@@ -1,5 +1,5 @@
 <template>
-  <header class="absolute top-20 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm text-black">
+  <header class="absolute mt-6 top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm text-black">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center">
         <!-- Logo and Brand Name -->
@@ -14,13 +14,10 @@
             class="text-orange-600 font-medium hover:text-orange-700 transition-colors flex items-center"
           >
             Home
-            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
           </NuxtLink>
           <NuxtLink 
             to="/women" 
-            class="text-gray-700 hover:text-orange-600 transition-colors flex items-center"
+            class="text-white hover:text-orange-600 transition-colors flex items-center"
           >
             Women
             <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
@@ -29,7 +26,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/men" 
-            class="text-gray-700 hover:text-orange-600 transition-colors flex items-center"
+            class="text-white hover:text-orange-600 transition-colors flex items-center"
           >
             Men
             <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
@@ -38,7 +35,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/kids" 
-            class="text-gray-700 hover:text-orange-600 transition-colors flex items-center"
+            class="text-white hover:text-orange-600 transition-colors flex items-center"
           >
             Kids
             <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
@@ -47,7 +44,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/jewelry" 
-            class="text-gray-700 hover:text-orange-600 transition-colors flex items-center"
+            class="text-white hover:text-orange-600 transition-colors flex items-center"
           >
             Jewelry
             <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
@@ -56,12 +53,9 @@
           </NuxtLink>
           <NuxtLink 
             to="/accessories" 
-            class="text-gray-700 hover:text-orange-600 transition-colors flex items-center"
+            class="text-white hover:text-orange-600 transition-colors flex items-center"
           >
             Accessories
-            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
           </NuxtLink>
         </nav>
 

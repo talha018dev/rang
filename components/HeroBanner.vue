@@ -1,12 +1,11 @@
 <template>
-  <section class="relative h-screen overflow-hidden">
+  <AppHeader />
+  <section class="h-screen overflow-hidden">
     <!-- Background Image -->
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50">
       <div 
         class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
-        style="background-image: url('/landing-image.png'); background-repeat: no-repeat; background-size: contain;"
+        style="background-image: url('/landing-image.png'); background-repeat: no-repeat; background-size: contain; background-position: top;"
       ></div>
-    </div>
 
     <!-- Content Overlay -->
     <div class="relative z-10 h-full flex items-center">
@@ -51,5 +50,13 @@
 </template>
 
 <script setup lang="ts">
-// Component logic can be added here if needed
+import AppHeader from './AppHeader.vue';
+// import HeroBanner from '../components/HeroBanner.vue';
+
+useHead({
+  title: 'Rang Bangladesh - Durga Puja 2025 Collection',
+  meta: [
+    { name: 'description', content: 'Discover the latest Durga Puja 2025 collection from Rang Bangladesh. Traditional and modern fashion for everyone.' }
+  ]
+})
 </script>

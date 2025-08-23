@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <AppHeader />
+  <div class="">
+    
     <HeroBanner />
   </div>
 </template>
