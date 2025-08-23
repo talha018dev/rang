@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    
+    <AppHeader />
     <HeroBanner />
   </div>
 </template>
@@ -9,8 +9,8 @@
 
 
 <script setup lang="ts">
-import AppHeader from '../components/AppHeader.vue';
-import HeroBanner from '../components/HeroBanner.vue';
+import AppHeader from '../components/AppHeader'
+import HeroBanner from '../components/HeroBanner'
 
 useHead({
   title: 'Rang Bangladesh - Durga Puja 2025 Collection',
