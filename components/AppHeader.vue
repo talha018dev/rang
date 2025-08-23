@@ -1,19 +1,14 @@
 <template>
-  <header class="bg-white text-black shadow-sm border-b border-gray-200">
+  <header class="absolute top-20 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm text-black">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
+      <div class="flex justify-between items-center">
         <!-- Logo and Brand Name -->
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-red-500 via-yellow-400 to-blue-500 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">R</span>
-          </div>
           <div>
             <img src="/rang-logo.png" alt="logo" />
           </div>
-        </div>
 
         <!-- Navigation Menu -->
-        <nav class="hidden md:flex items-center space-x-8">
+        <nav class="flex items-center gap-4 ">
           <NuxtLink 
             to="/" 
             class="text-orange-600 font-medium hover:text-orange-700 transition-colors flex items-center"

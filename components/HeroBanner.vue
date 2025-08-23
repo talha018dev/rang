@@ -2,7 +2,10 @@
   <section class="relative h-screen overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50">
-      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&h=1080&fit=crop')] bg-cover bg-center bg-no-repeat opacity-90"></div>
+      <div 
+        class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
+        style="background-image: url('/landing-image.png'); background-repeat: no-repeat; background-size: contain;"
+      ></div>
     </div>
 
     <!-- Content Overlay -->
