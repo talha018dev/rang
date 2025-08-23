@@ -4,7 +4,7 @@
     <!-- Background Image -->
       <div 
         class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
-        style="background-image: url('/landing-image.png'); background-repeat: no-repeat; background-size: contain; background-position: top;"
+        style="background-image: url('/landing-image.png');"
       ></div>
 
     <!-- Content Overlay -->
@@ -44,8 +44,6 @@
       </div>
     </div>
 
-    <!-- Decorative overlay -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
   </section>
 </template>
 
