@@ -1,14 +1,11 @@
 <template>
   <header class="absolute mt-6 top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm text-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-end">
-        <!-- Logo and Brand Name -->
           <div>
             <img src="/rang-logo.png" alt="logo" />
           </div>
-
-        <!-- Navigation Menu -->
-        <nav class="flex items-center gap-4 ">
+        <nav class="flex items-center gap-8 ">
           <NuxtLink 
             to="/" 
             class="text-orange-600 font-medium hover:text-orange-700 transition-colors flex items-center"
@@ -59,17 +56,19 @@
           </NuxtLink>
         </nav>
 
-        <!-- Utility Icons -->
-        <div class="flex items-center space-x-4 text-white">
+        <div class="flex items-center space-x-4 text-white relative top-2">
           <button class="p-2  hover:text-orange-600 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
-          <button class="p-2  hover:text-orange-600 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          <button class="p-2 flex items-center hover:text-orange-600 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 13.2504C15.4143 13.2504 15.75 13.5862 15.75 14.0004V14.5004C15.7499 15.3622 15.4073 16.1888 14.7979 16.7982C14.1884 17.4076 13.3619 17.7504 12.5 17.7504H12C11.2708 17.7504 10.5714 17.4603 10.0557 16.9447C9.54007 16.4291 9.25014 15.7296 9.25004 15.0004V11.7504H8.00004C7.58595 11.7504 7.25024 11.4144 7.25004 11.0004C7.25004 10.5862 7.58583 10.2504 8.00004 10.2504H9.25004V8.61853L9.24223 8.55506C9.23691 8.53475 9.2291 8.51495 9.21879 8.49646C9.19808 8.45935 9.16802 8.42802 9.13188 8.40564C9.09577 8.38333 9.05415 8.37052 9.01176 8.36853C8.96933 8.36662 8.92673 8.37597 8.88871 8.3949H8.88774L8.335 8.67127L8.26469 8.70154C7.90925 8.83612 7.50269 8.68256 7.32914 8.33533C7.14417 7.96471 7.29446 7.51347 7.66508 7.32849L8.21781 7.0531L8.42289 6.96619C8.63274 6.89289 8.85573 6.86042 9.07914 6.87049C9.37684 6.88396 9.66643 6.97266 9.91996 7.12928C10.1736 7.286 10.3831 7.5056 10.5284 7.76599C10.6736 8.02633 10.7499 8.31946 10.75 8.61756V10.2504H15L15.0772 10.2543C15.4551 10.2929 15.75 10.6122 15.75 11.0004C15.7499 11.3884 15.4551 11.7079 15.0772 11.7465L15 11.7504H10.75V15.0004C10.7501 15.3318 10.8819 15.6498 11.1163 15.8842C11.3507 16.1185 11.6686 16.2504 12 16.2504H12.5C12.9641 16.2504 13.4092 16.0657 13.7373 15.7377C14.0059 15.4692 14.1758 15.1218 14.2295 14.7504H14C13.586 14.7504 13.2502 14.4144 13.25 14.0004C13.25 13.5862 13.5858 13.2504 14 13.2504H15Z" fill="white"/>
+              <path d="M20 12C20 9.87827 19.1575 7.84306 17.6572 6.34277C16.1569 4.84248 14.1217 4 12 4C9.87827 4 7.84306 4.84248 6.34277 6.34277C4.84248 7.84306 4 9.87827 4 12C4 13.0506 4.20734 14.0909 4.60938 15.0615C5.01141 16.0321 5.59995 16.9144 6.34277 17.6572C7.08559 18.4 7.96795 18.9886 8.93848 19.3906C9.90908 19.7927 10.9494 20 12 20C13.0506 20 14.0909 19.7927 15.0615 19.3906C16.0321 18.9886 16.9144 18.4 17.6572 17.6572C18.4 16.9144 18.9886 16.0321 19.3906 15.0615C19.7927 14.0909 20 13.0506 20 12ZM22 12C22 13.3132 21.7418 14.6139 21.2393 15.8271C20.7367 17.0404 19.9998 18.1427 19.0713 19.0713C18.1427 19.9998 17.0404 20.7367 15.8271 21.2393C14.6139 21.7418 13.3132 22 12 22C10.6868 22 9.38611 21.7418 8.17285 21.2393C6.95964 20.7367 5.85727 19.9998 4.92871 19.0713C4.00015 18.1427 3.26329 17.0404 2.76074 15.8271C2.2582 14.6139 2 13.3132 2 12C2 9.34784 3.05335 6.80407 4.92871 4.92871C6.80407 3.05335 9.34784 2 12 2C14.6522 2 17.1959 3.05335 19.0713 4.92871C20.9467 6.80407 22 9.34784 22 12Z" fill="white"/>
+            </svg>
+            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
           </button>
           <button class="p-2  hover:text-orange-600 transition-colors">
@@ -78,9 +77,10 @@
             </svg>
           </button>
           <button class="p-2  hover:text-orange-600 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 18C17.5304 18 18.0391 18.2107 18.4142 18.5858C18.7893 18.9609 19 19.4696 19 20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22C16.4696 22 15.9609 21.7893 15.5858 21.4142C15.2107 21.0391 15 20.5304 15 20C15 18.89 15.89 18 17 18ZM1 2H4.27L5.21 4H20C20.2652 4 20.5196 4.10536 20.7071 4.29289C20.8946 4.48043 21 4.73478 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63L7.17 14.75C7.17 14.8163 7.19634 14.8799 7.24322 14.9268C7.29011 14.9737 7.3537 15 7.42 15H19V17H7C6.46957 17 5.96086 16.7893 5.58579 16.4142C5.21071 16.0391 5 15.5304 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2ZM7 18C7.53043 18 8.03914 18.2107 8.41421 18.5858C8.78929 18.9609 9 19.4696 9 20C9 20.5304 8.78929 21.0391 8.41421 21.4142C8.03914 21.7893 7.53043 22 7 22C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20C5 18.89 5.89 18 7 18ZM16 11L18.78 6H12.46H6.14L8.5 11H16Z" fill="white"/>
+</svg>
+
           </button>
           <button class="p-2  hover:text-orange-600 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,5 +94,4 @@
 </template>
 
 <script setup lang="ts">
-// Component logic can be added here if needed
 </script>

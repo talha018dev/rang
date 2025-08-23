@@ -2,7 +2,7 @@
  
   <section class="h-screen overflow-hidden">
       <div 
-        class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-90"
+        class="absolute inset-0 bg-cover bg-no-repeat bg-top opacity-90"
         style="background-image: url('/landing-image.png');"
       ></div>
 
@@ -26,7 +26,5 @@
 </template>
 
 <script setup lang="ts">
-// import AppHeader from './AppHeader.vue';
-// import HeroBanner from '../components/HeroBanner.vue';
 
 </script>
