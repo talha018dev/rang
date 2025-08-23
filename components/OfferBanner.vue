@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden bg-[#F7941C] text-white py-5 border-t-4 border-red-500">
+  <div class="relative overflow-hidden bg-[#F7941C] text-white py-5">
     <!-- Sliding content container -->
     <div 
       class="flex whitespace-nowrap animate-slide"
