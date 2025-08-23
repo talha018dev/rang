@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white shadow-sm border-b border-gray-200">
+  <header class="bg-white text-black shadow-sm border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Logo and Brand Name -->
@@ -7,12 +7,8 @@
           <div class="w-10 h-10 bg-gradient-to-br from-red-500 via-yellow-400 to-blue-500 rounded-lg flex items-center justify-center">
             <span class="text-white font-bold text-sm">R</span>
           </div>
-          <div class="flex flex-col">
-            <div class="flex items-center space-x-2">
-              <span class="text-gray-800 font-semibold text-lg">বাংলাদেশ</span>
-              <span class="text-gray-600 text-sm">আমরা সময়কে রাঙিয়ে তুলি</span>
-            </div>
-            <span class="text-gray-800 font-bold text-sm">RANG BANGLADESH</span>
+          <div>
+            <img src="/rang-logo.png" alt="logo" />
           </div>
         </div>
 
