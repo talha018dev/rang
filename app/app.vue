@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="pb-4">
     <AppHeader />
     <HeroBanner />
     <OfferBanner />
@@ -10,7 +10,7 @@
 
 
 
-<script setup lang="ts">
+<script setup>
 import AppHeader from '../components/AppHeader'
 import HeroBanner from '../components/HeroBanner'
 import OfferBanner from '../components/OfferBanner'
