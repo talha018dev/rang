@@ -5,6 +5,7 @@
     <OfferBanner />
     <ExploreRang />
     <ShopByCategory />
+    <TimelessSixYards />
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import HeroBanner from '../components/HeroBanner'
 import OfferBanner from '../components/OfferBanner'
 import ExploreRang from '../components/ExploreRang'
 import ShopByCategory from '../components/ShopByCategory'
+import TimelessSixYards from '../components/TimelessSixYards'
 useHead({
   title: 'Rang Bangladesh - Durga Puja 2025 Collection',
   meta: [
