@@ -2,7 +2,7 @@
     <main class="max-w-[90%] mx-auto">
         <section class="my-20">
             <div class="text-6xl text-center">
-                <h1><span class="text-[#FAB767]">Shop by</span> <span class="text-[#F1592C] font-bold">Category</span></h1>
+                <h1><span class="text-[#FAB767] font-light">Shop by</span> <span class="text-[#F1592C] font-bold">Category</span></h1>
             </div>
         </section>
         <section>

@@ -7,6 +7,7 @@
     <ShopByCategory />
     <TimelessSixYards />
     <ShopByBrand />
+    <ShopByTheme />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import ExploreRang from '../components/ExploreRang'
 import ShopByCategory from '../components/ShopByCategory'
 import TimelessSixYards from '../components/TimelessSixYards'
 import ShopByBrand from '../components/ShopByBrand'
+import ShopByTheme from '../components/ShopByTheme'
 useHead({
   title: 'Rang Bangladesh - Durga Puja 2025 Collection',
   meta: [
