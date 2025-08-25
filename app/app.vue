@@ -4,6 +4,7 @@
     <HeroBanner />
     <OfferBanner />
     <ExploreRang />
+    <ShopByCategory />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import AppHeader from '../components/AppHeader'
 import HeroBanner from '../components/HeroBanner'
 import OfferBanner from '../components/OfferBanner'
 import ExploreRang from '../components/ExploreRang'
+import ShopByCategory from '../components/ShopByCategory'
 useHead({
   title: 'Rang Bangladesh - Durga Puja 2025 Collection',
   meta: [
