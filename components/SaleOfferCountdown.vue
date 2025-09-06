@@ -119,16 +119,33 @@
                     <div 
                         v-for="(slide, index) in carouselSlides" 
                         :key="index"
-                        class="w-[300px] flex-shrink-0 p-4"
+                        class="w-[300px] flex-shrink-0 m-4"
                     >
-                        <div class="bg-white rounded-lg p-6 text-gray-800 border border-gray-200 shadow-lg h-full flex flex-col">
-                            <div class="flex flex-col items-center text-center space-y-4 flex-1">
-                                <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center">
-                                    <span class="text-3xl font-bold text-orange-600">{{ slide.discount }}</span>
+                        <div class="bg-white rounded-lg text-gray-800 border border-gray-200 shadow-lg h-full flex flex-col">
+                            <div class="">
+                                <div class="rounded-lg overflow-hidden">
+                                    <img 
+                                        :src="slide.image" 
+                                        :alt="slide.title"
+                                        class="w-full h-full object-cover"
+                                    />
                                 </div>
-                                <div class="flex-1">
-                                    <h3 class="font-semibold text-xl text-gray-900 mb-2">{{ slide.title }}</h3>
-                                    <p class="text-sm text-gray-600">{{ slide.description }}</p>
+                                <div class="w-full ml-3 mt-6">
+                                    <h3 class="font-semibold text-2xl text-gray-900">{{ slide.title }}</h3>
+                                    <p class="text-base text-gray-500 mt-1">{{ slide.itemCount }} in stock</p>
+                                    
+                                </div>
+                                <div class="mt-8 ml-3">
+                                    <div>৳</div>
+                                    <p class="text-base text-gray-400 line-through">{{ slide.itemOldPrice }}<span class="font-extrabold text-sm">৳</span></p>
+                                    <div class="flex items-center">
+                                        <p class="text-xl text-black font-bold">{{ slide.itemPrice }}<span class="font-extrabold">৳</span></p>
+                                        <button class="p-2 hover:text-orange-600 transition-colors ml-auto">
+                                            <svg class="filter brightness-0 saturate-100" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M17 18C17.5304 18 18.0391 18.2107 18.4142 18.5858C18.7893 18.9609 19 19.4696 19 20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22C16.4696 22 15.9609 21.7893 15.5858 21.4142C15.2107 21.0391 15 20.5304 15 20C15 18.89 15.89 18 17 18ZM1 2H4.27L5.21 4H20C20.2652 4 20.5196 4.10536 20.7071 4.29289C20.8946 4.48043 21 4.73478 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63L7.17 14.75C7.17 14.8163 7.19634 14.8799 7.24322 14.9268C7.29011 14.9737 7.3537 15 7.42 15H19V17H7C6.46957 17 5.96086 16.7893 5.58579 16.4142C5.21071 16.0391 5 15.5304 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2ZM7 18C7.53043 18 8.03914 18.2107 8.41421 18.5858C8.78929 18.9609 9 19.4696 9 20C9 20.5304 8.78929 21.0391 8.41421 21.4142C8.03914 21.7893 7.53043 22 7 22C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20C5 18.89 5.89 18 7 18ZM16 11L18.78 6H12.46H6.14L8.5 11H16Z" fill="white"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                                 <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors duration-200 w-full">
                                     Shop Now
@@ -157,34 +174,52 @@ const countdown = ref({
 const currentSlide = ref(0)
 const carouselSlides = ref([
     {
+        image: '/sale-carousel-1.png',
         discount: '50%',
         title: 'Summer Collection',
-        description: 'Get up to 50% off on selected items'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     },
     {
+        image: '/sale-carousel-2.png',
         discount: '30%',
         title: 'New Arrivals',
-        description: 'Fresh styles with 30% discount'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     },
     {
+        image: '/sale-carousel-3.png',
         discount: '25%',
         title: 'Accessories',
-        description: 'Complete your look with 25% off'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     },
     {
+        image: '/sale-carousel-4.png',
         discount: '40%',
         title: 'Premium Range',
-        description: 'Luxury items at 40% discount'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     },
     {
+        image: '/sale-carousel-1.png',
         discount: '35%',
         title: 'Casual Wear',
-        description: 'Comfortable styles at 35% off'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     },
     {
+        image: '/sale-carousel-2.png',
         discount: '45%',
         title: 'Evening Collection',
-        description: 'Elegant evening wear with 45% discount'
+        itemCount: 4,
+        itemPrice: 1000,
+        itemOldPrice: 1500,
     }
 ])
 
