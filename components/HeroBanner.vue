@@ -1,5 +1,6 @@
 <template>
-  <section class="h-[calc(100svh-88px)] overflow-hidden">
+  <!-- <section class="h-[calc(100svh-88px)] overflow-hidden"> -->
+  <section class="h-[100svh] overflow-hidden">
       <div 
         class="absolute inset-0 bg-cover bg-no-repeat bg-top opacity-90"
         style="background-image: url('/landing-image.png');"

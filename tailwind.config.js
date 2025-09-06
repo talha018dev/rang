@@ -11,7 +11,11 @@ module.exports = {
       "./nuxt.config.{js,ts}"
     ],
     theme: {
-      extend: {},
+      extend: {
+        fontFamily: {
+          'sans': ['Poppins', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+        },
+      },
     },
     plugins: [],
   } 
