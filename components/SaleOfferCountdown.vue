@@ -11,8 +11,7 @@
                 <div class="countdown-top">
                     <div class="countdown-text">
                         <h2 class="countdown-headline">
-                            <span class="countdown-headline-block">Deals of the</span>
-                            <span class="countdown-headline-block">Month</span>
+                            <span class="countdown-headline-block">Deals of the Month</span>
                         </h2>
                         <p class="countdown-description">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -72,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Bottom Section with Shop Now Button and Navigation -->
+                <!-- Bottom Section with Shop Now Button -->
                 <div class="countdown-bottom">
                     <button class="countdown-shop-button">
                         <span class="countdown-shop-text">Shop Now</span>
@@ -80,87 +79,64 @@
                             <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
                         </svg>
                     </button>
-                    
-                    <!-- Navigation Arrows -->
-                    <div class="countdown-navigation">
-                        <button 
-                            @click="previousSlide"
-                            class="countdown-nav-button"
-                            :disabled="currentSlide === 0"
-                            :class="{ 'countdown-nav-button-disabled': currentSlide === 0 }"
-                        >
-                            <svg class="countdown-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                        <button 
-                            @click="nextSlide"
-                            class="countdown-nav-button"
-                            :disabled="currentSlide >= maxSlides"
-                            :class="{ 'countdown-nav-button-disabled': currentSlide >= maxSlides }"
-                        >
-                            <svg class="countdown-nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Carousel Cards Section -->
         <div class="carousel-section">
-            <!-- Cards Container -->
-            <div class="carousel-container">
-                <div 
-                    class="carousel-track"
-                    :style="{ transform: `translateX(-${currentSlide * 300}px)` }"
-                >
-                    <div 
-                        v-for="(slide, index) in carouselSlides" 
-                        :key="index"
-                        class="carousel-slide"
-                    >
-                        <div class="carousel-card">
-                            <div class="">
-                                <div class="carousel-image-container">
-                                    <img 
-                                        :src="slide.image" 
-                                        :alt="slide.title"
-                                        class="carousel-image"
-                                    />
-                                </div>
-                                <div class="carousel-content">
-                                    <h3 class="carousel-title">{{ slide.title }}</h3>
-                                    <p class="carousel-stock">{{ slide.itemCount }} in stock</p>
-                                    
-                                </div>
-                                <div class="carousel-price-section">
-                                    <div class="carousel-currency">৳</div>
-                                    <p class="carousel-old-price">{{ slide.itemOldPrice }}<span class="carousel-old-price-currency">৳</span></p>
-                                    <div class="carousel-price-row">
-                                        <p class="carousel-current-price">{{ slide.itemPrice }}<span class="carousel-current-price-currency">৳</span></p>
-                                        <button class="carousel-cart-button">
-                                            <svg class="carousel-cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M17 18C17.5304 18 18.0391 18.2107 18.4142 18.5858C18.7893 18.9609 19 19.4696 19 20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22C16.4696 22 15.9609 21.7893 15.5858 21.4142C15.2107 21.0391 15 20.5304 15 20C15 18.89 15.89 18 17 18ZM1 2H4.27L5.21 4H20C20.2652 4 20.5196 4.10536 20.7071 4.29289C20.8946 4.48043 21 4.73478 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63L7.17 14.75C7.17 14.8163 7.19634 14.8799 7.24322 14.9268C7.29011 14.9737 7.3537 15 7.42 15H19V17H7C6.46957 17 5.96086 16.7893 5.58579 16.4142C5.21071 16.0391 5 15.5304 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2ZM7 18C7.53043 18 8.03914 18.2107 8.41421 18.5858C8.78929 18.9609 9 19.4696 9 20C9 20.5304 8.78929 21.0391 8.41421 21.4142C8.03914 21.7893 7.53043 22 7 22C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20C5 18.89 5.89 18 7 18ZM16 11L18.78 6H12.46H6.14L8.5 11H16Z" fill="white"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button class="carousel-shop-button">
-                                    Shop Now
+            <UCarousel 
+                v-slot="{ item }" 
+                :items="carouselSlides" 
+                class="carousel-nuxt"
+                arrows
+                indicators
+                :slides-per-view="3.2"
+                :space-between="16"
+                :ui="{
+                    item: 'carousel-slide basis-1/3',
+                    container: 'carousel-container',
+                    track: 'carousel-track'
+                }"
+            >
+                <div class="carousel-card">
+                    <div class="">
+                        <div class="carousel-image-container">
+                            <img 
+                                :src="item.image" 
+                                :alt="item.title"
+                                class="carousel-image"
+                            />
+                        </div>
+                        <div class="carousel-content">
+                            <h3 class="carousel-title">{{ item.title }}</h3>
+                            <p class="carousel-stock">{{ item.itemCount }} in stock</p>
+                            
+                        </div>
+                        <div class="carousel-price-section">
+                            <div class="carousel-currency">৳</div>
+                            <p class="carousel-old-price">{{ item.itemOldPrice }}<span class="carousel-old-price-currency">৳</span></p>
+                            <div class="carousel-price-row">
+                                <p class="carousel-current-price">{{ item.itemPrice }}<span class="carousel-current-price-currency">৳</span></p>
+                                <button class="carousel-cart-button">
+                                    <svg class="carousel-cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17 18C17.5304 18 18.0391 18.2107 18.4142 18.5858C18.7893 18.9609 19 19.4696 19 20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22C16.4696 22 15.9609 21.7893 15.5858 21.4142C15.2107 21.0391 15 20.5304 15 20C15 18.89 15.89 18 17 18ZM1 2H4.27L5.21 4H20C20.2652 4 20.5196 4.10536 20.7071 4.29289C20.8946 4.48043 21 4.73478 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63L7.17 14.75C7.17 14.8163 7.19634 14.8799 7.24322 14.9268C7.29011 14.9737 7.3537 15 7.42 15H19V17H7C6.46957 17 5.96086 16.7893 5.58579 16.4142C5.21071 16.0391 5 15.5304 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2ZM7 18C7.53043 18 8.03914 18.2107 8.41421 18.5858C8.78929 18.9609 9 19.4696 9 20C9 20.5304 8.78929 21.0391 8.41421 21.4142C8.03914 21.7893 7.53043 22 7 22C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20C5 18.89 5.89 18 7 18ZM16 11L18.78 6H12.46H6.14L8.5 11H16Z" fill="white"/>
+                                    </svg>
                                 </button>
                             </div>
                         </div>
+                        <button class="carousel-shop-button">
+                            Shop Now
+                        </button>
                     </div>
                 </div>
-            </div>
+            </UCarousel>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 // Countdown state
 const countdown = ref({
@@ -170,8 +146,7 @@ const countdown = ref({
     seconds: 0
 })
 
-// Carousel state
-const currentSlide = ref(0)
+// Carousel data
 const carouselSlides = ref([
     {
         image: '/sale-carousel-1.png',
@@ -222,27 +197,6 @@ const carouselSlides = ref([
         itemOldPrice: 1500,
     }
 ])
-
-// Calculate visible slides and max slides
-const visibleSlides = ref(3) // Adjust based on container width
-const maxSlides = computed(() => Math.max(0, carouselSlides.value.length - visibleSlides.value))
-
-// Carousel functions
-const nextSlide = () => {
-    if (currentSlide.value < maxSlides.value) {
-        currentSlide.value++
-    }
-}
-
-const previousSlide = () => {
-    if (currentSlide.value > 0) {
-        currentSlide.value--
-    }
-}
-
-const goToSlide = (index: number) => {
-    currentSlide.value = Math.min(index, maxSlides.value)
-}
 
 // Set target date (30 days from now)
 const targetDate = new Date()
