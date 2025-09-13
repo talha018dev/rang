@@ -11,7 +11,7 @@
                 <div class="countdown-top">
                     <div class="countdown-text">
                         <h2 class="countdown-headline">
-                            <span class="countdown-headline-block">Deals of the Month</span>
+                            <span class="">Deals of the <span class="countdown-headline-block">Month</span></span>
                         </h2>
                         <p class="countdown-description">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

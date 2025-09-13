@@ -45,12 +45,14 @@
 
 .countdown-headline {
   font-size: 2.25rem;
-  font-weight: bold;
+  font-weight: normal;
   line-height: 1.1;
 }
 
 .countdown-headline-block {
   display: block;
+  font-weight: bold;
+  margin-top: 4px;
 }
 
 .countdown-description {
@@ -73,13 +75,14 @@
 .countdown-time-unit {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .countdown-time-label {
   color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight:400;
+  margin-bottom: 0.5rem;
 }
 
 .countdown-time-digits {
