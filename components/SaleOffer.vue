@@ -8,7 +8,7 @@
         
         <SaleOfferCountdown />
         
-        <section class="sale-grid-main">
+        <section class="">
             <div class="sale-grid-main">
                 <img src="/brand-6.png" alt="Brand Rang" class="sale-image"></img>
                 <div class="sale-grid-secondary">
