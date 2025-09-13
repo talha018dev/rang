@@ -1,0 +1,33 @@
+/* OfferBanner Styles */
+.offer-banner {
+  position: relative;
+  overflow: hidden;
+  background-color: #F7941C;
+  color: white;
+  padding: 1.25rem 0;
+  margin-top: 3rem;
+}
+
+.offer-content {
+  display: flex;
+  white-space: nowrap;
+  animation: slide linear infinite;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.offer-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}

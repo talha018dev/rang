@@ -1,0 +1,44 @@
+/* SaleOffer Styles */
+.sale-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.sale-header {
+  margin: 5rem 0;
+}
+
+.sale-title {
+  font-size: 3.75rem;
+  text-align: center;
+}
+
+.sale-title-light {
+  color: #FAB767;
+  font-weight: 300;
+}
+
+.sale-title-bold {
+  color: #F1592C;
+  font-weight: bold;
+}
+
+.sale-grid-main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.sale-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.sale-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}

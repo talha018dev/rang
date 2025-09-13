@@ -1,0 +1,54 @@
+/* ShopByCategory Styles */
+.category-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.category-header {
+  margin: 5rem 0;
+}
+
+.category-title {
+  font-size: 3.75rem;
+  text-align: center;
+}
+
+.category-title-light {
+  color: #FAB767;
+  font-weight: 300;
+}
+
+.category-title-bold {
+  color: #F1592C;
+  font-weight: bold;
+}
+
+.category-grid-main {
+  display: grid;
+  grid-template-columns: 3fr 5fr;
+  gap: 1rem;
+}
+
+.category-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-image-rounded {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.category-image-container {
+  border-radius: 0.5rem;
+}

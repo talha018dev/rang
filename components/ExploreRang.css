@@ -1,0 +1,54 @@
+/* ExploreRang Styles */
+.explore-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.explore-header {
+  margin: 5rem 0;
+}
+
+.explore-title {
+  font-size: 3.75rem;
+  text-align: center;
+}
+
+.explore-title-light {
+  color: #FAB767;
+  font-weight: 300;
+}
+
+.explore-title-bold {
+  color: #F1592C;
+  font-weight: bold;
+}
+
+.explore-grid-main {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 1rem;
+}
+
+.explore-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.explore-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.explore-image-rounded {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.explore-image-container {
+  border-radius: 0.5rem;
+}

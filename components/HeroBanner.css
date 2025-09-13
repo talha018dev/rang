@@ -1,0 +1,64 @@
+/* HeroBanner Styles */
+.hero-section {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+  opacity: 0.9;
+}
+
+.hero-content {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.hero-overlay {
+  background-color: rgba(247, 148, 28, 0.26);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-family: serif;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.hero-button {
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.hero-button:hover {
+  background-color: #ea580c;
+}
+
+.hero-button-text {
+  border-bottom: 1px solid white;
+  padding-bottom: 0.25rem;
+  display: inline-block;
+}

@@ -1,28 +1,28 @@
 <template>
-  <div class="relative overflow-hidden bg-[#F7941C] text-white py-5 mt-12">
+  <div class="offer-banner">
     <!-- Sliding content container -->
     <div 
-      class="flex whitespace-nowrap animate-slide text-2xl font-bold"
+      class="offer-content"
       :style="{ animationDuration: `${animationDuration}s` }"
     >
       <!-- First set of content -->
-      <div class="flex items-center space-x-8 px-4 ">
+      <div class="offer-item">
         50% OFF • Get Yours Now !!! •
       </div>
       
       <!-- Duplicate content for seamless loop -->
-      <div class="flex items-center space-x-8 px-4 ">
+      <div class="offer-item">
         50% OFF • Get Yours Now !!! •
       </div>
       
       <!-- Third set for smooth transition -->
-      <div class="flex items-center space-x-8 px-4 ">
+      <div class="offer-item">
         50% OFF • Get Yours Now !!! •
       </div>
-      <div class="flex items-center space-x-8 px-4 ">
+      <div class="offer-item">
         50% OFF • Get Yours Now !!! •
       </div>
-      <div class="flex items-center space-x-8 px-4 ">
+      <div class="offer-item">
         50% OFF • Get Yours Now !!! •
       </div>
     </div>
@@ -48,6 +48,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const animationDuration = computed(() => props.speed)
 </script>
+
+<style scoped>
+@import './OfferBanner.css';
+</style>
 
 <style scoped>
 @keyframes slide {

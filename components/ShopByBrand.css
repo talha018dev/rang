@@ -1,0 +1,59 @@
+/* ShopByBrand Styles */
+.brand-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.brand-header {
+  margin: 5rem 0;
+}
+
+.brand-title {
+  font-size: 3.75rem;
+  text-align: center;
+}
+
+.brand-title-light {
+  color: #FAB767;
+  font-weight: 300;
+}
+
+.brand-title-bold {
+  color: #F1592C;
+  font-weight: bold;
+}
+
+.brand-grid-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1.5rem;
+}
+
+.brand-image {
+  width: 100%;
+  height: 9rem;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.brand-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.brand-grid-tertiary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.brand-image-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}

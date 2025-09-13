@@ -2,29 +2,28 @@
   <UApp>
     <AppHeader />
     
-    <!-- <HeroBanner /> -->
-    <!-- <HeroBanner />
+    <HeroBanner />
     <OfferBanner />
     <ExploreRang />
     <ShopByCategory />
     <TimelessSixYards />
     <ShopByBrand />
     <ShopByTheme />
-    <SaleOffer /> -->
+    <SaleOffer />
 
       <!-- Carousel -->
       <!-- <UCarousel 
         v-slot="{ item }" 
         :items="items" 
-        class="w-full max-w-4xl mx-auto"
+        class="app-carousel"
         arrows
         indicators
       >
-        <div class="flex justify-center">
+        <div class="app-carousel-container">
           <NuxtImg 
             :src="item" 
             :alt="`Carousel image ${items.indexOf(item) + 1}`"
-            class="w-full max-w-lg h-80 object-cover rounded-lg shadow-md"
+            class="app-carousel-image"
             loading="eager"
             format="webp"
             quality="90"
@@ -38,6 +37,13 @@
 <script setup lang="">
 import AppHeader from '../components/AppHeader.vue'
 import HeroBanner from '../components/HeroBanner.vue'
+import OfferBanner from '../components/OfferBanner.vue'
+import ExploreRang from '../components/ExploreRang.vue'
+import ShopByCategory from '../components/ShopByCategory.vue'
+import TimelessSixYards from '../components/TimelessSixYards.vue'
+import ShopByBrand from '../components/ShopByBrand.vue'
+import ShopByTheme from '../components/ShopByTheme.vue'
+import SaleOffer from '../components/SaleOffer.vue'
 import '../app/assets/css/main.css'
 
 const items = [
@@ -50,3 +56,7 @@ const items = [
 ]
 
 </script>
+
+<style scoped>
+@import './app.css';
+</style>

@@ -1,0 +1,308 @@
+/* SaleOfferCountdown Styles */
+.countdown-section {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.countdown-card {
+  position: relative;
+  height: 30rem;
+  background-color: #ed9a32;
+  min-width: 420px;
+}
+
+.countdown-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+}
+
+.countdown-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.countdown-top {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.countdown-text {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.countdown-headline {
+  font-size: 2.25rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.countdown-headline-block {
+  display: block;
+}
+
+.countdown-description {
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.75rem;
+  font-size: 1.125rem;
+  max-width: 28rem;
+}
+
+.countdown-timer {
+  margin-bottom: 1.5rem;
+}
+
+.countdown-timer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.countdown-time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.countdown-time-label {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.countdown-time-digits {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.countdown-digit {
+  background-color: rgba(251, 146, 60, 0.8);
+  border-radius: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-digit-text {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.countdown-separator {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: relative;
+  top: 0.5rem;
+}
+
+.countdown-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countdown-shop-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.countdown-shop-button:hover {
+  background-color: #1d4ed8;
+}
+
+.countdown-shop-text {
+  font-weight: 500;
+}
+
+.countdown-shop-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.countdown-navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.countdown-nav-button {
+  background-color: #e5e7eb;
+  color: #1f2937;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.countdown-nav-button:hover {
+  background-color: #d1d5db;
+}
+
+.countdown-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.countdown-nav-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.carousel-section {
+  flex: 1;
+  background-color: #f3f4f6;
+  position: relative;
+}
+
+.carousel-container {
+  overflow: hidden;
+  height: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  height: 100%;
+}
+
+.carousel-slide {
+  width: 300px;
+  flex-shrink: 0;
+  margin: 1rem;
+}
+
+.carousel-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-image-container {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-content {
+  width: 100%;
+  margin-left: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-title {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.carousel-stock {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.carousel-price-section {
+  margin-top: 2rem;
+  margin-left: 0.75rem;
+}
+
+.carousel-currency {
+  font-size: 1rem;
+}
+
+.carousel-old-price {
+  font-size: 1rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.carousel-old-price-currency {
+  font-weight: 800;
+  font-size: 0.875rem;
+}
+
+.carousel-price-row {
+  display: flex;
+  align-items: center;
+}
+
+.carousel-current-price {
+  font-size: 1.25rem;
+  color: black;
+  font-weight: bold;
+}
+
+.carousel-current-price-currency {
+  font-weight: 800;
+}
+
+.carousel-cart-button {
+  padding: 0.5rem;
+  margin-left: auto;
+  transition: color 0.15s ease-in-out;
+}
+
+.carousel-cart-button:hover {
+  color: #ea580c;
+}
+
+.carousel-cart-icon {
+  filter: brightness(0) saturate(100%);
+  width: 24px;
+  height: 24px;
+}
+
+.carousel-shop-button {
+  background-color: #f97316;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+}
+
+.carousel-shop-button:hover {
+  background-color: #ea580c;
+}
+
+.countdown-nav-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

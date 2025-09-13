@@ -1,0 +1,20 @@
+/* App Styles */
+.app-carousel {
+  width: 100%;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.app-carousel-container {
+  display: flex;
+  justify-content: center;
+}
+
+.app-carousel-image {
+  width: 100%;
+  max-width: 32rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}

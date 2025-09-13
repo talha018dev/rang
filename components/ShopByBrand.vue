@@ -1,37 +1,37 @@
 <template>
-    <main class="max-w-[90%] mx-auto">
-        <section class="my-20">
-            <div class="text-6xl text-center">
-                <h1><span class="text-[#FAB767] font-light">Shop by</span> <span class="text-[#F1592C] font-bold">Brand</span></h1>
+    <main class="brand-container">
+        <section class="brand-header">
+            <div class="brand-title">
+                <h1><span class="brand-title-light">Shop by</span> <span class="brand-title-bold">Brand</span></h1>
             </div>
         </section>
         <section>
-            <div class="flex items-center flex-wrap justify-around gap-6">
+            <div class="brand-grid-main">
                 <div class="">
-                    <img src="/brand-1.png" alt="Brand Rang" class="w-full h-36 object-contain  rounded-none"></img>
+                    <img src="/brand-1.png" alt="Brand Rang" class="brand-image"></img>
                 </div>
                 <div>
-                    <img src="/brand-2.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                    <img src="/brand-2.png" alt="Brand Rang" class="brand-image"></img>
                 </div>
                 <div class="">
-                    <img src="/brand-3.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                    <img src="/brand-3.png" alt="Brand Rang" class="brand-image"></img>
                 </div>
                 <div class="">
-                    <img src="/brand-4.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                    <img src="/brand-4.png" alt="Brand Rang" class="brand-image"></img>
                 </div>
                 <div class="">
-                    <img src="/brand-5.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                    <img src="/brand-5.png" alt="Brand Rang" class="brand-image"></img>
                 </div>
             </div>
         </section>
-        <section class="mt-8">
-            <div class="grid grid-cols-2 gap-4">
-                <img src="/brand-6.png" alt="Brand Rang" class="w-full h-full object-cover rounded-none"></img>
-                <div class="grid grid-cols-2 gap-4">
-                    <img src="/brand-7.png" alt="Brand Rang" class="w-full h-full object-cover rounded-none"></img>
-                    <img src="/brand-8.png" alt="Brand Rang" class="w-full h-full object-cover rounded-none"></img>
-                    <img src="/brand-9.png" alt="Brand Rang" class="w-full h-full object-cover rounded-none"></img>
-                    <img src="/brand-10.png" alt="Brand Rang" class="w-full h-full object-cover rounded-none"></img>
+        <section class="brand-grid-secondary">
+            <div class="brand-grid-secondary">
+                <img src="/brand-6.png" alt="Brand Rang" class="brand-image-cover"></img>
+                <div class="brand-grid-tertiary">
+                    <img src="/brand-7.png" alt="Brand Rang" class="brand-image-cover"></img>
+                    <img src="/brand-8.png" alt="Brand Rang" class="brand-image-cover"></img>
+                    <img src="/brand-9.png" alt="Brand Rang" class="brand-image-cover"></img>
+                    <img src="/brand-10.png" alt="Brand Rang" class="brand-image-cover"></img>
                 </div>
             </div>
         </section>
@@ -41,3 +41,7 @@
 <script setup lang="ts">
 
 </script>
+
+<style scoped>
+@import './ShopByBrand.css';
+</style>

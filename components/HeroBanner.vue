@@ -1,18 +1,18 @@
 <template>
-  <!-- <section class="h-[calc(100svh-88px)] overflow-hidden"> -->
-  <section class="h-[100svh] overflow-hidden">
+  <!-- <section class="hero-section-alt"> -->
+  <section class="hero-section">
       <div 
-        class="absolute inset-0 bg-cover bg-no-repeat bg-top opacity-90"
+        class="hero-background"
         style="background-image: url('/landing-image.png');"
       ></div>
-      <div class="w-full relative z-10 h-full flex items-center">
-          <div class="bg-[#F7941C42]/40 text-white text-center p-4 w-full">
-            <p class="text-lg font-medium  mb-2">New Collection</p>
-            <h1 class="text-5xl font-serif font-bold mb-4 leading-tight">
+      <div class="hero-content">
+          <div class="hero-overlay">
+            <p class="hero-subtitle">New Collection</p>
+            <h1 class="hero-title">
               Durga Puja - 2025
             </h1>
-            <button class="hover:bg-orange-600 text-white  font-semibold py-3 px-8 rounded-lg text-lg transition-colors">
-                <div class="border-b-[1px] border-white pb-1 inline-block">
+            <button class="hero-button">
+                <div class="hero-button-text">
                 Shop Now
               </div>
               </button>
@@ -25,3 +25,7 @@
 <script setup lang="ts">
 
 </script>
+
+<style scoped>
+@import './HeroBanner.css';
+</style>
