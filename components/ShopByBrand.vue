@@ -6,12 +6,22 @@
             </div>
         </section>
         <section>
-            <div class="flex items-center justify-around gap-6">
-                <img src="/brand-1.png" alt="Brand Rang" class="w-full h-36 object-contain  rounded-none"></img>
-                <img src="/brand-2.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
-                <img src="/brand-3.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
-                <img src="/brand-4.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
-                <img src="/brand-5.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+            <div class="flex items-center flex-wrap justify-around gap-6">
+                <div class="">
+                    <img src="/brand-1.png" alt="Brand Rang" class="w-full h-36 object-contain  rounded-none"></img>
+                </div>
+                <div>
+                    <img src="/brand-2.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                </div>
+                <div class="">
+                    <img src="/brand-3.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                </div>
+                <div class="">
+                    <img src="/brand-4.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                </div>
+                <div class="">
+                    <img src="/brand-5.png" alt="Brand Rang" class="w-full h-36 object-contain rounded-none"></img>
+                </div>
             </div>
         </section>
         <section class="mt-8">
