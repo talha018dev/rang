@@ -146,6 +146,49 @@
   background-color: #f3f4f6;
   position: relative;
 }
+
+/* Custom Navigation Buttons */
+.carousel-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.carousel-nav-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  pointer-events: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-nav-btn:hover {
+  background-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.carousel-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.carousel-nav-btn svg {
+  color: #374151;
+  transition: color 0.2s ease-in-out;
+}
+
+.carousel-nav-btn:hover svg {
+  color: #1f2937;
+}
 .carousel-section .carousel-nuxt {
   margin: 16px;
 }

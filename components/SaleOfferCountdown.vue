@@ -79,12 +79,27 @@
                             <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
                         </svg>
                     </button>
+                    <div class="carousel-navigation">
+                        <button @click="goToPrevious" class="carousel-nav-btn carousel-nav-prev">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button @click="goToNext" class="carousel-nav-btn carousel-nav-next">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Carousel Cards Section -->
         <div class="carousel-section">
+            <!-- Custom Navigation Buttons -->
+            
+            
             <UCarousel 
              ref="carousel"
                 v-slot="{ item }" 
@@ -92,6 +107,8 @@
                 class="carousel-nuxt"
                 :slides-per-view="3.2"
                 :space-between="16"
+                :prev="{ onClick: goToPrevious }"
+                :next="{ onClick: goToNext }"
                 :ui="{
                     item: 'carousel-slide basis-1/3',
                     container: 'carousel-container',
@@ -145,7 +162,17 @@ const countdown = ref({
 })
 
 const carousel = useTemplateRef('carousel')
-console.log('🚀 - carousel:', carousel)
+
+// Manual navigation functions
+const goToNext = () => {
+  console.log('Next button clicked, carousel:', carousel.value.emblaApi.scrollNext().scrollPrev())
+  carousel.value.emblaApi.scrollNext()
+}
+
+const goToPrevious = () => {
+  console.log('Previous button clicked, carousel:', carousel.value)
+  carousel.value.emblaApi.scrollPrev()
+}
 
 // Carousel data
 const carouselSlides = ref([
