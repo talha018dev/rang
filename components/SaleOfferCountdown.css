@@ -157,9 +157,10 @@
 }
 
 .carousel-nav-btn {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #DFDFE2;
   border: 1px solid #e5e7eb;
-  border-radius: 50%;
+  color: black;
+  
   width: 3rem;
   height: 3rem;
   display: flex;
@@ -180,9 +181,17 @@
 .carousel-nav-btn:active {
   transform: scale(0.95);
 }
+.carousel-nav-prev {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.carousel-nav-next {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+} 
 
 .carousel-nav-btn svg {
-  color: #374151;
+  color: black;
   transition: color 0.2s ease-in-out;
 }
 

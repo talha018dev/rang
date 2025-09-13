@@ -81,14 +81,10 @@
                     </button>
                     <div class="carousel-navigation">
                         <button @click="goToPrevious" class="carousel-nav-btn carousel-nav-prev">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <Icon name="heroicons:chevron-left" size="20" color="black" />
                         </button>
                         <button @click="goToNext" class="carousel-nav-btn carousel-nav-next">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <Icon name="heroicons:chevron-right" size="20" color="black" />
                         </button>
                     </div>
                 </div>
