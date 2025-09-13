@@ -1,34 +1,52 @@
 <template>
-  <div class="pb-4">
+  <UApp>
     <AppHeader />
-    <HeroBanner />
+    
+    <!-- <HeroBanner /> -->
+    <!-- <HeroBanner />
     <OfferBanner />
     <ExploreRang />
     <ShopByCategory />
     <TimelessSixYards />
     <ShopByBrand />
     <ShopByTheme />
-    <SaleOffer />
-  </div>
+    <SaleOffer /> -->
+
+      <!-- Carousel -->
+      <!-- <UCarousel 
+        v-slot="{ item }" 
+        :items="items" 
+        class="w-full max-w-4xl mx-auto"
+        arrows
+        indicators
+      >
+        <div class="flex justify-center">
+          <NuxtImg 
+            :src="item" 
+            :alt="`Carousel image ${items.indexOf(item) + 1}`"
+            class="w-full max-w-lg h-80 object-cover rounded-lg shadow-md"
+            loading="eager"
+            format="webp"
+            quality="90"
+            sizes="sm:100vw md:50vw lg:800px"
+          />
+        </div>
+      </UCarousel> -->
+  </UApp>
 </template>
 
+<script setup lang="">
+import AppHeader from '../components/AppHeader.vue'
+import HeroBanner from '../components/HeroBanner.vue'
+import '../app/assets/css/main.css'
 
+const items = [
+  '/sale-carousel-1.png',
+  '/sale-carousel-2.png',
+  '/sale-carousel-3.png',
+  '/sale-carousel-4.png',
+  '/brand-1.png',
+  '/brand-2.png'
+]
 
-
-<script setup>
-import AppHeader from '../components/AppHeader'
-import HeroBanner from '../components/HeroBanner'
-import OfferBanner from '../components/OfferBanner'
-import ExploreRang from '../components/ExploreRang'
-import ShopByCategory from '../components/ShopByCategory'
-import TimelessSixYards from '../components/TimelessSixYards'
-import ShopByBrand from '../components/ShopByBrand'
-import ShopByTheme from '../components/ShopByTheme'
-import SaleOffer from '../components/SaleOffer'
-useHead({
-  title: 'Rang Bangladesh - Durga Puja 2025 Collection',
-  meta: [
-    { name: 'description', content: 'Discover the latest Durga Puja 2025 collection from Rang Bangladesh. Traditional and modern fashion for everyone.' }
-  ]
-})
 </script>

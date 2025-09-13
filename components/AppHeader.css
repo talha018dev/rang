@@ -1,0 +1,98 @@
+/* AppHeader Styles */
+.header {
+  position: absolute;
+  margin-top: 1.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: transparent;
+  backdrop-filter: blur(4px);
+  color: black;
+}
+
+.header-container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link-home {
+  color: #ea580c;
+  font-weight: 500;
+  transition: color 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-home:hover {
+  color: #c2410c;
+}
+
+.nav-link {
+  color: white;
+  transition: color 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link:hover {
+  color: #ea580c;
+}
+
+.nav-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+  position: relative;
+  top: 0.5rem;
+}
+
+.action-button {
+  padding: 0.5rem;
+  transition: color 0.15s ease-in-out;
+}
+
+.action-button:hover {
+  color: #ea580c;
+}
+
+.action-button-flex {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease-in-out;
+}
+
+.action-button-flex:hover {
+  color: #ea580c;
+}
+
+.action-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.action-icon-small {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+}
