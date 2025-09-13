@@ -9,7 +9,6 @@
 
 .countdown-card {
   position: relative;
-  height: 30rem;
   background-color: #ed9a32;
   min-width: 420px;
 }
@@ -142,11 +141,13 @@
   height: 1.25rem;
 }
 
-
 .carousel-section {
   flex: 1;
   background-color: #f3f4f6;
   position: relative;
+}
+.carousel-section .carousel-nuxt {
+  margin: 16px;
 }
 
 .carousel-card {
@@ -176,7 +177,7 @@
 .carousel-content {
   width: 100%;
   margin-left: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .carousel-title {
@@ -192,7 +193,7 @@
 }
 
 .carousel-price-section {
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-left: 0.75rem;
 }
 

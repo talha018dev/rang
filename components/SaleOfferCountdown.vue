@@ -86,11 +86,10 @@
         <!-- Carousel Cards Section -->
         <div class="carousel-section">
             <UCarousel 
+             ref="carousel"
                 v-slot="{ item }" 
                 :items="carouselSlides" 
                 class="carousel-nuxt"
-                arrows
-                indicators
                 :slides-per-view="3.2"
                 :space-between="16"
                 :ui="{
@@ -114,7 +113,6 @@
                             
                         </div>
                         <div class="carousel-price-section">
-                            <div class="carousel-currency">৳</div>
                             <p class="carousel-old-price">{{ item.itemOldPrice }}<span class="carousel-old-price-currency">৳</span></p>
                             <div class="carousel-price-row">
                                 <p class="carousel-current-price">{{ item.itemPrice }}<span class="carousel-current-price-currency">৳</span></p>
@@ -136,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 
 // Countdown state
 const countdown = ref({
@@ -145,6 +143,9 @@ const countdown = ref({
     minutes: 0,
     seconds: 0
 })
+
+const carousel = useTemplateRef('carousel')
+console.log('🚀 - carousel:', carousel)
 
 // Carousel data
 const carouselSlides = ref([

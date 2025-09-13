@@ -24,7 +24,7 @@
                 </div>
             </div>
         </section>
-        <section class="brand-grid-secondary">
+        <section class="">
             <div class="brand-grid-secondary">
                 <img src="/brand-6.png" alt="Brand Rang" class="brand-image-cover"></img>
                 <div class="brand-grid-tertiary">
