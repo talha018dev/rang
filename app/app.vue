@@ -10,6 +10,8 @@
     <ShopByBrand />
     <ShopByTheme />
     <SaleOffer />
+    <WhyRang />
+    <CustomerDiaries />
 
       <!-- Carousel -->
       <!-- <UCarousel 
@@ -43,7 +45,9 @@ import ShopByCategory from '../components/ShopByCategory.vue'
 import TimelessSixYards from '../components/TimelessSixYards.vue'
 import ShopByBrand from '../components/ShopByBrand.vue'
 import ShopByTheme from '../components/ShopByTheme.vue'
+import WhyRang from '../components/WhyRang.vue'
 import SaleOffer from '../components/SaleOffer.vue'
+import CustomerDiaries from '../components/CustomerDiaries.vue'
 import '../app/assets/css/main.css'
 
 const items = [

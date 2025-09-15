@@ -1,0 +1,227 @@
+/* Customer Diaries Complex Grid Layout */
+.customer-diaries-section {
+  margin: 5rem 0;
+  padding: 0 2rem;
+}
+
+.customer-diaries-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(8, 120px);
+  gap: 1rem;
+  grid-template-areas:
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
+    "group-rickshaw group-rickshaw man-yellow customers-diaries customers-diaries customers-diaries"
+    "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors to-tones"
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors to-tones"
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2"
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh couple-roof couple-roof";
+}
+
+/* Grid Area Assignments */
+.from-threads { grid-area: from-threads; }
+.woman-yellow { grid-area: woman-yellow; }
+.man-yellow { grid-area: man-yellow; }
+.customers-diaries { grid-area: customers-diaries; }
+.group-rickshaw { grid-area: group-rickshaw; }
+.dancing-women-1 { grid-area: dancing-women-1; }
+.woman-saree { grid-area: woman-saree; }
+.woman-floor { grid-area: woman-floor; }
+.family-outdoors { grid-area: family-outdoors; }
+.to-tones { grid-area: to-tones; }
+.rang-bangladesh { grid-area: rang-bangladesh; }
+.dancing-women-2 { grid-area: dancing-women-2; }
+.couple-roof { grid-area: couple-roof; }
+
+/* Base Grid Item Styling */
+.grid-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Image Block Styling */
+.image-block {
+  background: #f5f5f5;
+}
+
+.image-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.grid-item:hover .image-block img {
+  transform: scale(1.05);
+}
+
+/* Text Block Styling */
+.text-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.text-content {
+  text-align: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Specific Text Block Colors */
+.from-threads {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+}
+
+.to-tones {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+}
+
+.customers-diaries {
+  background: linear-gradient(135deg, #f8f4e6, #f0e68c);
+  color: #ff6b35;
+}
+
+.rang-bangladesh {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+}
+
+/* Text Sizing */
+.text-line-1, .text-line-2, .text-line-3 {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.text-line-2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.text-line-3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.text-large {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.text-small {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .customer-diaries-container {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 100px);
+    grid-template-areas:
+      "from-threads woman-yellow man-yellow customers-diaries"
+      "from-threads woman-yellow man-yellow customers-diaries"
+      "group-rickshaw group-rickshaw man-yellow customers-diaries"
+      "group-rickshaw group-rickshaw man-yellow dancing-women-1"
+      "woman-saree woman-saree woman-floor woman-floor"
+      "woman-saree woman-saree family-outdoors to-tones"
+      "woman-saree woman-saree rang-bangladesh rang-bangladesh"
+      "woman-saree woman-saree dancing-women-2 dancing-women-2"
+      "couple-roof couple-roof couple-roof couple-roof";
+  }
+  
+  .text-large {
+    font-size: 2.5rem;
+  }
+  
+  .text-small {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .customer-diaries-container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(16, 80px);
+    grid-template-areas:
+      "from-threads woman-yellow"
+      "from-threads woman-yellow"
+      "man-yellow customers-diaries"
+      "man-yellow customers-diaries"
+      "group-rickshaw group-rickshaw"
+      "group-rickshaw group-rickshaw"
+      "dancing-women-1 dancing-women-1"
+      "dancing-women-1 dancing-women-1"
+      "woman-saree woman-saree"
+      "woman-saree woman-saree"
+      "woman-floor family-outdoors"
+      "woman-floor family-outdoors"
+      "to-tones to-tones"
+      "rang-bangladesh rang-bangladesh"
+      "dancing-women-2 dancing-women-2"
+      "couple-roof couple-roof";
+  }
+  
+  .text-content {
+    padding: 1rem;
+  }
+  
+  .text-large {
+    font-size: 2rem;
+  }
+  
+  .text-small {
+    font-size: 1.2rem;
+  }
+  
+  .text-line-1, .text-line-2, .text-line-3 {
+    font-size: 1rem;
+  }
+  
+  .text-line-2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-diaries-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(32, 60px);
+    gap: 0.5rem;
+  }
+  
+  /* Stack all items vertically on mobile */
+  .from-threads, .woman-yellow, .man-yellow, .customers-diaries,
+  .group-rickshaw, .dancing-women-1, .woman-saree, .woman-floor,
+  .family-outdoors, .to-tones, .rang-bangladesh, .dancing-women-2,
+  .couple-roof {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  
+  .text-large {
+    font-size: 1.8rem;
+  }
+  
+  .text-small {
+    font-size: 1rem;
+  }
+}
