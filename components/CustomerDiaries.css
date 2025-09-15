@@ -13,8 +13,8 @@
   grid-template-rows: repeat(8, 120px);
   gap: 1rem;
   grid-template-areas:
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries ."
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries ."
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
     "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
     "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
     "woman-saree woman-floor family-outdoors to-tones to-tones to-tones"
@@ -94,8 +94,32 @@
 }
 
 .customers-diaries {
-  background: linear-gradient(135deg, #f8f4e6, #f0e68c);
+  background: transparent;
   color: #ff6b35;
+}
+
+.customers-diaries .text-content {
+  width: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.customers-diaries .text-large {
+  color: #F1592C;
+  font-size: 100px;
+  font-weight: 800;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.customers-diaries .text-small {
+  color: #FAB767;
+  font-size: 3rem;
+  font-weight: 600;
+  text-align: right;
+  align-self: flex-end;
 }
 
 .rang-bangladesh {
@@ -156,6 +180,14 @@
   .text-small {
     font-size: 1.5rem;
   }
+  
+  .customers-diaries .text-large {
+    font-size: 50px;
+  }
+  
+  .customers-diaries .text-small {
+    font-size: 2.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -193,6 +225,14 @@
     font-size: 1.2rem;
   }
   
+  .customers-diaries .text-large {
+    font-size: 40px;
+  }
+  
+  .customers-diaries .text-small {
+    font-size: 2rem;
+  }
+  
   .text-line-1, .text-line-2, .text-line-3 {
     font-size: 1rem;
   }
@@ -224,5 +264,13 @@
   
   .text-small {
     font-size: 1rem;
+  }
+  
+  .customers-diaries .text-large {
+    font-size: 30px;
+  }
+  
+  .customers-diaries .text-small {
+    font-size: 1.5rem;
   }
 }
