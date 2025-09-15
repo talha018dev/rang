@@ -9,18 +9,26 @@
   
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(8, 115px);
-  gap: 1rem;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(16, 57.5px);
+  gap: 0.5rem;
   grid-template-areas:
-    "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
-    "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
-    "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
-    "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
-    "woman-saree woman-floor family-outdoors family-outdoors to-tones ."
-    "woman-saree woman-floor family-outdoors family-outdoors to-tones ."
-    "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof"
-    "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof";
+    "from-threads from-threads woman-yellow woman-yellow woman-yellow woman-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
+    "from-threads from-threads woman-yellow woman-yellow woman-yellow woman-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
+    "from-threads from-threads woman-yellow woman-yellow woman-yellow woman-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
+    "from-threads from-threads woman-yellow woman-yellow woman-yellow woman-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
+    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
+    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
+    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
+    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
+    "woman-saree woman-saree woman-floor woman-floor family-outdoors family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof couple-roof"
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof couple-roof"
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof couple-roof"
+    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof couple-roof";
 }
 
 /* Grid Area Assignments */
