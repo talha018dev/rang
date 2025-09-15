@@ -10,7 +10,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(8, 120px);
+  grid-template-rows: repeat(8, 115px);
   gap: 1rem;
   grid-template-areas:
     "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
@@ -42,7 +42,6 @@
 .grid-item {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
   /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -84,7 +83,8 @@
 }
 
 .text-content {
-  text-align: center;
+  width: 100%;
+  text-align: left;
   color: white;
   font-family: 'Arial', sans-serif;
   font-weight: 600;
@@ -93,11 +93,32 @@
 
 /* Specific Text Block Colors */
 .from-threads {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: #F7941C;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.from-threads .text-line-1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
+}
+
+.from-threads .text-line-2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
 }
 
 .to-tones {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: #F7941C;
 }
 
 .customers-diaries {
@@ -130,7 +151,7 @@
 }
 
 .rang-bangladesh {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: #F7941C;
 }
 
 /* Text Sizing */
