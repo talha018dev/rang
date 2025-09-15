@@ -119,6 +119,27 @@
 
 .to-tones {
   background: #F7941C;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.to-tones .text-line-1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
+}
+
+.to-tones .text-line-2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
 }
 
 .customers-diaries {
@@ -152,6 +173,36 @@
 
 .rang-bangladesh {
   background: #F7941C;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.rang-bangladesh .text-line-1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
+}
+
+.rang-bangladesh .text-line-2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
+}
+
+.rang-bangladesh .text-line-3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 50px;
+  letter-spacing: 0%;
 }
 
 /* Text Sizing */
