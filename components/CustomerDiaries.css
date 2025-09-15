@@ -13,12 +13,12 @@
   grid-template-rows: repeat(8, 120px);
   gap: 1rem;
   grid-template-areas:
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
-    "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
-    "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
-    "woman-saree woman-floor family-outdoors to-tones to-tones to-tones"
-    "woman-saree woman-floor family-outdoors to-tones to-tones to-tones"
+    "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
+    "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
+    "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
+    "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
+    "woman-saree woman-floor woman-floor family-outdoors family-outdoors to-tones"
+    "woman-saree woman-floor woman-floor family-outdoors family-outdoors to-tones"
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof"
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof";
 }
@@ -162,13 +162,13 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(10, 100px);
     grid-template-areas:
-      "from-threads woman-yellow man-yellow customers-diaries"
-      "from-threads woman-yellow man-yellow customers-diaries"
+      "from-threads woman-yellow woman-yellow customers-diaries"
+      "from-threads woman-yellow woman-yellow customers-diaries"
       "group-rickshaw group-rickshaw man-yellow dancing-women-1"
       "group-rickshaw group-rickshaw man-yellow dancing-women-1"
-      "woman-saree woman-floor family-outdoors to-tones"
-      "woman-saree woman-floor family-outdoors to-tones"
-      "woman-saree rang-bangladesh dancing-women-2 couple-roof"
+      "woman-saree woman-floor woman-floor family-outdoors"
+      "woman-saree woman-floor woman-floor family-outdoors"
+      "woman-saree to-tones to-tones couple-roof"
       "woman-saree rang-bangladesh dancing-women-2 couple-roof"
       "couple-roof couple-roof couple-roof couple-roof";
   }
