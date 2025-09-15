@@ -20,10 +20,12 @@
       </div>
 
       <!-- Text Block: "Customers Diaries" -->
-      <div class="grid-item text-block customers-diaries">
+      <div class="grid-item text-block customers-diaries p-0">
         <div class="text-content">
-          <span class="text-large">Customers</span>
-          <span class="text-small">Diaries</span>
+          <span class="text-large">Customers
+            <span class="text-small text-light">Diaries</span>
+          </span>
+          
         </div>
       </div>
 

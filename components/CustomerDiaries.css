@@ -17,8 +17,8 @@
     "from-threads woman-yellow woman-yellow man-yellow customers-diaries customers-diaries"
     "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
     "group-rickshaw group-rickshaw group-rickshaw man-yellow dancing-women-1 ."
-    "woman-saree woman-floor woman-floor family-outdoors family-outdoors to-tones"
-    "woman-saree woman-floor woman-floor family-outdoors family-outdoors to-tones"
+    "woman-saree woman-floor family-outdoors family-outdoors to-tones ."
+    "woman-saree woman-floor family-outdoors family-outdoors to-tones ."
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof"
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof";
 }
@@ -43,13 +43,13 @@
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .grid-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); */
 }
 
 /* Image Block Styling */
@@ -74,6 +74,13 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+.pl-0 {
+  padding-left: 0 !important;
 }
 
 .text-content {
@@ -108,7 +115,7 @@
 
 .customers-diaries .text-large {
   color: #F1592C;
-  font-size: 100px;
+  font-size: 70px;
   font-weight: 800;
   text-align: left;
   align-self: flex-start;
@@ -166,8 +173,8 @@
       "from-threads woman-yellow woman-yellow customers-diaries"
       "group-rickshaw group-rickshaw man-yellow dancing-women-1"
       "group-rickshaw group-rickshaw man-yellow dancing-women-1"
-      "woman-saree woman-floor woman-floor family-outdoors"
-      "woman-saree woman-floor woman-floor family-outdoors"
+      "woman-saree woman-floor family-outdoors family-outdoors"
+      "woman-saree woman-floor family-outdoors family-outdoors"
       "woman-saree to-tones to-tones couple-roof"
       "woman-saree rang-bangladesh dancing-women-2 couple-roof"
       "couple-roof couple-roof couple-roof couple-roof";
@@ -273,4 +280,7 @@
   .customers-diaries .text-small {
     font-size: 1.5rem;
   }
+}
+.text-light {
+  font-weight: 200 !important;
 }
