@@ -12,6 +12,7 @@
     <SaleOffer />
     <WhyRang />
     <CustomerDiaries />
+    <AppFooter />
 
       <!-- Carousel -->
       <!-- <UCarousel 
@@ -48,6 +49,7 @@ import ShopByTheme from '../components/ShopByTheme.vue'
 import WhyRang from '../components/WhyRang.vue'
 import SaleOffer from '../components/SaleOffer.vue'
 import CustomerDiaries from '../components/CustomerDiaries.vue'
+import AppFooter from '../components/AppFooter.vue'
 import '../app/assets/css/main.css'
 
 const items = [
