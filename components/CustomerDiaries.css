@@ -1,11 +1,12 @@
 /* Customer Diaries Complex Grid Layout */
 .customer-diaries-section {
-  margin: 5rem 0;
-  padding: 0 2rem;
+  margin: 5rem auto;
+  /* padding: 0 2rem; */
+  max-width: 90%;
 }
 
 .customer-diaries-container {
-  max-width: 1400px;
+  
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -16,8 +17,8 @@
     "from-threads woman-yellow man-yellow customers-diaries customers-diaries ."
     "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
     "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
-    "woman-saree woman-floor family-outdoors to-tones couple-roof couple-roof"
-    "woman-saree woman-floor family-outdoors to-tones couple-roof couple-roof"
+    "woman-saree woman-floor family-outdoors to-tones to-tones to-tones"
+    "woman-saree woman-floor family-outdoors to-tones to-tones to-tones"
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof"
     "woman-saree rang-bangladesh dancing-women-2 dancing-women-2 couple-roof couple-roof";
 }
