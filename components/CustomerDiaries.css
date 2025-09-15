@@ -12,9 +12,9 @@
   grid-template-rows: repeat(8, 120px);
   gap: 1rem;
   grid-template-areas:
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
-    "from-threads woman-yellow man-yellow customers-diaries customers-diaries customers-diaries"
-    "group-rickshaw group-rickshaw man-yellow customers-diaries customers-diaries customers-diaries"
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries ."
+    "from-threads woman-yellow man-yellow customers-diaries customers-diaries ."
+    "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
     "group-rickshaw group-rickshaw man-yellow dancing-women-1 dancing-women-1 ."
     "woman-saree woman-floor family-outdoors to-tones dancing-women-2 dancing-women-2"
     "woman-saree woman-floor family-outdoors to-tones dancing-women-2 dancing-women-2"
@@ -139,7 +139,7 @@
     grid-template-areas:
       "from-threads woman-yellow man-yellow customers-diaries"
       "from-threads woman-yellow man-yellow customers-diaries"
-      "group-rickshaw group-rickshaw man-yellow customers-diaries"
+      "group-rickshaw group-rickshaw man-yellow dancing-women-1"
       "group-rickshaw group-rickshaw man-yellow dancing-women-1"
       "woman-saree woman-floor family-outdoors to-tones"
       "woman-saree woman-floor family-outdoors to-tones"
