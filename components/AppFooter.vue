@@ -82,14 +82,15 @@
             <h3 class="section-heading">Download App</h3>
             <div class="app-buttons">
               <a href="#" class="app-button app-store">
-                <span class="app-icon">🍎</span>
+                <Icon name="simple-icons:apple" />
                 <div class="app-text">
                   <span class="app-subtitle">Download on the</span>
                   <span class="app-title">App Store</span>
                 </div>
               </a>
               <a href="#" class="app-button google-play">
-                <span class="app-icon">▶</span>
+                <img src="/play-store-logo.svg"  />
+
                 <div class="app-text">
                   <span class="app-subtitle">GET IT ON</span>
                   <span class="app-title">Google Play</span>
@@ -103,24 +104,26 @@
             <h3 class="section-heading">Payment Gateway Partner</h3>
             <div class="payment-logos">
               <div class="payment-logo sslcommerz">
-                <span>SSLCommerz</span>
+                <img src="/ssl.png" />
               </div>
               <div class="payment-logo paypal">
-                <span>PayPal</span>
+                <img src="/paypal.png" />
               </div>
             </div>
           </div>
         </div>
+        
       </div>
-    </div>
-
-    <!-- Bottom separator line -->
-    <div class="footer-separator"></div>
-    
-    <!-- Copyright -->
-    <div class="copyright">
+      <div class="copyright">
       <p>© Rang Bangladesh Ltd. — All Rights reserved.</p>
     </div>
+    </div>
+    
+
+    <!-- Bottom separator line -->
+    
+    <!-- Copyright -->
+    
   </footer>
 </template>
 

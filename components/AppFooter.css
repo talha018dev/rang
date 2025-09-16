@@ -25,6 +25,7 @@
   grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
   gap: 2rem;
   align-items: start;
+  font-family: Jost, sans-serif;
 }
 
 /* Section Headings */
@@ -37,7 +38,7 @@
   letter-spacing: 0%;
   vertical-align: middle;
   margin-bottom: 1rem;
-  color: #2B2B2B;
+  color: #2b2b2b;
 }
 
 /* Contact Us Section */
@@ -107,7 +108,7 @@
 }
 
 .footer-links li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .footer-links a {
@@ -115,6 +116,13 @@
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease;
+
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
 }
 
 .footer-links a:hover {
@@ -130,12 +138,11 @@
 }
 
 .download-section {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .app-buttons {
   display: flex;
-  flex-direction: column;
   gap: 0.8rem;
 }
 
@@ -165,12 +172,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-left: 12px;
 }
 
 .app-subtitle {
   font-size: 0.7rem;
   line-height: 1;
   margin-bottom: 0.2rem;
+  font-weight: 400;
 }
 
 .app-title {
@@ -181,7 +190,7 @@
 
 /* Payment Section */
 .payment-section {
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .payment-logos {
@@ -194,7 +203,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 1rem;
+  /* padding: 0.8rem 1rem; */
   border-radius: 8px;
   font-weight: bold;
   font-size: 0.9rem;
@@ -202,28 +211,39 @@
   text-align: center;
 }
 
-.payment-logo.sslcommerz {
-  background-color: #0066cc;
+.payment-logo.sslcommerz img {
+  /* background-color: #0066cc; */
   color: white;
+  width: 100%;
+  height: 48px;
+  object-fit: contain;
+  object-position: left;
 }
 
-.payment-logo.paypal {
-  background-color: #0070ba;
+.payment-logo.paypal img {
+  /* background-color: #0070ba; */
   color: white;
+  width: 100%;
+  height: 48px;
+  object-fit: contain;
+  object-position: left;
 }
 
 /* Copyright */
 .copyright {
-  background-color: #fdf5eb;
-  padding: 1rem 0;
+  /* background-color: #fdf5eb; */
+  padding-top: 2rem;
   text-align: center;
-  border-top: 1px solid #f5e6d3;
+  border-top: 1px solid #fab767;
 }
 
 .copyright p {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #555555;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
 }
 
 /* Responsive Design */
@@ -285,4 +305,8 @@
   .social-icons {
     justify-content: center;
   }
+}
+.app-store iconify {
+  font-size: 2.5rem;
+  margin-right: 1rem;
 }
