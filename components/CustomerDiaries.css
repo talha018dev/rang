@@ -411,8 +411,6 @@
   font-weight: 200 !important;
 }
 .best-deals-section {
-  max-width: 90%;
-  margin: 5rem auto;
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
@@ -421,7 +419,13 @@
   letter-spacing: 0%;
   vertical-align: middle;
   color: black;
+  background: linear-gradient(to bottom, white, #fab767);
 
+  
+}
+.best-deals-container {
+  max-width: 90%;
+  margin: 4rem auto;
   display: flex;
   align-items: center;
   gap: 4rem;
@@ -430,4 +434,22 @@
 .best-deals-section img {
   margin: auto;
   margin-bottom: 2rem;
+}
+.best-deals-button-container {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #FAB767;
+  max-width: 90%;
+  margin: auto;
+  padding-bottom: 2rem;
+  
+}
+.best-deals-button-container button {
+  border: 1px solid;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+
+  display: flex;
+  margin: auto;
+  gap: 1rem;
 }

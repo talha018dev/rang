@@ -12,7 +12,7 @@
     <SaleOffer />
     <WhyRang />
     <CustomerDiaries />
-    <AppFooter />
+    <!-- <AppFooter /> -->
 
       <!-- Carousel -->
       <!-- <UCarousel 
