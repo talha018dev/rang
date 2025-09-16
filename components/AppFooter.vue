@@ -11,25 +11,25 @@
           <h3 class="section-heading">Contact Us</h3>
           <div class="contact-info">
             <div class="contact-item">
-              <span class="contact-icon">📍</span>
+              <span class="contact-icon"><Icon name="heroicons:map" /></span>
               <span>91 West Masdair, Narayanganj, 1400, Bangladesh</span>
             </div>
             <div class="contact-item">
-              <span class="contact-icon">✉️</span>
+              <span class="contact-icon"><Icon name="heroicons:envelope" /></span>
               <span>contactrang@gmail.com</span>
             </div>
             <div class="contact-item">
-              <span class="contact-icon">📞</span>
+              <span class="contact-icon"><Icon name="heroicons:phone" /></span>
               <span>+8801777 744 344</span>
             </div>
           </div>
           <div class="social-media">
             <h4 class="social-heading">Social Media For Rang Bangladesh</h4>
             <div class="social-icons">
-              <a href="#" class="social-icon">f</a>
-              <a href="#" class="social-icon">X</a>
-              <a href="#" class="social-icon">▶</a>
-              <a href="#" class="social-icon">📷</a>
+              <a href="#" class="social-icon"><Icon name="tabler:brand-facebook" /></a>
+                <a href="#" class="social-icon"><Icon name="simple-icons:x" /></a>
+                <a href="#" class="social-icon"><Icon name="tabler:brand-youtube" /></a>
+              <a href="#" class="social-icon"><Icon name="mdi:instagram" /></a>
             </div>
           </div>
         </div>

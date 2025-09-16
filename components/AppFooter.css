@@ -8,7 +8,7 @@
 
 .footer-separator {
   height: 1px;
-  background-color: #F5E6D3;
+  background-color: #f5e6d3;
   width: 100%;
 }
 
@@ -17,7 +17,8 @@
 }
 
 .footer-container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
+  max-width: 90%;
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
@@ -28,12 +29,15 @@
 
 /* Section Headings */
 .section-heading {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #555555;
+  font-family: Jost, sans-serif;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
   margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #2B2B2B;
 }
 
 /* Contact Us Section */
@@ -55,7 +59,7 @@
 
 .contact-icon {
   margin-right: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
   margin-top: 0.1rem;
 }
@@ -82,12 +86,12 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  background-color: #555555;
-  color: white;
+  /* background-color: #555555; */
+  color: #737382;
   text-decoration: none;
   border-radius: 4px;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   transition: background-color 0.3s ease;
 }
 
@@ -199,21 +203,21 @@
 }
 
 .payment-logo.sslcommerz {
-  background-color: #0066CC;
+  background-color: #0066cc;
   color: white;
 }
 
 .payment-logo.paypal {
-  background-color: #0070BA;
+  background-color: #0070ba;
   color: white;
 }
 
 /* Copyright */
 .copyright {
-  background-color: #FDF5EB;
+  background-color: #fdf5eb;
   padding: 1rem 0;
   text-align: center;
-  border-top: 1px solid #F5E6D3;
+  border-top: 1px solid #f5e6d3;
 }
 
 .copyright p {
@@ -228,7 +232,7 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1.5rem;
   }
-  
+
   .download-payment-section {
     grid-column: 1 / -1;
     flex-direction: row;
@@ -241,22 +245,22 @@
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
-  
+
   .contact-section {
     grid-column: 1 / -1;
   }
-  
+
   .download-payment-section {
     grid-column: 1 / -1;
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .app-buttons {
     flex-direction: row;
     justify-content: flex-start;
   }
-  
+
   .payment-logos {
     flex-direction: row;
     justify-content: flex-start;
@@ -269,15 +273,15 @@
     gap: 1.5rem;
     padding: 0 1rem;
   }
-  
+
   .app-buttons {
     flex-direction: column;
   }
-  
+
   .payment-logos {
     flex-direction: column;
   }
-  
+
   .social-icons {
     justify-content: center;
   }
