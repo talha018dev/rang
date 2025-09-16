@@ -6,45 +6,70 @@
 }
 
 .customer-diaries-container {
-  
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(16, 57.5px);
   gap: 0.5rem;
   grid-template-areas:
-    "from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
-    "from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
-    "from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
-    "from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries"
-    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
-    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
-    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
-    "group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . ."
-    "woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
-    "woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
-    "woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
-    "woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . ."
-    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof"
-    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof"
-    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof"
-    "woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof";
+    'from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries'
+    'from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries'
+    'from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries'
+    'from-threads from-threads woman-yellow woman-yellow woman-yellow man-yellow man-yellow man-yellow customers-diaries customers-diaries customers-diaries customers-diaries'
+    'group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . .'
+    'group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . .'
+    'group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . .'
+    'group-rickshaw group-rickshaw group-rickshaw group-rickshaw group-rickshaw man-yellow man-yellow man-yellow dancing-women-1 dancing-women-1 . .'
+    'woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . .'
+    'woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . .'
+    'woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . .'
+    'woman-saree woman-saree woman-floor woman-floor woman-floor family-outdoors family-outdoors family-outdoors to-tones to-tones . .'
+    'woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof'
+    'woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof'
+    'woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof'
+    'woman-saree woman-saree rang-bangladesh rang-bangladesh rang-bangladesh dancing-women-2 dancing-women-2 dancing-women-2 dancing-women-2 couple-roof couple-roof couple-roof';
 }
 
 /* Grid Area Assignments */
-.from-threads { grid-area: from-threads; }
-.woman-yellow { grid-area: woman-yellow; }
-.man-yellow { grid-area: man-yellow; }
-.customers-diaries { grid-area: customers-diaries; }
-.group-rickshaw { grid-area: group-rickshaw; }
-.dancing-women-1 { grid-area: dancing-women-1; }
-.woman-saree { grid-area: woman-saree; }
-.woman-floor { grid-area: woman-floor; }
-.family-outdoors { grid-area: family-outdoors; }
-.to-tones { grid-area: to-tones; }
-.rang-bangladesh { grid-area: rang-bangladesh; }
-.dancing-women-2 { grid-area: dancing-women-2; }
-.couple-roof { grid-area: couple-roof; }
+.from-threads {
+  grid-area: from-threads;
+}
+.woman-yellow {
+  grid-area: woman-yellow;
+}
+.man-yellow {
+  grid-area: man-yellow;
+}
+.customers-diaries {
+  grid-area: customers-diaries;
+}
+.group-rickshaw {
+  grid-area: group-rickshaw;
+}
+.dancing-women-1 {
+  grid-area: dancing-women-1;
+}
+.woman-saree {
+  grid-area: woman-saree;
+}
+.woman-floor {
+  grid-area: woman-floor;
+}
+.family-outdoors {
+  grid-area: family-outdoors;
+}
+.to-tones {
+  grid-area: to-tones;
+}
+.rang-bangladesh {
+  grid-area: rang-bangladesh;
+}
+.dancing-women-2 {
+  grid-area: dancing-women-2;
+}
+.couple-roof {
+  grid-area: couple-roof;
+}
 
 /* Base Grid Item Styling */
 .grid-item {
@@ -101,7 +126,7 @@
 
 /* Specific Text Block Colors */
 .from-threads {
-  background: #F7941C;
+  background: #f7941c;
   align-items: flex-end;
   justify-content: flex-start;
   padding: 1rem;
@@ -126,7 +151,7 @@
 }
 
 .to-tones {
-  background: #F7941C;
+  background: #f7941c;
   align-items: flex-end;
   justify-content: flex-start;
   padding: 1rem;
@@ -164,7 +189,7 @@
 }
 
 .customers-diaries .text-large {
-  color: #F1592C;
+  color: #f1592c;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
@@ -176,7 +201,7 @@
 }
 
 .customers-diaries .text-small {
-  color: #FAB767;
+  color: #fab767;
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-style: normal;
@@ -188,7 +213,7 @@
 }
 
 .rang-bangladesh {
-  background: #F7941C;
+  background: #f7941c;
   align-items: flex-end;
   justify-content: flex-start;
   padding: 1rem;
@@ -222,7 +247,9 @@
 }
 
 /* Text Sizing */
-.text-line-1, .text-line-2, .text-line-3 {
+.text-line-1,
+.text-line-2,
+.text-line-3 {
   display: block;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
@@ -257,29 +284,29 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(10, 100px);
     grid-template-areas:
-      "from-threads woman-yellow woman-yellow customers-diaries"
-      "from-threads woman-yellow woman-yellow customers-diaries"
-      "group-rickshaw group-rickshaw man-yellow dancing-women-1"
-      "group-rickshaw group-rickshaw man-yellow dancing-women-1"
-      "woman-saree woman-floor family-outdoors family-outdoors"
-      "woman-saree woman-floor family-outdoors family-outdoors"
-      "woman-saree to-tones to-tones couple-roof"
-      "woman-saree rang-bangladesh dancing-women-2 couple-roof"
-      "couple-roof couple-roof couple-roof couple-roof";
+      'from-threads woman-yellow woman-yellow customers-diaries'
+      'from-threads woman-yellow woman-yellow customers-diaries'
+      'group-rickshaw group-rickshaw man-yellow dancing-women-1'
+      'group-rickshaw group-rickshaw man-yellow dancing-women-1'
+      'woman-saree woman-floor family-outdoors family-outdoors'
+      'woman-saree woman-floor family-outdoors family-outdoors'
+      'woman-saree to-tones to-tones couple-roof'
+      'woman-saree rang-bangladesh dancing-women-2 couple-roof'
+      'couple-roof couple-roof couple-roof couple-roof';
   }
-  
+
   .text-large {
     font-size: 2.5rem;
   }
-  
+
   .text-small {
     font-size: 1.5rem;
   }
-  
+
   .customers-diaries .text-large {
     font-size: 50px;
   }
-  
+
   .customers-diaries .text-small {
     font-size: 2.5rem;
   }
@@ -290,48 +317,50 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(16, 80px);
     grid-template-areas:
-      "from-threads woman-yellow"
-      "from-threads woman-yellow"
-      "man-yellow customers-diaries"
-      "man-yellow customers-diaries"
-      "group-rickshaw group-rickshaw"
-      "group-rickshaw group-rickshaw"
-      "dancing-women-1 dancing-women-1"
-      "dancing-women-1 dancing-women-1"
-      "woman-saree woman-saree"
-      "woman-saree woman-saree"
-      "woman-floor family-outdoors"
-      "woman-floor family-outdoors"
-      "to-tones to-tones"
-      "rang-bangladesh rang-bangladesh"
-      "dancing-women-2 dancing-women-2"
-      "couple-roof couple-roof";
+      'from-threads woman-yellow'
+      'from-threads woman-yellow'
+      'man-yellow customers-diaries'
+      'man-yellow customers-diaries'
+      'group-rickshaw group-rickshaw'
+      'group-rickshaw group-rickshaw'
+      'dancing-women-1 dancing-women-1'
+      'dancing-women-1 dancing-women-1'
+      'woman-saree woman-saree'
+      'woman-saree woman-saree'
+      'woman-floor family-outdoors'
+      'woman-floor family-outdoors'
+      'to-tones to-tones'
+      'rang-bangladesh rang-bangladesh'
+      'dancing-women-2 dancing-women-2'
+      'couple-roof couple-roof';
   }
-  
+
   .text-content {
     padding: 1rem;
   }
-  
+
   .text-large {
     font-size: 2rem;
   }
-  
+
   .text-small {
     font-size: 1.2rem;
   }
-  
+
   .customers-diaries .text-large {
     font-size: 40px;
   }
-  
+
   .customers-diaries .text-small {
     font-size: 2rem;
   }
-  
-  .text-line-1, .text-line-2, .text-line-3 {
+
+  .text-line-1,
+  .text-line-2,
+  .text-line-3 {
     font-size: 1rem;
   }
-  
+
   .text-line-2 {
     font-size: 1.4rem;
   }
@@ -343,32 +372,62 @@
     grid-template-rows: repeat(32, 60px);
     gap: 0.5rem;
   }
-  
+
   /* Stack all items vertically on mobile */
-  .from-threads, .woman-yellow, .man-yellow, .customers-diaries,
-  .group-rickshaw, .dancing-women-1, .woman-saree, .woman-floor,
-  .family-outdoors, .to-tones, .rang-bangladesh, .dancing-women-2,
+  .from-threads,
+  .woman-yellow,
+  .man-yellow,
+  .customers-diaries,
+  .group-rickshaw,
+  .dancing-women-1,
+  .woman-saree,
+  .woman-floor,
+  .family-outdoors,
+  .to-tones,
+  .rang-bangladesh,
+  .dancing-women-2,
   .couple-roof {
     grid-column: 1;
     grid-row: auto;
   }
-  
+
   .text-large {
     font-size: 1.8rem;
   }
-  
+
   .text-small {
     font-size: 1rem;
   }
-  
+
   .customers-diaries .text-large {
     font-size: 30px;
   }
-  
+
   .customers-diaries .text-small {
     font-size: 1.5rem;
   }
 }
 .text-light {
   font-weight: 200 !important;
+}
+.best-deals-section {
+  max-width: 90%;
+  margin: 5rem auto;
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 17px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: black;
+
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  justify-content: space-around;
+}
+.best-deals-section img {
+  margin: auto;
+  margin-bottom: 2rem;
 }
