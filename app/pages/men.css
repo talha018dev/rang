@@ -1,21 +1,18 @@
 /* Men Page Styles */
 .men-page {
   min-height: 100vh;
-  background-color: #faf9f7;
+  margin-top: 15rem;
 }
 
 /* Hero Banner Section */
 .hero-banner {
   width: 100%;
-  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  /* background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%); */
   position: relative;
   overflow: hidden;
 }
 
 .hero-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .hero-content {
@@ -44,33 +41,13 @@
   font-family: 'Poppins', sans-serif;
 }
 
-.hero-images {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.hero-image-left,
-.hero-image-right {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-image-left {
-  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-}
-
-.hero-image-right {
-  background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-}
 
 .hero-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  /* height: 100%; */
+  height: 460px;
+  object-fit: contain;
+  object-position: left;
   transition: transform 0.3s ease;
 }
 
@@ -86,9 +63,9 @@
 }
 
 .filter-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  /* max-width: 1200px; */
+  /* margin: 0 auto; */
+  /* padding: 0 1rem; */
 }
 
 .filter-dropdowns {
@@ -212,7 +189,7 @@
   .hero-title {
     font-size: 3rem;
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
@@ -223,30 +200,30 @@
   .hero-content {
     min-height: 300px;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .filter-dropdowns {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
   }
-  
+
   .filter-dropdown {
     min-width: auto;
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
   }
-  
+
   .product-image {
     height: 250px;
   }
-  
+
   .products-section {
     padding: 2rem 0;
   }
@@ -256,38 +233,38 @@
   .hero-content {
     min-height: 250px;
   }
-  
+
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .hero-container,
   .filter-container,
   .products-container {
     padding: 0 0.75rem;
   }
-  
+
   .products-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .product-card {
     max-width: none;
   }
-  
+
   .product-image {
     height: 200px;
   }
-  
+
   .product-info {
     padding: 1rem;
   }
-  
+
   .product-name {
     font-size: 1rem;
   }
-  
+
   .product-price {
     font-size: 1.125rem;
   }
@@ -298,7 +275,7 @@
   .hero-title {
     font-size: 5rem;
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 2.5rem;
@@ -310,6 +287,6 @@
   .hero-container,
   .filter-container,
   .products-container {
-    max-width: 1400px;
   }
 }
+
