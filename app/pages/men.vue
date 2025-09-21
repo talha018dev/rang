@@ -80,12 +80,14 @@
       </div>
     </section>
   </div>
+  <AppFooter />
 </template>
 
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { computed, ref } from 'vue'
 import './men.css'
+import AppFooter from '../../components/AppFooter.vue'
 
 // Meta
 useHead({
