@@ -2,8 +2,9 @@
 .app-footer {
   /* background-color: #FDF5EB; */
   color: #555555;
-  font-family: 'Arial', sans-serif;
+  font-family: Jost, sans-serif;
   width: 100%;
+  background: linear-gradient(to bottom, white, #fbd19b)
 }
 
 .footer-separator {
@@ -313,4 +314,50 @@
 .app-store .iconify {
   font-size: 2rem;
   /* margin-right: 1rem; */
+}
+
+
+
+.best-deals-section {
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 17px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: black;
+  /* background: linear-gradient(to bottom, white, #fbd19b); */
+
+  
+}
+.best-deals-container {
+  max-width: 50%;
+  margin: 4rem auto;
+  display: flex;
+  align-items: center;
+  /* gap: 4rem; */
+  justify-content: space-around;
+}
+.best-deals-section img {
+  margin: auto;
+  margin-bottom: 2rem;
+}
+.best-deals-button-container {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #FAB767;
+  max-width: 90%;
+  margin: auto;
+  padding-bottom: 2rem;
+  
+}
+.best-deals-button-container button {
+  border: 1px solid;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+
+  display: flex;
+  margin: auto;
+  gap: 1rem;
 }

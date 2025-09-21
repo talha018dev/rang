@@ -1,5 +1,28 @@
 <template>
   <footer class="app-footer">
+    <section class="best-deals-section">
+      <div class="best-deals-container">
+      <div>
+        <img src="/best-deals.svg" />
+        <div>Best Deals</div>
+      </div>
+      <div>
+        <img src="/supporting-teams.svg" />
+        <div>Supporting Teams</div>
+      </div>
+      <div>
+        <img src="/best-quality.svg" />
+        <div>Best Quality</div>
+      </div>
+      <div>
+        <img src="/flexible-payment.svg" />
+        <div>Flexible Payment</div>
+      </div>
+    </div>
+    <div class="best-deals-button-container">
+      <button>Find Out More <Icon name="heroicons:chevron-right" /></button>
+    </div>
+    </section>
     <!-- Top separator line -->
     <div class="footer-separator"></div>
     
