@@ -9,7 +9,7 @@
 
 .footer-separator {
   height: 1px;
-  background-color: #f5e6d3;
+  background-color: #FAB767;
   width: 100%;
 }
 
@@ -19,7 +19,10 @@
 
 .footer-container {
   /* max-width: 1200px; */
-  max-width: 90%;
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
   margin: 0 auto;
   /* padding: 0 2rem; */
   display: grid;
@@ -346,7 +349,7 @@
 .best-deals-button-container {
   width: 100%;
   text-align: center;
-  border-bottom: 1px solid #FAB767;
+  /* border-bottom: 1px solid #FAB767; */
   max-width: 90%;
   margin: auto;
   padding-bottom: 2rem;

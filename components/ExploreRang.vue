@@ -5,7 +5,7 @@
                 <h1><span class="explore-title-light">Explore</span> <span class="explore-title-bold">Rang Bangladesh</span></h1>
             </div>
         </section>
-        <section>
+        <section class="explore-grid-container">
             <div class="explore-grid-main">
                 <img src="/explore-1.png" alt="Explore Rang" class="explore-image-rounded"></img>
                 <img src="/explore-2.png" alt="Explore Rang" class="explore-image-rounded"></img>
