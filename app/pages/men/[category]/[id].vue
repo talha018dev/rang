@@ -2,14 +2,6 @@
   <div class="product-page">
     <AppHeader />
     
-    <!-- Debug Info -->
-    <div style="background: red; color: white; padding: 20px; margin: 20px;">
-      <h1>DEBUG INFO</h1>
-      <p>Category: {{ category }}</p>
-      <p>ID: {{ id }}</p>
-      <p>Product Name: {{ product.name }}</p>
-    </div>
-    
     <!-- Breadcrumb Navigation -->
     <div class="breadcrumb">
       <NuxtLink to="/">Homepage</NuxtLink>
@@ -168,10 +160,6 @@ const route = useRoute()
 const category = route.params.category as string
 const id = route.params.id as string
 
-// Debug logging
-console.log('Route params:', route.params)
-console.log('Category:', category)
-console.log('ID:', id)
 
 // Meta
 useHead({

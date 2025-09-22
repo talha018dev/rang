@@ -5,6 +5,9 @@
     <!-- Hero Banner Section -->
     <section class="hero-banner">
         <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="hero-title">MEN</h1>
+          </div>
               <NuxtImg 
                 src="/men/men-hero.png" 
                 alt="Men's fashion" 
@@ -53,9 +56,10 @@
     <section class="products-section">
       <div class="products-container">
         <div class="products-grid">
-          <div 
+          <NuxtLink 
             v-for="(product, index) in filteredProducts" 
             :key="index"
+            :to="`/men/${product.category}/${product.id}`"
             class="product-card"
           >
             <div class="product-image">
@@ -72,7 +76,7 @@
               <h3 class="product-name">{{ product.name }}</h3>
               <p class="product-price">{{ product.price }}</p>
             </div>
-          </div>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -81,10 +85,8 @@
 </template>
 
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
-import { computed, ref } from 'vue'
-import AppFooter from '../../components/AppFooter.vue'
-import './men.css'
+// All Vue composables and components are auto-imported in Nuxt 4
+import '../men.css'
 
 // Meta
 useHead({
@@ -98,7 +100,6 @@ useHead({
 const selectedSize = ref('')
 const selectedPrice = ref('')
 
-
 // Product data
 const products = ref([
   {
@@ -107,7 +108,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-1.png',
     size: 'M',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 2,
@@ -115,7 +117,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-2.png',
     size: 'L',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 3,
@@ -123,7 +126,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-1.png',
     size: 'XL',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 4,
@@ -131,7 +135,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-2.png',
     size: 'M',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 5,
@@ -139,7 +144,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-1.png',
     size: 'L',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 6,
@@ -147,7 +153,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-2.png',
     size: 'XL',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 7,
@@ -155,7 +162,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-1.png',
     size: 'M',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   },
   {
     id: 8,
@@ -163,7 +171,8 @@ const products = ref([
     price: 'Tk 2,500',
     image: '/men/men-2.png',
     size: 'L',
-    priceRange: '2000-3000'
+    priceRange: '2000-3000',
+    category: 'punjabi'
   }
 ])
 
@@ -186,5 +195,4 @@ const filteredProducts = computed(() => {
 :global(.nav-link:hover) {
   color: #ea580c !important;
 }
-
 </style>
