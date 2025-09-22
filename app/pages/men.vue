@@ -86,8 +86,8 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 import { computed, ref } from 'vue'
-import './men.css'
 import AppFooter from '../../components/AppFooter.vue'
+import './men.css'
 
 // Meta
 useHead({
@@ -100,6 +100,7 @@ useHead({
 // Reactive data
 const selectedSize = ref('')
 const selectedPrice = ref('')
+
 
 // Product data
 const products = ref([
@@ -189,11 +190,4 @@ const filteredProducts = computed(() => {
   color: #ea580c !important;
 }
 
-:global(.nav-link-home) {
-  color: #ea580c !important;
-}
-
-:global(.nav-link-home:hover) {
-  color: #c2410c !important;
-}
 </style>

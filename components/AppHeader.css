@@ -15,10 +15,6 @@
   width: 90%;
 }
 
-.header-container {
-  /* width: 90%; */
-  /* margin: 0 auto; */
-}
 
 .header-content {
   display: flex;
@@ -33,7 +29,7 @@
 }
 
 .nav-link-home {
-  color: #ea580c;
+  /* color: #ea580c; */
   font-weight: 500;
   transition: color 0.15s ease-in-out;
   display: flex;
@@ -41,7 +37,12 @@
 }
 
 .nav-link-home:hover {
-  color: #c2410c;
+  /* color: #c2410c; */
+}
+
+.nav-link-home-active {
+  /* color: #c2410c; */
+  font-weight: 600;
 }
 
 .nav-link {
@@ -53,6 +54,11 @@
 
 .nav-link:hover {
   color: #ea580c;
+}
+
+.nav-link-active {
+  color: #ea580c !important;
+  font-weight: 600;
 }
 
 .nav-icon {

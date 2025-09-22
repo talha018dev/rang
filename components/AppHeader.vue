@@ -8,13 +8,13 @@
         <nav class="nav">
           <NuxtLink 
             to="/" 
-            class="nav-link-home"
+            :class="getNavLinkHomeClass(isHomeActive)"
           >
             Home
           </NuxtLink>
           <NuxtLink 
             to="/women" 
-            class="nav-link"
+            :class="getNavLinkClass(isWomenActive)"
           >
             Women
             <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +23,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/men" 
-            class="nav-link"
+            :class="getNavLinkClass(isMenActive)"
           >
             Men
             <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -32,7 +32,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/kids" 
-            class="nav-link"
+            :class="getNavLinkClass(isKidsActive)"
           >
             Kids
             <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -41,7 +41,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/jewelry" 
-            class="nav-link"
+            :class="getNavLinkClass(isJewelryActive)"
           >
             Jewelry
             <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -50,7 +50,7 @@
           </NuxtLink>
           <NuxtLink 
             to="/accessories" 
-            class="nav-link"
+            :class="getNavLinkClass(isAccessoriesActive)"
           >
             Accessories
           </NuxtLink>
@@ -93,6 +93,31 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'nuxt/app';
+import { computed } from 'vue';
+
+const router = useRouter()
+
+// Computed property to get current route
+const currentRoute = computed(() => router.currentRoute.value.path)
+console.log('🚀 - currentRoute:', currentRoute.value)
+
+// Computed properties for each nav link to determine if it's active
+const isHomeActive = computed(() => currentRoute.value === '/')
+const isWomenActive = computed(() => currentRoute.value === '/women')
+const isMenActive = computed(() => currentRoute.value === '/men/')
+const isKidsActive = computed(() => currentRoute.value === '/kids')
+const isJewelryActive = computed(() => currentRoute.value === '/jewelry')
+const isAccessoriesActive = computed(() => currentRoute.value === '/accessories')
+
+// Function to get nav link class based on active state
+const getNavLinkClass = (isActive: boolean) => {
+  return isActive ? 'nav-link nav-link-active' : 'nav-link'
+}
+
+const getNavLinkHomeClass = (isActive: boolean) => {
+  return isActive ? 'nav-link nav-link-active' : 'nav-link'
+}
 </script>
 
 <style scoped>
