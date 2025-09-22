@@ -6,6 +6,7 @@
 
 /* Breadcrumb Navigation */
 .breadcrumb {
+  margin-top: 10rem;
   padding: 20px 40px;
   font-size: 14px;
   color: #666;
@@ -128,23 +129,6 @@
   transition: transform 0.3s ease;
 }
 
-/* Zoom Overlay */
-.zoom-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.zoom-image {
-  width: 200%;
-  height: 200%;
-  object-fit: cover;
-  opacity: 0.9;
-}
 
 /* Right Side - Product Details */
 .product-details {

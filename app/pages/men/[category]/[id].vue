@@ -44,7 +44,7 @@
         </div>
 
         <!-- Main Product Image -->
-        <div class="main-image-container" @mouseenter="showZoom = true" @mouseleave="showZoom = false" @mousemove="handleMouseMove">
+        <div class="main-image-container">
           <div class="main-image-wrapper">
             <NuxtImg 
               :src="product.images[selectedImageIndex]" 
@@ -54,17 +54,6 @@
               format="webp"
               quality="90"
             />
-            <!-- Zoom overlay -->
-            <div v-if="showZoom" class="zoom-overlay" :style="zoomStyle">
-              <NuxtImg 
-                :src="product.images[selectedImageIndex]" 
-                :alt="product.name"
-                class="zoom-image"
-                loading="eager"
-                format="webp"
-                quality="90"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -176,8 +165,6 @@ const selectedColorIndex = ref(2) // Default to mustard yellow
 const selectedSize = ref('')
 const quantity = ref(1)
 const showMoreImages = ref(false)
-const showZoom = ref(false)
-const mousePosition = ref({ x: 0, y: 0 })
 
 // Mock product data - in a real app, this would come from an API
 const product = ref({
@@ -204,18 +191,6 @@ const product = ref({
   ]
 })
 
-// Computed properties
-const zoomStyle = computed(() => {
-  const scale = 2
-  const offsetX = mousePosition.value.x * scale
-  const offsetY = mousePosition.value.y * scale
-  
-  return {
-    transform: `translate(-${offsetX}px, -${offsetY}px) scale(${scale})`,
-    transformOrigin: `${mousePosition.value.x}px ${mousePosition.value.y}px`
-  }
-})
-
 // Methods
 const increaseQuantity = () => {
   quantity.value++
@@ -224,14 +199,6 @@ const increaseQuantity = () => {
 const decreaseQuantity = () => {
   if (quantity.value > 1) {
     quantity.value--
-  }
-}
-
-const handleMouseMove = (event: MouseEvent) => {
-  const rect = (event.target as HTMLElement).getBoundingClientRect()
-  mousePosition.value = {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
   }
 }
 </script>
