@@ -366,6 +366,7 @@
 }
 .footer-main {
   max-width: 1600px;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
 }

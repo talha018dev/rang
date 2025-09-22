@@ -105,7 +105,7 @@ console.log('🚀 - currentRoute:', currentRoute.value)
 // Computed properties for each nav link to determine if it's active
 const isHomeActive = computed(() => currentRoute.value === '/')
 const isWomenActive = computed(() => currentRoute.value === '/women')
-const isMenActive = computed(() => currentRoute.value === '/men/')
+const isMenActive = computed(() => currentRoute.value === '/men')
 const isKidsActive = computed(() => currentRoute.value === '/kids')
 const isJewelryActive = computed(() => currentRoute.value === '/jewelry')
 const isAccessoriesActive = computed(() => currentRoute.value === '/accessories')

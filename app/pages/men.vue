@@ -5,9 +5,6 @@
     <!-- Hero Banner Section -->
     <section class="hero-banner">
         <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="hero-title">MEN</h1>
-          </div>
               <NuxtImg 
                 src="/men/men-hero.png" 
                 alt="Men's fashion" 
