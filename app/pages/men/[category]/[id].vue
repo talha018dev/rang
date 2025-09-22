@@ -137,6 +137,137 @@
         </div>
       </div>
     </div>
+
+    <!-- Frequently Bought Together Section -->
+    <div class="frequently-bought-section">
+      <h2 class="section-title">Frequently bought together</h2>
+      
+      <div class="frequently-bought-container">
+        <!-- Product Cards -->
+        <div class="frequently-bought-products">
+          <div 
+            v-for="(item, index) in frequentlyBoughtItems" 
+            :key="index"
+            class="frequently-bought-item"
+          >
+            <!-- Checkbox -->
+            <div class="item-checkbox">
+              <input 
+                type="checkbox" 
+                :id="`item-${index}`"
+                v-model="item.selected"
+                class="checkbox-input"
+              />
+              <label :for="`item-${index}`" class="checkbox-label"></label>
+            </div>
+            
+            <!-- Product Image -->
+            <div class="item-image">
+              <NuxtImg 
+                :src="item.image" 
+                :alt="item.name"
+                class="product-img"
+                loading="lazy"
+                format="webp"
+                quality="85"
+              />
+            </div>
+            
+            <!-- Product Details -->
+            <div class="item-details">
+              <p class="item-description">{{ item.description }}</p>
+              <p class="item-price">{{ item.price }}</p>
+            </div>
+            
+            <!-- Plus Sign (except for last item) -->
+            <div v-if="index < frequentlyBoughtItems.length - 1" class="plus-sign">
+              <svg class="plus-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Total and Add to Cart -->
+        <div class="frequently-bought-summary">
+          <div class="total-price">
+            <span class="total-label">Total price :</span>
+            <span class="total-amount">{{ totalPrice }}</span>
+          </div>
+          <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
+            Add to cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Information Section -->
+    <div class="product-info-section">
+      <div class="product-info-container">
+        <!-- Left Column - Product Description -->
+        <div class="product-description">
+          <h2 class="info-section-title">Product Description</h2>
+          
+          <div class="description-content">
+            <div class="description-item">
+              <h3 class="description-subtitle">Details</h3>
+              <ul class="description-list">
+                <li>Long sleeve overshirt with curved hem</li>
+                <li>Patch pockets</li>
+                <li>100% cotton</li>
+                <li>Machine washable</li>
+              </ul>
+            </div>
+
+            <div class="description-item">
+              <h3 class="description-subtitle">Size & Fit</h3>
+              <ul class="description-list">
+                <li>Oversized</li>
+                <li>Sleeve Type - Long Sleeve</li>
+                <li>Fit or Cut - Oversized</li>
+              </ul>
+            </div>
+
+            <div class="description-item">
+              <h3 class="description-subtitle">Stylist's Notes</h3>
+              <p class="description-text">
+                Curate a soft-utility aesthetic by teaming with loose fit shirts and denim.
+              </p>
+            </div>
+
+            <div class="description-item">
+              <h3 class="description-subtitle">Better Cotton</h3>
+              <p class="description-text">
+                By choosing our cotton products, you're supporting our investment in Better Cotton's mission to help cotton communities survive and thrive while protecting and restoring the environment. Better Cotton Farmers are farmers who care for the environment and respect workers' rights and wellbeing. This product is sourced via a system of mass balance and therefore may not contain Better Cotton.
+              </p>
+              <a href="https://bettercotton.org/massbalance" class="better-cotton-link" target="_blank" rel="noopener noreferrer">
+                bettercotton.org/massbalance
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Product Specification -->
+        <div class="product-specification">
+          <h2 class="info-section-title">Product Specification</h2>
+          
+          <div class="specification-content">
+            <ul class="specification-list">
+              <li><span class="spec-label">Product Code</span> - 21491001</li>
+              <li><span class="spec-label">Iron</span> - Cool iron, Iron Inside Out</li>
+              <li><span class="spec-label">Washing Instructions</span> - Machine washable</li>
+              <li><span class="spec-label">Country of Origin</span> - India</li>
+              <li><span class="spec-label">Neckline</span> - Collar</li>
+              <li><span class="spec-label">Brand</span> - John Lewis ANYDAY</li>
+              <li><span class="spec-label">Fastening</span> - Button</li>
+              <li><span class="spec-label">Drying Instructions</span> - Do not tumble dry</li>
+              <li><span class="spec-label">Pattern Details</span> - Plain</li>
+              <li><span class="spec-label">Composition</span> - 100% cotton</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <AppFooter />
 </template>
@@ -166,6 +297,34 @@ const selectedSize = ref('')
 const quantity = ref(1)
 const showMoreImages = ref(false)
 
+// Frequently bought together data
+const frequentlyBoughtItems = ref([
+  {
+    id: 1,
+    name: "Men's Punjabi",
+    description: "This Item : Men's Punjabi for eid occasion and festive",
+    price: "TK : 2,500",
+    image: '/men/men-1.png',
+    selected: true
+  },
+  {
+    id: 2,
+    name: "Men's Punjabi",
+    description: "This Item : Men's Punjabi for eid occasion and festive",
+    price: "TK : 2,500",
+    image: '/men/men-2.png',
+    selected: false
+  },
+  {
+    id: 3,
+    name: "Men's Punjabi",
+    description: "This Item : Men's Punjabi for eid occasion and festive",
+    price: "TK : 2,500",
+    image: '/men/men-1.png',
+    selected: false
+  }
+])
+
 // Mock product data - in a real app, this would come from an API
 const product = ref({
   id: id,
@@ -191,6 +350,13 @@ const product = ref({
   ]
 })
 
+// Computed properties
+const totalPrice = computed(() => {
+  const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
+  const total = selectedItems.length * 2500 // Each item costs 2500
+  return `Tk ${total.toLocaleString()}`
+})
+
 // Methods
 const increaseQuantity = () => {
   quantity.value++
@@ -200,5 +366,12 @@ const decreaseQuantity = () => {
   if (quantity.value > 1) {
     quantity.value--
   }
+}
+
+const addFrequentlyBoughtToCart = () => {
+  const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
+  console.log('Adding to cart:', selectedItems)
+  // In a real app, this would add the selected items to the cart
+  alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 </script>
