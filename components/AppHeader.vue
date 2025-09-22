@@ -110,12 +110,22 @@ const isKidsActive = computed(() => currentRoute.value === '/kids')
 const isJewelryActive = computed(() => currentRoute.value === '/jewelry')
 const isAccessoriesActive = computed(() => currentRoute.value === '/accessories')
 
-// Function to get nav link class based on active state
+// Function to get nav link class based on active state and current page
 const getNavLinkClass = (isActive: boolean) => {
+  // On home page, all links should be white
+  if (isHomeActive.value) {
+    return 'nav-link nav-link-home-page'
+  }
+  // On other pages, active link should be orange
   return isActive ? 'nav-link nav-link-active' : 'nav-link'
 }
 
 const getNavLinkHomeClass = (isActive: boolean) => {
+  // On home page, home link should be orange
+  if (isHomeActive.value) {
+    return 'nav-link nav-link-active'
+  }
+  // On other pages, active link should be orange
   return isActive ? 'nav-link nav-link-active' : 'nav-link'
 }
 </script>
