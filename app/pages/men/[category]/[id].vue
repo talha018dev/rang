@@ -36,13 +36,17 @@
               format="webp"
               quality="85"
             />
+            
+            <!-- Show More Overlay for last thumbnail -->
+            <div v-if="index === product.images.length - 1" class="thumbnail-show-more-overlay" @click.stop="showMoreImages = !showMoreImages">
+              <div class="thumbnail-show-more-content">
+                <span class="thumbnail-show-more-text">Show More</span>
+                <svg class="thumbnail-show-more-arrow" :class="{ rotated: showMoreImages }" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
           </div>
-          <button class="show-more-btn" @click="showMoreImages = !showMoreImages">
-            Show More
-            <svg class="arrow-icon" :class="{ rotated: showMoreImages }" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </button>
         </div>
 
         <!-- Main Product Image -->
@@ -805,6 +809,7 @@ const addFrequentlyBoughtToCart = () => {
   // In a real app, this would add the selected items to the cart
   alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
+
 
 const voteHelpful = (reviewId: number, isHelpful: boolean) => {
   const review = reviews.value.find(r => r.id === reviewId)
