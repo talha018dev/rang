@@ -83,7 +83,6 @@
     </div>
   </section>
   <section class="">
-    
     <AppFooter />
   </section>
 </template>

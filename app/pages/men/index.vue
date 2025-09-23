@@ -5,9 +5,7 @@
     <!-- Hero Banner Section -->
     <section class="hero-banner">
         <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="hero-title">MEN</h1>
-          </div>
+         
               <NuxtImg 
                 src="/men/men-hero.png" 
                 alt="Men's fashion" 
@@ -86,6 +84,7 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
+import AppFooter from '../../../components/AppFooter.vue'
 import '../men.css'
 
 // Meta
