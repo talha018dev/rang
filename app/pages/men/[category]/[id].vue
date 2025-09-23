@@ -3,14 +3,16 @@
     <AppHeader />
     
     <!-- Breadcrumb Navigation -->
-    <div class="breadcrumb">
-      <NuxtLink to="/">Homepage</NuxtLink>
-      <span>/</span>
-      <NuxtLink to="/men">Men</NuxtLink>
-      <span>/</span>
-      <span>{{ category }}</span>
-      <span>/</span>
-      <span>{{ product.name }}</span>
+    <div class="breadcrumb-bg">
+      <div class="breadcrumb">
+        <NuxtLink to="/">Homepage</NuxtLink>
+        <span>/</span>
+        <NuxtLink to="/men">Men</NuxtLink>
+        <span>/</span>
+        <span>{{ category }}</span>
+        <span>/</span>
+        <span>{{ product.name }}</span>
+      </div>
     </div>
 
     <!-- Product Details Section -->
@@ -134,6 +136,62 @@
         <div class="action-buttons">
           <button class="buy-now-btn">Buy Now</button>
           <button class="add-to-basket-btn">Add to Basket</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matching Series Section -->
+    <div class="matching-series-section">
+      <h2 class="section-title">Explore Our Matching Series:</h2>
+      
+      <div class="matching-series-container">
+        <div class="matching-series-products">
+          <div 
+            v-for="(item, index) in matchingSeriesItems" 
+            :key="index"
+            class="matching-series-item"
+          >
+            <!-- Checkbox -->
+            <div class="item-checkbox">
+              <input 
+                type="checkbox" 
+                :id="`matching-${index}`"
+                v-model="item.checked"
+                class="checkbox-input"
+              />
+              <label :for="`matching-${index}`" class="checkbox-label"></label>
+            </div>
+            
+            <!-- Product Image -->
+            <div class="item-image">
+              <NuxtImg 
+                :src="item.image" 
+                :alt="item.name"
+                class="product-img"
+                loading="lazy"
+                format="webp"
+                quality="85"
+              />
+            </div>
+            
+            <!-- Product Details -->
+            <div class="item-details">
+              <p class="item-name">{{ item.name }}</p>
+              
+              <!-- Size Selector -->
+              <div class="size-selector">
+                <select v-model="item.size" class="size-select">
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
+              
+              <p class="item-price">TK {{ item.price.toLocaleString() }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -494,6 +552,52 @@ const selectedColorIndex = ref(2) // Default to mustard yellow
 const selectedSize = ref('')
 const quantity = ref(1)
 const showMoreImages = ref(false)
+
+// Matching series data
+const matchingSeriesItems = ref([
+  {
+    checked: true,
+    image: '/men/men-1.png',
+    name: 'Premium Cotton Kurta',
+    size: 'M',
+    price: 1500
+  },
+  {
+    checked: false,
+    image: '/men/men-2.png',
+    name: 'Designer Punjabi Set',
+    size: 'L',
+    price: 2200
+  },
+  {
+    checked: true,
+    image: '/men/men-1.png',
+    name: 'Traditional Sherwani',
+    size: 'XL',
+    price: 3500
+  },
+  {
+    checked: false,
+    image: '/men/men-2.png',
+    name: 'Casual Pathani Suit',
+    size: 'M',
+    price: 1800
+  },
+  {
+    checked: true,
+    image: '/men/men-1.png',
+    name: 'Festive Kurta Pajama',
+    size: 'L',
+    price: 2800
+  },
+  {
+    checked: false,
+    image: '/men/men-2.png',
+    name: 'Wedding Collection',
+    size: 'XL',
+    price: 4500
+  }
+])
 
 // Frequently bought together data
 const frequentlyBoughtItems = ref([
