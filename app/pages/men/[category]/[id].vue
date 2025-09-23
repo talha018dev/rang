@@ -50,7 +50,6 @@
         </div>
 
         <!-- Main Product Image -->
-        <div class="main-image-container">
           <div class="main-image-wrapper">
             <NuxtImg 
               :src="product.images[selectedImageIndex]" 
@@ -61,7 +60,6 @@
               quality="90"
             />
           </div>
-        </div>
       </div>
 
       <!-- Right Side - Product Details -->
