@@ -91,9 +91,7 @@
 
         <!-- Share Button -->
         <button class="share-btn">
-          <svg class="share-icon" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-          </svg>
+          <img src="/product-details/ios_share.svg" alt="Share" />
           Share
         </button>
 
@@ -129,9 +127,9 @@
 
         <!-- Quantity Selector -->
         <div class="quantity-selector">
-          <button class="quantity-btn" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
+          <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
           <span class="quantity-text">Quantity: {{ quantity }}</span>
-          <button class="quantity-btn" @click="increaseQuantity">+</button>
+          <button class="quantity-btn plus" @click="increaseQuantity">+</button>
         </div>
 
         <!-- Action Buttons -->
@@ -243,10 +241,7 @@
             <!-- Plus Sign (except for last item) -->
             
           </div>
-        </div>
-        
-        <!-- Total and Add to Cart -->
-        <div class="frequently-bought-summary">
+          <div class="frequently-bought-summary">
           <div class="total-price">
             <span class="total-label">Total price :</span>
             <span class="total-amount">{{ totalPrice }}</span>
@@ -255,6 +250,18 @@
             Add to cart
           </button>
         </div>
+        </div>
+        
+        <!-- Total and Add to Cart -->
+        <!-- <div class="frequently-bought-summary">
+          <div class="total-price">
+            <span class="total-label">Total price :</span>
+            <span class="total-amount">{{ totalPrice }}</span>
+          </div>
+          <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
+            Add to cart
+          </button>
+        </div> -->
       </div>
     </div>
 
@@ -332,19 +339,19 @@
       
       <!-- Overall Rating Summary -->
       <div class="reviews-summary">
-        <div class="overall-rating">
+        
+<div>
+  <div class="overall-rating">
           <div class="rating-display">
-            <span class="rating-number">{{ overallRating }}</span>
             <div class="stars-display">
               <svg v-for="i in 5" :key="i" class="star" :class="{ filled: i <= Math.floor(overallRating), partial: i === Math.ceil(overallRating) && overallRating % 1 !== 0 }" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             </div>
+            <span class="rating-number">{{ overallRating }}</span>
+            <p class="reviews-count">{{ totalReviews }} Reviews {{ totalSold }} Sold</p>
           </div>
-          <p class="reviews-count">{{ totalReviews }} Reviews {{ totalSold }} Sold</p>
         </div>
-
-        <!-- Star Distribution -->
         <div class="star-distribution">
           <div v-for="(count, index) in starDistribution" :key="index" class="star-bar">
             <span class="star-label">{{ 5 - index }} Stars ({{ count }})</span>
@@ -353,34 +360,58 @@
             </div>
           </div>
         </div>
+</div>
+        <!-- Star Distribution -->
+        
 
         <!-- Attribute Ratings -->
         <div class="attribute-ratings">
           <div class="attribute-item">
-            <span class="attribute-label">Quality</span>
+            <span class="attribute-label">Quality: Excellent</span>
             <div class="attribute-slider">
               <div class="slider-track">
-                <div class="slider-fill" :style="{ width: `${(attributeRatings.quality / 5) * 100}%` }"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
               </div>
-              <span class="attribute-value">{{ attributeRatings.qualityLabel }}</span>
+            </div>
+            <div class="quality-slider-labels">
+              <div>Poor</div>
+              <div class="ml-auto">Excellent</div>
             </div>
           </div>
           <div class="attribute-item">
-            <span class="attribute-label">Value</span>
+            <span class="attribute-label">Value: Excellent</span>
             <div class="attribute-slider">
               <div class="slider-track">
-                <div class="slider-fill" :style="{ width: `${(attributeRatings.value / 5) * 100}%` }"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
               </div>
-              <span class="attribute-value">{{ attributeRatings.valueLabel }}</span>
+            </div>
+            <div class="quality-slider-labels">
+              <div>Poor</div>
+              <div class="ml-auto">Excellent</div>
             </div>
           </div>
           <div class="attribute-item">
-            <span class="attribute-label">Fit</span>
+            <span class="attribute-label">Fit: Big</span>
             <div class="attribute-slider">
               <div class="slider-track">
-                <div class="slider-fill" :style="{ width: `${(attributeRatings.fit / 5) * 100}%` }"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
+                <div class="quality-bar"></div>
               </div>
-              <span class="attribute-value">{{ attributeRatings.fitLabel }}</span>
+            </div>
+            <div class="quality-slider-labels">
+              <div>Very Small</div>
+              <div class="ml-auto">Very Big</div>
             </div>
           </div>
         </div>
@@ -530,7 +561,7 @@
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
 import './product-details.css'
-
+import AppFooter from '../../../../components/AppFooter.vue'
 // Get route parameters
 const route = useRoute()
 const category = route.params.category as string
