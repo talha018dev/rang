@@ -495,24 +495,27 @@
   max-width: 1600px;
   width: 90%;
   margin: 60px auto 0;
-  padding: 0 20px;
 }
 
 .matching-series-container {
   padding: 30px;
+  padding-left: 0;
+  padding-right: 0;
   border-radius: 12px;
   /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); */
 }
 
 .matching-series-products {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .matching-series-item {
   display: flex;
   gap: 1rem;
+  width: 20%;
   align-items: center;
   position: relative;
   background: white;
@@ -631,9 +634,11 @@
 
 /* Frequently Bought Together Section */
 .frequently-bought-section {
-  max-width: 1200px;
-  margin: 60px auto 0;
-  padding: 0 20px;
+  max-width: 1600px;
+  width: 90%;
+  padding: 0 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-title {
@@ -649,8 +654,7 @@
   align-items: flex-start;
   gap: 40px;
   padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
 
 .frequently-bought-products {
@@ -664,15 +668,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
   min-width: 200px;
 }
 
-.item-checkbox {
-  /* position: absolute;
+.frequently-bought-item .item-image .item-checkbox {
+  position: absolute;
   top: 8px;
   right: 8px;
-  z-index: 2; */
+  z-index: 2;
 }
 
 .checkbox-input {
@@ -681,23 +684,22 @@
 
 .checkbox-label {
   display: block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ea580c;
-  border-radius: 4px;
-  background: white;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #BFDBFE;
+  background: transparent;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
 }
 
 .checkbox-label:hover {
-  border-color: #c2410c;
+  border-color: #BFDBFE;
 }
 
 .checkbox-input:checked + .checkbox-label {
-  background: #ea580c;
-  border-color: #ea580c;
+  background: #BFDBFE;
+  border-color: #BFDBFE;
 }
 
 .checkbox-input:checked + .checkbox-label::after {
@@ -706,18 +708,19 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: black;
   font-size: 12px;
   font-weight: bold;
 }
 
-.item-image {
-  /* width: 120px;
-  height: 120px;
+
+.frequently-bought-section .item-image {
+  /* width: 120px; */
+  height: 160px;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+  position: relative;
 }
 
 .product-img {
@@ -852,7 +855,7 @@
     padding: 15px;
   }
 
-  .item-image {
+  .frequently-bought-section .item-image {
     width: 100px;
     height: 100px;
   }

@@ -211,15 +211,7 @@
             class="frequently-bought-item"
           >
             <!-- Checkbox -->
-            <div class="item-checkbox">
-              <input 
-                type="checkbox" 
-                :id="`item-${index}`"
-                v-model="item.selected"
-                class="checkbox-input"
-              />
-              <label :for="`item-${index}`" class="checkbox-label"></label>
-            </div>
+            
             
             <!-- Product Image -->
             <div class="item-image">
@@ -231,6 +223,15 @@
                 format="webp"
                 quality="85"
               />
+              <div class="item-checkbox">
+              <input 
+                type="checkbox" 
+                :id="`item-${index}`"
+                v-model="item.selected"
+                class="checkbox-input"
+              />
+              <label :for="`item-${index}`" class="checkbox-label"></label>
+            </div>
             </div>
             
             <!-- Product Details -->
@@ -240,11 +241,7 @@
             </div>
             
             <!-- Plus Sign (except for last item) -->
-            <div v-if="index < frequentlyBoughtItems.length - 1" class="plus-sign">
-              <svg class="plus-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-              </svg>
-            </div>
+            
           </div>
         </div>
         
@@ -608,15 +605,19 @@ const frequentlyBoughtItems = ref([
     name: "Men's Punjabi",
     description: "This Item : Men's Punjabi for eid occasion and festive",
     price: "TK : 2,500",
-    image: '/men/men-1.png',
+    image: '/product-details/frequently-1.png',
     selected: true
+  },
+  {
+    id: 'plus-1',
+    type: 'plus',
   },
   {
     id: 2,
     name: "Men's Punjabi",
     description: "This Item : Men's Punjabi for eid occasion and festive",
     price: "TK : 2,500",
-    image: '/men/men-2.png',
+    image: '/product-details/frequently-1.png',
     selected: false
   },
   {
@@ -624,7 +625,7 @@ const frequentlyBoughtItems = ref([
     name: "Men's Punjabi",
     description: "This Item : Men's Punjabi for eid occasion and festive",
     price: "TK : 2,500",
-    image: '/men/men-1.png',
+    image: '/product-details/frequently-1.png',
     selected: false
   }
 ])
