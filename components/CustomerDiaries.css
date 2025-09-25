@@ -427,12 +427,12 @@
   
 }
 .best-deals-container {
-  max-width: 50%;
   margin: 4rem auto;
   display: flex;
   align-items: center;
-  /* gap: 4rem; */
   justify-content: space-around;
+  max-width: 1600px;
+  width: 90%;
 }
 .best-deals-section img {
   margin: auto;

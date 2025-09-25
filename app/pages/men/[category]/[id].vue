@@ -608,10 +608,10 @@ const frequentlyBoughtItems = ref([
     image: '/product-details/frequently-1.png',
     selected: true
   },
-  {
-    id: 'plus-1',
-    type: 'plus',
-  },
+  // {
+  //   id: 'plus-1',
+  //   type: 'plus',
+  // },
   {
     id: 2,
     name: "Men's Punjabi",

@@ -335,7 +335,7 @@
   
 }
 .best-deals-container {
-  max-width: 50%;
+  /* max-width: 50%; */
   margin: 4rem auto;
   display: flex;
   align-items: center;

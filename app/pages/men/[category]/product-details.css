@@ -28,7 +28,7 @@
 }
 
 .breadcrumb a:hover {
-  color: #ea580c;
+  color: #e18719;
 }
 
 .breadcrumb span {
@@ -79,12 +79,12 @@
 }
 
 .thumbnail:hover {
-  border-color: #ea580c;
+  border-color: #e18719;
 }
 
 .thumbnail.active {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 1px #ea580c;
+  border-color: #e18719;
+  box-shadow: 0 0 0 1px #e18719;
 }
 
 .thumbnail-img {
@@ -193,7 +193,7 @@
 .current-price {
   font-size: 28px;
   font-weight: bold;
-  color: #ea580c;
+  color: #e18719;
 }
 
 .original-price {
@@ -308,7 +308,7 @@
 
 .size-select:focus {
   outline: none;
-  border-color: #ea580c;
+  border-color: #e18719;
 }
 
 .dropdown-icon {
@@ -323,7 +323,7 @@
 }
 
 .size-guide-link {
-  color: #ea580c;
+  color: #e18719;
   text-decoration: none;
   font-size: 14px;
   margin-left: 15px;
@@ -362,7 +362,7 @@
 
 .color-option.selected {
   border-color: #333;
-  box-shadow: 0 0 0 2px #ea580c;
+  box-shadow: 0 0 0 2px #e18719;
 }
 
 /* Quantity Selector */
@@ -391,7 +391,7 @@
 
 .quantity-btn:hover:not(:disabled) {
   background: #f5f5f5;
-  border-color: #ea580c;
+  border-color: #e18719;
 }
 
 .quantity-btn:disabled {
@@ -413,7 +413,7 @@
 
 .buy-now-btn {
   flex: 1;
-  background: #ea580c;
+  background: #e18719;
   color: white;
   border: none;
   border-radius: 8px;
@@ -496,6 +496,17 @@
   width: 90%;
   margin: 60px auto 0;
 }
+.matching-series-section .section-title {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 28px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #e18719;
+  margin-bottom: 0;
+}
 
 .matching-series-container {
   padding: 30px;
@@ -572,12 +583,12 @@
 
 .matching-series-item .size-select:focus {
   outline: none;
-  border-color: #ea580c;
+  border-color: #e18719;
 }
 
 .matching-series-item .item-price {
   font-size: 16px;
-  color: #ea580c;
+  color: #e18719;
   font-weight: 600;
   margin: 0;
 }
@@ -639,14 +650,19 @@
   padding: 0 0px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 2rem;
 }
 
-.section-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #ea580c;
-  margin-bottom: 30px;
-  text-align: left;
+.frequently-bought-section .section-title {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 28px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #e18719;
+  margin-bottom: 0;
 }
 
 .frequently-bought-container {
@@ -654,6 +670,8 @@
   align-items: flex-start;
   gap: 40px;
   padding: 30px;
+  padding-left: 0;
+  padding-right: 0;
   border-radius: 4px;
 }
 
@@ -667,7 +685,7 @@
 .frequently-bought-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   min-width: 200px;
 }
 
@@ -686,7 +704,7 @@
   display: block;
   width: 16px;
   height: 16px;
-  border: 2px solid #BFDBFE;
+  border: 2px solid #bfdbfe;
   background: transparent;
   cursor: pointer;
   position: relative;
@@ -694,12 +712,12 @@
 }
 
 .checkbox-label:hover {
-  border-color: #BFDBFE;
+  border-color: #bfdbfe;
 }
 
 .checkbox-input:checked + .checkbox-label {
-  background: #BFDBFE;
-  border-color: #BFDBFE;
+  background: #bfdbfe;
+  border-color: #bfdbfe;
 }
 
 .checkbox-input:checked + .checkbox-label::after {
@@ -712,7 +730,6 @@
   font-size: 12px;
   font-weight: bold;
 }
-
 
 .frequently-bought-section .item-image {
   /* width: 120px; */
@@ -730,7 +747,7 @@
 }
 
 .item-details {
-  text-align: center;
+  text-align: left;
   width: 100%;
 }
 
@@ -744,7 +761,7 @@
 
 .item-price {
   font-size: 16px;
-  color: #ea580c;
+  color: #e18719;
   font-weight: 600;
   margin: 0;
 }
@@ -759,7 +776,7 @@
 .plus-icon {
   width: 24px;
   height: 24px;
-  color: #ea580c;
+  color: #e18719;
 }
 
 .frequently-bought-summary {
@@ -784,7 +801,7 @@
 
 .total-amount {
   font-size: 20px;
-  color: #ea580c;
+  color: #e18719;
   font-weight: 700;
 }
 
@@ -816,6 +833,8 @@
     flex-direction: column;
     gap: 30px;
     padding: 20px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .frequently-bought-products {
@@ -853,6 +872,8 @@
 
   .frequently-bought-container {
     padding: 15px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .frequently-bought-section .item-image {
@@ -880,7 +901,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
-  padding: 40px;
+
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
@@ -888,7 +909,7 @@
 .info-section-title {
   font-size: 24px;
   font-weight: 600;
-  color: #ea580c;
+  color: #e18719;
   margin-bottom: 30px;
   text-align: left;
 }
@@ -898,7 +919,17 @@
   display: flex;
   flex-direction: column;
 }
-
+.product-description .info-section-title,
+.product-specification .info-section-title {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 28px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #e18719;
+}
 .description-content {
   display: flex;
   flex-direction: column;
@@ -939,7 +970,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  color: #ea580c;
+  color: #e18719;
   font-weight: bold;
   font-size: 16px;
 }
@@ -952,7 +983,7 @@
 }
 
 .better-cotton-link {
-  color: #ea580c;
+  color: #e18719;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -1078,12 +1109,15 @@
   padding: 0 20px;
 }
 
-.reviews-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #ea580c;
-  margin-bottom: 30px;
-  text-align: left;
+.reviews-section .reviews-title {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 28px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #e18719;
 }
 
 /* Reviews Summary */
@@ -1114,7 +1148,7 @@
 .rating-number {
   font-size: 48px;
   font-weight: 700;
-  color: #ea580c;
+  color: #e18719;
 }
 
 .stars-display {
@@ -1172,7 +1206,7 @@
 
 .bar-fill {
   height: 100%;
-  background: #ea580c;
+  background: #e18719;
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -1212,7 +1246,7 @@
 
 .slider-fill {
   height: 100%;
-  background: #ea580c;
+  background: #e18719;
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -1254,7 +1288,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #ea580c;
+  border-color: #e18719;
   box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
 }
 
@@ -1431,13 +1465,13 @@
 }
 
 .helpfulness-btn:hover {
-  border-color: #ea580c;
-  color: #ea580c;
+  border-color: #e18719;
+  color: #e18719;
 }
 
 .helpfulness-btn.active {
-  border-color: #ea580c;
-  background: #ea580c;
+  border-color: #e18719;
+  background: #e18719;
   color: white;
 }
 
@@ -1457,7 +1491,7 @@
 }
 
 .report-btn:hover {
-  color: #ea580c;
+  color: #e18719;
 }
 
 .review-attributes {
@@ -1581,7 +1615,7 @@
 }
 
 .title-part-2 {
-  color: #ea580c;
+  color: #e18719;
 }
 
 .related-products-grid {
@@ -1721,5 +1755,5 @@
 }
 
 :global(.nav-link:hover) {
-  color: #ea580c !important;
+  color: #e18719 !important;
 }
