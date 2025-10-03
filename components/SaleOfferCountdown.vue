@@ -148,6 +148,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+// import UCarousel from '@nuxt/ui'
 
 // Countdown state
 const countdown = ref({
