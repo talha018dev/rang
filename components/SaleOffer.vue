@@ -2,7 +2,7 @@
     <main class="sale-container">
         <section class="sale-header">
             <div class="sale-title">
-                <h1><span class="sale-title-light">Sale</span> <span class="sale-title-bold">Offer</span></h1>
+                <div><span class="sale-title-light">Sale</span> <span class="sale-title-bold">Offer</span></div>
             </div>
         </section>
         

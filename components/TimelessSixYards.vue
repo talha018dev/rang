@@ -2,7 +2,7 @@
     <main class="timeless-container">
         <section class="timeless-header">
             <div class="timeless-title">
-                <h1><span class="timeless-title-light">Timeless</span> <span class="timeless-title-bold">Six Yards</span></h1>
+                <div><span class="timeless-title-light">Timeless</span> <span class="timeless-title-bold">Six Yards</span></div>
             </div>
         </section>
         <section>

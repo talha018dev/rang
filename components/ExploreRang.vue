@@ -2,7 +2,7 @@
     <main class="explore-container">
         <section class="explore-header">
             <div class="explore-title">
-                <h1><span class="explore-title-light">Explore</span> <span class="explore-title-bold">Rang Bangladesh</span></h1>
+                <div><span class="explore-title-light">Explore</span> <span class="explore-title-bold">Rang Bangladesh</span></div>
             </div>
         </section>
         <section class="explore-grid-container">

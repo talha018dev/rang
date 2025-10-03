@@ -2,7 +2,7 @@
     <main class="category-container">
         <section class="category-header">
             <div class="category-title">
-                <h1><span class="category-title-light">Shop by</span> <span class="category-title-bold">Category</span></h1>
+                <div><span class="category-title-light">Shop by</span> <span class="category-title-bold">Category</span></div>
             </div>
         </section>
         <section>

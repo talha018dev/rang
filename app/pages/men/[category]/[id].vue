@@ -64,7 +64,7 @@
 
       <!-- Right Side - Product Details -->
       <div class="product-details">
-        <h1 class="product-title">{{ product.name }}</h1>
+        <div class="product-title">{{ product.name }}</div>
         
         <!-- Pricing -->
         <div class="pricing">

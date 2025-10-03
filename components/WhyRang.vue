@@ -3,7 +3,7 @@
     <div class="why-rang-container">
         <section class="sale-header">
             <div class="sale-title">
-                <h1><span class="sale-title-light">Why</span> <span class="sale-title-bold">Rang Bangladesh?</span></h1>
+                <div><span class="sale-title-light">Why</span> <span class="sale-title-bold">Rang Bangladesh?</span></div>
             </div>
         </section>
         <div class="why-rang-grid">

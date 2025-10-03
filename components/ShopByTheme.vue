@@ -2,7 +2,7 @@
     <main class="theme-container">
         <section class="theme-header">
             <div class="theme-title">
-                <h1><span class="theme-title-light">Shop by</span> <span class="theme-title-bold">Theme</span></h1>
+                <div><span class="theme-title-light">Shop by</span> <span class="theme-title-bold">Theme</span></div>
             </div>
         </section>
         <section>

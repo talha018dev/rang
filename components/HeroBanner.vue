@@ -8,9 +8,9 @@
       <div class="hero-content">
           <div class="hero-overlay">
             <p class="hero-subtitle">New Collection</p>
-            <h1 class="hero-title">
+            <div class="hero-title">
               Durga Puja - 2025
-            </h1>
+            </div>
             <button class="hero-button">
                 <div class="hero-button-text">
                 Shop Now

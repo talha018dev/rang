@@ -2,7 +2,7 @@
     <main class="brand-container">
         <section class="brand-header">
             <div class="brand-title">
-                <h1><span class="brand-title-light">Shop by</span> <span class="brand-title-bold">Brand</span></h1>
+                <div><span class="brand-title-light">Shop by</span> <span class="brand-title-bold">Brand</span></div>
             </div>
         </section>
         <section>
