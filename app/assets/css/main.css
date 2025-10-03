@@ -1,5 +1,9 @@
-@import "tailwindcss";
 @import "@nuxt/ui";
+
+button {
+    background-color: transparent;
+    border: none;
+}
 
 body {
     /* max-width: 1600px;
@@ -10,3 +14,4 @@ body {
 .jost {
     font-family: Jost, sans-serif;
 }
+

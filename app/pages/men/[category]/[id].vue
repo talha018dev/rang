@@ -560,9 +560,12 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
-import './product-details.css'
+// CSS is imported globally via nuxt.config.ts
+import { useHead, useRoute } from 'nuxt/app'
+import { computed, ref } from 'vue'
 import AppFooter from '../../../../components/AppFooter.vue'
 // Get route parameters
+import './product-details.css'
 const route = useRoute()
 const category = route.params.category as string
 const id = route.params.id as string
