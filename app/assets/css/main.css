@@ -1,4 +1,5 @@
 @import "@nuxt/ui";
+@import "tailwindcss";
 
 /* CSS Reset - Remove all user agent stylesheet defaults */
 *, *::before, *::after {
