@@ -59,3 +59,13 @@
   object-fit: cover;
   border-radius: 0;
 }
+
+@media (max-width: 600px) {
+  .timeless-grid {
+    grid-template-columns: 1fr;
+  }
+  .timeless-image {
+    height: 300px;
+    object-position: bottom;
+  }
+}

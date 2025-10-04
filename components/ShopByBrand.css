@@ -8,6 +8,7 @@
 
 .brand-header {
   margin: 5rem 0;
+  margin-bottom: 0;
 }
 
 .brand-title {
@@ -23,6 +24,19 @@
   
   .brand-header {
     margin: 3rem 0;
+    margin-bottom: 0;
+  }
+}
+
+/* Responsive adjustments for medium screens */
+@media (max-width: 768px) {
+  .brand-grid-main {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+  
+  .brand-image {
+    height: 7rem;
   }
 }
 
@@ -34,6 +48,16 @@
   
   .brand-header {
     margin: 2rem 0;
+    margin-bottom: 0;
+  }
+  
+  .brand-grid-main {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .brand-image {
+    height: 5rem;
   }
 }
 
@@ -48,11 +72,10 @@
 }
 
 .brand-grid-main {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.5rem;
+  align-items: center;
 }
 
 .brand-image {
