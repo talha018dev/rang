@@ -56,7 +56,8 @@
           </NuxtLink>
         </nav>
 
-        <div class="header-actions">
+        <!-- Desktop Header Actions -->
+        <div class="header-actions desktop-actions">
           <button class="action-button">
             <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -87,16 +88,96 @@
             </svg>
           </button>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-button" @click="toggleDrawer">
+          <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
     </div>
+
+    <!-- Nuxt UI Drawer -->
+    <UDrawer v-model:open="isDrawerOpen" direction="right">
+      <template #content>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Menu</h3>
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-x-mark"
+              @click="closeDrawer"
+            />
+          </div>
+          
+          <div class="space-y-2">
+            <UButton
+              color="gray"
+              variant="ghost"
+              class="w-full justify-start"
+              icon="i-heroicons-magnifying-glass"
+            >
+              Search
+            </UButton>
+            <UButton
+              color="gray"
+              variant="ghost"
+              class="w-full justify-start"
+              icon="i-heroicons-currency-dollar"
+            >
+              Currency
+            </UButton>
+            <UButton
+              color="gray"
+              variant="ghost"
+              class="w-full justify-start"
+              icon="i-heroicons-heart"
+            >
+              Wishlist
+            </UButton>
+            <UButton
+              color="gray"
+              variant="ghost"
+              class="w-full justify-start"
+              icon="i-heroicons-shopping-cart"
+            >
+              Cart
+            </UButton>
+            <UButton
+              color="gray"
+              variant="ghost"
+              class="w-full justify-start"
+              icon="i-heroicons-user"
+            >
+              Account
+            </UButton>
+          </div>
+        </div>
+      </template>
+    </UDrawer>
   </header>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'nuxt/app';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const router = useRouter()
+
+// Reactive state for drawer
+const isDrawerOpen = ref(false)
+
+// Function to toggle drawer
+const toggleDrawer = () => {
+  isDrawerOpen.value = !isDrawerOpen.value
+}
+
+// Function to close drawer
+const closeDrawer = () => {
+  isDrawerOpen.value = false
+}
 
 // Computed property to get current route
 const currentRoute = computed(() => router.currentRoute.value.path)

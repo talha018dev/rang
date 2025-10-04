@@ -105,3 +105,44 @@
   height: 1rem;
   margin-left: 0.25rem;
 }
+
+/* Mobile Menu Button */
+.mobile-menu-button {
+  display: none;
+  padding: 0.5rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+}
+
+.mobile-menu-button:hover {
+  color: #ea580c;
+}
+
+.hamburger-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .desktop-actions {
+    display: none;
+  }
+  
+  .mobile-menu-button {
+    display: block;
+  }
+}
+
+@media (min-width: 1201px) {
+  .mobile-menu-button {
+    display: none;
+  }
+  
+  .desktop-actions {
+    display: flex;
+  }
+}
