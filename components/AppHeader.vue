@@ -99,56 +99,66 @@
     </div>
 
     <!-- Nuxt UI Drawer -->
-    <UDrawer v-model:open="isDrawerOpen" direction="right">
+    <UDrawer 
+    nobodyStyles='false'
+      v-model:open="isDrawerOpen" 
+      direction="right"
+      class="header-drawer"
+      :ui="{ 
+        content: 'header-drawer',
+        header: '',
+        body: ''
+      }"
+    >
       <template #content>
-        <div class="p-6">
+        <div class="p-6 bg-white header-drawer-template">
           <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-gray-900">Menu</h3>
+            <h3 class="text-lg font-semibold text-orange-600"></h3>
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
               icon="i-heroicons-x-mark"
               @click="closeDrawer"
             />
           </div>
           
-          <div class="space-y-2">
+          <div class="header-drawer-template-buttons">
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
-              class="w-full justify-start"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-magnifying-glass"
             >
               Search
             </UButton>
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
-              class="w-full justify-start"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-currency-dollar"
             >
               Currency
             </UButton>
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
-              class="w-full justify-start"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-heart"
             >
               Wishlist
             </UButton>
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
-              class="w-full justify-start"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-shopping-cart"
             >
               Cart
             </UButton>
             <UButton
-              color="gray"
+              color="orange"
               variant="ghost"
-              class="w-full justify-start"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-user"
             >
               Account

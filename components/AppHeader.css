@@ -1,4 +1,25 @@
 /* AppHeader Styles */
+.header-drawer {
+  background-color: white !important;
+  color: black !important;
+}
+
+.header-drawer-template {
+  background-color: white !important;
+  color: black !important;
+  padding: 16px !important;
+}
+
+.header-drawer-template-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+  min-width: 300px;
+  margin-top: 20px;
+}
+
 .header {
   position: absolute;
   margin-top: 1.5rem;
@@ -14,7 +35,6 @@
   margin-right: auto;
   width: 90%;
 }
-
 
 .header-content {
   display: flex;
@@ -110,6 +130,7 @@
 .mobile-menu-button {
   display: none;
   padding: 0.5rem;
+  padding-bottom: 0;
   color: white;
   background: none;
   border: none;
@@ -131,7 +152,7 @@
   .desktop-actions {
     display: none;
   }
-  
+
   .mobile-menu-button {
     display: block;
   }
@@ -141,8 +162,24 @@
   .mobile-menu-button {
     display: none;
   }
-  
+
   .desktop-actions {
     display: flex;
   }
+}
+.header-drawer [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=right][data-state=open] {
+  display: none !important;
+}
+div [data-vaul-handle] {
+  display: none !important;
+}
+.header-drawer .transition-opacity {
+  display: none !important;
+  opacity: 0 !important;
+}
+.header-drawer [data-vaul-drawer-visible="true"] {
+  display: none !important;
+}
+.header-drawer {
+  background-color: red !important;
 }

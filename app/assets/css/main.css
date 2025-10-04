@@ -1,414 +1,510 @@
-@import "@nuxt/ui";
-@import "tailwindcss";
+@import '@nuxt/ui';
+@import 'tailwindcss';
 
 /* CSS Reset - Remove all user agent stylesheet defaults */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-    display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 
 body {
-    line-height: 1;
-    background-color: white !important;
-    font-family: Poppins, sans-serif;
+  line-height: 1;
+  background-color: white !important;
+  font-family: Poppins, sans-serif;
 }
 
-ol, ul {
-    list-style: none;
+ol,
+ul {
+  list-style: none;
 }
 
-blockquote, q {
-    quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 /* Remove default button styles */
 button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    outline: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
 }
 
 /* Remove default input styles */
-input, textarea, select {
-    font: inherit;
-    color: inherit;
-    background: transparent;
-    border: none;
-    outline: none;
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
 }
 
 /* Remove default link styles */
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 /* Remove default image styles */
 img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Remove default form styles */
 form {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 legend {
-    padding: 0;
+  padding: 0;
 }
 
 /* Remove default heading styles */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    font-size: inherit;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+  font-size: inherit;
 }
 
 /* Remove default paragraph styles */
 p {
-    margin: 0;
+  margin: 0;
 }
 
 /* Remove default list styles */
 li {
-    list-style: none;
+  list-style: none;
 }
 
 /* Remove default table styles */
-th, td {
-    padding: 0;
-    text-align: left;
+th,
+td {
+  padding: 0;
+  text-align: left;
 }
 
 /* Remove default hr styles */
 hr {
-    border: none;
-    margin: 0;
-    padding: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* Remove default address styles */
 address {
-    font-style: normal;
+  font-style: normal;
 }
 
 /* Remove default cite styles */
 cite {
-    font-style: normal;
+  font-style: normal;
 }
 
 /* Remove default code styles */
-code, pre {
-    font-family: inherit;
+code,
+pre {
+  font-family: inherit;
 }
 
 /* Remove default mark styles */
 mark {
-    background: transparent;
-    color: inherit;
+  background: transparent;
+  color: inherit;
 }
 
 /* Remove default small styles */
 small {
-    font-size: inherit;
+  font-size: inherit;
 }
 
 /* Remove default sub/sup styles */
-sub, sup {
-    font-size: inherit;
-    line-height: inherit;
-    position: static;
-    vertical-align: baseline;
+sub,
+sup {
+  font-size: inherit;
+  line-height: inherit;
+  position: static;
+  vertical-align: baseline;
 }
 
 /* Remove default details/summary styles */
 details {
-    display: block;
+  display: block;
 }
 
 summary {
-    display: block;
-    cursor: pointer;
+  display: block;
+  cursor: pointer;
 }
 
 /* Remove default progress styles */
 progress {
-    appearance: none;
-    border: none;
-    background: transparent;
+  appearance: none;
+  border: none;
+  background: transparent;
 }
 
 /* Remove default meter styles */
 meter {
-    appearance: none;
-    border: none;
-    background: transparent;
+  appearance: none;
+  border: none;
+  background: transparent;
 }
 
 /* Remove default range styles */
-input[type="range"] {
-    appearance: none;
-    background: transparent;
+input[type='range'] {
+  appearance: none;
+  background: transparent;
 }
 
 /* Remove default file input styles */
-input[type="file"] {
-    appearance: none;
-    background: transparent;
-    border: none;
+input[type='file'] {
+  appearance: none;
+  background: transparent;
+  border: none;
 }
 
 /* Remove default search input styles */
-input[type="search"] {
-    appearance: none;
+input[type='search'] {
+  appearance: none;
 }
 
 /* Remove default number input styles */
-input[type="number"] {
-    appearance: textfield;
+input[type='number'] {
+  appearance: textfield;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    appearance: none;
-    margin: 0;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
 }
 
 /* Remove default color input styles */
-input[type="color"] {
-    appearance: none;
-    background: transparent;
-    border: none;
-    padding: 0;
-    width: auto;
-    height: auto;
+input[type='color'] {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
 }
 
 /* Remove default date/time input styles */
-input[type="date"],
-input[type="time"],
-input[type="datetime-local"] {
-    appearance: none;
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'] {
+  appearance: none;
 }
 
 /* Remove default checkbox/radio styles */
-input[type="checkbox"],
-input[type="radio"] {
-    appearance: none;
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
+input[type='checkbox'],
+input[type='radio'] {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* Remove default select styles */
 select {
-    appearance: none;
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* Remove default textarea styles */
 textarea {
-    resize: none;
-    overflow: auto;
+  resize: none;
+  overflow: auto;
 }
 
 /* Remove default fieldset styles */
 fieldset {
-    min-width: 0;
+  min-width: 0;
 }
 
 /* Remove default legend styles */
 legend {
-    width: 100%;
-    max-width: 100%;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Remove default optgroup styles */
 optgroup {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 /* Remove default option styles */
 option {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 /* Remove default datalist styles */
 datalist {
-    display: none;
+  display: none;
 }
 
 /* Remove default output styles */
 output {
-    display: inline;
+  display: inline;
 }
 
 /* Remove default keygen styles */
 keygen {
-    display: none;
+  display: none;
 }
 
 /* Remove default menu styles */
 menu {
-    display: block;
-    list-style: none;
+  display: block;
+  list-style: none;
 }
 
 /* Remove default dir styles */
 dir {
-    display: block;
-    list-style: none;
+  display: block;
+  list-style: none;
 }
 
 /* Remove default isindex styles */
 isindex {
-    display: none;
+  display: none;
 }
 
 /* Remove default listing styles */
 listing {
-    display: block;
-    font-family: monospace;
-    white-space: pre;
+  display: block;
+  font-family: monospace;
+  white-space: pre;
 }
 
 /* Remove default plaintext styles */
 plaintext {
-    display: block;
-    font-family: monospace;
-    white-space: pre;
+  display: block;
+  font-family: monospace;
+  white-space: pre;
 }
 
 /* Remove default xmp styles */
 xmp {
-    display: block;
-    font-family: monospace;
-    white-space: pre;
+  display: block;
+  font-family: monospace;
+  white-space: pre;
 }
 
 /* Remove default noframes styles */
 noframes {
-    display: none;
+  display: none;
 }
 
 /* Remove default noembed styles */
 noembed {
-    display: none;
+  display: none;
 }
 
 /* Remove default noscript styles */
 noscript {
-    display: none;
+  display: none;
 }
 
 /* Remove default script styles */
 script {
-    display: none;
+  display: none;
 }
 
 /* Remove default style styles */
 style {
-    display: none;
+  display: none;
 }
 
 /* Remove default title styles */
 title {
-    display: none;
+  display: none;
 }
 
 /* Remove default base styles */
 base {
-    display: none;
+  display: none;
 }
 
 /* Remove default link styles */
 link {
-    display: none;
+  display: none;
 }
 
 /* Remove default meta styles */
 meta {
-    display: none;
+  display: none;
 }
 
 /* Remove default head styles */
 head {
-    display: none;
+  display: none;
 }
 
 /* Remove default html styles */
 html {
-    font-size: 16px;
-    line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 /* Remove default body styles */
 body {
-    font-family: Poppins, sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #000;
-    background-color: white;
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #000;
+  background-color: white;
 }
 
 /* Utility classes */
 .jost {
-    font-family: Jost, sans-serif;
+  font-family: Jost, sans-serif;
 }
 
+div [data-vaul-handle] {
+  display: none !important;
+}
