@@ -158,8 +158,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-
-
+  overflow: hidden;
   /* padding: 1rem; */
 }
 
@@ -343,6 +342,7 @@
 .carousel-container {
   gap: 16px !important;
   padding-left: 16px !important;
+  padding-right: 16px !important;
   padding-top: 6px !important;
 }
 

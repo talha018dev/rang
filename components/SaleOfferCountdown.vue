@@ -112,13 +112,13 @@
                 v-slot="{ item }" 
                 :items="carouselSlides" 
                 class="carousel-nuxt"
-                :slides-per-view="3.2"
+                :slides-per-view="3"
                 :space-between="16"
                 :prev="{ onClick: goToPrevious }"
                 :next="{ onClick: goToNext }"
                 :ui="{
                     item: 'carousel-slide basis-1/3',
-                    container: 'carousel-container gap-4 !mt-1 !ml-4',
+                    container: 'carousel-container gap-4 !mt-1 !ml-4 !mr-4',
                     track: 'carousel-track'
                 }"
             >
