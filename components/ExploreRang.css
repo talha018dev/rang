@@ -21,7 +21,7 @@
   .explore-title {
     font-size: 2.5rem;
   }
-  
+
   .explore-header {
     margin: 3rem 0;
   }
@@ -32,19 +32,19 @@
   .explore-title {
     font-size: 2rem;
   }
-  
+
   .explore-header {
     margin: 2rem 0;
   }
 }
 
 .explore-title-light {
-  color: #FAB767;
+  color: #fab767;
   font-weight: 300;
 }
 
 .explore-title-bold {
-  color: #F1592C;
+  color: #f1592c;
   font-weight: bold;
 }
 
@@ -59,12 +59,22 @@
   grid-template-columns: 5fr 3fr;
   gap: 1rem;
 }
+.explore-grid-main img:hover{
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
 
 .explore-grid-secondary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-top: 1rem;
+}
+.explore-grid-secondary img:hover{
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .explore-image {
@@ -82,4 +92,22 @@
 
 .explore-image-container {
   border-radius: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .explore-grid-main {
+    grid-template-columns: 1fr;
+  }
+  .explore-grid-main img {
+    height: 300px;
+    object-position: top;
+  }
+
+  .explore-grid-secondary {
+    grid-template-columns: 1fr;
+  }
+  .explore-grid-secondary img {
+    height: 300px;
+    object-position: top;
+  }
 }
