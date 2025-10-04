@@ -122,6 +122,52 @@
             />
           </div>
           
+          <!-- Mobile Navigation Links -->
+          <div class="mobile-nav-links">
+            <NuxtLink 
+              to="/" 
+              :class="getNavLinkHomeClass(isHomeActive)"
+              @click="closeDrawer"
+            >
+              Home
+            </NuxtLink>
+            <NuxtLink 
+              to="/women" 
+              :class="getNavLinkClass(isWomenActive)"
+              @click="closeDrawer"
+            >
+              Women
+            </NuxtLink>
+            <NuxtLink 
+              to="/men" 
+              :class="getNavLinkClass(isMenActive)"
+              @click="closeDrawer"
+            >
+              Men
+            </NuxtLink>
+            <NuxtLink 
+              to="/kids" 
+              :class="getNavLinkClass(isKidsActive)"
+              @click="closeDrawer"
+            >
+              Kids
+            </NuxtLink>
+            <NuxtLink 
+              to="/jewelry" 
+              :class="getNavLinkClass(isJewelryActive)"
+              @click="closeDrawer"
+            >
+              Jewelry
+            </NuxtLink>
+            <NuxtLink 
+              to="/accessories" 
+              :class="getNavLinkClass(isAccessoriesActive)"
+              @click="closeDrawer"
+            >
+              Accessories
+            </NuxtLink>
+          </div>
+
           <div class="header-drawer-template-buttons">
             <UButton
               color="orange"
