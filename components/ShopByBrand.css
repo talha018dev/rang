@@ -5,6 +5,11 @@
   margin-left: auto;
   margin-right: auto;
 }
+.brand-container img:hover{
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
 
 .brand-header {
   margin: 5rem 0;
@@ -89,7 +94,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 }
 
 .brand-grid-tertiary {
@@ -103,4 +108,21 @@
   height: 100%;
   object-fit: cover;
   border-radius: 0;
+}
+
+@media (max-width: 600px) {
+  .brand-grid-secondary {
+    grid-template-columns: 1fr;
+  }
+  .brand-grid-secondary img {
+    height: 300px;
+    object-position: top;
+  }
+  .brand-grid-tertiary {
+    grid-template-columns: 1fr;
+  }
+  .brand-grid-tertiary img {
+    height: 300px;
+    object-position: top;
+  }
 }

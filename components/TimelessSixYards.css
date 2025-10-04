@@ -5,6 +5,11 @@
   margin-left: auto;
   margin-right: auto;
 }
+.timeless-container img:hover{
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
 
 .timeless-header {
   margin: 5rem 0;
