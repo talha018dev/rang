@@ -1,5 +1,6 @@
 @import '@nuxt/ui';
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 
 /* CSS Reset - Remove all user agent stylesheet defaults */
 *,
@@ -503,6 +504,10 @@ body {
 /* Utility classes */
 .jost {
   font-family: Jost, sans-serif;
+}
+
+.dm-serif {
+  font-family: 'DM Serif Display', serif;
 }
 
 div [data-vaul-handle] {

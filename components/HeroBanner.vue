@@ -8,7 +8,7 @@
       <div class="hero-content">
           <div class="hero-overlay">
             <p class="hero-subtitle">New Collection</p>
-            <div class="hero-title">
+            <div class="hero-title dm-serif">
               Durga Puja - 2025
             </div>
             <button class="hero-button">

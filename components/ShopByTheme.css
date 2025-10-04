@@ -16,6 +16,30 @@
   text-align: center;
 }
 
+/* Responsive font size for screens under 1200px */
+@media (max-width: 1199px) {
+  .theme-title {
+    font-size: 2.5rem;
+  }
+  
+  .theme-header {
+    margin-top: 6rem;
+    margin-bottom: 3rem;
+  }
+}
+
+/* Further responsive adjustments for mobile screens under 600px */
+@media (max-width: 599px) {
+  .theme-title {
+    font-size: 2rem;
+  }
+  
+  .theme-header {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+  }
+}
+
 .theme-title-light {
   color: #FAB767;
   font-weight: 300;
