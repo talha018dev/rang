@@ -342,9 +342,25 @@
   /* gap: 4rem; */
   justify-content: space-around;
 }
+
+@media (max-width: 700px) {
+  .best-deals-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+  }
+}
 .best-deals-section img {
   margin: auto;
   margin-bottom: 2rem;
+}
+
+.best-deals-container > div {
+  text-align: center;
 }
 .best-deals-button-container {
   width: 100%;
