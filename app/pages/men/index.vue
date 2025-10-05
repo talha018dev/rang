@@ -89,7 +89,7 @@
 // All Vue composables and components are auto-imported in Nuxt 4
 import { computed, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
-import '../men.css'
+import './men.css'
 import { useHead } from 'nuxt/app'
 
 // Meta
@@ -110,7 +110,7 @@ const products = ref([
     id: 1,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-1.png',
+    image: '/men/men-image-large.png',
     size: 'M',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -119,7 +119,7 @@ const products = ref([
     id: 2,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-2.png',
+    image: '/men/men-image-large.png',
     size: 'L',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -128,7 +128,7 @@ const products = ref([
     id: 3,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-1.png',
+    image: '/men/men-image-large.png',
     size: 'XL',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -137,7 +137,7 @@ const products = ref([
     id: 4,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-2.png',
+    image: '/men/men-image-large.png',
     size: 'M',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -146,7 +146,7 @@ const products = ref([
     id: 5,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-1.png',
+    image: '/men/men-image-large.png',
     size: 'L',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -155,7 +155,7 @@ const products = ref([
     id: 6,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-2.png',
+    image: '/men/men-image-large.png',
     size: 'XL',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -164,7 +164,7 @@ const products = ref([
     id: 7,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-1.png',
+    image: '/men/men-image-large.png',
     size: 'M',
     priceRange: '2000-3000',
     category: 'punjabi'
@@ -173,7 +173,7 @@ const products = ref([
     id: 8,
     name: 'Punjabi for men',
     price: 'Tk 2,500',
-    image: '/men/men-2.png',
+    image: '/men/men-image-large.png',
     size: 'L',
     priceRange: '2000-3000',
     category: 'punjabi'
