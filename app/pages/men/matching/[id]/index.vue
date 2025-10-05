@@ -530,10 +530,11 @@
 
     <!-- Related Products Section -->
     <div class="related-products-section">
-      <h2 class="related-products-title">
-        <span class="title-part-1">Related</span>
-        <span class="title-part-2">Products</span>
-      </h2>
+      <div class="related-products-header">
+        <div class="related-products-title">
+          <div><span class="related-products-title-light">Related</span> <span class="related-products-title-bold">Products</span></div>
+        </div>
+      </div>
       
       <div class="related-products-grid">
         <div 

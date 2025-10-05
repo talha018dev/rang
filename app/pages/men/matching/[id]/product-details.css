@@ -1775,21 +1775,34 @@
   padding: 0 20px;
 }
 
+.related-products-header {
+  margin: 2rem 0;
+}
+
 .related-products-title {
+  font-size: 2.75rem;
   text-align: center;
-  margin-bottom: 40px;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.2;
 }
 
-.title-part-1 {
-  color: #f97316;
-  margin-right: 8px;
+.related-products-title-light {
+  color: #fab767;
+  font-weight: 300;
 }
 
-.title-part-2 {
-  color: #e18719;
+.related-products-title-bold {
+  color: #f1592c;
+  font-weight: bold;
+}
+
+/* Responsive font size for screens under 1200px */
+@media (max-width: 1199px) {
+  .related-products-title {
+    font-size: 1.5rem;
+  }
+
+  .related-products-header {
+    margin: 1rem 0;
+  }
 }
 
 .related-products-grid {
@@ -1868,9 +1881,12 @@
     padding: 0 15px;
   }
 
+  .related-products-header {
+    margin: 3rem 0;
+  }
+
   .related-products-title {
-    font-size: 28px;
-    margin-bottom: 30px;
+    font-size: 2.5rem;
   }
 
   .related-products-grid {
@@ -1896,9 +1912,12 @@
 }
 
 @media (max-width: 480px) {
+  .related-products-header {
+    margin: 2rem 0;
+  }
+
   .related-products-title {
-    font-size: 24px;
-    margin-bottom: 24px;
+    font-size: 2rem;
   }
 
   .related-products-grid {
