@@ -6,7 +6,7 @@
       <section class="hero-banner">
           <div class="hero-content">
             <div class="hero-text">
-              <div class="hero-title">WOMEN</div>
+              <!-- <div class="hero-title">WOMEN</div> -->
             </div>
                 <NuxtImg 
                   src="/men/men-hero.png" 

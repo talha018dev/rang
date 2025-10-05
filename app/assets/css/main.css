@@ -538,6 +538,7 @@ div [data-vaul-handle] {
   drop-shadow(-0.5px 0 0 white) 
   drop-shadow(0 -0.5px 0 white); */
   -webkit-text-stroke: 1px white;
+  z-index: 100;
 }
 .image-div-text span {
   font-family: Poppins;
@@ -547,6 +548,7 @@ div [data-vaul-handle] {
   line-height: 100%;
   letter-spacing: 0%;
   color: white;
+  z-index: 100;
 }
 .image-shop-now {
   bottom: 10px;
@@ -564,4 +566,6 @@ div [data-vaul-handle] {
   letter-spacing: 0%;
 
   color: white;
+
+  z-index: 100;
 }

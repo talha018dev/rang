@@ -20,7 +20,7 @@
   .sale-title {
     font-size: 2.5rem;
   }
-  
+
   .sale-header {
     margin: 3rem 0;
   }
@@ -31,19 +31,19 @@
   .sale-title {
     font-size: 2rem;
   }
-  
+
   .sale-header {
     margin: 2rem 0;
   }
 }
 
 .sale-title-light {
-  color: #FAB767;
+  color: #fab767;
   font-weight: 300;
 }
 
 .sale-title-bold {
-  color: #F1592C;
+  color: #f1592c;
   font-weight: bold;
 }
 
@@ -133,7 +133,7 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
   }
-  
+
   .sale-brand-image {
     height: 7rem;
   }
@@ -145,7 +145,7 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 0.5rem;
   }
-  
+
   .sale-brand-image {
     height: 5rem;
   }
@@ -165,5 +165,32 @@
   .sale-brands-grid-tertiary img {
     height: 300px;
     object-position: top;
+  }
+}
+
+.sale-offer-text {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 133px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
+
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 100;
+}
+
+@media (max-width: 800px) {
+  .sale-offer-text {
+    font-size: 30px;
+  }
+}
+@media (max-width: 600px) {
+  .sale-offer-text {
+    font-size: 40px;
   }
 }
