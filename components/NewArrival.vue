@@ -1,11 +1,12 @@
 <template>
-  <div class="new-arrival">
-    <div class="container mx-auto px-4 py-12">
-      <!-- Section Header -->
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">New Arrivals</h2>
+  <main class="new-arrival-container">
+    <section class="new-arrival-header">
+      <div class="new-arrival-title">
+        <div><span class="new-arrival-title-light">New</span> <span class="new-arrival-title-bold">Arrivals</span></div>
       </div>
+    </section>
 
+    <section>
       <!-- Carousel -->
       <UCarousel
         ref="carouselRef"
@@ -16,8 +17,6 @@
           container: 'rounded-lg'
         }"
         class="rounded-lg"
-        arrows
-        indicators
         :slides-per-view="4"
         :slides-per-group="1"
         :autoplay="false"
@@ -38,8 +37,8 @@
           </div> -->
         </div>
       </UCarousel>
-    </div>
-  </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">

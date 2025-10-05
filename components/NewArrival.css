@@ -1,9 +1,49 @@
-.new-arrival {
-  /* background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); */
-  min-height: 500px;
+/* NewArrival Styles */
+.new-arrival-container {
   width: 90%;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+.new-arrival-header {
+  margin: 5rem 0;
+}
+
+.new-arrival-title {
+  font-size: 3.75rem;
+  text-align: center;
+}
+
+/* Responsive font size for screens under 1200px */
+@media (max-width: 1199px) {
+  .new-arrival-title {
+    font-size: 2.5rem;
+  }
+  
+  .new-arrival-header {
+    margin: 3rem 0;
+  }
+}
+
+/* Further responsive adjustments for mobile screens under 600px */
+@media (max-width: 599px) {
+  .new-arrival-title {
+    font-size: 2rem;
+  }
+  
+  .new-arrival-header {
+    margin: 2rem 0;
+  }
+}
+
+.new-arrival-title-light {
+  color: #FAB767;
+  font-weight: 300;
+}
+
+.new-arrival-title-bold {
+  color: #F1592C;
+  font-weight: bold;
 }
 
 .carousel-item {
@@ -18,16 +58,16 @@
 }
 
 /* Custom carousel styling */
-.new-arrival :deep(.carousel) {
+.new-arrival-container :deep(.carousel) {
   padding: 1rem 0;
 }
 
-.new-arrival :deep(.carousel-item) {
+.new-arrival-container :deep(.carousel-item) {
   padding: 0 0.5rem;
 }
 
 /* Ensure carousel navigation is visible */
-.new-arrival :deep(.carousel-arrow) {
+.new-arrival-container :deep(.carousel-arrow) {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -35,19 +75,19 @@
   position: relative;
 }
 
-.new-arrival :deep(.carousel-arrow:hover) {
+.new-arrival-container :deep(.carousel-arrow:hover) {
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.new-arrival :deep(.carousel-indicators) {
+.new-arrival-container :deep(.carousel-indicators) {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
   gap: 0.5rem;
 }
 
-.new-arrival :deep(.carousel-indicator) {
+.new-arrival-container :deep(.carousel-indicator) {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   width: 8px;
@@ -56,40 +96,32 @@
   transition: background-color 0.3s ease;
 }
 
-.new-arrival :deep(.carousel-indicator.active) {
+.new-arrival-container :deep(.carousel-indicator.active) {
   background: #3b82f6;
 }
 
-.new-arrival :deep(.carousel-indicator:hover) {
+.new-arrival-container :deep(.carousel-indicator:hover) {
   background: rgba(59, 130, 246, 0.7);
 }
 
 /* Ensure carousel container is focusable for keyboard navigation */
-.new-arrival :deep(.carousel) {
+.new-arrival-container :deep(.carousel) {
   outline: none;
 }
 
-.new-arrival :deep(.carousel:focus) {
+.new-arrival-container :deep(.carousel:focus) {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .new-arrival {
-    padding: 2rem 0;
-  }
-
-  .new-arrival h2 {
-    font-size: 1.875rem;
-  }
-
   .carousel-item img {
     height: 200px;
   }
   
   /* Show 2 items on mobile */
-  .new-arrival :deep(.carousel-item) {
+  .new-arrival-container :deep(.carousel-item) {
     flex: 0 0 50%;
   }
 }
@@ -100,7 +132,7 @@
   }
   
   /* Show 3 items on tablet */
-  .new-arrival :deep(.carousel-item) {
+  .new-arrival-container :deep(.carousel-item) {
     flex: 0 0 33.333%;
   }
 }
@@ -111,13 +143,13 @@
   }
   
   /* Show 4 items on desktop */
-  .new-arrival :deep(.carousel-item) {
+  .new-arrival-container :deep(.carousel-item) {
     flex: 0 0 25%;
   }
 }
 
 /* Gradient overlay for better text readability */
-.carousel-item::before {
+/* .carousel-item::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -127,7 +159,7 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
   border-radius: 0 0 0.5rem 0.5rem;
   z-index: 1;
-}
+} */
 
 .carousel-item h3,
 .carousel-item p {
