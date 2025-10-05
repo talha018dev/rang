@@ -462,11 +462,12 @@
             </div>
             <div class="review-meta">
               <span class="reviewer-name">{{ review.reviewerName }}</span>
+              
               <span v-if="review.verified" class="verified-badge">
+                Verified Buyer
                 <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
-                Verified Buyer
               </span>
               <span class="review-date">{{ review.date }}</span>
             </div>
@@ -475,9 +476,8 @@
           <div class="review-content">
             <h3 class="review-title">{{ review.title }}</h3>
             <p class="review-text">{{ review.text }}</p>
-          </div>
 
-          <div class="review-footer">
+            <div class="review-footer">
             <div class="helpfulness">
               <span class="helpfulness-text">Is this review helpful?</span>
               <div class="helpfulness-buttons">
@@ -505,7 +505,7 @@
             </div>
             <button class="report-btn">Report</button>
           </div>
-
+          </div>
           <div class="review-attributes">
             <div class="attribute-rating">
               <span class="attr-label">Quality :</span>
@@ -520,6 +520,10 @@
               <span class="attr-value">{{ review.attributes.fit }}</span>
             </div>
           </div>
+
+         
+
+          
         </div>
       </div>
     </div>
