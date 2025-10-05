@@ -66,3 +66,104 @@
   object-fit: cover;
   border-radius: 0;
 }
+
+/* Sale Brands Section Styles */
+.sale-brands-section {
+  margin-top: 2rem;
+}
+
+.sale-brands-grid-main {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.sale-brand-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sale-brand-image {
+  width: 100%;
+  height: 9rem;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.sale-brand-image:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.sale-brands-section-secondary {
+  margin-top: 1rem;
+}
+
+.sale-brands-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.sale-brands-grid-tertiary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.sale-brand-image-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.sale-brand-image-cover:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Responsive adjustments for medium screens */
+@media (max-width: 768px) {
+  .sale-brands-grid-main {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+  
+  .sale-brand-image {
+    height: 7rem;
+  }
+}
+
+/* Further responsive adjustments for mobile screens under 600px */
+@media (max-width: 599px) {
+  .sale-brands-grid-main {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .sale-brand-image {
+    height: 5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .sale-brands-grid-secondary {
+    grid-template-columns: 1fr;
+  }
+  .sale-brands-grid-secondary img {
+    height: 300px;
+    object-position: top;
+  }
+  .sale-brands-grid-tertiary {
+    grid-template-columns: 1fr;
+  }
+  .sale-brands-grid-tertiary img {
+    height: 300px;
+    object-position: top;
+  }
+}

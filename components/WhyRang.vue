@@ -10,25 +10,25 @@
             <div class="grid-item grid-item-1">
                 <div class="card-image">
                     <img src="/why-rang-1.png" alt="Festive celebration with people in traditional attire" />
-                    <div class="card-overlay">
+                    <!-- <div class="card-overlay">
                         <h3>Because it's Festive</h3>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="grid-item grid-item-2">
                 <div class="card-image">
                     <img src="/why-rang-2.png" alt="Colorful traditional celebration" />
-                    <div class="card-overlay">
+                    <!-- <div class="card-overlay">
                         <h3>Because it's Colorful</h3>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="grid-item grid-item-3">
                 <div class="card-image">
                     <img src="/why-rang-3.png" alt="Bangladeshi cultural celebration" />
-                    <div class="card-overlay">
+                    <!-- <div class="card-overlay">
                         <h3>Because it's Bangladesh</h3>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
