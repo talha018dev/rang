@@ -59,7 +59,7 @@
             <NuxtLink 
               v-for="(product, index) in filteredProducts" 
               :key="index"
-              :to="`/men/${product.category}/${product.id}`"
+              :to="`/men/matching/${product.id}`"
               class="product-card"
             >
               <div class="product-image">
@@ -87,8 +87,10 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
+import { computed, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
 import '../men.css'
+import { useHead } from 'nuxt/app'
 
 // Meta
 useHead({

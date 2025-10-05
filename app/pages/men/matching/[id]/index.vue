@@ -9,7 +9,7 @@
         <span>/</span>
         <NuxtLink to="/men">Men</NuxtLink>
         <span>/</span>
-        <span>{{ category }}</span>
+        <span>Matching Series</span>
         <span>/</span>
         <span>{{ product.name }}</span>
       </div>
