@@ -12,9 +12,9 @@
             </div>
             <div class="explore-grid-secondary">
                 <img src="/explore-3.png" alt="Explore Rang" class="explore-image"></img>
-                <img src="/explore-4.png" alt="Explore Rang" class="explore-image"></img>
+                <img src="/explore-44.png" alt="Explore Rang" class="explore-image"></img>
                 <div class="explore-image-container">
-                    <img src="/explore-5.png" alt="Explore Rang" class="explore-image-rounded"></img>
+                    <img src="/explore-55.png" alt="Explore Rang" class="explore-image-rounded"></img>
                 </div>
             </div>
         </section>

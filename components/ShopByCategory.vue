@@ -7,8 +7,8 @@
         </section>
         <section>
             <div class="category-grid-main">
-                <img src="/category-1.png" alt="Category Rang" class="category-image-rounded"></img>
                 <img src="/category-2.png" alt="Category Rang" class="category-image-rounded"></img>
+                <img src="/category-1.png" alt="Category Rang" class="category-image-rounded"></img>
             </div>
             <div class="category-grid-secondary">
                 <img src="/category-3.png" alt="Category Rang" class="category-image"></img>

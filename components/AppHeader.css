@@ -184,6 +184,12 @@
   }
 }
 
+@media (min-width: 801px) {
+  .mobile-nav-links {
+    display: none;
+  }
+}
+
 @media (max-width: 1200px) {
   .desktop-actions {
     display: none;
@@ -191,6 +197,14 @@
 
   .mobile-menu-button {
     display: block;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+  }
+
+  .nav-link-home {
+    font-size: 0.85rem;
   }
 }
 
