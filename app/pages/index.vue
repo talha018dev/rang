@@ -2,6 +2,7 @@
   <div>
     <HeroBanner />
     <OfferBanner />
+    <NewArrival />
     <ExploreRang />
     <ShopByCategory />
     <TimelessSixYards />
@@ -16,6 +17,7 @@
 <script setup lang="">
 import HeroBanner from '../../components/HeroBanner.vue'
 import OfferBanner from '../../components/OfferBanner.vue'
+import NewArrival from '../../components/NewArrival.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
 import ShopByCategory from '../../components/ShopByCategory.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
