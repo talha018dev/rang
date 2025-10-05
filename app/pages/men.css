@@ -1,11 +1,20 @@
 /* Men Page Styles */
+.men-page-gradient {
+  background: linear-gradient(to bottom, white, #dfc5a3)
+}
+
+.app-footer {
+  background: transparent !important;
+}
+
 .men-page {
   min-height: 100vh;
-  margin-top: 15rem;
+  padding-top: 15rem;
   width: 90%;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+
 }
 
 /* Hero Banner Section */
@@ -56,7 +65,7 @@
 
 /* Filter Section */
 .filter-section {
-  background-color: white;
+  /* background-color: white; */
   padding: 2rem 0;
   border-bottom: 1px solid black;
 }
@@ -78,7 +87,7 @@
   padding: 0.75rem 2.5rem 0.75rem 1rem;
   border: 1px solid #d1d5db;
   /* border-radius: 0.5rem; */
-  background-color: white;
+  /* background-color: white; */
   font-weight: bold;
   font-size: 1rem;
   color: #374151;
@@ -128,7 +137,7 @@
 
 .product-card {
   width: 100%;
-  background-color: white;
+  /* background-color: white; */
   border-radius: 0.75rem;
   overflow: hidden;
   /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); */
@@ -141,14 +150,15 @@
   box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.product-image {
+.men-page .product-image {
   width: 100%;
+  height: auto;
   /* height: 440px; */
   /* overflow: hidden; */
   position: relative;
 }
 
-.product-img {
+.men-page .product-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -225,7 +235,7 @@
     gap: 1rem;
   }
 
-  .product-image {
+  .men-page .product-image {
     height: 350px;
   }
 
@@ -259,7 +269,7 @@
     gap: 1rem;
   }
 
-  .product-image {
+  .men-page .product-image {
     height: 300px;
   }
 

@@ -1,85 +1,88 @@
 <template>
-  <div class="men-page">
-    <AppHeader />
-    
-    <!-- Hero Banner Section -->
-    <section class="hero-banner">
-        <div class="hero-content">
-         
-              <NuxtImg 
-                src="/men/men-hero.png" 
-                alt="Men's fashion" 
-                class="hero-img"
-                loading="eager"
-                format="webp"
-                quality="90"
-              />
-      </div>
-    </section>
+  <main class="men-page-gradient">
 
-    <!-- Filter Section -->
-    <section class="filter-section">
-      <div class="filter-container">
-        <div class="filter-dropdowns">
-          <div class="filter-dropdown">
-            <select class="filter-select" v-model="selectedSize">
-              <option value="">Size</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
-            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="filter-dropdown">
-            <select class="filter-select" v-model="selectedPrice">
-              <option value="">Price</option>
-              <option value="0-1000">Under Tk 1,000</option>
-              <option value="1000-2000">Tk 1,000 - 2,000</option>
-              <option value="2000-3000">Tk 2,000 - 3,000</option>
-              <option value="3000+">Above Tk 3,000</option>
-            </select>
-            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
+    <div class="men-page">
+      <AppHeader />
+      
+      <!-- Hero Banner Section -->
+      <section class="hero-banner">
+          <div class="hero-content">
+           
+                <NuxtImg 
+                  src="/men/men-hero.png" 
+                  alt="Men's fashion" 
+                  class="hero-img"
+                  loading="eager"
+                  format="webp"
+                  quality="90"
+                />
+        </div>
+      </section>
+  
+      <!-- Filter Section -->
+      <section class="filter-section">
+        <div class="filter-container">
+          <div class="filter-dropdowns">
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedSize">
+                <option value="">Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedPrice">
+                <option value="">Price</option>
+                <option value="0-1000">Under Tk 1,000</option>
+                <option value="1000-2000">Tk 1,000 - 2,000</option>
+                <option value="2000-3000">Tk 2,000 - 3,000</option>
+                <option value="3000+">Above Tk 3,000</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Products Grid Section -->
-    <section class="products-section">
-      <div class="products-container">
-        <div class="products-grid">
-          <NuxtLink 
-            v-for="(product, index) in filteredProducts" 
-            :key="index"
-            :to="`/men/${product.category}/${product.id}`"
-            class="product-card"
-          >
-            <div class="product-image">
-              <NuxtImg 
-                :src="product.image" 
-                :alt="product.name" 
-                class="product-img"
-                loading="lazy"
-                format="webp"
-                quality="85"
-              />
-            </div>
-            <div class="product-info">
-              <h3 class="product-name">{{ product.name }}</h3>
-              <p class="product-price">{{ product.price }}</p>
-            </div>
-          </NuxtLink>
+      </section>
+  
+      <!-- Products Grid Section -->
+      <section class="products-section">
+        <div class="products-container">
+          <div class="products-grid">
+            <NuxtLink 
+              v-for="(product, index) in filteredProducts" 
+              :key="index"
+              :to="`/men/${product.category}/${product.id}`"
+              class="product-card"
+            >
+              <div class="product-image">
+                <NuxtImg 
+                  :src="product.image" 
+                  :alt="product.name" 
+                  class="product-img"
+                  loading="lazy"
+                  format="webp"
+                  quality="85"
+                />
+              </div>
+              <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">{{ product.price }}</p>
+              </div>
+            </NuxtLink>
+          </div>
         </div>
-      </div>
-    </section>
-  </div>
-  <AppFooter />
+      </section>
+    </div>
+    <AppFooter />
+  </main>
 </template>
 
 <script setup lang="ts">
