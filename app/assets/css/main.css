@@ -513,3 +513,55 @@ body {
 div [data-vaul-handle] {
   display: none !important;
 }
+
+.image-div {
+  position: relative;
+}
+.image-div-text {
+  position: absolute;
+}
+.image-div-text .by {
+  font-weight: 100 !important;
+}
+
+.image-div-text div {
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 64px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(254, 244, 232, 0.7);
+  /* filter: drop-shadow(0.5px 0 0 white) 
+  drop-shadow(0 0.5px 0 white)
+  drop-shadow(-0.5px 0 0 white) 
+  drop-shadow(0 -0.5px 0 white); */
+  -webkit-text-stroke: 1px white;
+}
+.image-div-text span {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
+}
+.image-shop-now {
+  bottom: 10px;
+  right: 10px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: SemiBold;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  color: white;
+}

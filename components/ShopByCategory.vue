@@ -7,7 +7,14 @@
         </section>
         <section>
             <div class="category-grid-main">
-                <img src="/category-2.png" alt="Category Rang" class="category-image-rounded"></img>
+                <div class="image-div">
+                    <img src="/shop-by-category/shop-by-category-1.png" alt="Category Rang" class="category-image-rounded"></img>
+                    <div class="image-div-text" style="top: 10px; left: 10px;">
+                        <div>Men</div>
+                        <span><span class="by">by</span> Rang Bangladesh</span>
+                    </div>
+                    <div class="image-shop-now">Shop Now <Icon name="heroicons:chevron-right" /></div>
+                </div>
                 <img src="/category-1.png" alt="Category Rang" class="category-image-rounded"></img>
             </div>
             <div class="category-grid-secondary">

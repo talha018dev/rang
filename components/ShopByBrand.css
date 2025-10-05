@@ -116,7 +116,7 @@
   }
   .brand-grid-secondary img {
     height: 300px;
-    object-position: top;
+    object-position: bottom;
   }
   .brand-grid-tertiary {
     grid-template-columns: 1fr;
