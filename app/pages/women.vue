@@ -1,13 +1,13 @@
 <template>
+  <main class="men-page-gradient">
+
     <div class="men-page">
       <AppHeader />
       
       <!-- Hero Banner Section -->
       <section class="hero-banner">
           <div class="hero-content">
-            <div class="hero-text">
-              <!-- <div class="hero-title">WOMEN</div> -->
-            </div>
+           
                 <NuxtImg 
                   src="/men/men-hero.png" 
                   alt="Men's fashion" 
@@ -59,7 +59,7 @@
             <NuxtLink 
               v-for="(product, index) in filteredProducts" 
               :key="index"
-              :to="`/men/${product.category}/${product.id}`"
+              :to="`/men/matching/${product.id}`"
               class="product-card"
             >
               <div class="product-image">
@@ -82,120 +82,130 @@
       </section>
     </div>
     <AppFooter />
-  </template>
-  
-  <script setup lang="ts">
-  // All Vue composables and components are auto-imported in Nuxt 4
-  import './men/men.css'
-  
-  // Meta
-  useHead({
-    title: 'Men\'s Collection - Rang',
-    meta: [
-      { name: 'description', content: 'Discover our exclusive collection of men\'s Punjabi outfits and traditional wear.' }
-    ]
-  })
-  
-  // Reactive data
-  const selectedSize = ref('')
-  const selectedPrice = ref('')
-  
-  
-  // Product data
-  const products = ref([
-    {
-      id: 1,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'M',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 2,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'L',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 3,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'XL',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 4,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'M',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 5,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'L',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 6,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'XL',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 7,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'M',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    },
-    {
-      id: 8,
-      name: 'Punjabi for men',
-      price: 'Tk 2,500',
-      image: '/men/men-image-large.png',
-      size: 'L',
-      priceRange: '2000-3000',
-      category: 'punjabi'
-    }
-  ])
-  
-  // Computed filtered products
-  const filteredProducts = computed(() => {
-    return products.value.filter(product => {
-      const sizeMatch = !selectedSize.value || product.size === selectedSize.value
-      const priceMatch = !selectedPrice.value || product.priceRange === selectedPrice.value
-      return sizeMatch && priceMatch
-    })
-  })
-  </script>
-  
-  <style scoped>
-  /* Override AppHeader navigation colors for men page */
-  :global(.nav-link) {
-    color: black !important;
+  </main>
+</template>
+
+<script setup lang="ts">
+// All Vue composables and components are auto-imported in Nuxt 4
+import { computed, ref } from 'vue'
+import AppFooter from '../../components/AppFooter.vue'
+import './men/men.css'
+import { useHead } from 'nuxt/app'
+
+// Meta
+useHead({
+  title: 'Men\'s Collection - Rang',
+  meta: [
+    { name: 'description', content: 'Discover our exclusive collection of men\'s Punjabi outfits and traditional wear.' }
+  ]
+})
+
+// Reactive data
+const selectedSize = ref('')
+const selectedPrice = ref('')
+
+// Product data
+const products = ref([
+  {
+    id: 1,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'M',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 2,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'L',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 3,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'XL',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 4,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'M',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 5,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'L',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 6,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'XL',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 7,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'M',
+    priceRange: '2000-3000',
+    category: 'punjabi'
+  },
+  {
+    id: 8,
+    name: 'Punjabi for men',
+    price: 'Tk 2,500',
+    image: '/men/men-image-large.png',
+    size: 'L',
+    priceRange: '2000-3000',
+    category: 'punjabi'
   }
-  
-  :global(.nav-link:hover) {
-    color: #ea580c !important;
-  }
-  
-  </style>
-  
+])
+
+// Computed filtered products
+const filteredProducts = computed(() => {
+  return products.value.filter(product => {
+    const sizeMatch = !selectedSize.value || product.size === selectedSize.value
+    const priceMatch = !selectedPrice.value || product.priceRange === selectedPrice.value
+    return sizeMatch && priceMatch
+  })
+})
+</script>
+
+<style scoped>
+/* Override AppHeader navigation colors for men page */
+:global(.nav-link) {
+  color: black !important;
+}
+
+:global(.nav-link:hover) {
+  color: #ea580c !important;
+}
+
+/* Override hamburger icon color for men page */
+:global(.mobile-menu-button) {
+  color: black !important;
+}
+
+:global(.mobile-menu-button:hover) {
+  color: #ea580c !important;
+}
+</style>
