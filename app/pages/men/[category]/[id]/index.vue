@@ -563,7 +563,7 @@
 // CSS is imported globally via nuxt.config.ts
 import { useHead, useRoute } from 'nuxt/app'
 import { computed, ref } from 'vue'
-import AppFooter from '../../../../components/AppFooter.vue'
+import AppFooter from '../../../../../components/AppFooter.vue'
 // Get route parameters
 import './product-details.css'
 const route = useRoute()
