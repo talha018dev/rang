@@ -197,4 +197,13 @@ const filteredProducts = computed(() => {
 :global(.nav-link:hover) {
   color: #ea580c !important;
 }
+
+/* Override hamburger icon color for men page */
+:global(.mobile-menu-button) {
+  color: black !important;
+}
+
+:global(.mobile-menu-button:hover) {
+  color: #ea580c !important;
+}
 </style>
