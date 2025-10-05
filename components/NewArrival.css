@@ -26,6 +26,54 @@
   padding: 0 0.5rem;
 }
 
+/* Ensure carousel navigation is visible */
+.new-arrival :deep(.carousel-arrow) {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  position: relative;
+}
+
+.new-arrival :deep(.carousel-arrow:hover) {
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.new-arrival :deep(.carousel-indicators) {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.new-arrival :deep(.carousel-indicator) {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-arrival :deep(.carousel-indicator.active) {
+  background: #3b82f6;
+}
+
+.new-arrival :deep(.carousel-indicator:hover) {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+/* Ensure carousel container is focusable for keyboard navigation */
+.new-arrival :deep(.carousel) {
+  outline: none;
+}
+
+.new-arrival :deep(.carousel:focus) {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 640px) {
   .new-arrival {
@@ -37,19 +85,34 @@
   }
 
   .carousel-item img {
-    height: 250px;
+    height: 200px;
+  }
+  
+  /* Show 2 items on mobile */
+  .new-arrival :deep(.carousel-item) {
+    flex: 0 0 50%;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .carousel-item img {
-    height: 300px;
+    height: 250px;
+  }
+  
+  /* Show 3 items on tablet */
+  .new-arrival :deep(.carousel-item) {
+    flex: 0 0 33.333%;
   }
 }
 
 @media (min-width: 1025px) {
   .carousel-item img {
-    height: 320px;
+    height: 300px;
+  }
+  
+  /* Show 4 items on desktop */
+  .new-arrival :deep(.carousel-item) {
+    flex: 0 0 25%;
   }
 }
 
