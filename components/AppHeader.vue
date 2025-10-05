@@ -102,7 +102,7 @@
     <UDrawer 
     nobodyStyles='false'
       v-model:open="isDrawerOpen" 
-      direction="right"
+      direction="left"
       class="header-drawer"
       :ui="{ 
         content: 'header-drawer',

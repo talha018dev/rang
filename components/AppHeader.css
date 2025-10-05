@@ -15,7 +15,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 16px;
+  gap: 4px;
   min-width: 300px;
   margin-bottom: 20px;
   padding-bottom: 20px;
@@ -51,19 +51,19 @@
 }
 
 .header {
-  position: absolute;
-  margin-top: 1.5rem;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background-color: transparent;
+  /* background-color: rgba(255, 255, 255, 0.95); */
   backdrop-filter: blur(4px);
   color: black;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
+  width: 100%;
+  padding: 1.5rem 2rem;
 }
 
 .header-content {
@@ -180,6 +180,11 @@
 /* Responsive Design */
 @media (max-width: 800px) {
   .nav {
+    display: none;
+  }
+  
+  /* Hide logo on screens under 800px */
+  .header-content > div:first-child {
     display: none;
   }
 }
