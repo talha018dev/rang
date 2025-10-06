@@ -103,3 +103,20 @@
     object-position: top;
   }
 }
+
+.category-grid-main-men img {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 0.75rem;
+  width: 100%;
+  height: 100%;
+}
+.category-grid-main-women img {
+  aspect-ratio: 1.7/1;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 0.75rem;
+  width: 100%;
+  height: 100%;
+}
