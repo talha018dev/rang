@@ -14,7 +14,7 @@
                             <span class="">Deals of the <span class="countdown-headline-block">Month</span></span>
                         </h2>
                         <p class="countdown-description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                            Best Rang Deals This Month — Grab Your’s, Before It’s Gone!
                         </p>
                     </div>
                 </div>
