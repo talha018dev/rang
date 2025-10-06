@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" :class="{ 'header-scrolled': isScrolled }">
     <div class="header-container">
       <div class="header-content">
           <div>
@@ -218,12 +218,15 @@
 
 <script setup lang="ts">
 import { useRouter } from 'nuxt/app';
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const router = useRouter()
 
 // Reactive state for drawer
 const isDrawerOpen = ref(false)
+
+// Reactive state for scroll position
+const isScrolled = ref(false)
 
 // Function to toggle drawer
 const toggleDrawer = () => {
@@ -265,6 +268,21 @@ const getNavLinkHomeClass = (isActive: boolean) => {
   // On other pages, active link should be orange
   return isActive ? 'nav-link nav-link-active' : 'nav-link'
 }
+
+// Function to handle scroll event
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 80
+}
+
+// Add scroll event listener on mount
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+// Remove scroll event listener on unmount
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>

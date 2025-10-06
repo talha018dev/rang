@@ -64,6 +64,31 @@
   margin-right: auto;
   width: 100%;
   padding: 1.5rem 2rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.header-scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.header-scrolled .nav-link {
+  color: black !important;
+}
+
+.header-scrolled .nav-link-home-page {
+  color: black !important;
+}
+
+.header-scrolled .nav-link-active {
+  color: #ea580c !important;
+}
+
+.header-scrolled .header-actions {
+  color: black;
+}
+
+.header-scrolled .mobile-menu-button {
+  color: black;
 }
 
 .header-content {
