@@ -6,33 +6,33 @@
 }
 
 .category-header {
-  margin: 5rem 0;
+  margin: 4rem 0;
 }
 
 .category-title {
-  font-size: 3.75rem;
+  font-size: 3.25rem;
   text-align: center;
 }
 
 /* Responsive font size for screens under 1200px */
 @media (max-width: 1199px) {
   .category-title {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
   }
   
   .category-header {
-    margin: 3rem 0;
+    margin: 2.5rem 0;
   }
 }
 
 /* Further responsive adjustments for mobile screens under 600px */
 @media (max-width: 599px) {
   .category-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
   
   .category-header {
-    margin: 2rem 0;
+    margin: 1.5rem 0;
   }
 }
 
@@ -119,4 +119,10 @@
   border-radius: 0.75rem;
   width: 100%;
   height: 100%;
+}
+
+@media (max-width: 600px) {
+  .category-grid-main-men img{
+    aspect-ratio: 2/1;
+  }
 }

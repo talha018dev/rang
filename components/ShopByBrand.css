@@ -12,23 +12,23 @@
 }
 
 .brand-header {
-  margin: 5rem 0;
+  margin: 4rem 0;
   margin-bottom: 1rem;
 }
 
 .brand-title {
-  font-size: 3.75rem;
+  font-size: 3.25rem;
   text-align: center;
 }
 
 /* Responsive font size for screens under 1200px */
 @media (max-width: 1199px) {
   .brand-title {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
   }
   
   .brand-header {
-    margin: 3rem 0;
+    margin: 2.5rem 0;
     margin-bottom: 0;
   }
 }
@@ -48,11 +48,11 @@
 /* Further responsive adjustments for mobile screens under 600px */
 @media (max-width: 599px) {
   .brand-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
   
   .brand-header {
-    margin: 2rem 0;
+    margin: 1.5rem 0;
     margin-bottom: 0;
   }
   
