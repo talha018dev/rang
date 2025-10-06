@@ -1,5 +1,5 @@
 <template>
-  <header class="header" :class="{ 'header-scrolled': isScrolled }">
+  <header class="header" :class="{ 'header-scrolled': isScrolled, 'header-home': isHomeActive }">
     <div class="header-container">
       <div class="header-content">
           <div>

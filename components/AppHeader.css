@@ -88,7 +88,12 @@
 }
 
 .header-scrolled .mobile-menu-button {
-  color: black;
+  color: black !important;
+}
+
+/* Make hamburger white only on home page when not scrolled */
+.header-home:not(.header-scrolled) .mobile-menu-button {
+  color: white !important;
 }
 
 .header-content {
