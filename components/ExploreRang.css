@@ -57,7 +57,7 @@
 .explore-grid-main {
   display: grid;
   grid-template-columns: 5fr 3fr;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .explore-grid-main img:hover{
   transform: scale(1.05);
@@ -68,8 +68,8 @@
 .explore-grid-secondary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
 }
 .explore-grid-secondary img:hover{
   transform: scale(1.05);
