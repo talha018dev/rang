@@ -569,3 +569,6 @@ div [data-vaul-handle] {
 
   z-index: 100;
 }
+.color-inherit {
+  color: inherit !important;
+}
