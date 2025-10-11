@@ -533,10 +533,6 @@ div [data-vaul-handle] {
   line-height: 100%;
   letter-spacing: 0%;
   color: rgba(254, 244, 232, 0.7);
-  /* filter: drop-shadow(0.5px 0 0 white) 
-  drop-shadow(0 0.5px 0 white)
-  drop-shadow(-0.5px 0 0 white) 
-  drop-shadow(0 -0.5px 0 white); */
   -webkit-text-stroke: 1px white;
   z-index: 100;
 }
