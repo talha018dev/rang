@@ -13,7 +13,24 @@
   z-index: 100;
   position: absolute;
   top: 0;
-  right: 0;
+  right: 10px;
+  transition: color 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+/* Make heading black on all pages except home page */
+.header:not(.header-home) .heading-text {
+  color: black;
+}
+
+/* Make heading black when scrolled */
+.header-scrolled .heading-text {
+  color: black !important;
+}
+
+/* Add hover effect like other elements */
+.heading-text:hover {
+  color: #ea580c;
 }
 
 .header-drawer {
@@ -166,7 +183,7 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0rem;
   color: white;
   position: relative;
   top: 0.5rem;
