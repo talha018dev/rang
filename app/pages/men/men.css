@@ -60,7 +60,7 @@
 }
 
 .hero-content img {
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 3.25;
   object-fit: cover;
   object-position: 0 20%;
 }
@@ -95,7 +95,7 @@
 }
 
 .hero-img:hover {
-  /* transform: scale(1); Full view on hover */
+  transform: scale(1);
 }
 
 /* Filter Section */
@@ -196,15 +196,16 @@
 .men-page .product-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   transition: transform 0.4s ease;
   transform: scale(2.1); /* Zoomed in by default */
   transform-origin: center center;
+  aspect-ratio: 0.82;
 }
 
 .product-card:hover .product-img {
-  /* transform: scale(1); Full view on hover */
+  transform: scale(1);
 }
 
 .product-info {
