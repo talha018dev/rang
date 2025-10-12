@@ -1,6 +1,6 @@
 /* Product Details Page Styles */
 .product-page {
-  background-color: #fffdf5; /* Light beige background */
+  /* background-color: #fffdf5;  */
   min-height: 100vh;
 }
 
@@ -1499,7 +1499,7 @@
 }
 
 .review-item {
-  background: #fffdf5;
+  /* background: #fffdf5; */
   border-bottom: 1px solid #e5e7eb;
   border-radius: 0;
   padding: 24px 0;
@@ -1613,9 +1613,8 @@
 .helpfulness-text {
   font-size: 16px;
   color: #000000;
-  background-color: #f3f4f6;
+  background-color: #f0f0f0;
   padding: 8px 16px;
-  border-radius: 8px;
 }
 
 .helpfulness-buttons {
@@ -1629,8 +1628,7 @@
   gap: 6px;
   padding: 8px 16px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #f3f4f6;
+  background: #e0e0e0;
   font-size: 14px;
   color: #000000;
   cursor: pointer;
@@ -1839,8 +1837,8 @@
 
 .product-image-container {
   width: 100%;
-  height: 280px;
-  overflow: hidden;
+  height: auto;
+  overflow: hidden; /* Hide the zoomed parts by default */
   position: relative;
 }
 
@@ -1848,11 +1846,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  object-position: center;
+  transition: transform 0.4s ease;
+  transform: scale(2.1); /* Zoomed in by default */
+  transform-origin: center center;
+  aspect-ratio: 0.82;
 }
 
 .related-product-card:hover .product-image {
-  /* transform: scale(1.05); */
+  transform: scale(1);
 }
 
 .product-info {
@@ -1883,7 +1885,7 @@
   }
 
   .product-image-container {
-    height: 240px;
+    height: auto;
   }
 }
 
@@ -1907,7 +1909,7 @@
   }
 
   .product-image-container {
-    height: 200px;
+    height: auto;
   }
 
   .product-info {
@@ -1938,7 +1940,7 @@
   }
 
   .product-image-container {
-    height: 250px;
+    height: auto;
   }
 
   .product-info {

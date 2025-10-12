@@ -753,25 +753,25 @@ const relatedProducts = ref([
     id: 1,
     name: "Punjabi for men",
     price: "Tk 2,500",
-    image: '/men/men-1.png'
+    image: '/men/men-image-large.png'
   },
   {
     id: 2,
     name: "Punjabi for men",
     price: "Tk 2,500",
-    image: '/men/men-2.png'
+    image: '/men/men-image-large.png'
   },
   {
     id: 3,
     name: "Punjabi for men",
     price: "Tk 2,500",
-    image: '/men/men-1.png'
+    image: '/men/men-image-large.png'
   },
   {
     id: 4,
     name: "Punjabi for men",
     price: "Tk 2,500",
-    image: '/men/men-2.png'
+    image: '/men/men-image-large.png'
   }
 ])
 
