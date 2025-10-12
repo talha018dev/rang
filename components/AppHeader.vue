@@ -1,6 +1,9 @@
 <template>
   <header class="header" :class="{ 'header-scrolled': isScrolled, 'header-home': isHomeActive }">
     <div class="header-container">
+      <div>
+        <h1 class="heading-text">RANG BANGLADESH</h1>
+      </div>
       <div class="header-content">
           <div>
             <img src="/rang-logo.png" alt="logo" />
