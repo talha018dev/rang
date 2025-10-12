@@ -174,7 +174,7 @@
 }
 
 .main-image:hover {
-  transform: scale(1); /* Full view on hover */
+  /* transform: scale(1); Full view on hover */
 }
 
 /* Right Side - Product Details */
@@ -407,7 +407,7 @@
 }
 
 .color-option:hover {
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
 }
 
 .color-option.selected {
@@ -1851,7 +1851,7 @@
 }
 
 .related-product-card:hover .product-image {
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 .product-info {

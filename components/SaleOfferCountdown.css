@@ -191,7 +191,7 @@
 .carousel-nav-btn:hover {
   background-color: white;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 .carousel-nav-btn:active {

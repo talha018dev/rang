@@ -95,7 +95,7 @@
 }
 
 .hero-img:hover {
-  transform: scale(1); /* Full view on hover */
+  /* transform: scale(1); Full view on hover */
 }
 
 /* Filter Section */
@@ -204,7 +204,7 @@
 }
 
 .product-card:hover .product-img {
-  transform: scale(1); /* Full view on hover */
+  /* transform: scale(1); Full view on hover */
 }
 
 .product-info {

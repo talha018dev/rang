@@ -60,7 +60,7 @@
   gap: 0.5rem;
 }
 .explore-grid-main img:hover{
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
 }
@@ -72,7 +72,7 @@
   margin-top: 0.5rem;
 }
 .explore-grid-secondary img:hover{
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
 }
