@@ -62,7 +62,7 @@
               :to="`/men/matching/${product.id}`"
               class="product-card"
             >
-              <div class="product-image">
+              <div class="product-image-item">
                 <NuxtImg 
                   :src="product.image" 
                   :alt="product.name" 
