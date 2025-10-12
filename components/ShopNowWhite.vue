@@ -1,7 +1,6 @@
 <template>
   <button class="shop-now-white-button">
-    <span class="button-text">Shop Now</span>
-    <Icon name="heroicons:shopping-bag" class="shopping-bag-icon" />
+    Shop Now
   </button>
 </template>
 
