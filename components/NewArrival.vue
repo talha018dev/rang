@@ -33,7 +33,9 @@
           />
           <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
             <h3 class="new-arrival-name-light">{{ item.title }}</h3>
-            <p class="text-white/90 text-sm">Shop Now </p>
+            <p class="shop-now-blue-button-div">
+              <ShopNowBlue />
+            </p>
           </div>
         </div>
       </UCarousel>
@@ -43,6 +45,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ShopNowBlue from './ShopNowBlue.vue'
 
 interface NewArrivalItem {
   src: string
