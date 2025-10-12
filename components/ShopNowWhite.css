@@ -1,0 +1,65 @@
+.shop-now-white-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: #FEF4E8;
+  color: #1F2937;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(254, 244, 232, 0.3);
+  min-width: 120px;
+  height: 48px;
+}
+
+.shop-now-white-button:hover {
+  background-color: #F9F3E7;
+  box-shadow: 0 4px 8px rgba(254, 244, 232, 0.4);
+  transform: translateY(-1px);
+  border-color: #D1D5DB;
+}
+
+.shop-now-white-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(254, 244, 232, 0.3);
+}
+
+.shop-now-white-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(254, 244, 232, 0.5);
+  border-color: #9CA3AF;
+}
+
+.button-text {
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  color: #1F2937;
+}
+
+.shopping-bag-icon {
+  width: 20px;
+  height: 20px;
+  stroke: #1F2937;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .shop-now-white-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-width: 100px;
+    height: 44px;
+  }
+  
+  .shopping-bag-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
