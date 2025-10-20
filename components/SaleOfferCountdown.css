@@ -8,6 +8,13 @@
   height: 400px;
 }
 
+/* Hide desktop version on mobile */
+@media (max-width: 599px) {
+  .countdown-section {
+    display: none;
+  }
+}
+
 .countdown-card {
   position: relative;
   background-color: #ed9a32;

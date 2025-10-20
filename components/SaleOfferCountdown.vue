@@ -1,4 +1,5 @@
 <template>
+    <!-- Desktop Version -->
     <section class="countdown-section">
         <!-- Countdown Card (Left Side) -->
         <div class="countdown-card">
@@ -147,11 +148,15 @@
             </UCarousel>
         </div>
     </section>
+    
+    <!-- Mobile Version -->
+    <SaleOfferCountdownMobile />
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import ShopNowBlue from './ShopNowBlue.vue'
+import SaleOfferCountdownMobile from './SaleOfferCountdownMobile.vue'
 // import UCarousel from '@nuxt/ui'
 
 // Countdown state
