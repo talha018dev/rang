@@ -41,24 +41,25 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+  color: #F7941C
 }
 
 .icon {
   width: 24px;
   height: 24px;
-  stroke: #f1592c;
+  stroke: #F7941C;
   stroke-width: 1.5;
   transition: all 0.2s ease;
 }
 
 .nav-item.active .icon {
-  stroke: #f1592c;
+  stroke: #F7941C;
   stroke-width: 2;
-  fill: #f1592c;
+  fill: #F7941C;
 }
 
 .nav-item:not(.active) .icon {
-  stroke: #f1592c;
+  stroke: #F7941C;
   stroke-width: 1.5;
   fill: none;
 }
@@ -77,22 +78,22 @@
 }
 
 /* Active state with shadow/glow effect */
-.nav-item.active {
-  background-color: rgba(241, 89, 44, 0.05);
-}
+/* .nav-item.active {
+  background-color: rgba(247, 148, 28, 0.05);
+} */
 
-.nav-item.active::before {
+/* .nav-item.active::before {
   content: '';
   position: absolute;
   top: -2px;
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(135deg, rgba(241, 89, 44, 0.1), rgba(241, 89, 44, 0.05));
+  background: linear-gradient(135deg, rgba(247, 148, 28, 0.1), rgba(247, 148, 28, 0.05));
   border-radius: 10px;
   z-index: -1;
   opacity: 0.6;
-}
+} */
 
 /* Show mobile footer only on screens under 600px */
 @media (max-width: 599px) {

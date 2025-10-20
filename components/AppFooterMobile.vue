@@ -10,7 +10,7 @@
       
       <div class="nav-item" :class="{ active: activeTab === 'favourite' }" @click="setActiveTab('favourite')">
         <div class="nav-icon">
-          <Icon name="heroicons:heart" class="icon" />
+          <Icon name="heroicons:heart" class="icon"  />
         </div>
         <div class="nav-label">Favourite</div>
       </div>
