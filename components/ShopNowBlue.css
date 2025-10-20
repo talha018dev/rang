@@ -39,7 +39,7 @@
   letter-spacing: 0.025em;
 }
 
-.shopping-bag-icon {
+.button-icon {
   width: 20px;
   height: 20px;
   stroke: #4285F4;
@@ -55,7 +55,7 @@
     height: 44px;
   }
   
-  .shopping-bag-icon {
+  .button-icon {
     width: 18px;
     height: 18px;
   }

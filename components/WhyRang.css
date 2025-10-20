@@ -16,6 +16,10 @@
 
 .sale-header {
   margin: 5rem 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .sale-title {
@@ -35,13 +39,17 @@
 }
 
 /* Further responsive adjustments for mobile screens under 600px */
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .sale-title {
     font-size: 1.75rem;
   }
   
   .sale-header {
     margin: 1.5rem 0;
+  }
+  
+  .mobile-only {
+    display: flex !important;
   }
 }
 
@@ -53,6 +61,15 @@
 .sale-title-bold {
   color: #f1592c;
   font-weight: bold;
+}
+
+.see-all-button {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-only {
+  display: none;
 }
 /* Responsive Grid Layout */
 .why-rang-grid {

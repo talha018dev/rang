@@ -5,6 +5,9 @@
             <div class="sale-title">
                 <div><span class="sale-title-light">Why</span> <span class="sale-title-bold">Rang Bangladesh?</span></div>
             </div>
+            <div class="see-all-button mobile-only">
+                <ShopNowBlue icon="heroicons:arrow-right" title="See All" />
+            </div>
         </section>
         <div class="why-rang-grid">
             <div class="grid-item grid-item-1">
@@ -37,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-
+import ShopNowBlue from './ShopNowBlue.vue'
 </script>
 
 <style scoped>
