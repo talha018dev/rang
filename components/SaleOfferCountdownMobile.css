@@ -100,7 +100,7 @@
 }
 
 .countdown-mobile-digit-text {
-  font-size: calc(1.25rem + 2vw);
+  font-size: calc(1rem + 2vw);
   font-weight: 700;
   color: white;
   line-height: 1;

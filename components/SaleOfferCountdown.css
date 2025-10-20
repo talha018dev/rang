@@ -9,9 +9,9 @@
 }
 
 /* Hide desktop version on mobile */
-@media (max-width: 599px) {
+@media (max-width: 600px) {
   .countdown-section {
-    display: none;
+    /* display: none; */
   }
 }
 
@@ -67,7 +67,7 @@
 .countdown-description {
   color: rgba(255, 255, 255, 0.9);
   margin-top: 0.75rem;
-  font-size: 1.125rem;
+  font-size: 0.9rem;
   max-width: 28rem;
 }
 

@@ -140,19 +140,19 @@
 }
 
 /* Further responsive adjustments for mobile screens under 600px */
-@media (max-width: 599px) {
-  .sale-brands-grid-main {
+@media (max-width: 600px) {
+  /* .sale-brands-grid-main {
     grid-template-columns: repeat(5, 1fr);
     gap: 0.5rem;
   }
 
   .sale-brand-image {
     height: 5rem;
-  }
+  } */
 }
 
 @media (max-width: 600px) {
-  .sale-brands-grid-secondary {
+  /* .sale-brands-grid-secondary {
     grid-template-columns: 1fr;
   }
   .sale-brands-grid-secondary img {
@@ -165,7 +165,7 @@
   .sale-brands-grid-tertiary img {
     height: 300px;
     object-position: top;
-  }
+  } */
 }
 
 .sale-offer-text {

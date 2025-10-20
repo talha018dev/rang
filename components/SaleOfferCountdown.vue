@@ -1,8 +1,8 @@
 <template>
     <!-- Desktop Version -->
-    <section class="countdown-section">
+    <section  class="countdown-section">
         <!-- Countdown Card (Left Side) -->
-        <div class="countdown-card">
+        <div v-if="!isMobile" class="countdown-card">
             <!-- Background Image -->
             <div class="countdown-background" style="background-image: url('/landing-image.png')"></div>
             
@@ -90,7 +90,7 @@
                 
             </div>
         </div>
-
+        <SaleOfferCountdownMobile v-if="isMobile" />
         <!-- Carousel Cards Section (Right Side) -->
         <div class="carousel-section">
             <!-- Carousel Navigation Buttons -->
@@ -150,7 +150,7 @@
     </section>
     
     <!-- Mobile Version -->
-    <SaleOfferCountdownMobile />
+    
 </template>
 
 <script setup lang="ts">
@@ -166,6 +166,9 @@ const countdown = ref({
     minutes: 0,
     seconds: 0
 })
+
+// Mobile state
+const isMobile = ref(false)
 
 const carousel = useTemplateRef('carousel')
 
@@ -272,6 +275,11 @@ const handleKeydown = (event: KeyboardEvent) => {
     }
 }
 
+// Handle responsive behavior
+const handleResize = () => {
+    isMobile.value = window.innerWidth < 600
+}
+
 // Start countdown timer and add keyboard listeners
 onMounted(() => {
     calculateTimeRemaining()
@@ -279,6 +287,10 @@ onMounted(() => {
     
     // Add keyboard event listener
     document.addEventListener('keydown', handleKeydown)
+    
+    // Add resize listener
+    handleResize()
+    window.addEventListener('resize', handleResize)
 })
 
 // Cleanup interval and event listeners on component unmount
