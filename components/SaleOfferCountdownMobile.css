@@ -120,3 +120,35 @@
     display: block;
   }
 }
+
+/* Decrease font size and box size for very small screens */
+@media (max-width: 499px) {
+  .countdown-mobile-digit {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .countdown-mobile-digit-text {
+    font-size: calc(0.875rem + 1.5vw);
+  }
+  
+  .countdown-mobile-separator {
+    font-size: calc(0.875rem + 1.5vw);
+  }
+}
+
+/* Extra small screens - even smaller boxes and font */
+@media (max-width: 399px) {
+  .countdown-mobile-digit {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .countdown-mobile-digit-text {
+    font-size: calc(0.75rem + 1vw);
+  }
+  
+  .countdown-mobile-separator {
+    font-size: calc(0.75rem + 1vw);
+  }
+}
