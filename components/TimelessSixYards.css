@@ -66,13 +66,91 @@
   aspect-ratio: 0.68;
 }
 
+.carousel-image {
+  aspect-ratio: 0.73;
+}
+
+/* Carousel Styles */
+.timeless-carousel {
+  display: none;
+}
+
+.carousel-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.carousel-container:active {
+  cursor: grabbing;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-slide {
+  flex: 0 0 auto;
+  width: calc(100% / 2.25);
+  padding-right: 1rem;
+}
+
+.carousel-slide:last-child {
+  padding-right: 0;
+}
+
+.carousel-navigation {
+  display: none;
+}
+
+.carousel-btn {
+  background: #F1592C;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background: #d44a25;
+  transform: scale(1.05);
+}
+
+.carousel-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 @media (max-width: 600px) {
   .timeless-grid {
-    grid-template-columns: 1fr;
+    display: none;
   }
+  
+  .timeless-carousel {
+    display: block;
+  }
+  
   .timeless-image {
     height: 300px;
     object-position: bottom;
+  }
+  
+  .shop-now-blue-button-div {
+    display: none;
   }
 }
 
@@ -88,6 +166,7 @@
   letter-spacing: 0%;
   text-align: center;
   color: white;
+  margin-bottom: 1rem;
 }
 .shop-now-blue-button-div {
   text-align: center;
