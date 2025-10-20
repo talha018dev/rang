@@ -32,7 +32,7 @@
   .sale-title {
     font-size: 2.25rem;
   }
-  
+
   .sale-header {
     margin: 2.5rem 0;
   }
@@ -43,11 +43,11 @@
   .sale-title {
     font-size: 1.75rem;
   }
-  
+
   .sale-header {
     margin: 1.5rem 0;
   }
-  
+
   .mobile-only {
     display: flex !important;
   }
@@ -79,7 +79,7 @@
   gap: 1rem;
   /* max-width: 1200px; */
   margin: 0 auto;
-  height: 600px;
+  /* height: 600px; */
 }
 
 .grid-item {
@@ -150,7 +150,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .why-rang-grid {
+  /* .why-rang-grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 300px);
     height: auto;
@@ -162,12 +162,12 @@
   .grid-item-3 {
     grid-column: 1;
     grid-row: auto;
-  }
-  
+  } */
+
   .card-overlay h3 {
     font-size: 1.25rem;
   }
-  
+
   .sale-title {
     font-size: 2.5rem;
   }
@@ -177,16 +177,34 @@
   .why-rang-grid {
     gap: 0.75rem;
   }
-  
+
   .card-overlay {
     padding: 1.5rem 1rem 1rem;
   }
-  
+
   .card-overlay h3 {
     font-size: 1.1rem;
   }
-  
+
   .sale-title {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-image {
+    height: auto;
+  }
+  .grid-item-1 .card-image img {
+    aspect-ratio: 2.08;
+    height: auto;
+  }
+  .grid-item-2 .card-image img {
+    aspect-ratio: 2.08;
+    height: auto;
+  }
+  .grid-item-3 .card-image img {
+    aspect-ratio: 1;
+    height: auto;
   }
 }
