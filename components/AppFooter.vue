@@ -1,5 +1,6 @@
 <template>
-  <footer class="app-footer">
+  <!-- Desktop Footer -->
+  <footer v-if="!isMobile" class="app-footer">
     <div class="footer-main">
       <section class="best-deals-section">
         <div class="best-deals-container">
@@ -141,9 +142,31 @@
     </div>
     </div>
   </footer>
+  
+  <!-- Mobile Footer -->
+  <AppFooterMobile v-if="isMobile" />
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+import AppFooterMobile from './AppFooterMobile.vue'
+
+// Mobile state
+const isMobile = ref(false)
+
+// Handle responsive behavior
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 600
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <style scoped>

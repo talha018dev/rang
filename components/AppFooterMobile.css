@@ -1,0 +1,102 @@
+/* AppFooterMobile Styles */
+.app-footer-mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #d1d5db;
+  z-index: 1000;
+  display: none;
+}
+
+.mobile-nav-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.75rem 0;
+  max-width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  background-color: #f9fafb;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  stroke: #f1592c;
+  stroke-width: 1.5;
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .icon {
+  stroke: #f1592c;
+  stroke-width: 2;
+  fill: #f1592c;
+}
+
+.nav-item:not(.active) .icon {
+  stroke: #f1592c;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.nav-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #374151;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .nav-label {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Active state with shadow/glow effect */
+.nav-item.active {
+  background-color: rgba(241, 89, 44, 0.05);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, rgba(241, 89, 44, 0.1), rgba(241, 89, 44, 0.05));
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Show mobile footer only on screens under 600px */
+@media (max-width: 599px) {
+  .app-footer-mobile {
+    display: block;
+  }
+}
