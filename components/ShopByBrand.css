@@ -110,8 +110,8 @@
 }
 
 @media (max-width: 600px) {
-  .brand-grid-secondary {
-    grid-template-columns: 1fr;
+  /* .brand-grid-secondary {
+    grid-template-columns: 1fr 1fr;
   }
   .brand-grid-secondary img {
     height: 300px;
@@ -123,5 +123,5 @@
   .brand-grid-tertiary img {
     height: 300px;
     object-position: top;
-  }
+  } */
 }
