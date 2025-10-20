@@ -19,7 +19,7 @@
   .category-title {
     font-size: 2.25rem;
   }
-  
+
   .category-header {
     margin: 2.5rem 0;
   }
@@ -30,19 +30,19 @@
   .category-title {
     font-size: 1.75rem;
   }
-  
+
   .category-header {
     margin: 1.5rem 0;
   }
 }
 
 .category-title-light {
-  color: #FAB767;
+  color: #fab767;
   font-weight: 300;
 }
 
 .category-title-bold {
-  color: #F1592C;
+  color: #f1592c;
   font-weight: bold;
 }
 
@@ -51,7 +51,7 @@
   grid-template-columns: 3fr 5fr;
   gap: 1rem;
 }
-.category-grid-main img:hover{
+.category-grid-main img:hover {
   /* transform: scale(1.05); */
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
@@ -63,7 +63,7 @@
   gap: 1rem;
   margin-top: 1rem;
 }
-.category-grid-secondary img:hover{
+.category-grid-secondary img:hover {
   /* transform: scale(1.05); */
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
@@ -122,7 +122,26 @@
 }
 
 @media (max-width: 600px) {
-  .category-grid-main-men img{
+  .category-grid-main-men img {
     aspect-ratio: 2/1;
+  }
+  .category-grid-main {
+    grid-template-columns: 1fr 2fr;
+  }
+  .category-grid-main-men img {
+    aspect-ratio: 0.88;
+    height: auto;
+  }
+  .category-grid-main-women img {
+    aspect-ratio: 1.73;
+    height: auto;
+  }
+  .category-grid-secondary {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .category-grid-secondary img {
+    aspect-ratio: 0.88;
+    height: auto;
+    border-radius: 8px;
   }
 }

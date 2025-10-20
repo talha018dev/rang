@@ -547,6 +547,7 @@ div [data-vaul-handle] {
   color: white;
   z-index: 100;
 }
+
 .image-shop-now {
   bottom: 10px;
   right: 10px;
@@ -566,6 +567,19 @@ div [data-vaul-handle] {
 
   z-index: 100;
 }
+
+@media (max-width: 600px) {
+  .image-div-text div {
+    font-size: 24px;
+  }
+  .image-div-text span {
+    font-size: 16px;
+  }
+  .image-shop-now {
+    font-size: 16px;
+  }
+}
+
 .color-inherit {
   color: inherit !important;
 }
