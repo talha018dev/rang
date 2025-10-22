@@ -2055,6 +2055,11 @@
     order: 3;
     width: 100%;
   }
+  .product-details-p-2-mobile {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
 
   .share-btn {
     display: none;
@@ -2364,4 +2369,77 @@
 
 .frequently-bought-carousel {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .reviews-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .search-box {
+    width: 100%;
+  }
+  .sort-dropdown {
+    width: 100%;
+  }
+  .sort-select {
+    width: 100%;
+  }
+  .review-header {
+    flex-direction: column;
+  }
+  .review-meta {
+    justify-content: flex-start;
+  }
+  .reviewer-name {
+    width: 100%;
+  }
+  .helpfulness {
+    flex-direction: column;
+    width: 100%;
+  }
+  .helpfulness-text {
+    width: 100%;
+    font-family: Poppins;
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 17px;
+    background-color: #f0f0f0;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+  .helpfulness-buttons {
+    width: 100%;
+  }
+  .helpfulness-btn {
+    flex: 1;
+    font-family: Poppins;
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+  .report-btn {
+    font-family: Poppins;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 17px;
+    color: #3a3a41;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin-top: 10px;
+  }
+  .review-attributes {
+    flex-direction: column;
+
+    font-family: Poppins;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 17px;
+    color: #3a3a41;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
 }

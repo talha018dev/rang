@@ -52,96 +52,96 @@
       <!-- Right Side - Product Details -->
       <div class="product-details-container">
         <div class="product-details-p-1">
-        <div class="product-title-share-btn">
+          <div class="product-title-share-btn">
 
-          <div class="product-title">{{ product.name }}</div>
-          <button class="share-btn-mobile">
-            <img src="/product-details/ios_share.svg" alt="Share" />
-          </button>
-        </div>
-
-        <!-- Pricing -->
-        <div class="pricing">
-          <span class="current-price">{{ product.currentPrice }}</span>
-          <span class="original-price">{{ product.originalPrice }}</span>
-          <span class="discount">{{ product.discount }}</span>
-        </div>
-
-        <!-- Rating and Reviews -->
-        <div class="rating-section-sku-share-btn">
-          <div class="rating-section">
-            <div class="stars">
-              <svg v-for="i in 5" :key="i" class="star" :class="{ filled: i <= product.rating }" fill="currentColor"
-                viewBox="0 0 20 20">
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-            <span class="rating-number">{{ product.rating }}</span>
-            <span class="reviews">{{ product.reviews }}</span>
-          </div>
-
-          <!-- SKU -->
-          <div class="sku-share-btn">
-            <div class="sku">
-              SKU: {{ product.sku }}
-            </div>
-
-            <!-- Share Button -->
-            <button class="share-btn">
+            <div class="product-title">{{ product.name }}</div>
+            <button class="share-btn-mobile">
               <img src="/product-details/ios_share.svg" alt="Share" />
-              <div class="share-text">Share</div>
             </button>
           </div>
-        </div>
-      </div>
 
-      <!-- Size Selection -->
-      <div class="product-details-p-2">
-        <div class="size-selection">
-          <label class="selection-label">Size</label>
-          <div class="size-radio-group">
-            <label v-for="size in product.sizes" :key="size" class="size-radio-option"
-              :class="{ selected: selectedSize === size }">
-              <input type="radio" :value="size" v-model="selectedSize" class="size-radio-input" />
-              <span class="size-radio-label">{{ size }}</span>
-            </label>
+          <!-- Pricing -->
+          <div class="pricing">
+            <span class="current-price">{{ product.currentPrice }}</span>
+            <span class="original-price">{{ product.originalPrice }}</span>
+            <span class="discount">{{ product.discount }}</span>
           </div>
-          <div class="size-dropdown-container">
-            <select v-model="selectedSize" class="size-dropdown">
-              <option value="" disabled>Select
-              </option>
-              <option v-for="size in product.sizes" :key="size" :value="size">
-                {{ size }}
-              </option>
-            </select>
-            <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+
+          <!-- Rating and Reviews -->
+          <div class="rating-section-sku-share-btn">
+            <div class="rating-section">
+              <div class="stars">
+                <svg v-for="i in 5" :key="i" class="star" :class="{ filled: i <= product.rating }" fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+              <span class="rating-number">{{ product.rating }}</span>
+              <span class="reviews">{{ product.reviews }}</span>
+            </div>
+
+            <!-- SKU -->
+            <div class="sku-share-btn">
+              <div class="sku">
+                SKU: {{ product.sku }}
+              </div>
+
+              <!-- Share Button -->
+              <button class="share-btn">
+                <img src="/product-details/ios_share.svg" alt="Share" />
+                <div class="share-text">Share</div>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Color Selection -->
-        <div class="color-selection">
-          <label class="selection-label">Color</label>
-          <div class="color-options">
-            <div v-for="(color, index) in product.colors" :key="index" class="color-option"
-              :class="{ selected: selectedColorIndex === index }" :style="{ backgroundColor: color.value }"
-              @click="selectedColorIndex = index"></div>
+        <!-- Size Selection -->
+        <div class="product-details-p-2" v-if="!isMobile">
+          <div class="size-selection">
+            <label class="selection-label">Size</label>
+            <div class="size-radio-group">
+              <label v-for="size in product.sizes" :key="size" class="size-radio-option"
+                :class="{ selected: selectedSize === size }">
+                <input type="radio" :value="size" v-model="selectedSize" class="size-radio-input" />
+                <span class="size-radio-label">{{ size }}</span>
+              </label>
+            </div>
+            <div class="size-dropdown-container">
+              <select v-model="selectedSize" class="size-dropdown">
+                <option value="" disabled>Select
+                </option>
+                <option v-for="size in product.sizes" :key="size" :value="size">
+                  {{ size }}
+                </option>
+              </select>
+              <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+            </div>
+          </div>
+
+          <!-- Color Selection -->
+          <div class="color-selection">
+            <label class="selection-label">Color</label>
+            <div class="color-options">
+              <div v-for="(color, index) in product.colors" :key="index" class="color-option"
+                :class="{ selected: selectedColorIndex === index }" :style="{ backgroundColor: color.value }"
+                @click="selectedColorIndex = index"></div>
+            </div>
+          </div>
+
+          <!-- Quantity Selector -->
+          <div class="quantity-selector">
+            <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
+            <span class="quantity-text">Quantity: {{ quantity }}</span>
+            <button class="quantity-btn plus" @click="increaseQuantity">+</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="buy-now-btn">Buy Now</button>
+            <button class="add-to-basket-btn">Add to Basket</button>
           </div>
         </div>
-
-        <!-- Quantity Selector -->
-        <div class="quantity-selector">
-          <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
-          <span class="quantity-text">Quantity: {{ quantity }}</span>
-          <button class="quantity-btn plus" @click="increaseQuantity">+</button>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-          <button class="buy-now-btn">Buy Now</button>
-          <button class="add-to-basket-btn">Add to Basket</button>
-        </div>
-      </div>
       </div>
     </div>
 
@@ -186,6 +186,51 @@
           </div>
         </div>
       </div>
+      <div class="product-details-p-2-mobile" v-if="isMobile">
+        <div class="size-selection">
+          <label class="selection-label">Size</label>
+          <div class="size-radio-group">
+            <label v-for="size in product.sizes" :key="size" class="size-radio-option"
+              :class="{ selected: selectedSize === size }">
+              <input type="radio" :value="size" v-model="selectedSize" class="size-radio-input" />
+              <span class="size-radio-label">{{ size }}</span>
+            </label>
+          </div>
+          <div class="size-dropdown-container">
+            <select v-model="selectedSize" class="size-dropdown">
+              <option value="" disabled>Select
+              </option>
+              <option v-for="size in product.sizes" :key="size" :value="size">
+                {{ size }}
+              </option>
+            </select>
+            <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+          </div>
+        </div>
+
+        <!-- Color Selection -->
+        <div class="color-selection">
+          <label class="selection-label">Color</label>
+          <div class="color-options">
+            <div v-for="(color, index) in product.colors" :key="index" class="color-option"
+              :class="{ selected: selectedColorIndex === index }" :style="{ backgroundColor: color.value }"
+              @click="selectedColorIndex = index"></div>
+          </div>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="quantity-selector">
+          <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
+          <span class="quantity-text">Quantity: {{ quantity }}</span>
+          <button class="quantity-btn plus" @click="increaseQuantity">+</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="buy-now-btn">Buy Now</button>
+          <button class="add-to-basket-btn">Add to Basket</button>
+        </div>
+      </div>
 
       <!-- Frequently Bought Together Section -->
       <div class="frequently-bought-section">
@@ -213,24 +258,18 @@
           </div>
 
           <!-- Mobile Carousel Layout -->
-          <UCarousel
-            ref="frequentlyBoughtCarousel"
-            v-slot="{ item }"
-            :items="frequentlyBoughtItems"
-            :slides-per-view="2"
-            :space-between="15"
-            :ui="{
+          <UCarousel ref="frequentlyBoughtCarousel" v-slot="{ item }" :items="frequentlyBoughtItems"
+            :slides-per-view="2" :space-between="15" :ui="{
               item: 'frequently-bought-item',
               container: 'frequently-bought-products mobile-layout',
-            }"
-            class="frequently-bought-carousel mobile-layout"
-          >
+            }" class="frequently-bought-carousel mobile-layout">
             <div class="frequently-bought-item">
               <div class="item-image">
                 <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy" format="webp"
                   quality="85" />
                 <div class="item-checkbox">
-                  <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected" class="checkbox-input" />
+                  <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected"
+                    class="checkbox-input" />
                   <label :for="`mobile-item-${item.id}`" class="checkbox-label"></label>
                 </div>
               </div>
@@ -566,6 +605,18 @@ useHead({
   meta: [
     { name: 'description', content: `Discover our exclusive ${category} collection for men. Premium quality traditional wear.` }
   ]
+})
+
+const isMobile = ref(false)
+
+// Handle responsive behavior
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 600
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
 })
 
 // Reactive data
