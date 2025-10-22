@@ -150,7 +150,7 @@
       <div class="matching-series-section">
         <h2 class="section-title">Explore Our Matching Series:</h2>
 
-        <div class="matching-series-container">
+        <div class="matching-series-container" v-if="!isMobile">
           <div class="matching-series-products">
             <div v-for="(item, index) in matchingSeriesItems" :key="index" class="matching-series-item">
               <!-- Checkbox -->
@@ -185,6 +185,43 @@
             </div>
           </div>
         </div>
+         <section v-if="isMobile">
+           <UCarousel ref="matchingSeriesCarousel" v-slot="{ item }" :items="matchingSeriesItems"
+             :slides-per-view="2" :space-between="15" :ui="{
+               item: 'matching-series-item',
+               container: 'matching-series-products mobile-layout',
+             }" class="matching-series-carousel mobile-layout">
+             <div class="matching-series-item matching-series-item-mobile">
+               <div class="item-checkbox">
+                 <input type="checkbox" :id="`mobile-matching-${item.name}`" v-model="item.checked"
+                   class="checkbox-input" />
+                 <label :for="`mobile-matching-${item.name}`" class="checkbox-label"></label>
+               </div>
+
+               <div class="item-image">
+                 <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy" format="webp"
+                   quality="85" />
+               </div>
+
+               <div class="item-details">
+                 <p class="item-name">{{ item.name }}</p>
+
+                 <!-- Size Selector -->
+                 <div class="size-selector">
+                   <select v-model="item.size" class="size-select">
+                     <option value="S">S</option>
+                     <option value="M">M</option>
+                     <option value="L">L</option>
+                     <option value="XL">XL</option>
+                     <option value="XXL">XXL</option>
+                   </select>
+                 </div>
+
+                 <p class="item-price">TK {{ item.price.toLocaleString() }}</p>
+               </div>
+             </div>
+           </UCarousel>
+         </section>
       </div>
       <div class="product-details-p-2-mobile" v-if="isMobile">
         <div class="size-selection">
@@ -909,8 +946,9 @@ const addFrequentlyBoughtToCart = () => {
   alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 
-// Nuxt UI Carousel reference
+// Nuxt UI Carousel references
 const frequentlyBoughtCarousel = ref()
+const matchingSeriesCarousel = ref()
 
 
 

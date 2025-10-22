@@ -635,10 +635,15 @@
   background: white;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
   transition: all 0.3s ease;
   cursor: pointer;
   min-width: 350px;
+}
+.matching-series-item-mobile {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px !important;
+
 }
 
 .matching-series-item:hover {
@@ -2362,10 +2367,34 @@
     padding-bottom: 4px;
   }
 
-  .frequently-bought-products {
+   .frequently-bought-products {
+     flex-wrap: nowrap;
+   }
+
+   /* Matching Series Carousel for Mobile */
+   .matching-series-carousel {
+     width: 100%;
+     display: block;
+   }
+
+   .matching-series-products.mobile-layout {
+     display: flex !important;
+     width: 100% !important;
+   }
+   .matching-series-products {
     flex-wrap: nowrap;
-  }
-}
+   }
+
+   .matching-series-track {
+     display: flex !important;
+     width: max-content !important;
+   }
+
+   .matching-series-item {
+     flex: 0 0 calc(50vw - 20px) !important;
+     max-width: calc(50vw - 20px) !important;
+   }
+ }
 
 .frequently-bought-carousel {
   display: none;
@@ -2376,6 +2405,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+  .product-info-section {
+    margin-top: 10px;
+  }
+  .product-info-container {
+    padding: 0;
   }
   .search-box {
     width: 100%;
