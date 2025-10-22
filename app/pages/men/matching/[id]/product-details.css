@@ -2394,6 +2394,41 @@
      flex: 0 0 calc(50vw - 20px) !important;
      max-width: calc(50vw - 20px) !important;
    }
+
+   /* Matching Series Summary */
+   .matching-series-summary {
+     margin-top: 20px;
+     padding: 0 10px;
+   }
+
+   .matching-series-summary .total-price {
+     text-align: center;
+     margin-bottom: 15px;
+     font-size: 18px;
+     font-weight: 600;
+     width: 100%;
+     justify-content: center;
+   }
+
+   .matching-series-summary .add-to-cart-btn {
+     width: 100%;
+     background: #3579e9;
+     color: white;
+     border: none;
+     padding: 15px;
+     border-radius: 8px;
+     font-size: 16px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: background 0.3s ease;
+   }
+
+   .matching-series-summary .add-to-cart-btn:hover {
+     background: #2352b8;
+   }
+   .product-description {
+    margin-top: 24px;
+   }
  }
 
 .frequently-bought-carousel {

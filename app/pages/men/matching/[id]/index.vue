@@ -221,6 +221,17 @@
                </div>
              </div>
            </UCarousel>
+
+           <!-- Matching Series Summary -->
+           <div class="matching-series-summary">
+             <div class="total-price">
+               <span class="total-label">Total price :</span>
+               <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
+             </div>
+             <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
+               Add to cart
+             </button>
+           </div>
          </section>
       </div>
       <div class="product-details-p-2-mobile" v-if="isMobile">
@@ -898,6 +909,15 @@ const totalPrice = computed(() => {
   return `Tk ${total.toLocaleString()}`
 })
 
+// Total price for matching series items
+const matchingSeriesTotalPrice = computed(() => {
+  const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
+  const total = selectedItems.reduce((sum, item) => {
+    return sum + item.price
+  }, 0)
+  return `TK ${total.toLocaleString()}`
+})
+
 const filteredAndSortedReviews = computed(() => {
   let filtered = reviews.value
 
@@ -944,6 +964,13 @@ const addFrequentlyBoughtToCart = () => {
   console.log('Adding to cart:', selectedItems)
   // In a real app, this would add the selected items to the cart
   alert(`Added ${selectedItems.length} item(s) to cart!`)
+}
+
+const addMatchingSeriesToCart = () => {
+  const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
+  console.log('Adding matching series to cart:', selectedItems)
+  // In a real app, this would add the selected items to the cart
+  alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
 }
 
 // Nuxt UI Carousel references
