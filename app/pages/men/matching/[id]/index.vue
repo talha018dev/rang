@@ -63,8 +63,14 @@
       </div>
 
       <!-- Right Side - Product Details -->
-      <div class="product-details">
-        <div class="product-title">{{ product.name }}</div>
+      <div class="product-details-p-1">
+        <div class="product-title-share-btn">
+
+          <div class="product-title">{{ product.name }}</div>
+          <button class="share-btn-mobile">
+          <img src="/product-details/ios_share.svg" alt="Share" />
+        </button>
+        </div>
         
         <!-- Pricing -->
         <div class="pricing">
@@ -74,7 +80,8 @@
         </div>
 
         <!-- Rating and Reviews -->
-        <div class="rating-section">
+        <div class="rating-section-sku-share-btn">
+          <div class="rating-section">
           <div class="stars">
             <svg v-for="i in 5" :key="i" class="star" :class="{ filled: i <= product.rating }" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -85,6 +92,7 @@
         </div>
 
         <!-- SKU -->
+       <div class="sku-share-btn">
         <div class="sku">
           SKU: {{ product.sku }}
         </div>
@@ -92,11 +100,15 @@
         <!-- Share Button -->
         <button class="share-btn">
           <img src="/product-details/ios_share.svg" alt="Share" />
-          Share
+          <div class="share-text">Share</div>
         </button>
+       </div>
+        </div>
+       </div>
 
         <!-- Size Selection -->
-        <div class="size-selection">
+        <div class="product-details-p-2">
+          <div class="size-selection">
           <label class="selection-label">Size</label>
           <div class="size-radio-group">
             <label 
@@ -144,7 +156,7 @@
           <button class="buy-now-btn">Buy Now</button>
           <button class="add-to-basket-btn">Add to Basket</button>
         </div>
-      </div>
+        </div>
     </div>
 
     <!-- Matching Series Section -->
