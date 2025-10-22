@@ -779,7 +779,7 @@
 .frequently-bought-products {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   gap: 20px;
   flex: 1;
 }
@@ -1989,17 +1989,25 @@
 }
 
 @media (max-width: 600px) {
+  .product-details-container {
+    width: 100%;
+  }
   .product-container {
     padding: 0;
+    display: flex;
+    flex-direction: column;
   }
   .product-title-share-btn {
     display: flex;
-    flex-direction: column;
     align-items: flex-start;
     margin-bottom: 20px;
   }
   .product-title {
     margin-bottom: 0;
+  }
+  .pricing {
+    flex-direction: row;
+    align-items: center;
   }
   .current-price {
     font-family: Poppins;
@@ -2132,11 +2140,11 @@
   }
   .quantity-selector {
     width: 100%;
-    height: 46px;
+    height: 44px;
   }
   .quantity-btn {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 42px;
   }
 
   .quantity-text {
@@ -2185,36 +2193,33 @@
      order: 2;
    }
 
-   /* Frequently Bought Carousel for Mobile */
+   /* Frequently Bought Section for Mobile */
    .frequently-bought-section {
      order: 1;
    }
    
    .frequently-bought-container {
-     overflow: visible;
+     overflow: hidden;
      position: relative;
-   }
-   .frequently-bought-container .carousel-controls {
-     display: none;
+     width: 100%;
    }
    
    .frequently-bought-products {
      display: flex;
      gap: 15px;
-     transition: transform 0.3s ease;
-     padding: 0 20px;
-     width: max-content;
-     margin-right: 20px;
+     /* flex-wrap: wrap; */
+     justify-content: center;
    }
    
    .frequently-bought-item {
-     flex: 0 0 calc(50vw - 30px);
-     min-width: 0;
      background: white;
      border-radius: 8px;
      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
      overflow: visible;
      position: relative;
+     height: auto;
+     flex: 0 0 calc(50% - 7.5px);
+     min-width: 0;
    }
    
    .frequently-bought-item .item-image {
@@ -2281,41 +2286,7 @@
    .frequently-bought-summary .add-to-cart-btn:hover {
      background: #2352b8;
    }
-
-   /* Carousel Controls */
-   .carousel-controls {
-     display: flex;
-     justify-content: space-between;
-     margin-bottom: 15px;
-     padding: 0 10px;
-   }
-   
-   .carousel-btn {
-     width: 40px;
-     height: 40px;
-     border-radius: 50%;
-     border: 1px solid #ddd;
-     background: white;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     cursor: pointer;
-     transition: all 0.3s ease;
-   }
-   
-   .carousel-btn:hover:not(:disabled) {
-     border-color: #e18719;
-     background: #f9f9f9;
-   }
-   
-   .carousel-btn:disabled {
-     opacity: 0.5;
-     cursor: not-allowed;
-   }
-   
-   .carousel-btn svg {
-     width: 20px;
-     height: 20px;
-     color: #666;
+   .frequently-bought-products {
+    flex-wrap: nowrap;
    }
  }
