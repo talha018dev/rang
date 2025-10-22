@@ -50,7 +50,8 @@
       </div>
 
       <!-- Right Side - Product Details -->
-      <div class="product-details-p-1">
+      <div class="product-details-container">
+        <div class="product-details-p-1">
         <div class="product-title-share-btn">
 
           <div class="product-title">{{ product.name }}</div>
@@ -143,6 +144,7 @@
           <button class="add-to-basket-btn">Add to Basket</button>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Matching Series Section -->
@@ -215,7 +217,20 @@
           </div>
 
           <!-- Product Cards -->
-          <div class="frequently-bought-products" :style="{ transform: `translateX(-${currentSlide * 50}%)` }">
+          <div 
+            class="frequently-bought-products" 
+            @mousedown="handleMouseDown"
+            @mousemove="handleMouseMove"
+            @mouseup="handleMouseUp"
+            @mouseleave="handleMouseUp"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+            :style="{ 
+              transform: `translateX(${-currentSlide * slideWidth + dragOffset}px)`,
+              transition: isDragging ? 'none' : 'transform 0.3s ease-in-out'
+            }"
+          >
             <div v-for="(item, index) in frequentlyBoughtItems" :key="index" class="frequently-bought-item">
               <!-- Product Image -->
               <div class="item-image">
@@ -543,7 +558,7 @@
 // All Vue composables and components are auto-imported in Nuxt 4
 // CSS is imported globally via nuxt.config.ts
 import { useHead, useRoute } from 'nuxt/app'
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AppFooter from '../../../../../components/AppFooter.vue'
 // Get route parameters
 import './product-details.css'
@@ -826,7 +841,17 @@ const addFrequentlyBoughtToCart = () => {
 
 // Carousel functionality
 const currentSlide = ref(0)
+const slideWidth = ref(0)
 const maxSlides = computed(() => Math.max(0, frequentlyBoughtItems.value.length - 2))
+
+// Drag and touch state
+const isDragging = ref(false)
+const dragOffset = ref(0)
+const startX = ref(0)
+const startY = ref(0)
+const lastX = ref(0)
+const isTouch = ref(false)
+const isMobile = ref(false)
 
 const nextSlide = () => {
   if (currentSlide.value < maxSlides.value) {
@@ -839,6 +864,103 @@ const prevSlide = () => {
     currentSlide.value--
   }
 }
+
+// Mouse event handlers
+const handleMouseDown = (e: MouseEvent) => {
+  if (!isMobile.value) return
+  isDragging.value = true
+  startX.value = e.clientX
+  lastX.value = e.clientX
+  dragOffset.value = 0
+}
+
+const handleMouseMove = (e: MouseEvent) => {
+  if (!isDragging.value || !isMobile.value) return
+  e.preventDefault()
+  
+  const deltaX = e.clientX - startX.value
+  dragOffset.value = deltaX
+}
+
+const handleMouseUp = () => {
+  if (!isDragging.value || !isMobile.value) return
+  isDragging.value = false
+  
+  const threshold = slideWidth.value * 0.3
+  
+  if (Math.abs(dragOffset.value) > threshold) {
+    if (dragOffset.value > 0) {
+      prevSlide()
+    } else {
+      nextSlide()
+    }
+  }
+  
+  dragOffset.value = 0
+}
+
+// Touch event handlers
+const handleTouchStart = (e: TouchEvent) => {
+  if (!isMobile.value) return
+  isTouch.value = true
+  isDragging.value = true
+  startX.value = e?.touches[0]?.clientX ?? 0
+  startY.value = e?.touches[0]?.clientY ?? 0
+  lastX.value = e?.touches[0]?.clientX ?? 0
+  dragOffset.value = 0
+}
+
+const handleTouchMove = (e: TouchEvent) => {
+  if (!isDragging.value || !isMobile.value) return
+  
+  const touch = e?.touches[0]
+  const deltaX = (touch?.clientX ?? 0) - startX.value
+  const deltaY = (touch?.clientY ?? 0) - startY.value
+  
+  // Only prevent default if horizontal swipe is more significant than vertical
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    e.preventDefault()
+    dragOffset.value = deltaX
+  }
+}
+
+const handleTouchEnd = () => {
+  if (!isDragging.value || !isMobile.value) return
+  isDragging.value = false
+  isTouch.value = false
+  
+  const threshold = slideWidth.value * 0.3
+  
+  if (Math.abs(dragOffset.value) > threshold) {
+    if (dragOffset.value > 0) {
+      prevSlide()
+    } else {
+      nextSlide()
+    }
+  }
+  
+  dragOffset.value = 0
+}
+
+// Handle responsive behavior
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 600
+  if (isMobile.value) {
+    // Calculate slide width for mobile (2 items visible)
+    const containerWidth = window.innerWidth * 0.9 // 90% of screen width
+    slideWidth.value = containerWidth / 2
+  }
+}
+
+// Initialize on mount
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 
 const voteHelpful = (reviewId: number, isHelpful: boolean) => {
