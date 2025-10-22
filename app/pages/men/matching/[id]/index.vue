@@ -126,7 +126,23 @@
               <span class="size-radio-label">{{ size }}</span>
             </label>
           </div>
+          <div class="size-dropdown-container">
+            <select 
+            v-model="selectedSize" 
+            class="size-dropdown"
+          >
+            <option value="" disabled>Select <Icon name="mdi:chevron-down" /></option>
+            <option 
+              v-for="size in product.sizes" 
+              :key="size" 
+              :value="size"
+            >
+              {{ size }}
+              <Icon name="mdi:chevron-down" />
+            </option>
+          </select>
           <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+          </div>
         </div>
 
         <!-- Color Selection -->

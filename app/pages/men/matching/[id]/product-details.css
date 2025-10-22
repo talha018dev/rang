@@ -393,6 +393,11 @@
   text-decoration: underline;
 }
 
+/* Size Dropdown for Mobile */
+.size-dropdown {
+  display: none;
+}
+
 /* Color Selection */
 .color-selection {
   margin-bottom: 25px;
@@ -556,7 +561,7 @@
 
   .thumbnail {
     /* width: 120px; */
-    height: 120px;
+    height: auto;
     /* height: auto; */
     width: auto;
   }
@@ -1983,6 +1988,9 @@
 }
 
 @media (max-width: 600px) {
+  .product-container {
+    padding: 0;
+  }
   .product-title-share-btn {
     display: flex;
     align-items: center;
@@ -2031,6 +2039,7 @@
   }
   .product-details-p-2 {
     order: 3;
+    width: 100%;
   }
 
   .share-btn {
@@ -2074,5 +2083,92 @@
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0%;
+  }
+  .size-radio-group {
+    display: none;
+  }
+  .size-dropdown-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .size-dropdown {
+    text-align: center;
+    display: inline-block;
+    /* width: 100%; */
+    width: fit-content;
+    padding: 12px 20px;
+    border: 1px solid black;
+    background: white;
+    font-family: Poppins;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    font-family: Poppins;
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+  .size-guide-link {
+    margin-bottom: 4px;
+  }
+
+  .size-dropdown:focus {
+    outline: none;
+    border-color: #e18719;
+    box-shadow: 0 0 0 2px rgba(225, 135, 25, 0.2);
+  }
+
+  .size-dropdown:hover {
+    border-color: #e18719;
+  }
+  .quantity-selector {
+    width: 100%;
+    height: 46px;
+  }
+  .quantity-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .quantity-text {
+    width: 100%;
+    text-align: center;
+
+    font-family: Poppins;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+  .buy-now-btn {
+    background-color: #3579e9;
+
+    font-family: Poppins;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    height: 50px;
+  }
+  .buy-now-btn:hover {
+    background-color: #2352b8;
+  }
+  .add-to-basket-btn {
+    font-family: Poppins;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    height: 50px;
   }
 }

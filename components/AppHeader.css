@@ -237,6 +237,15 @@
   transition: color 0.15s ease-in-out;
 }
 
+@media (max-width: 600px) {
+  .mobile-menu-button {
+    padding-left: 0;
+  }
+  .heading-text {
+    right: 0;
+  }
+}
+
 /* Make mobile menu button black on all pages except home page */
 .header:not(.header-home) .mobile-menu-button {
   color: black !important;
