@@ -798,6 +798,10 @@
   z-index: 2;
 }
 
+.frequentlyBoughtCarousel {
+  display: none;
+}
+
 .checkbox-input {
   display: none;
 }
@@ -2189,104 +2193,175 @@
   .frequently-bought-section {
     order: 1;
   }
-   .matching-series-section {
-     order: 2;
-   }
+  .matching-series-section {
+    order: 2;
+  }
 
-   /* Frequently Bought Section for Mobile */
-   .frequently-bought-section {
-     order: 1;
-   }
-   
-   .frequently-bought-container {
-     overflow: hidden;
-     position: relative;
-     width: 100%;
-   }
-   
-   .frequently-bought-products {
-     display: flex;
-     gap: 15px;
-     /* flex-wrap: wrap; */
-     justify-content: center;
-   }
-   
-   .frequently-bought-item {
-     background: white;
-     border-radius: 8px;
-     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-     overflow: visible;
-     position: relative;
-     height: auto;
-     flex: 0 0 calc(50% - 7.5px);
-     min-width: 0;
-   }
-   
-   .frequently-bought-item .item-image {
-     position: relative;
-     aspect-ratio: 1.475;
-     overflow: hidden;
-   }
-   
-   .frequently-bought-item .product-img {
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
-   }
-   
-   .frequently-bought-item .item-checkbox {
-     position: absolute;
-     top: 10px;
-     right: 10px;
-     z-index: 10;
-     pointer-events: auto;
-   }
-   
-   .frequently-bought-item .item-details {
-     padding: 12px;
-   }
-   
-   .frequently-bought-item .item-description {
-     font-size: 14px;
-     margin-bottom: 8px;
-     line-height: 1.3;
-   }
-   
-   .frequently-bought-item .item-price {
-     font-weight: 600;
-     font-size: 16px;
-     color: #e18719;
-   }
-   
-   .frequently-bought-summary {
-     margin-top: 20px;
-     padding: 0 10px;
-   }
-   
-   .frequently-bought-summary .total-price {
-     text-align: center;
-     margin-bottom: 15px;
-     font-size: 18px;
-     font-weight: 600;
-   }
-   
-   .frequently-bought-summary .add-to-cart-btn {
-     width: 100%;
-     background: #3579e9;
-     color: white;
-     border: none;
-     padding: 15px;
-     border-radius: 8px;
-     font-size: 16px;
-     font-weight: 600;
-     cursor: pointer;
-     transition: background 0.3s ease;
-   }
-   
-   .frequently-bought-summary .add-to-cart-btn:hover {
-     background: #2352b8;
-   }
-   .frequently-bought-products {
+  /* Frequently Bought Section for Mobile */
+  .frequently-bought-section {
+    order: 1;
+  }
+
+  .frequently-bought-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Desktop Layout - Always visible by default */
+  .desktop-layout {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Mobile Layout - Hidden on Desktop */
+  .mobile-layout {
+    display: none;
+  }
+
+  /* Desktop Layout - Show on screens 600px and above */
+  @media (min-width: 600px) {
+    .desktop-layout {
+      display: flex !important;
+    }
+
+    .mobile-layout {
+      display: none !important;
+    }
+  }
+
+  .frequently-bought-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+    position: relative;
+    height: auto;
+    flex: 0 0 calc(50% - 7.5px);
+    min-width: 0;
+    max-width: calc(50% - 7.5px);
+  }
+
+  .frequently-bought-item .item-image {
+    position: relative;
+    aspect-ratio: 1.475;
+    overflow: hidden;
+  }
+
+  .frequently-bought-item .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .frequently-bought-item .item-checkbox {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .frequently-bought-item .item-details {
+    padding: 12px;
+  }
+
+  .frequently-bought-item .item-description {
+    font-size: 14px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .frequently-bought-item .item-price {
+    font-weight: 600;
+    font-size: 16px;
+    color: #e18719;
+  }
+
+  .frequently-bought-summary {
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+
+  .frequently-bought-summary .total-price {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .frequently-bought-summary .add-to-cart-btn {
+    width: 100%;
+    background: #3579e9;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .frequently-bought-summary .add-to-cart-btn:hover {
+    background: #2352b8;
+  }
+
+  /* Mobile Layout - Show Carousel, Hide Desktop Grid (only under 600px) */
+  @media (max-width: 600px) {
+    .desktop-layout {
+      display: none !important;
+    }
+    .add-to-cart-btn {
+      border-radius: 0;
+    }
+
+    .mobile-layout {
+      display: block !important;
+    }
+
+    .frequently-bought-carousel {
+      width: 100%;
+      display: block;
+    }
+    .total-price {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .total-label {
+      margin-bottom: 0;
+      font-family: Poppins;
+      font-weight: 700;
+      font-style: Bold;
+      font-size: 17px;
+      line-height: 100%;
+      letter-spacing: 0%;
+    }
+  }
+
+  .frequently-bought-products.mobile-layout {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  .frequently-bought-track {
+    display: flex !important;
+    width: max-content !important;
+  }
+
+  .frequently-bought-item {
+    flex: 0 0 calc(50vw - 20px) !important;
+    max-width: calc(50vw - 20px) !important;
+    padding-bottom: 4px;
+  }
+
+  .frequently-bought-products {
     flex-wrap: nowrap;
-   }
- }
+  }
+}
+
+.frequently-bought-carousel {
+  display: none;
+}

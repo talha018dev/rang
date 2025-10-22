@@ -192,8 +192,8 @@
         <h2 class="section-title">Frequently bought together</h2>
 
         <div class="frequently-bought-container">
-          <!-- Product Cards -->
-          <div class="frequently-bought-products">
+          <!-- Desktop Grid Layout -->
+          <div class="frequently-bought-products desktop-layout">
             <div v-for="(item, index) in frequentlyBoughtItems" :key="index" class="frequently-bought-item">
               <!-- Product Image -->
               <div class="item-image">
@@ -207,10 +207,40 @@
 
               <div class="item-details">
                 <p class="item-description">{{ item.description }}</p>
-                <p class="item-price">{{ item.price }}</p>
+                <p class="item-price">{{ item.price }} asdasd</p>
               </div>
             </div>
           </div>
+
+          <!-- Mobile Carousel Layout -->
+          <UCarousel
+            ref="frequentlyBoughtCarousel"
+            v-slot="{ item }"
+            :items="frequentlyBoughtItems"
+            :slides-per-view="2"
+            :space-between="15"
+            :ui="{
+              item: 'frequently-bought-item',
+              container: 'frequently-bought-products mobile-layout',
+            }"
+            class="frequently-bought-carousel mobile-layout"
+          >
+            <div class="frequently-bought-item">
+              <div class="item-image">
+                <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy" format="webp"
+                  quality="85" />
+                <div class="item-checkbox">
+                  <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected" class="checkbox-input" />
+                  <label :for="`mobile-item-${item.id}`" class="checkbox-label"></label>
+                </div>
+              </div>
+
+              <div class="item-details">
+                <p class="item-description">{{ item.description }}</p>
+                <p class="item-price">{{ item.price }}</p>
+              </div>
+            </div>
+          </UCarousel>
 
           <!-- Summary Section -->
           <div class="frequently-bought-summary">
@@ -801,6 +831,9 @@ const addFrequentlyBoughtToCart = () => {
   // In a real app, this would add the selected items to the cart
   alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
+
+// Nuxt UI Carousel reference
+const frequentlyBoughtCarousel = ref()
 
 
 
