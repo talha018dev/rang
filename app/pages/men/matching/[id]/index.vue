@@ -561,11 +561,13 @@
     </div>
 
     <!-- Related Products Section -->
-    <div class="related-products-section">
+    <div class="related-products-section" v-if="!isMobile">
       <div class="related-products-header">
         <div class="related-products-title">
-          <div><span class="related-products-title-light">Related</span> <span
-              class="related-products-title-bold">Products</span></div>
+          <div>
+            <span class="related-products-title-light">Related</span>
+            <span class="related-products-title-bold">Products</span>
+          </div>
         </div>
       </div>
 
@@ -582,6 +584,30 @@
         </div>
       </div>
     </div>
+    <section v-if="isMobile" class="related-products-section-mobile">
+      <div class="related-products-title">
+        <div>
+          <span class="related-products-title-light">Related</span>
+          <span class="related-products-title-bold">Products</span>
+        </div>
+      </div>
+      <!-- Related Products Carousel -->
+      <UCarousel ref="carouselRef" v-slot="{ item }" :items="relatedProducts" :ui="{
+        item: 'basis-1/2',
+        container: 'rounded-lg gap-4'
+      }" class="rounded-lg gap-4" :slides-per-view="2" :slides-per-group="1" :space-between="15" :autoplay="false"
+        :infinite="true" tabindex="0">
+        <div class="carousel-item">
+          <NuxtImg :src="item.image" :alt="item.name"
+            class="w-full h-80 object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            loading="lazy" />
+          <div class="related-products-info">
+            <h3 class="new-arrival-name-light">{{ item.name }}</h3>
+            <h4 class="related-products-price">Tk 2,500</h4>
+          </div>
+        </div>
+      </UCarousel>
+    </section>
   </div>
   <AppFooter />
 </template>
