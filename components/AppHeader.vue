@@ -278,14 +278,16 @@ const getNavLinkHomeClass = (isActive: boolean) => {
   return isActive ? 'nav-link nav-link-active' : 'nav-link'
 }
 
-// Function to handle scroll event
+// Function to handle scroll and layout changes
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 80
+  const hasVerticalScroll = document.documentElement.scrollHeight > window.innerHeight
+  isScrolled.value = hasVerticalScroll && window.scrollY > 80
 }
 
 // Add scroll event listener on mount
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  window.addEventListener('resize', handleScroll)
   // Initialize scroll state on mount
   handleScroll()
 })
@@ -293,6 +295,7 @@ onMounted(() => {
 // Remove scroll event listener on unmount
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', handleScroll)
 })
 </script>
 
