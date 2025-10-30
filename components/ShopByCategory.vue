@@ -16,7 +16,13 @@
                     <div class="image-shop-now">Shop Now <Icon name="heroicons:chevron-right" /></div>
                 </div>
                 <div class="category-grid-main-women">
-                    <img src="/category-1.png" alt="Category Rang" class="category-image-rounded"></img>
+                    <img src="/shop-by-category/shop-by-category-2.png" alt="Category Rang" class="category-image-rounded"></img>
+                    <div class="image-div-text bottom-left">
+                        <div class="small-image-text">See what’s new in our</div>
+                        <div>Women</div>
+                        <p>Collection</p>
+                    </div>
+                    <div class="image-shop-now">Shop Now <Icon name="heroicons:chevron-right" /></div>
                 </div>
             </div>
             <div class="category-grid-secondary">

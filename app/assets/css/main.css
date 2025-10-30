@@ -521,14 +521,36 @@ div [data-vaul-handle] {
   display: none !important;
 }
 
+.small-image-text {
+  font-size: 0.8em !important;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  line-height: 100%;
+  letter-spacing: 0%;
+  -webkit-text-stroke: 0px white !important;
+}
+
 .image-div {
   position: relative;
 }
 .image-div-text {
   position: absolute;
 }
+.image-div-text-bottom-left {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
 .image-div-text .by {
   font-weight: 100 !important;
+}
+
+.bottom-left {
+  bottom: 10px !important;
+  left: 10px !important;
+  top: auto !important;
+  right: auto !important;
 }
 
 .image-div-text div {
@@ -542,6 +564,16 @@ div [data-vaul-handle] {
   color: rgba(254, 244, 232, 0.7);
   -webkit-text-stroke: 1px white;
   z-index: 100;
+}
+
+.image-div-text p {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 3.5em;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
 }
 .image-div-text span {
   font-family: Poppins;
