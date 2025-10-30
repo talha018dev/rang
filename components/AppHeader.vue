@@ -6,7 +6,7 @@
       </div>
       <div class="header-content">
           <div>
-            <img src="/rang-logo.png" alt="logo" />
+            <img src="/rang-logo.png" alt="logo" class='logo-image' />
           </div>
         <nav class="nav">
           <NuxtLink 

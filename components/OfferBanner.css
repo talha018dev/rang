@@ -4,15 +4,15 @@
   overflow: hidden;
   background-color: #F7941C;
   color: white;
-  padding: 1.25rem 0;
-  margin-top: 3rem;
+  padding: 0.25rem 0;
+  margin-top: 1rem;
 }
 
 .offer-content {
   display: flex;
   white-space: nowrap;
   animation: slide linear infinite;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
