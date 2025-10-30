@@ -203,9 +203,7 @@
   transition: color 0.15s ease-in-out;
 }
 
-.action-button:hover {
-  color: #ea580c;
-}
+.action-button:hover {}
 
 .action-button-flex {
   padding: 0.5rem;
@@ -214,9 +212,7 @@
   transition: color 0.15s ease-in-out;
 }
 
-.action-button-flex:hover {
-  color: #ea580c;
-}
+.action-button-flex:hover {}
 
 .action-icon {
   width: 1.25rem;
@@ -255,9 +251,7 @@
   color: black !important;
 }
 
-.mobile-menu-button:hover {
-  color: #ea580c;
-}
+.mobile-menu-button:hover {}
 
 .hamburger-icon {
   width: 1.5rem;
