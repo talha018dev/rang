@@ -172,7 +172,7 @@
   font-family: Poppins;
   font-weight: 700;
   font-style: Bold;
-  font-size: 133px;
+  font-size: 8.3125em;
   leading-trim: NONE;
   line-height: 100%;
   letter-spacing: 0%;
@@ -186,11 +186,11 @@
 
 @media (max-width: 800px) {
   .sale-offer-text {
-    font-size: 30px;
+    font-size: 1.875em;
   }
 }
 @media (max-width: 600px) {
   .sale-offer-text {
-    font-size: 40px;
+    font-size: 2.5em;
   }
 }

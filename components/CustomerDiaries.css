@@ -139,7 +139,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -148,7 +148,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -164,7 +164,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -173,7 +173,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -196,7 +196,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
-  font-size: 80px;
+  font-size: 5em;
   line-height: 100%;
   letter-spacing: 0%;
   text-align: left;
@@ -208,7 +208,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-style: normal;
-  font-size: 60px;
+  font-size: 3.75em;
   line-height: 100%;
   letter-spacing: 0%;
   text-align: right;
@@ -226,7 +226,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -235,7 +235,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -244,7 +244,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
-  font-size: 44px;
+  font-size: 2.75em;
   line-height: 50px;
   letter-spacing: 0%;
 }
@@ -307,7 +307,7 @@
   }
 
   .customers-diaries .text-large {
-    font-size: 50px;
+    font-size: 3.125em;
   }
 
   .customers-diaries .text-small {
@@ -351,7 +351,7 @@
   }
 
   .customers-diaries .text-large {
-    font-size: 40px;
+    font-size: 2.5em;
   }
 
   .customers-diaries .text-small {
@@ -403,7 +403,7 @@
   }
 
   .customers-diaries .text-large {
-    font-size: 30px;
+    font-size: 1.875em;
   }
 
   .customers-diaries .text-small {
@@ -417,7 +417,7 @@
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
-  font-size: 17px;
+  font-size: 1.0625em;
   line-height: 100%;
   letter-spacing: 0%;
   vertical-align: middle;

@@ -16,7 +16,7 @@
     /* margin-top: 10rem; */
     /* padding: 20px 40px; */
     padding-bottom: 2rem;
-    font-size: 14px;
+    font-size: 0.875em;
     color: #666;
     /* background-color: white; */
   }
@@ -128,7 +128,7 @@
   }
   
   .thumbnail-show-more-text {
-    font-size: 12px;
+    font-size: 0.75em;
     font-weight: 600;
     color: #374151;
     text-align: center;
@@ -185,7 +185,7 @@
   }
   
   .product-title {
-    font-size: 32px;
+    font-size: 2em;
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
@@ -201,7 +201,7 @@
   }
   
   .current-price {
-    font-size: 28px;
+    font-size: 1.75em;
     font-weight: bold;
     color: #e18719;
   }
@@ -210,7 +210,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 24px;
+    font-size: 1.5em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -223,7 +223,7 @@
     font-family: Poppins;
     font-weight: 600;
     font-style: SemiBold;
-    font-size: 24px;
+    font-size: 1.5em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -256,7 +256,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 20px;
+    font-size: 1.25em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -267,7 +267,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 13px;
+    font-size: 0.8125em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -279,7 +279,7 @@
     font-family: Poppins;
     font-weight: 500;
     font-style: Medium;
-    font-size: 20px;
+    font-size: 1.25em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -297,7 +297,7 @@
     border-radius: 6px;
     padding: 10px 16px;
     color: #666;
-    font-size: 14px;
+    font-size: 0.875em;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 30px;
@@ -321,7 +321,7 @@
   
   .selection-label {
     display: block;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     color: #333;
     margin-bottom: 10px;
@@ -365,7 +365,7 @@
   .size-radio-label {
     font-family: Poppins;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 1em;
     cursor: pointer;
     user-select: none;
   }
@@ -374,7 +374,7 @@
     font-family: Poppins;
     font-weight: 600;
     font-style: SemiBold;
-    font-size: 13px;
+    font-size: 0.8125em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -434,7 +434,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 1.125em;
     font-weight: bold;
     color: #333;
     cursor: pointer;
@@ -463,7 +463,7 @@
   }
   
   .quantity-text {
-    font-size: 16px;
+    font-size: 1em;
     color: #333;
     min-width: 100px;
   }
@@ -481,7 +481,7 @@
     color: white;
     border: none;
     padding: 16px 24px;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -500,7 +500,7 @@
     color: #333;
     border: 2px solid #333;
     padding: 14px 24px;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -555,11 +555,11 @@
     }
   
     .product-title {
-      font-size: 24px;
+      font-size: 1.5em;
     }
   
     .current-price {
-      font-size: 24px;
+      font-size: 1.5em;
     }
   
     .action-buttons {
@@ -600,7 +600,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 28px;
+    font-size: 1.75em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -656,7 +656,7 @@
   }
   
   .matching-series-item .item-name {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     margin: 0 0 12px 0;
     line-height: 1.4;
@@ -673,7 +673,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 8px 12px;
-    font-size: 14px;
+    font-size: 0.875em;
     color: #333;
     cursor: pointer;
     min-width: 60px;
@@ -686,7 +686,7 @@
   }
   
   .matching-series-item .item-price {
-    font-size: 16px;
+    font-size: 1em;
     color: #e18719;
     font-weight: 600;
     margin: 0;
@@ -734,11 +734,11 @@
     }
   
     .matching-series-item .item-name {
-      font-size: 13px;
+      font-size: 0.8125em;
     }
   
     .matching-series-item .item-price {
-      font-size: 14px;
+      font-size: 0.875em;
     }
   }
   
@@ -756,7 +756,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 28px;
+    font-size: 1.75em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -826,7 +826,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: black;
-    font-size: 12px;
+    font-size: 0.75em;
     font-weight: bold;
   }
   
@@ -853,7 +853,7 @@
   }
   
   .item-description {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     margin: 0 0 8px 0;
     line-height: 1.4;
@@ -861,7 +861,7 @@
   }
   
   .item-price {
-    font-size: 16px;
+    font-size: 1em;
     color: #e18719;
     font-weight: 600;
     margin: 0;
@@ -893,7 +893,7 @@
   }
   
   .total-label {
-    font-size: 16px;
+    font-size: 1em;
     color: #374151;
     font-weight: 500;
     display: block;
@@ -901,7 +901,7 @@
   }
   
   .total-amount {
-    font-size: 20px;
+    font-size: 1.25em;
     color: #e18719;
     font-weight: 700;
   }
@@ -912,7 +912,7 @@
     border: none;
     padding: 12px 24px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -968,7 +968,7 @@
     }
   
     .section-title {
-      font-size: 20px;
+      font-size: 1.25em;
       margin-bottom: 20px;
     }
   
@@ -984,11 +984,11 @@
     }
   
     .item-description {
-      font-size: 13px;
+      font-size: 0.8125em;
     }
   
     .item-price {
-      font-size: 14px;
+      font-size: 0.875em;
     }
   }
   
@@ -1009,7 +1009,7 @@
   }
   
   .info-section-title {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: 600;
     color: #e18719;
     margin-bottom: 30px;
@@ -1026,7 +1026,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 28px;
+    font-size: 1.75em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1045,7 +1045,7 @@
   }
   
   .description-subtitle {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     color: #1f2937;
     margin: 0;
@@ -1063,7 +1063,7 @@
   .description-list li {
     position: relative;
     padding-left: 20px;
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     line-height: 1.5;
   }
@@ -1074,11 +1074,11 @@
     left: 0;
     color: #e18719;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 1em;
   }
   
   .description-text {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     line-height: 1.6;
     margin: 0;
@@ -1087,7 +1087,7 @@
   .better-cotton-link {
     color: #e18719;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.875em;
     font-weight: 500;
     margin-top: 8px;
     display: inline-block;
@@ -1120,7 +1120,7 @@
   }
   
   .specification-list li {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     line-height: 1.5;
     display: flex;
@@ -1144,7 +1144,7 @@
     }
   
     .info-section-title {
-      font-size: 20px;
+      font-size: 1.25em;
       margin-bottom: 20px;
     }
   
@@ -1176,7 +1176,7 @@
     }
   
     .info-section-title {
-      font-size: 18px;
+      font-size: 1.125em;
       margin-bottom: 15px;
     }
   
@@ -1185,22 +1185,22 @@
     }
   
     .description-subtitle {
-      font-size: 15px;
+      font-size: 0.9375em;
     }
   
     .description-list li,
     .description-text,
     .specification-list li {
-      font-size: 13px;
+      font-size: 0.8125em;
     }
   
     .spec-label {
       min-width: 90px;
-      font-size: 13px;
+      font-size: 0.8125em;
     }
   
     .better-cotton-link {
-      font-size: 13px;
+      font-size: 0.8125em;
     }
   }
   
@@ -1215,7 +1215,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 28px;
+    font-size: 1.75em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1277,7 +1277,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 13px;
+    font-size: 0.8125em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1293,7 +1293,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 15px;
+    font-size: 0.9375em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1307,7 +1307,7 @@
   }
   
   .star-label {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #374151;
     min-width: 80px;
   }
@@ -1336,7 +1336,7 @@
     font-family: Poppins;
     font-weight: 600;
     font-style: SemiBold;
-    font-size: 17px;
+    font-size: 1.0625em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1356,7 +1356,7 @@
   }
   
   .attribute-label {
-    font-size: 14px;
+    font-size: 0.875em;
     font-weight: 600;
     color: #374151;
   }
@@ -1388,7 +1388,7 @@
   }
   
   .attribute-value {
-    font-size: 12px;
+    font-size: 0.75em;
     color: #6b7280;
     min-width: 60px;
     text-align: right;
@@ -1414,7 +1414,7 @@
     width: 100%;
     padding: 12px 40px 12px 16px;
     border: 1px solid black;
-    font-size: 14px;
+    font-size: 0.875em;
     background: white;
     transition: border-color 0.2s ease;
   }
@@ -1422,7 +1422,7 @@
     font-family: Poppins;
     font-weight: 400;
     font-style: Regular;
-    font-size: 14px;
+    font-size: 0.875em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1453,7 +1453,7 @@
   .sort-select {
     padding: 12px 40px 12px 16px;
     border: 1px solid black;
-    font-size: 14px;
+    font-size: 0.875em;
     cursor: pointer;
     appearance: none;
     min-width: 450px;
@@ -1462,7 +1462,7 @@
     font-family: Poppins;
     font-weight: 700;
     font-style: Bold;
-    font-size: 24px;
+    font-size: 1.5em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1473,7 +1473,7 @@
     font-family: Poppins;
     font-weight: 400;
     font-style: Regular;
-    font-size: 14px;
+    font-size: 0.875em;
     leading-trim: NONE;
     line-height: 100%;
     letter-spacing: 0%;
@@ -1538,7 +1538,7 @@
   }
   
   .rating-text {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
     font-weight: 700;
   }
@@ -1551,7 +1551,7 @@
   }
   
   .reviewer-name {
-    font-size: 20px;
+    font-size: 1.25em;
     font-weight: 700;
     color: #000000;
   }
@@ -1560,7 +1560,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
+    font-size: 0.875em;
     color: #000000;
     font-weight: 500;
   }
@@ -1575,7 +1575,7 @@
   }
   
   .review-date {
-    font-size: 14px;
+    font-size: 0.875em;
     color: #6b7280;
   }
   
@@ -1584,14 +1584,14 @@
   }
   
   .review-title {
-    font-size: 20px;
+    font-size: 1.25em;
     font-weight: 700;
     color: #000000;
     margin: 0 0 12px 0;
   }
   
   .review-text {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
     line-height: 1.6;
     margin: 0 0 16px 0;
@@ -1611,7 +1611,7 @@
   }
   
   .helpfulness-text {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
     background-color: #f0f0f0;
     padding: 8px 16px;
@@ -1629,7 +1629,7 @@
     padding: 8px 16px;
     border: 1px solid #d1d5db;
     background: #e0e0e0;
-    font-size: 14px;
+    font-size: 0.875em;
     color: #000000;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1652,7 +1652,7 @@
   }
   
   .report-btn {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
     background: none;
     border: none;
@@ -1680,12 +1680,12 @@
   }
   
   .attr-label {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
   }
   
   .attr-value {
-    font-size: 16px;
+    font-size: 1em;
     color: #000000;
     font-weight: 500;
   }
@@ -1746,7 +1746,7 @@
     }
   
     .reviews-title {
-      font-size: 20px;
+      font-size: 1.25em;
       margin-bottom: 20px;
     }
   
@@ -1755,7 +1755,7 @@
     }
   
     .rating-number {
-      font-size: 36px;
+      font-size: 2.25em;
     }
   
     .stars-display .star {
@@ -1863,7 +1863,7 @@
   }
   
   .product-name {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     color: #1f2937;
     margin: 0 0 8px 0;
@@ -1871,7 +1871,7 @@
   }
   
   .product-price {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
     color: #1f2937;
     margin: 0;
@@ -1917,11 +1917,11 @@
     }
   
     .product-name {
-      font-size: 15px;
+      font-size: 0.9375em;
     }
   
     .product-price {
-      font-size: 15px;
+      font-size: 0.9375em;
     }
   }
   
@@ -1948,11 +1948,11 @@
     }
   
     .product-name {
-      font-size: 16px;
+      font-size: 1em;
     }
   
     .product-price {
-      font-size: 16px;
+      font-size: 1em;
     }
   }
   

@@ -495,7 +495,7 @@ head {
 
 /* Remove default html styles */
 html {
-  font-size: 16px;
+  font-size: 1em;
   line-height: 1.5;
 }
 
@@ -535,7 +535,7 @@ div [data-vaul-handle] {
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
-  font-size: 64px;
+  font-size: 4em;
   leading-trim: NONE;
   line-height: 100%;
   letter-spacing: 0%;
@@ -547,7 +547,7 @@ div [data-vaul-handle] {
   font-family: Poppins;
   font-weight: 700;
   font-style: Bold;
-  font-size: 24px;
+  font-size: 1.5em;
   line-height: 100%;
   letter-spacing: 0%;
   color: white;
@@ -565,7 +565,7 @@ div [data-vaul-handle] {
   font-family: Poppins;
   font-weight: 400;
   font-style: SemiBold;
-  font-size: 20px;
+  font-size: 1.25em;
   line-height: 100%;
   letter-spacing: 0%;
 
@@ -576,13 +576,13 @@ div [data-vaul-handle] {
 
 @media (max-width: 600px) {
   .image-div-text div {
-    font-size: 24px;
+    font-size: 1.5em;
   }
   .image-div-text span {
-    font-size: 16px;
+    font-size: 1em;
   }
   .image-shop-now {
-    font-size: 16px;
+    font-size: 1em;
   }
 }
 
