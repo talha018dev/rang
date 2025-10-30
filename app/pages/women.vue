@@ -7,7 +7,7 @@
       <!-- Hero Banner Section -->
       <section class="hero-banner">
           <div class="hero-content">
-           <div class="hero-text">WOMEN</div>
+           <div class="hero-text" style="font-size: 5rem;">WOMEN</div>
                 <NuxtImg 
                   src="/men/men-hero-image.jpg" 
                   alt="Men's fashion" 
