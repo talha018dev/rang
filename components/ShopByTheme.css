@@ -12,12 +12,11 @@
 }
 
 .theme-header {
-  margin-top: 5rem;
-  margin-bottom: 2rem;
+  margin: 2rem 0 1rem 0;
 }
 
 .theme-title {
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
 }
 
@@ -28,8 +27,7 @@
   }
   
   .theme-header {
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem;
+    margin: 2.5rem 0;
   }
 }
 
@@ -40,8 +38,7 @@
   }
   
   .theme-header {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin: 1.5rem 0;
   }
 }
 
