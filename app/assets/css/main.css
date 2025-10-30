@@ -621,3 +621,22 @@ div [data-vaul-handle] {
 .color-inherit {
   color: inherit !important;
 }
+
+/* Global scale to simulate 75% zoom without changing browser zoom */
+:root {
+  --global-scale: 0.75;
+}
+
+/* Chromium/WebKit */
+html {
+  zoom: var(--global-scale);
+}
+
+/* Firefox fallback: simulate zoom via transform */
+@supports not (zoom: 1) {
+  body {
+    transform: scale(var(--global-scale));
+    transform-origin: top left;
+    width: calc(100% / var(--global-scale));
+  }
+}

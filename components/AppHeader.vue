@@ -286,6 +286,8 @@ const handleScroll = () => {
 // Add scroll event listener on mount
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  // Initialize scroll state on mount
+  handleScroll()
 })
 
 // Remove scroll event listener on unmount

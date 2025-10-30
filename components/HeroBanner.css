@@ -1,7 +1,8 @@
 /* HeroBanner Styles */
 .hero-section {
-  height: calc(100svh - 118px);
+  height: calc(100svh - 89px);
   overflow: hidden;
+  position: relative;
 }
 
 .hero-background {
