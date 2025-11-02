@@ -5,16 +5,22 @@
                 <div><span class="sale-title-light">Sale</span> <span class="sale-title-bold">Offer</span></div>
             </div>
         </section>
-        
+
         <SaleOfferCountdown />
         <section class="sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
-                <div class="image-div">
-                    <!-- <div class="sale-offer-text">50% OFF</div>
-                    <div class="image-shop-now">
-                        <span>Shop Now <Icon name="heroicons:chevron-right" /></span>
-                    </div> -->
-                    <img src="/sale-offer/sale-offer-1.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
+                <div class="image-div category-grid-main-men">
+                    <img src="/sale-offer/sale-offer-1.jpg" alt="Category Rang" class="sale-offer-image category-image-rounded"></img>
+                    <div class="image-div-text ultimate-sale" style="top: 10px; left: 10px;">
+                        <span>Ultimate</span>
+                        <div>Sale</div>
+                    </div>
+                    <div class="sale-offer-number-container">
+                        <div class="sale-offer-number">50% OFF</div>
+                        <div class="sale-offer-shop-now">Shop Now
+                            <Icon name="heroicons:chevron-right" />
+                        </div>
+                    </div>
                 </div>
                 <div class="sale-brands-grid-tertiary">
                     <img src="/sale-offer/sale-offer-2.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
