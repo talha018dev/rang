@@ -214,6 +214,15 @@
               color="orange"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
+              icon="i-heroicons-shopping-cart"
+            >
+              Store
+            </UButton>
+
+            <UButton
+              color="orange"
+              variant="ghost"
+              class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-user"
             >
               Account
