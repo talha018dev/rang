@@ -3,8 +3,8 @@
     <HeroBanner />
     <OfferBanner />
     <AllCategories />
-    <ApiCategories :sections="homepageData?.sections || null" />
-    <NewArrival />
+    <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
+    <NewArrival :products="newArrivalProducts" />
     <ExploreRang />
     <ShopByCategory />
     <TimelessSixYards />
@@ -17,9 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import AllCategories from '../../components/AllCategories.vue'
-import ApiCategories from '../../components/ApiCategories.vue'
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
 import HeroBanner from '../../components/HeroBanner.vue'
@@ -31,7 +30,7 @@ import ShopByCategory from '../../components/ShopByCategory.vue'
 import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
 import WhyRang from '../../components/WhyRang.vue'
-import type { HomepageData, HomepageResponse } from '../../types/homepage'
+import type { HomepageData, HomepageResponse, Product } from '../../types/homepage'
 
 const items = [
   '/sale-carousel-1.png',
@@ -46,6 +45,17 @@ const items = [
 const homepageData = ref<HomepageData | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+
+// Find New Arrival section products
+const newArrivalProducts = computed<Product[]>(() => {
+  if (!homepageData.value?.sections) return []
+  
+  const newArrivalSection = homepageData.value.sections.find(
+    section => section.title === 'New Arrival' || section.title === 'New Arrivals'
+  )
+  
+  return newArrivalSection?.products || []
+})
 
 // Fetch homepage data from API
 onMounted(async () => {
