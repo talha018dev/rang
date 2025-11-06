@@ -121,7 +121,7 @@
 import { useCart } from '../../../composables/useCart'
 import AppHeader from '../../../components/AppHeader.vue'
 import AppFooter from '../../../components/AppFooter.vue'
-import { useHead } from 'nuxt/app'
+import { useHead, navigateTo } from 'nuxt/app'
 import './cart.css'
 
 useHead({
@@ -145,10 +145,7 @@ const formatPrice = (price: number) => {
 }
 
 const handleCheckout = () => {
-  // TODO: Navigate to checkout page
-  console.log('Proceeding to checkout...')
-  // In a real app, navigate to checkout page
-  // navigateTo('/checkout')
+  navigateTo('/checkout')
 }
 </script>
 
