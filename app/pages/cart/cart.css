@@ -29,6 +29,7 @@
 .empty-cart {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
@@ -83,6 +84,7 @@
   grid-template-columns: 1fr 400px;
   gap: 2rem;
   margin-top: 2rem;
+  align-items: start;
 }
 
 .cart-items-section {

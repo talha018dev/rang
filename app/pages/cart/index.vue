@@ -1,7 +1,6 @@
 <template>
   <main class="cart-page">
     <div class="cart-container">
-      <AppHeader />
       
       <div class="cart-content">
         <h1 class="cart-title">Shopping Cart</h1>
