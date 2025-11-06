@@ -8,7 +8,7 @@
       <NuxtLink
         v-for="category in categories"
         :key="category.slug"
-        :to="`/products?category=${category.slug}`"
+        :to="`/products/${category.slug}`"
         class="category-card"
       >
         <div class="category-content">
