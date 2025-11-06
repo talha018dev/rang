@@ -13,9 +13,73 @@
             </div>
         </div>
 
-        <!-- Loading State -->
-        <div v-if="isLoading" class="loading-state">
-            <p>Loading product details...</p>
+        <!-- Loading State Skeleton -->
+        <div v-if="isLoading" class="product-container loading-skeleton">
+            <!-- Left Side - Product Images Skeleton -->
+            <div class="product-images">
+                <!-- Thumbnail Images Skeleton -->
+                <div class="thumbnail-images">
+                    <div v-for="i in 4" :key="i" class="thumbnail skeleton-thumbnail">
+                        <div class="skeleton-box"></div>
+                    </div>
+                </div>
+
+                <!-- Main Product Image Skeleton -->
+                <div class="main-image-wrapper">
+                    <div class="skeleton-box skeleton-main-image"></div>
+                </div>
+            </div>
+
+            <!-- Right Side - Product Details Skeleton -->
+            <div class="product-details-container">
+                <div class="product-details-p-1">
+                    <div class="product-title-share-btn">
+                        <div class="skeleton-box skeleton-title"></div>
+                        <div class="skeleton-box skeleton-share-btn"></div>
+                    </div>
+
+                    <!-- Pricing Skeleton -->
+                    <div class="pricing">
+                        <div class="skeleton-box skeleton-price"></div>
+                        <div class="skeleton-box skeleton-compare-price"></div>
+                    </div>
+
+                    <!-- Rating Skeleton -->
+                    <div class="rating-section-sku-share-btn">
+                        <div class="skeleton-box skeleton-rating"></div>
+                        <div class="skeleton-box skeleton-sku"></div>
+                    </div>
+                </div>
+
+                <!-- Size Selection Skeleton -->
+                <div class="product-details-p-2" v-if="!isMobile">
+                    <div class="size-selection">
+                        <div class="skeleton-box skeleton-label"></div>
+                        <div class="skeleton-size-options">
+                            <div v-for="i in 5" :key="i" class="skeleton-box skeleton-size-option"></div>
+                        </div>
+                    </div>
+
+                    <!-- Color Selection Skeleton -->
+                    <div class="color-selection">
+                        <div class="skeleton-box skeleton-label"></div>
+                        <div class="skeleton-color-options">
+                            <div v-for="i in 4" :key="i" class="skeleton-box skeleton-color-option"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Selector Skeleton -->
+                    <div class="quantity-selector">
+                        <div class="skeleton-box skeleton-quantity"></div>
+                    </div>
+
+                    <!-- Action Buttons Skeleton -->
+                    <div class="action-buttons">
+                        <div class="skeleton-box skeleton-button"></div>
+                        <div class="skeleton-box skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Error State -->
