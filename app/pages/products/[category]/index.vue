@@ -73,7 +73,7 @@
                     </div>
                     <div v-else class="products-grid">
                         <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
-                            <NuxtLink :to="`/products/${product.slug}`" class="product-card">
+                            <NuxtLink :to="`/products/${categorySlug}/${product.slug}`" class="product-card">
                                 <div class="product-image-item">
                                     <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
                                         format="webp" quality="85" />

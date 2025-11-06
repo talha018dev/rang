@@ -6,7 +6,7 @@
             </div>
         </section>
 
-        <SaleOfferCountdown />
+        <SaleOfferCountdown :products="saleOfferProducts" />
         <section class="sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
@@ -34,7 +34,25 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import type { Product } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
+
+interface Props {
+  products?: Product[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  products: () => []
+})
+
+// Computed property to ensure products are valid
+const saleOfferProducts = computed(() => {
+  if (!props.products || !Array.isArray(props.products)) {
+    return []
+  }
+  return props.products.filter(product => product && product.id)
+})
 </script>
 
 <style scoped>

@@ -226,6 +226,12 @@
   margin: 0;
 }
 
+.carousel-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .carousel-card {
   background-color: white;
   border-radius: 0.5rem;
@@ -250,6 +256,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .carousel-content {

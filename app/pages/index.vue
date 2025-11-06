@@ -2,7 +2,7 @@
   <div>
     <HeroBanner />
     <OfferBanner />
-    <AllCategories />
+    <!-- <AllCategories /> -->
     <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
     <NewArrival :products="newArrivalProducts" />
     <ExploreRang />
@@ -10,7 +10,7 @@
     <TimelessSixYards />
     <ShopByBrand />
     <ShopByTheme />
-    <SaleOffer />
+    <SaleOffer :products="saleOfferProducts" />
     <WhyRang />
     <CustomerDiaries />
   </div>
@@ -55,6 +55,17 @@ const newArrivalProducts = computed<Product[]>(() => {
   )
   
   return newArrivalSection?.products || []
+})
+
+// Find Sale Offer section products
+const saleOfferProducts = computed<Product[]>(() => {
+  if (!homepageData.value?.sections) return []
+  
+  const saleOfferSection = homepageData.value.sections.find(
+    section => section.title === 'Sale Offer'
+  )
+  
+  return saleOfferSection?.products || []
 })
 
 // Fetch homepage data from API

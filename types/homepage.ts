@@ -105,3 +105,17 @@ export interface ProductResponse {
   queries: ProductQuery[]
 }
 
+// Product Detail API types
+export interface ProductDetailQuery {
+  query: string
+  bindings: string[]
+  time: number
+}
+
+export interface ProductDetailResponse {
+  success: boolean
+  message: string
+  data: Product
+  queries: ProductDetailQuery[]
+}
+
