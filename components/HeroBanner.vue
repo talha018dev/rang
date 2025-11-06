@@ -49,7 +49,7 @@ const currentBannerUrl = computed(() => {
       return getImageUrl(banner);
     }
   }
-  return '/landing-image.png'; // Fallback
+  // return '/landing-image.png'; // Fallback
 });
 
 // Auto-rotate banners every 10 seconds

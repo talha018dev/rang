@@ -5,12 +5,116 @@
       <div class="checkout-content">
         <h1 class="checkout-title">Checkout</h1>
         
-        <div v-if="isEmpty" class="empty-cart-message">
+        <!-- Loading Skeleton -->
+        <div v-if="isLoadingCart" class="checkout-layout loading-skeleton">
+          <!-- Left Side - Forms Skeleton -->
+          <div class="checkout-forms">
+            <section class="checkout-section">
+              <div class="skeleton-box skeleton-section-title"></div>
+              <div class="checkout-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <div class="skeleton-box skeleton-label"></div>
+                    <div class="skeleton-box skeleton-input"></div>
+                  </div>
+                  <div class="form-group">
+                    <div class="skeleton-box skeleton-label"></div>
+                    <div class="skeleton-box skeleton-input"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-label"></div>
+                  <div class="skeleton-box skeleton-input"></div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-label"></div>
+                  <div class="skeleton-box skeleton-input"></div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-label"></div>
+                  <div class="skeleton-box skeleton-input"></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <div class="skeleton-box skeleton-label"></div>
+                    <div class="skeleton-box skeleton-input"></div>
+                  </div>
+                  <div class="form-group">
+                    <div class="skeleton-box skeleton-label"></div>
+                    <div class="skeleton-box skeleton-input"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-label"></div>
+                  <div class="skeleton-box skeleton-input"></div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-checkbox"></div>
+                </div>
+                <div class="form-group">
+                  <div class="skeleton-box skeleton-section-title-small"></div>
+                  <div class="skeleton-box skeleton-textarea"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Side - Order Summary Skeleton -->
+          <div class="checkout-summary">
+            <div class="summary-card">
+              <div class="skeleton-box skeleton-section-title"></div>
+              
+              <!-- Order Items Skeleton -->
+              <div class="order-items">
+                <div v-for="i in 3" :key="i" class="order-item">
+                  <div class="order-item-image">
+                    <div class="skeleton-box skeleton-order-image"></div>
+                  </div>
+                  <div class="order-item-details">
+                    <div class="skeleton-box skeleton-order-name"></div>
+                    <div class="skeleton-box skeleton-order-attr"></div>
+                    <div class="skeleton-box skeleton-order-price"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Totals Skeleton -->
+              <div class="order-totals">
+                <div class="total-row">
+                  <div class="skeleton-box skeleton-total-label"></div>
+                  <div class="skeleton-box skeleton-total-value"></div>
+                </div>
+                <div class="total-row">
+                  <div class="skeleton-box skeleton-total-label"></div>
+                  <div class="skeleton-box skeleton-total-value"></div>
+                </div>
+                <div class="total-row total-row-final">
+                  <div class="skeleton-box skeleton-total-label-large"></div>
+                  <div class="skeleton-box skeleton-total-value-large"></div>
+                </div>
+              </div>
+
+              <!-- Place Order Button Skeleton -->
+              <div class="skeleton-box skeleton-button"></div>
+              <div class="skeleton-box skeleton-link"></div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else-if="isEmpty" class="empty-cart-message">
           <p>Your cart is empty. Please add items to your cart before checkout.</p>
           <NuxtLink to="/products/men" class="shop-button">Continue Shopping</NuxtLink>
         </div>
 
-        <div  class="checkout-layout">
+        <div v-else class="checkout-layout" :class="{ 'processing-order': isPlacingOrder }">
+          <!-- Loading Overlay when placing order -->
+          <div v-if="isPlacingOrder" class="order-processing-overlay">
+            <div class="processing-spinner">
+              <div class="spinner"></div>
+              <p class="processing-text">Processing your order...</p>
+            </div>
+          </div>
+
           <!-- Left Side - Forms -->
           <div class="checkout-forms">
             <!-- Shipping Information -->
@@ -356,8 +460,16 @@ const {
   clearCart
 } = useCart()
 
+// Loading state for cart initialization
+const isLoadingCart = ref(true)
+
 // Client-side redirect if cart is empty
 onMounted(() => {
+  // Simulate cart loading time to show skeleton
+  setTimeout(() => {
+    isLoadingCart.value = false
+  }, 300)
+  
   if (isEmpty.value) {
     // Optionally redirect to cart page
     // navigateTo('/cart')

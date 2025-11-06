@@ -8,37 +8,25 @@
 
     <section>
       <!-- Carousel -->
-      <UCarousel
-        ref="carouselRef"
-        v-slot="{ item }"
-        :items="validProducts"
-        :ui="{
-          item: 'basis-1/4 flex',
-          container: 'rounded-lg'
-        }"
-        class="rounded-lg"
-        :slides-per-view="4"
-        :slides-per-group="1"
-        :autoplay="false"
-        :infinite="true"
-        tabindex="0"
-        @keydown="handleKeydown"
-      >
+      <UCarousel ref="carouselRef" v-slot="{ item }" :items="validProducts" :ui="{
+        item: 'basis-1/4 flex',
+        container: 'rounded-lg'
+      }" class="rounded-lg" :slides-per-view="4" :slides-per-group="1" :autoplay="false" :infinite="true"
+        tabindex="0" @keydown="handleKeydown">
         <div class="carousel-item">
-          <NuxtImg
-            :src="getImageUrl(item.image)"
-            :alt="item.name"
-            class="w-full h-80 object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-            loading="lazy"
-            format="webp"
-            quality="85"
-          />
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
-            <h3 class="new-arrival-name-light">{{ item.name }}</h3>
-            <p class="shop-now-blue-button-div">
-              <ShopNowBlue />
-            </p>
-          </div>
+          <NuxtLink :to="`/products/${item?.category?.slug}/${item.slug}`">
+
+            <NuxtImg :src="getImageUrl(item.image)" :alt="item.name"
+              class="w-full h-80 object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              loading="lazy" format="webp" quality="85" />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
+              <h3 class="new-arrival-name-light">{{ item.name }}</h3>
+              <p class="shop-now-blue-button-div">
+                <ShopNowBlue />
+              </p>
+            </div>
+          </NuxtLink>
         </div>
       </UCarousel>
     </section>

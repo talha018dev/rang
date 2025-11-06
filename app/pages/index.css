@@ -1,0 +1,355 @@
+/* Homepage Skeleton Loader Styles */
+.homepage-skeleton {
+  pointer-events: none;
+  user-select: none;
+}
+
+.skeleton-box {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Hero Banner Skeleton */
+.skeleton-hero-banner {
+  position: relative;
+  height: calc(100svh + 250px);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.skeleton-hero-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.skeleton-hero-content {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.skeleton-hero-subtitle {
+  height: 24px;
+  width: 150px;
+}
+
+.skeleton-hero-title {
+  height: 64px;
+  width: 400px;
+}
+
+.skeleton-hero-button {
+  height: 48px;
+  width: 150px;
+  border-radius: 4px;
+}
+
+/* Offer Banner Skeleton */
+.skeleton-offer-banner {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 2rem;
+}
+
+.skeleton-offer-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* New Arrival Skeleton */
+.skeleton-new-arrival {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-section-title {
+  height: 48px;
+  width: 300px;
+  margin: 0 auto 2rem;
+}
+
+.skeleton-carousel {
+  display: flex;
+  gap: 1rem;
+  padding: 0 2rem;
+}
+
+.skeleton-carousel-item {
+  flex: 1;
+  position: relative;
+  max-width: 25%;
+}
+
+.skeleton-product-image {
+  width: 100%;
+  height: 320px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.skeleton-product-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeleton-product-name {
+  height: 20px;
+  width: 80%;
+}
+
+.skeleton-product-button {
+  height: 36px;
+  width: 120px;
+  border-radius: 4px;
+}
+
+/* Explore Rang Skeleton */
+.skeleton-explore-rang {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-explore-content {
+  height: 400px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Shop By Category Skeleton */
+.skeleton-shop-category {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skeleton-category-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+
+.skeleton-category-name {
+  height: 20px;
+  width: 70%;
+  margin: 0 auto;
+}
+
+/* Timeless Six Yards Skeleton */
+.skeleton-timeless {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-timeless-content {
+  height: 500px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Shop By Brand Skeleton */
+.skeleton-shop-brand {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-brand-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+}
+
+/* Shop By Theme Skeleton */
+.skeleton-shop-theme {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-theme-image {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+}
+
+/* Sale Offer Skeleton */
+.skeleton-sale-offer {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-sale-content {
+  display: flex;
+  gap: 2rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-sale-countdown {
+  flex: 0 0 400px;
+  height: 500px;
+  border-radius: 8px;
+}
+
+.skeleton-sale-carousel {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+}
+
+.skeleton-sale-product {
+  flex: 1;
+  height: 500px;
+  border-radius: 8px;
+}
+
+/* Why Rang Skeleton */
+.skeleton-why-rang {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-why-item {
+  height: 200px;
+  border-radius: 8px;
+}
+
+/* Customer Diaries Skeleton */
+.skeleton-customer-diaries {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.skeleton-diaries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 0 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skeleton-diaries-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .skeleton-carousel {
+    padding: 0 1rem;
+  }
+
+  .skeleton-carousel-item {
+    max-width: 33.333%;
+  }
+
+  .skeleton-sale-content {
+    flex-direction: column;
+  }
+
+  .skeleton-sale-countdown {
+    flex: 1;
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-hero-banner {
+    height: 500px;
+  }
+
+  .skeleton-hero-title {
+    width: 250px;
+    height: 48px;
+  }
+
+  .skeleton-carousel-item {
+    max-width: 50%;
+  }
+
+  .skeleton-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .skeleton-brand-grid,
+  .skeleton-theme-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .skeleton-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-diaries-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
