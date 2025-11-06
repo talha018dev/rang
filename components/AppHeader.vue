@@ -16,7 +16,7 @@
             Home
           </NuxtLink>
           <NuxtLink 
-            to="/women" 
+            to="/products/women" 
             :class="getNavLinkClass(isWomenActive)"
           >
             Women
@@ -25,7 +25,7 @@
             </svg>
           </NuxtLink>
           <NuxtLink 
-            to="/men" 
+            to="/products/men" 
             :class="getNavLinkClass(isMenActive)"
           >
             Men
@@ -34,7 +34,7 @@
             </svg>
           </NuxtLink>
           <NuxtLink 
-            to="/kids" 
+            to="/products/kids" 
             :class="getNavLinkClass(isKidsActive)"
           >
             Kids
@@ -43,7 +43,7 @@
             </svg>
           </NuxtLink>
           <NuxtLink 
-            to="/jewelry" 
+            to="/products/jewelry" 
             :class="getNavLinkClass(isJewelryActive)"
           >
             Jewelry
@@ -52,7 +52,7 @@
             </svg>
           </NuxtLink>
           <NuxtLink 
-            to="/accessories" 
+            to="/products/accessories" 
             :class="getNavLinkClass(isAccessoriesActive)"
           >
             Accessories
@@ -142,35 +142,35 @@
               Home
             </NuxtLink>
             <NuxtLink 
-              to="/women" 
+              to="/products/women" 
               :class="getNavLinkClass(isWomenActive)"
               @click="closeDrawer"
             >
               Women
             </NuxtLink>
             <NuxtLink 
-              to="/men" 
+              to="/products/men" 
               :class="getNavLinkClass(isMenActive)"
               @click="closeDrawer"
             >
               Men
             </NuxtLink>
             <NuxtLink 
-              to="/kids" 
+              to="/products/kids" 
               :class="getNavLinkClass(isKidsActive)"
               @click="closeDrawer"
             >
               Kids
             </NuxtLink>
             <NuxtLink 
-              to="/jewelry" 
+              to="/products/jewelry" 
               :class="getNavLinkClass(isJewelryActive)"
               @click="closeDrawer"
             >
               Jewelry
             </NuxtLink>
             <NuxtLink 
-              to="/accessories" 
+              to="/products/accessories" 
               :class="getNavLinkClass(isAccessoriesActive)"
               @click="closeDrawer"
             >

@@ -7,7 +7,7 @@
       <div class="breadcrumb">
         <NuxtLink to="/">Homepage</NuxtLink>
         <span>/</span>
-        <NuxtLink to="/men">Men</NuxtLink>
+        <NuxtLink to="/products/men">Men</NuxtLink>
         <span>/</span>
         <span>Matching Series</span>
         <span>/</span>
@@ -977,7 +977,7 @@ const handleAddToCart = () => {
       name: product.value.name,
       price: price,
       priceDisplay: product.value.currentPrice,
-      image: product.value.images[0],
+      image: product.value.images[0] || '',
       size: selectedSize.value,
       color: product.value.colors[selectedColorIndex.value]?.name,
       colorValue: product.value.colors[selectedColorIndex.value]?.value,

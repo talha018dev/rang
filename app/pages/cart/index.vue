@@ -14,7 +14,7 @@
           </div>
           <h2 class="empty-cart-title">Your cart is empty</h2>
           <p class="empty-cart-text">Start shopping to add items to your cart</p>
-          <NuxtLink to="/men" class="shop-button">Continue Shopping</NuxtLink>
+          <NuxtLink to="/products/men" class="shop-button">Continue Shopping</NuxtLink>
         </div>
 
         <div v-else class="cart-layout">
@@ -105,7 +105,7 @@
                 Proceed to Checkout
               </button>
               
-              <NuxtLink to="/men" class="continue-shopping-link">
+              <NuxtLink to="/products/men" class="continue-shopping-link">
                 Continue Shopping
               </NuxtLink>
             </div>
