@@ -28,7 +28,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <div class="filter-dropdown">
+                        <!-- <div class="filter-dropdown">
                             <select class="filter-select" v-model="selectedPrice">
                                 <option value="">Price</option>
                                 <option value="0-1000">Under Tk 1,000</option>
@@ -41,7 +41,7 @@
                                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                     clip-rule="evenodd" />
                             </svg>
-                        </div>
+                        </div> -->
                         <div class="filter-dropdown">
                             <select class="filter-select" v-model="selectedSort">
                                 <option value="latest">Latest</option>
