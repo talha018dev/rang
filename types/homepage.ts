@@ -112,10 +112,15 @@ export interface ProductDetailQuery {
   time: number
 }
 
+export interface ProductDetailData {
+  product: Product
+  related?: Product[]
+}
+
 export interface ProductDetailResponse {
   success: boolean
   message: string
-  data: Product
+  data: Product | ProductDetailData
   queries: ProductDetailQuery[]
 }
 

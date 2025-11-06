@@ -173,8 +173,10 @@
 
                             <!-- Product Image -->
                             <div class="item-image">
-                                <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy"
-                                    format="webp" quality="85" />
+                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                        format="webp" quality="85" />
+                                </NuxtLink>
                             </div>
 
                             <!-- Product Details -->
@@ -183,12 +185,10 @@
 
                                 <!-- Size Selector -->
                                 <div class="size-selector">
-                                    <select v-model="item.size" class="size-select">
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="XXL">XXL</option>
+                                    <select v-model="item.size" class="size-select" @change="updateMatchingSeriesSize(index, $event)">
+                                        <option v-for="size in getAvailableSizesForProduct(item.product)" :key="size" :value="size">
+                                            {{ size }}
+                                        </option>
                                     </select>
                                 </div>
 
@@ -198,7 +198,7 @@
                     </div>
                 </div>
                 <section v-if="isMobile">
-                    <UCarousel ref="matchingSeriesCarousel" v-slot="{ item }" :items="matchingSeriesItems"
+                    <UCarousel ref="matchingSeriesCarousel" v-slot="{ item, index }" :items="matchingSeriesItems"
                         :slides-per-view="2" :space-between="15" :ui="{
                             item: 'matching-series-item',
                             container: 'matching-series-products mobile-layout',
@@ -211,8 +211,10 @@
                             </div>
 
                             <div class="item-image">
-                                <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy"
-                                    format="webp" quality="85" />
+                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                        format="webp" quality="85" />
+                                </NuxtLink>
                             </div>
 
                             <div class="item-details">
@@ -220,12 +222,10 @@
 
                                 <!-- Size Selector -->
                                 <div class="size-selector">
-                                    <select v-model="item.size" class="size-select">
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="XXL">XXL</option>
+                                    <select v-model="item.size" class="size-select" @change="updateMatchingSeriesSize(matchingSeriesItems.findIndex(i => i.id === item.id), $event)">
+                                        <option v-for="size in getAvailableSizesForProduct(item.product)" :key="size" :value="size">
+                                            {{ size }}
+                                        </option>
                                     </select>
                                 </div>
 
@@ -646,7 +646,7 @@ import { navigateTo, useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../../../components/AppFooter.vue'
 import { useCart } from '../../../../../composables/useCart'
-import type { Product, ProductDetailResponse } from '../../../../../types/homepage'
+import type { Product } from '../../../../../types/homepage'
 // Get route parameters
 import './product.css'
 const route = useRoute()
@@ -655,6 +655,7 @@ const productIdSlug = computed(() => route.params.productId as string)
 
 // Product data from API
 const product = ref<Product | null>(null)
+const relatedProducts = ref<Product[]>([])
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
@@ -685,12 +686,24 @@ const fetchProductDetails = async () => {
 
   try {
     const apiUrl = `https://rangbd.thecell.tech/api/product/${productIdSlug.value}`
-    const response = await $fetch<ProductDetailResponse>(apiUrl)
+    const response = await $fetch<any>(apiUrl)
     console.log('Product Detail API Response:', response)
 
     if (response.success && response.data) {
-      product.value = response.data
+      // Check if data is a Product or an object with product and related
+      if ('product' in response.data) {
+        product.value = response.data.product
+        relatedProducts.value = response.data.related || []
+      } else if ('related' in response.data) {
+        product.value = response.data as Product
+        relatedProducts.value = (response.data as any).related || []
+      } else {
+        product.value = response.data as Product
+        // Check if there's a related field at the root level
+        relatedProducts.value = (response as any).related || []
+      }
       console.log('Product loaded:', product.value)
+      console.log('Related products:', relatedProducts.value)
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
@@ -735,51 +748,47 @@ const handleResize = () => {
 }
 
 
-// Matching series data
-const matchingSeriesItems = ref([
-    {
-        checked: true,
-        image: '/men/men-1.png',
-        name: 'Premium Cotton Kurta',
-        size: 'M',
-        price: 1500
-    },
-    {
-        checked: false,
-        image: '/men/men-2.png',
-        name: 'Designer Punjabi Set',
-        size: 'L',
-        price: 2200
-    },
-    {
-        checked: true,
-        image: '/men/men-1.png',
-        name: 'Traditional Sherwani',
-        size: 'XL',
-        price: 3500
-    },
-    {
-        checked: false,
-        image: '/men/men-2.png',
-        name: 'Casual Pathani Suit',
-        size: 'M',
-        price: 1800
-    },
-    {
-        checked: true,
-        image: '/men/men-1.png',
-        name: 'Festive Kurta Pajama',
-        size: 'L',
-        price: 2800
-    },
-    {
-        checked: false,
-        image: '/men/men-2.png',
-        name: 'Wedding Collection',
-        size: 'XL',
-        price: 4500
+// Matching series items state
+const matchingSeriesItems = ref<Array<{
+  id: number
+  checked: boolean
+  image: string
+  name: string
+  size: string
+  price: number
+  slug: string
+  product: Product
+}>>([])
+
+// Update matching series items when related products change
+watch(relatedProducts, (newRelatedProducts) => {
+  if (!newRelatedProducts || newRelatedProducts.length === 0) {
+    matchingSeriesItems.value = []
+    return
+  }
+
+  matchingSeriesItems.value = newRelatedProducts.map((product, index) => {
+    // Get first available size from variants
+    const firstVariant = product.variants?.[0]
+    const defaultSize = firstVariant?.attributes?.size || 'M'
+    
+    // Get the minimum price from variants or use product price
+    const minPrice = product.variants?.length > 0
+      ? Math.min(...product.variants.map(v => v.price))
+      : product.price
+
+    return {
+      id: product.id,
+      checked: index === 0, // First item checked by default
+      image: product.image,
+      name: product.name,
+      size: defaultSize,
+      price: minPrice,
+      slug: product.slug,
+      product: product // Store full product for reference
     }
-])
+  })
+}, { immediate: true })
 
 // Frequently bought together data
 const frequentlyBoughtItems = ref([
@@ -884,33 +893,7 @@ const reviews = ref([
     }
 ])
 
-// Related products data
-const relatedProducts = ref([
-    {
-        id: 1,
-        name: "Punjabi for men",
-        price: "Tk 2,500",
-        image: '/men/men-image-large.png'
-    },
-    {
-        id: 2,
-        name: "Punjabi for men",
-        price: "Tk 2,500",
-        image: '/men/men-image-large.png'
-    },
-    {
-        id: 3,
-        name: "Punjabi for men",
-        price: "Tk 2,500",
-        image: '/men/men-image-large.png'
-    },
-    {
-        id: 4,
-        name: "Punjabi for men",
-        price: "Tk 2,500",
-        image: '/men/men-image-large.png'
-    }
-])
+// Related products are now loaded from API in relatedProducts ref
 
 // Computed properties for product data
 const categoryTitle = computed(() => {
@@ -996,7 +979,7 @@ const totalPrice = computed(() => {
 const matchingSeriesTotalPrice = computed(() => {
     const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
     const total = selectedItems.reduce((sum, item) => {
-        return sum + item.price
+        return sum + (item.price || 0)
     }, 0)
     return `TK ${total.toLocaleString()}`
 })
@@ -1101,17 +1084,56 @@ const addFrequentlyBoughtToCart = () => {
     alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 
+// Helper function to get available sizes for a product
+const getAvailableSizesForProduct = (product: Product | undefined): string[] => {
+  if (!product?.variants) return ['S', 'M', 'L', 'XL', 'XXL']
+  
+  const sizes = new Set<string>()
+  product.variants.forEach(variant => {
+    if (variant.attributes?.size) {
+      sizes.add(variant.attributes.size)
+    }
+  })
+  
+  return Array.from(sizes).sort().length > 0 ? Array.from(sizes).sort() : ['S', 'M', 'L', 'XL', 'XXL']
+}
+
+// Update matching series item price when size changes
+const updateMatchingSeriesSize = (index: number, event: Event) => {
+  const selectElement = event.target as HTMLSelectElement
+  const newSize = selectElement.value
+  const item = matchingSeriesItems.value[index]
+  
+  if (item && item.product) {
+    // Find variant with the new size
+    const variant = item.product.variants?.find(v => v.attributes?.size === newSize)
+    if (variant) {
+      item.size = newSize
+      item.price = variant.price
+    }
+  }
+}
+
 const addMatchingSeriesToCart = () => {
     const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
     selectedItems.forEach(item => {
-        addToCart({
-            id: `matching-${item.name}-${item.size}`,
-            name: item.name,
-            price: item.price,
-            priceDisplay: `Tk ${item.price.toLocaleString()}`,
-            image: item.image,
-            size: item.size
-        })
+      // Find the variant matching the selected size
+      const selectedVariant = item.product?.variants?.find(variant => 
+        variant.attributes?.size === item.size
+      ) || item.product?.variants?.[0]
+      
+      const variantPrice = selectedVariant?.price || item.price
+      const variantImage = selectedVariant?.image || item.image
+      
+      addToCart({
+          id: item.id.toString(),
+          name: item.name,
+          price: variantPrice,
+          priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
+          image: getImageUrl(variantImage),
+          size: item.size,
+          sku: selectedVariant?.sku || item.product?.sku || ''
+      })
     })
 
     alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
