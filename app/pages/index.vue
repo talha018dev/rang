@@ -2,6 +2,7 @@
   <div>
     <HeroBanner />
     <OfferBanner />
+    <ApiCategories :sections="homepageData?.sections || null" />
     <NewArrival />
     <ExploreRang />
     <ShopByCategory />
@@ -16,6 +17,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import ApiCategories from '../../components/ApiCategories.vue'
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
 import HeroBanner from '../../components/HeroBanner.vue'
