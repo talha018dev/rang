@@ -293,7 +293,7 @@
             </div>
 
             <!-- Frequently Bought Together Section -->
-            <div class="frequently-bought-section">
+            <div v-if="frequentlyBoughtItems.length > 0" class="frequently-bought-section">
                 <h2 class="section-title">Frequently bought together</h2>
 
                 <div class="frequently-bought-container">
@@ -302,8 +302,10 @@
                         <div v-for="(item, index) in frequentlyBoughtItems" :key="index" class="frequently-bought-item">
                             <!-- Product Image -->
                             <div class="item-image">
-                                <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy"
-                                    format="webp" quality="85" />
+                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                        format="webp" quality="85" />
+                                </NuxtLink>
                                 <div class="item-checkbox">
                                     <input type="checkbox" :id="`item-${index}`" v-model="item.selected"
                                         class="checkbox-input" />
@@ -313,7 +315,7 @@
 
                             <div class="item-details">
                                 <p class="item-description">{{ item.description }}</p>
-                                <p class="item-price">{{ item.price }} asdasd</p>
+                                <p class="item-price">{{ item.price }}</p>
                             </div>
                         </div>
                     </div>
@@ -326,8 +328,10 @@
                         }" class="frequently-bought-carousel mobile-layout">
                         <div class="frequently-bought-item">
                             <div class="item-image">
-                                <NuxtImg :src="item.image" :alt="item.name" class="product-img" loading="lazy"
-                                    format="webp" quality="85" />
+                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                        format="webp" quality="85" />
+                                </NuxtLink>
                                 <div class="item-checkbox">
                                     <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected"
                                         class="checkbox-input" />
@@ -656,6 +660,7 @@ const productIdSlug = computed(() => route.params.productId as string)
 // Product data from API
 const product = ref<Product | null>(null)
 const relatedProducts = ref<Product[]>([])
+const crossSoldProducts = ref<Product[]>([])
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
@@ -694,16 +699,20 @@ const fetchProductDetails = async () => {
       if ('product' in response.data) {
         product.value = response.data.product
         relatedProducts.value = response.data.related || []
-      } else if ('related' in response.data) {
+        crossSoldProducts.value = (response.data as any).cross_sold || []
+      } else if ('related' in response.data || 'cross_sold' in response.data) {
         product.value = response.data as Product
         relatedProducts.value = (response.data as any).related || []
+        crossSoldProducts.value = (response.data as any).cross_sold || []
       } else {
         product.value = response.data as Product
-        // Check if there's a related field at the root level
+        // Check if there's a related or cross_sold field at the root level
         relatedProducts.value = (response as any).related || []
+        crossSoldProducts.value = (response as any).cross_sold || []
       }
       console.log('Product loaded:', product.value)
       console.log('Related products:', relatedProducts.value)
+      console.log('Cross-sold products:', crossSoldProducts.value)
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
@@ -790,37 +799,50 @@ watch(relatedProducts, (newRelatedProducts) => {
   })
 }, { immediate: true })
 
-// Frequently bought together data
-const frequentlyBoughtItems = ref([
-    {
-        id: 1,
-        name: "Men's Punjabi",
-        description: "This Item : Men's Punjabi for eid occasion and festive",
-        price: "TK : 2,500",
-        image: '/product-details/frequently-1.png',
-        selected: true
-    },
-    // {
-    //   id: 'plus-1',
-    //   type: 'plus',
-    // },
-    {
-        id: 2,
-        name: "Men's Punjabi",
-        description: "This Item : Men's Punjabi for eid occasion and festive",
-        price: "TK : 2,500",
-        image: '/product-details/frequently-1.png',
-        selected: false
-    },
-    {
-        id: 3,
-        name: "Men's Punjabi",
-        description: "This Item : Men's Punjabi for eid occasion and festive",
-        price: "TK : 2,500",
-        image: '/product-details/frequently-1.png',
-        selected: false
+// Frequently bought together items state
+const frequentlyBoughtItems = ref<Array<{
+  id: number
+  name: string
+  description: string
+  price: string
+  priceValue: number
+  image: string
+  selected: boolean
+  slug: string
+  product: Product
+}>>([])
+
+// Update frequently bought items when cross-sold products change
+watch(crossSoldProducts, (newCrossSoldProducts) => {
+  if (!newCrossSoldProducts || newCrossSoldProducts.length === 0) {
+    frequentlyBoughtItems.value = []
+    return
+  }
+
+  frequentlyBoughtItems.value = newCrossSoldProducts.map((product, index) => {
+    // Get the minimum price from variants or use product price
+    const minPrice = product.variants?.length > 0
+      ? Math.min(...product.variants.map(v => v.price))
+      : product.price
+
+    // Get description from product or create a default one
+    const description = product.description 
+      ? product.description.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+      : `This Item: ${product.name}`
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: description,
+      price: `TK : ${minPrice.toLocaleString()}`,
+      priceValue: minPrice,
+      image: product.image,
+      selected: index === 0, // First item selected by default
+      slug: product.slug,
+      product: product // Store full product for reference
     }
-])
+  })
+}, { immediate: true })
 
 // Reviews data
 const overallRating = ref(4.4)
@@ -971,7 +993,9 @@ const availableColors = computed(() => {
 // Computed properties
 const totalPrice = computed(() => {
     const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
-    const total = selectedItems.length * 2500 // Each item costs 2500
+    const total = selectedItems.reduce((sum, item) => {
+        return sum + (item.priceValue || 0)
+    }, 0)
     return `Tk ${total.toLocaleString()}`
 })
 
@@ -1069,16 +1093,21 @@ const handleBuyNow = () => {
 const addFrequentlyBoughtToCart = () => {
     const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
     selectedItems.forEach(item => {
-        const priceMatch = item.price.match(/[\d,]+/)
-        const price = priceMatch ? parseInt(priceMatch[0].replace(/,/g, '')) : 2500
+      // Get first variant or use product price
+      const firstVariant = item.product?.variants?.[0]
+      const variantPrice = firstVariant?.price || item.priceValue
+      const variantImage = firstVariant?.image || item.product?.image || item.image
+      const variantSize = firstVariant?.attributes?.size
 
-        addToCart({
-            id: `frequently-${item.id}`,
-            name: item.name,
-            price: price,
-            priceDisplay: item.price,
-            image: item.image
-        })
+      addToCart({
+          id: item.id.toString(),
+          name: item.name,
+          price: variantPrice,
+          priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
+          image: getImageUrl(variantImage),
+          size: variantSize,
+          sku: firstVariant?.sku || item.product?.sku || ''
+      })
     })
 
     alert(`Added ${selectedItems.length} item(s) to cart!`)
