@@ -390,4 +390,28 @@
   }
   
   /* Extra large screens */
+
+/* Loading, Error, and Empty States */
+.loading-state,
+.error-state,
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-family: Poppins, sans-serif;
+}
+
+.loading-state {
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+.error-state {
+  color: #ef4444;
+  font-size: 1.125rem;
+}
+
+.empty-state {
+  color: #6b7280;
+  font-size: 1.125rem;
+}
   

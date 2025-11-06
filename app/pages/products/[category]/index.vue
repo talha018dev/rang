@@ -20,11 +20,7 @@
                         <div class="filter-dropdown">
                             <select class="filter-select" v-model="selectedSize">
                                 <option value="">Size</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
+                                <option v-for="size in availableSizes" :key="size" :value="size">{{ size }}</option>
                             </select>
                             <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -53,16 +49,25 @@
             <!-- Products Grid Section -->
             <section class="products-section">
                 <div class="products-container">
-                    <div class="products-grid">
-                        <div v-for="(product, index) in filteredProducts" :key="index" class="product-card-wrapper">
-                            <NuxtLink :to="`/men/matching/${product.id}`" class="product-card">
+                    <div v-if="isLoading" class="loading-state">
+                        <p>Loading products...</p>
+                    </div>
+                    <div v-else-if="error" class="error-state">
+                        <p>Error loading products: {{ error }}</p>
+                    </div>
+                    <div v-else-if="filteredProducts.length === 0" class="empty-state">
+                        <p>No products found in this category.</p>
+                    </div>
+                    <div v-else class="products-grid">
+                        <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
+                            <NuxtLink :to="`/products/${product.slug}`" class="product-card">
                                 <div class="product-image-item">
-                                    <NuxtImg :src="product.image" :alt="product.name" class="product-img" loading="lazy"
+                                    <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
                                         format="webp" quality="85" />
                                 </div>
                                 <div class="product-info">
                                     <h3 class="product-name">{{ product.name }}</h3>
-                                    <p class="product-price">{{ product.price }}</p>
+                                    <p class="product-price">Tk {{ product.price.toLocaleString() }}</p>
                                 </div>
                             </NuxtLink>
                             <button class="add-to-cart-quick-btn" @click.stop="handleQuickAddToCart(product)"
@@ -84,9 +89,10 @@
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
 import { useHead, useRoute } from 'nuxt/app'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useCart } from '~~/composables/useCart'
+import type { Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
 // Get route params
@@ -115,109 +121,122 @@ useHead({
 // Reactive data
 const selectedSize = ref('')
 const selectedPrice = ref('')
+const products = ref<Product[]>([])
+const isLoading = ref(false)
+const error = ref<string | null>(null)
 
-// Product data
-const products = ref([
-    {
-        id: 1,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'M',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 2,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'L',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 3,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'XL',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 4,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'M',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 5,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'L',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 6,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'XL',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 7,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'M',
-        priceRange: '2000-3000',
-        category: 'punjabi'
-    },
-    {
-        id: 8,
-        name: 'Punjabi for men',
-        price: 'Tk 2,500',
-        image: '/men/men-image-large.png',
-        size: 'L',
-        priceRange: '2000-3000',
-        category: 'punjabi'
+// Helper function to get full image URL
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return ''
+  // If image path already includes http/https, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  // Otherwise, prepend the API base URL
+  return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
+
+// Fetch products from API
+const fetchProducts = async () => {
+  if (!categorySlug.value) return
+
+  isLoading.value = true
+  error.value = null
+
+  try {
+    // Clean category slug (remove any &amp; issues)
+    const cleanSlug = categorySlug.value.replace(/&amp;/g, '&')
+    const response = await $fetch<ProductResponse>(`https://rangbd.thecell.tech/api/product?category=${cleanSlug}`)
+    console.log('Products API Response:', response)
+
+    if (response.success && response.data) {
+      products.value = response.data
+      console.log('Products loaded:', products.value.length)
     }
-])
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+    error.value = errorMessage
+    console.error('Error fetching products:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Watch for category slug changes
+watch(categorySlug, () => {
+  fetchProducts()
+}, { immediate: true })
+
+// Fetch products on mount
+onMounted(() => {
+  fetchProducts()
+})
+
+// Get unique sizes from products
+const availableSizes = computed(() => {
+  const sizes = new Set<string>()
+  products.value.forEach(product => {
+    product.variants?.forEach(variant => {
+      if (variant.attributes?.size) {
+        sizes.add(variant.attributes.size)
+      }
+    })
+  })
+  return Array.from(sizes).sort()
+})
 
 // Computed filtered products
 const filteredProducts = computed(() => {
-    return products.value.filter(product => {
-        const sizeMatch = !selectedSize.value || product.size === selectedSize.value
-        const priceMatch = !selectedPrice.value || product.priceRange === selectedPrice.value
-        return sizeMatch && priceMatch
-    })
+  return products.value.filter(product => {
+    // Size filter - check if any variant matches
+    const sizeMatch = !selectedSize.value || 
+      product.variants?.some(variant => variant.attributes?.size === selectedSize.value) || false
+
+    // Price filter
+    let priceMatch = true
+    if (selectedPrice.value) {
+      const price = product.price
+      switch (selectedPrice.value) {
+        case '0-1000':
+          priceMatch = price < 1000
+          break
+        case '1000-2000':
+          priceMatch = price >= 1000 && price < 2000
+          break
+        case '2000-3000':
+          priceMatch = price >= 2000 && price < 3000
+          break
+        case '3000+':
+          priceMatch = price >= 3000
+          break
+      }
+    }
+
+    return sizeMatch && priceMatch
+  })
 })
 
 // Cart functionality
 const { addToCart } = useCart()
 
-const handleQuickAddToCart = (product: any) => {
-    const priceMatch = product.price.match(/[\d,]+/)
-    const price = priceMatch ? parseInt(priceMatch[0].replace(/,/g, '')) : 2500
+const handleQuickAddToCart = (product: Product) => {
+  // Get the first variant or use product defaults
+  const firstVariant = product.variants?.[0]
+  const size = firstVariant?.attributes?.size
+  const color = firstVariant?.attributes?.color
 
-    addToCart({
-        id: product.id.toString(),
-        name: product.name,
-        price: price,
-        priceDisplay: product.price,
-        image: product.image,
-        size: product.size
-    })
+  addToCart({
+    id: product.id.toString(),
+    name: product.name,
+    price: product.price,
+    priceDisplay: `Tk ${product.price.toLocaleString()}`,
+    image: getImageUrl(product.image),
+    size: size,
+    color: color,
+    sku: product.sku
+  })
 
-    alert('Item added to cart!')
+  alert('Item added to cart!')
 }
 </script>
 

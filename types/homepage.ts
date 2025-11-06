@@ -81,3 +81,17 @@ export interface CategoryResponse {
   queries: CategoryQuery[]
 }
 
+// Product API types
+export interface ProductQuery {
+  query: string
+  bindings: string[]
+  time: number
+}
+
+export interface ProductResponse {
+  success: boolean
+  message: string
+  data: Product[]
+  queries: ProductQuery[]
+}
+
