@@ -186,18 +186,18 @@ const handleTouchStart = (e: TouchEvent) => {
     if (!isMobile.value) return
     isTouch.value = true
     isDragging.value = true
-    startX.value = e.touches[0].clientX
-    startY.value = e.touches[0].clientY
-    lastX.value = e.touches[0].clientX
+    startX.value = e?.touches[0]?.clientX || 0
+    startY.value = e?.touches[0]?.clientY || 0
+    lastX.value = e?.touches[0]?.clientX || 0
     dragOffset.value = 0
 }
 
 const handleTouchMove = (e: TouchEvent) => {
     if (!isDragging.value || !isMobile.value) return
     
-    const touch = e.touches[0]
-    const deltaX = touch.clientX - startX.value
-    const deltaY = touch.clientY - startY.value
+    const touch = e?.touches[0] || { clientX: 0, clientY: 0 }
+    const deltaX = touch?.clientX - startX.value
+    const deltaY = touch?.clientY - startY.value
     
     // Only prevent default if horizontal swipe is more significant than vertical
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
