@@ -7,7 +7,7 @@
             <!-- Hero Banner Section -->
             <section class="hero-banner">
                 <div class="hero-content">
-                    <div class="hero-text">MEN</div>
+                    <div class="hero-text">{{ categoryTitle }}</div>
                     <NuxtImg src="/men/men-hero-image.jpg" alt="Men's fashion" class="hero-img" loading="eager"
                         format="webp" quality="90" />
                 </div>
@@ -83,17 +83,32 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
+import { useHead, useRoute } from 'nuxt/app'
 import { computed, ref } from 'vue'
-import './products.css'
-import { useHead } from 'nuxt/app'
-import { useCart } from '~~/composables/useCart'
 import AppFooter from '~~/components/AppFooter.vue'
+import { useCart } from '~~/composables/useCart'
+import './products.css'
+
+// Get route params
+const route = useRoute()
+const categorySlug = computed(() => route.params.category as string)
+
+// Format category slug to title
+const categoryTitle = computed(() => {
+  if (!categorySlug.value) return ''
+  // Replace hyphens with spaces and capitalize each word
+  return categorySlug.value
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+    .toUpperCase()
+})
 
 // Meta
 useHead({
-    title: 'Men\'s Collection - Rang',
+    title: `${categoryTitle.value} Collection - Rang`,
     meta: [
-        { name: 'description', content: 'Discover our exclusive collection of men\'s Punjabi outfits and traditional wear.' }
+        { name: 'description', content: `Discover our exclusive collection of ${categoryTitle.value.toLowerCase()} products.` }
     ]
 })
 

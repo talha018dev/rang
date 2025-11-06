@@ -8,11 +8,11 @@
       <NuxtLink
         v-for="category in categories"
         :key="category.slug"
-        :to="`/products/${category.slug}`"
+        :to="`/products/${category.slug?.replace('amp;', '')}`"
         class="category-card"
       >
         <div class="category-content">
-          <h3 class="category-name">{{ category.name }}</h3>
+          <h3 class="category-name">{{ category.name?.replace('amp;', '') }}</h3>
           <p class="category-count">{{ category.products_count }} products</p>
         </div>
       </NuxtLink>
