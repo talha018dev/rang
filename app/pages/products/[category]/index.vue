@@ -62,8 +62,22 @@
             <!-- Products Grid Section -->
             <section class="products-section">
                 <div class="products-container">
-                    <div v-if="isLoading" class="loading-state">
-                        <p>Loading products...</p>
+                    <!-- Loading Skeleton -->
+                    <div v-if="isLoading" class="products-grid loading-skeleton">
+                        <div v-for="i in 12" :key="i" class="product-card-wrapper skeleton-product-card">
+                            <div class="product-card">
+                                <div class="product-image-item">
+                                    <div class="skeleton-box skeleton-product-image"></div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="skeleton-box skeleton-product-name"></div>
+                                    <div class="skeleton-box skeleton-product-price"></div>
+                                </div>
+                            </div>
+                            <div class="add-to-cart-quick-btn skeleton-cart-btn">
+                                <div class="skeleton-box skeleton-cart-icon"></div>
+                            </div>
+                        </div>
                     </div>
                     <div v-else-if="error" class="error-state">
                         <p>Error loading products: {{ error }}</p>
