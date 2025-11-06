@@ -59,3 +59,25 @@ export interface HomepageResponse {
   queries: HomepageQuery[]
 }
 
+// Category API types
+export interface Category {
+  name: string
+  slug: string
+  children: Category[]
+  products_count: number
+}
+
+export interface CategoryQuery {
+  query: string
+  bindings: string[]
+  time: number
+}
+
+export interface CategoryResponse {
+  success: boolean
+  message: string
+  data: Category[]
+  pagination: null
+  queries: CategoryQuery[]
+}
+

@@ -1,13 +1,13 @@
 <template>
-  <main class="api-categories-container" v-if="sections && sections.length > 0">
-    <section v-for="section in sections" :key="section.title" class="category-section">
+  <main class="api-categories-container" v-if="validSections && validSections.length > 0">
+    <section v-for="section in validSections" :key="section.title" class="category-section">
       <div class="category-header">
         <h2 class="category-title">{{ section.title }}</h2>
       </div>
 
       <div v-if="section.products && section.products.length > 0" class="carousel-wrapper">
         <UCarousel
-          ref="carouselRef"
+          :key="`carousel-${section.title}`"
           v-slot="{ item }"
           :items="section.products"
           :ui="{
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 import type { HomepageSection } from '../types/homepage';
 
 interface Props {
@@ -61,7 +61,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const carouselRef = ref()
+// Computed property to ensure sections are valid
+const validSections = computed(() => {
+  if (!props.sections || !Array.isArray(props.sections)) {
+    return []
+  }
+  return props.sections.filter(section => section && section.products && section.products.length > 0)
+})
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
