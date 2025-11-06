@@ -774,9 +774,31 @@ const fetchProductDetails = async () => {
         relatedProducts.value = (response as any).related || []
         crossSoldProducts.value = (response as any).cross_sold || []
       }
+      
+      // Set first available size as default
+      if (product.value?.variants && product.value.variants.length > 0) {
+        const firstVariant = product.value.variants.find(v => v.attributes?.size)
+        if (firstVariant?.attributes?.size) {
+          selectedSize.value = firstVariant.attributes.size
+        } else {
+          // Fallback: get first size from available sizes
+          const sizes = new Set<string>()
+          product.value.variants.forEach(variant => {
+            if (variant.attributes?.size) {
+              sizes.add(variant.attributes.size)
+            }
+          })
+          const sortedSizes = Array.from(sizes).sort()
+          if (sortedSizes.length > 0) {
+            selectedSize.value = sortedSizes[0] || ''
+          }
+        }
+      }
+      
       console.log('Product loaded:', product.value)
       console.log('Related products:', relatedProducts.value)
       console.log('Cross-sold products:', crossSoldProducts.value)
+      console.log('Default size selected:', selectedSize.value)
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
@@ -793,9 +815,19 @@ watch(productIdSlug, () => {
   selectedImageIndex.value = 0
 }, { immediate: true })
 
-// Watch for product changes to reset selected image
-watch(product, () => {
+// Watch for product changes to reset selected image and set default size
+watch(product, (newProduct) => {
   selectedImageIndex.value = 0
+  
+  // Set first available size as default
+  if (newProduct?.variants && newProduct.variants.length > 0) {
+    const firstVariant = newProduct.variants.find(v => v.attributes?.size)
+    if (firstVariant?.attributes?.size) {
+      selectedSize.value = firstVariant.attributes.size
+    } else if (availableSizes.value.length > 0) {
+      selectedSize.value = availableSizes.value[0] || ''
+    }
+  }
 })
 
 // Fetch on mount
