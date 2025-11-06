@@ -623,8 +623,9 @@ div [data-vaul-handle] {
 }
 
 /* Global scale to simulate 75% zoom without changing browser zoom */
+/* Default is 1 for all pages, home page will override to 0.75 */
 :root {
-  --global-scale: 0.75;
+  --global-scale: 1;
 }
 
 /* Chromium/WebKit */

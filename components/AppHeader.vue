@@ -125,7 +125,7 @@
           <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-semibold text-orange-600"></h3>
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               icon="i-heroicons-x-mark"
               @click="closeDrawer"
@@ -180,7 +180,7 @@
 
           <div class="header-drawer-template-buttons">
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-magnifying-glass"
@@ -188,7 +188,7 @@
               Search
             </UButton>
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-currency-dollar"
@@ -196,7 +196,7 @@
               Currency
             </UButton>
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-heart"
@@ -204,7 +204,7 @@
               Wishlist
             </UButton>
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-shopping-cart"
@@ -212,7 +212,7 @@
               Cart
             </UButton>
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-shopping-cart"
@@ -221,7 +221,7 @@
             </UButton>
 
             <UButton
-              color="orange"
+              color="primary"
               variant="ghost"
               class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-user"

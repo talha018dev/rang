@@ -36,3 +36,23 @@ const items = [
   '/brand-2.png'
 ]
 </script>
+
+<style>
+/* Set global scale to 0.75 for home page */
+:root {
+  --global-scale: 0.75;
+}
+
+html {
+  zoom: var(--global-scale);
+}
+
+/* Firefox fallback */
+@supports not (zoom: 1) {
+  body {
+    transform: scale(var(--global-scale));
+    transform-origin: top left;
+    width: calc(100% / var(--global-scale));
+  }
+}
+</style>
