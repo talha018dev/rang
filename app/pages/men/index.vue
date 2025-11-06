@@ -56,27 +56,40 @@
       <section class="products-section">
         <div class="products-container">
           <div class="products-grid">
-            <NuxtLink 
+            <div 
               v-for="(product, index) in filteredProducts" 
               :key="index"
-              :to="`/men/matching/${product.id}`"
-              class="product-card"
+              class="product-card-wrapper"
             >
-              <div class="product-image-item">
-                <NuxtImg 
-                  :src="product.image" 
-                  :alt="product.name" 
-                  class="product-img"
-                  loading="lazy"
-                  format="webp"
-                  quality="85"
-                />
-              </div>
-              <div class="product-info">
-                <h3 class="product-name">{{ product.name }}</h3>
-                <p class="product-price">{{ product.price }}</p>
-              </div>
-            </NuxtLink>
+              <NuxtLink 
+                :to="`/men/matching/${product.id}`"
+                class="product-card"
+              >
+                <div class="product-image-item">
+                  <NuxtImg 
+                    :src="product.image" 
+                    :alt="product.name" 
+                    class="product-img"
+                    loading="lazy"
+                    format="webp"
+                    quality="85"
+                  />
+                </div>
+                <div class="product-info">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  <p class="product-price">{{ product.price }}</p>
+                </div>
+              </NuxtLink>
+              <button 
+                class="add-to-cart-quick-btn"
+                @click.stop="handleQuickAddToCart(product)"
+                title="Add to cart"
+              >
+                <svg class="cart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -89,6 +102,7 @@
 // All Vue composables and components are auto-imported in Nuxt 4
 import { computed, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
+import { useCart } from '../../../composables/useCart'
 import './men.css'
 import { useHead } from 'nuxt/app'
 
@@ -188,6 +202,25 @@ const filteredProducts = computed(() => {
     return sizeMatch && priceMatch
   })
 })
+
+// Cart functionality
+const { addToCart } = useCart()
+
+const handleQuickAddToCart = (product: any) => {
+  const priceMatch = product.price.match(/[\d,]+/)
+  const price = priceMatch ? parseInt(priceMatch[0].replace(/,/g, '')) : 2500
+  
+  addToCart({
+    id: product.id.toString(),
+    name: product.name,
+    price: price,
+    priceDisplay: product.price,
+    image: product.image,
+    size: product.size
+  })
+  
+  alert('Item added to cart!')
+}
 </script>
 
 <style scoped>

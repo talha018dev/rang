@@ -170,6 +170,11 @@
   /* justify-content: space-between; */
 }
 
+.product-card-wrapper {
+  position: relative;
+  flex: 0 0 calc(25% - 1.5rem);
+}
+
 .product-card {
   width: 100%;
   /* background-color: white; */
@@ -177,12 +182,52 @@
   overflow: hidden;
   /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  flex: 0 0 calc(25% - 1.5rem);
+  display: block;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.add-to-cart-quick-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.product-card-wrapper:hover .add-to-cart-quick-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.add-to-cart-quick-btn:hover {
+  background-color: #ea580c;
+  transform: scale(1.1);
+}
+
+.add-to-cart-quick-btn:hover .cart-icon {
+  color: white;
+}
+
+.cart-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #374151;
+  transition: color 0.2s ease;
 }
 
 .men-page .product-image-item {
@@ -233,7 +278,7 @@
     font-size: 3rem;
   }
 
-  .product-card {
+  .product-card-wrapper {
     flex: 0 0 calc(33.333% - 1.33rem);
     min-width: 250px;
   }
@@ -262,7 +307,7 @@
     min-width: auto;
   }
 
-  .product-card {
+  .product-card-wrapper {
     flex: 0 0 calc(50% - 0.5rem);
     min-width: 200px;
   }
@@ -295,7 +340,7 @@
     padding: 0 0.75rem;
   }
 
-  .product-card {
+  .product-card-wrapper {
     flex: 0 0 100%;
     min-width: auto;
     max-width: none;
@@ -328,7 +373,7 @@
     font-size: 5rem;
   }
 
-  .product-card {
+  .product-card-wrapper {
     flex: 0 0 calc(25% - 1.875rem);
   }
 

@@ -138,8 +138,8 @@
 
           <!-- Action Buttons -->
           <div class="action-buttons">
-            <button class="buy-now-btn">Buy Now</button>
-            <button class="add-to-basket-btn">Add to Basket</button>
+            <button class="buy-now-btn" @click="handleBuyNow">Buy Now</button>
+            <button class="add-to-basket-btn" @click="handleAddToCart">Add to Basket</button>
           </div>
         </div>
       </div>
@@ -275,8 +275,8 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <button class="buy-now-btn">Buy Now</button>
-          <button class="add-to-basket-btn">Add to Basket</button>
+          <button class="buy-now-btn" @click="handleBuyNow">Buy Now</button>
+          <button class="add-to-basket-btn" @click="handleAddToCart">Add to Basket</button>
         </div>
       </div>
 
@@ -663,8 +663,9 @@
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
 // CSS is imported globally via nuxt.config.ts
-import { useHead, useRoute } from 'nuxt/app'
+import { useHead, useRoute, navigateTo } from 'nuxt/app'
 import { computed, ref } from 'vue'
+import { useCart } from '../../../../../composables/useCart'
 import AppFooter from '../../../../../components/AppFooter.vue'
 // Get route parameters
 import './product-details.css'
@@ -959,17 +960,70 @@ const decreaseQuantity = () => {
   }
 }
 
+const { addToCart } = useCart()
+
+const handleAddToCart = () => {
+  if (!selectedSize.value) {
+    alert('Please select a size')
+    return
+  }
+  
+  const priceMatch = product.value.currentPrice.match(/[\d,]+/)
+  const price = priceMatch ? parseInt(priceMatch[0].replace(/,/g, '')) : 2500
+  
+  for (let i = 0; i < quantity.value; i++) {
+    addToCart({
+      id: product.value.id,
+      name: product.value.name,
+      price: price,
+      priceDisplay: product.value.currentPrice,
+      image: product.value.images[0],
+      size: selectedSize.value,
+      color: product.value.colors[selectedColorIndex.value]?.name,
+      colorValue: product.value.colors[selectedColorIndex.value]?.value,
+      sku: product.value.sku
+    })
+  }
+  
+  alert('Item added to cart!')
+}
+
+const handleBuyNow = () => {
+  handleAddToCart()
+  navigateTo('/cart')
+}
+
 const addFrequentlyBoughtToCart = () => {
   const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
-  console.log('Adding to cart:', selectedItems)
-  // In a real app, this would add the selected items to the cart
+  selectedItems.forEach(item => {
+    const priceMatch = item.price.match(/[\d,]+/)
+    const price = priceMatch ? parseInt(priceMatch[0].replace(/,/g, '')) : 2500
+    
+    addToCart({
+      id: `frequently-${item.id}`,
+      name: item.name,
+      price: price,
+      priceDisplay: item.price,
+      image: item.image
+    })
+  })
+  
   alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 
 const addMatchingSeriesToCart = () => {
   const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
-  console.log('Adding matching series to cart:', selectedItems)
-  // In a real app, this would add the selected items to the cart
+  selectedItems.forEach(item => {
+    addToCart({
+      id: `matching-${item.name}-${item.size}`,
+      name: item.name,
+      price: item.price,
+      priceDisplay: `Tk ${item.price.toLocaleString()}`,
+      image: item.image,
+      size: item.size
+    })
+  })
+  
   alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
 }
 
