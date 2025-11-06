@@ -42,6 +42,19 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </div>
+                        <div class="filter-dropdown">
+                            <select class="filter-select" v-model="selectedSort">
+                                <option value="latest">Latest</option>
+                                <option value="low-to-high">Low to High</option>
+                                <option value="high-to-low">High to Low</option>
+                                <option value="on-sale">On Sale</option>
+                            </select>
+                            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -81,6 +94,51 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Pagination Section -->
+            <section v-if="pagination && pagination.last_page > 1" class="pagination-section">
+                <div class="pagination-container">
+                    <div class="pagination">
+                        <button 
+                            class="pagination-btn" 
+                            :disabled="currentPage === 1"
+                            @click="goToPage(currentPage - 1)"
+                        >
+                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Previous
+                        </button>
+                        
+                        <div class="pagination-pages">
+                            <button
+                                v-for="page in visiblePages"
+                                :key="page"
+                                class="pagination-page-btn"
+                                :class="{ 'active': page === currentPage }"
+                                @click="goToPage(page)"
+                            >
+                                {{ page }}
+                            </button>
+                        </div>
+                        
+                        <button 
+                            class="pagination-btn" 
+                            :disabled="currentPage === pagination.last_page"
+                            @click="goToPage(currentPage + 1)"
+                        >
+                            Next
+                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="pagination-info">
+                        <p>Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} products</p>
+                    </div>
+                </div>
+            </section>
         </div>
         <AppFooter />
     </main>
@@ -92,7 +150,7 @@ import { useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useCart } from '~~/composables/useCart'
-import type { Product, ProductResponse } from '~~/types/homepage'
+import type { PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
 // Get route params
@@ -121,7 +179,10 @@ useHead({
 // Reactive data
 const selectedSize = ref('')
 const selectedPrice = ref('')
+const selectedSort = ref('latest') // Default sort is latest
+const currentPage = ref(1)
 const products = ref<Product[]>([])
+const pagination = ref<PaginationData | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
@@ -146,12 +207,20 @@ const fetchProducts = async () => {
   try {
     // Clean category slug (remove any &amp; issues)
     const cleanSlug = categorySlug.value.replace(/&amp;/g, '&')
-    const response = await $fetch<ProductResponse>(`https://rangbd.thecell.tech/api/product?category=${cleanSlug}`)
+    // Build API URL with sort and page parameters
+    const apiUrl = `https://rangbd.thecell.tech/api/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
+    const response = await $fetch<ProductResponse>(apiUrl)
     console.log('Products API Response:', response)
 
     if (response.success && response.data) {
       products.value = response.data
+      pagination.value = response.pagination
+      // Sync current page with API response (only if different to avoid loop)
+      if (pagination.value && pagination.value.current_page !== currentPage.value) {
+        currentPage.value = pagination.value.current_page
+      }
       console.log('Products loaded:', products.value.length)
+      console.log('Pagination:', pagination.value)
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
@@ -162,14 +231,75 @@ const fetchProducts = async () => {
   }
 }
 
-// Watch for category slug changes
-watch(categorySlug, () => {
-  fetchProducts()
-}, { immediate: true })
-
-// Fetch products on mount
+// Initial fetch on mount
 onMounted(() => {
   fetchProducts()
+})
+
+// Watch for category slug changes
+watch(categorySlug, () => {
+  currentPage.value = 1 // Reset to first page when category changes
+  fetchProducts()
+})
+
+// Watch for sort changes
+watch(selectedSort, () => {
+  currentPage.value = 1 // Reset to first page when sort changes
+  fetchProducts()
+})
+
+// Watch for page changes
+watch(currentPage, (newPage, oldPage) => {
+  // Only fetch if page actually changed (not initial)
+  if (oldPage !== undefined && newPage !== oldPage) {
+    fetchProducts()
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+})
+
+// Pagination functions
+const goToPage = (page: number) => {
+  if (pagination.value && page >= 1 && page <= pagination.value.last_page) {
+    currentPage.value = page
+  }
+}
+
+// Computed property for visible page numbers
+const visiblePages = computed(() => {
+  if (!pagination.value) return []
+  
+  const pages: number[] = []
+  const totalPages = pagination.value.last_page
+  const current = currentPage.value
+  
+  // Show up to 5 page numbers
+  if (totalPages <= 5) {
+    // Show all pages if 5 or fewer
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i)
+    }
+  } else {
+    // Show pages around current page
+    if (current <= 3) {
+      // Show first 5 pages
+      for (let i = 1; i <= 5; i++) {
+        pages.push(i)
+      }
+    } else if (current >= totalPages - 2) {
+      // Show last 5 pages
+      for (let i = totalPages - 4; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Show pages around current
+      for (let i = current - 2; i <= current + 2; i++) {
+        pages.push(i)
+      }
+    }
+  }
+  
+  return pages
 })
 
 // Get unique sizes from products
@@ -185,7 +315,8 @@ const availableSizes = computed(() => {
   return Array.from(sizes).sort()
 })
 
-// Computed filtered products
+// Computed filtered products (client-side filtering for size and price)
+// Note: The API handles pagination, so we filter the current page's products
 const filteredProducts = computed(() => {
   return products.value.filter(product => {
     // Size filter - check if any variant matches
@@ -214,6 +345,12 @@ const filteredProducts = computed(() => {
 
     return sizeMatch && priceMatch
   })
+})
+
+// Watch for filter changes to reset to page 1
+watch([selectedSize, selectedPrice], () => {
+  currentPage.value = 1
+  fetchProducts()
 })
 
 // Cart functionality

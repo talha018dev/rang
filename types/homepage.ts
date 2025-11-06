@@ -88,10 +88,20 @@ export interface ProductQuery {
   time: number
 }
 
+export interface PaginationData {
+  current_page: number
+  last_page: number
+  per_page: number
+  total: number
+  from: number
+  to: number
+}
+
 export interface ProductResponse {
   success: boolean
   message: string
   data: Product[]
+  pagination: PaginationData | null
   queries: ProductQuery[]
 }
 
