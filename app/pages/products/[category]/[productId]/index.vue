@@ -98,12 +98,28 @@
                         <NuxtImg :src="getImageUrl(image)" :alt="`${product.name} view ${index + 1}`" class="thumbnail-img"
                             loading="lazy" format="webp" quality="85" />
 
-                        <!-- Show More Overlay for last thumbnail -->
-                        <div v-if="index === productImages.length - 1" class="thumbnail-show-more-overlay"
-                            @click.stop="showMoreImages = !showMoreImages">
+                        <!-- Show More Overlay for last thumbnail (only when there are more than 4 images) -->
+                        <div v-if="hasMoreImages && index === productImages.length - 1 && !showMoreImages" 
+                            class="thumbnail-show-more-overlay"
+                            @click.stop="showMoreImages = true">
                             <div class="thumbnail-show-more-content">
                                 <span class="thumbnail-show-more-text">Show More</span>
-                                <svg class="thumbnail-show-more-arrow" :class="{ rotated: showMoreImages }"
+                                <svg class="thumbnail-show-more-arrow"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Show Less Overlay for last thumbnail (when all images are shown) -->
+                        <div v-if="hasMoreImages && index === productImages.length - 1 && showMoreImages" 
+                            class="thumbnail-show-more-overlay"
+                            @click.stop="showMoreImages = false">
+                            <div class="thumbnail-show-more-content">
+                                <span class="thumbnail-show-more-text">Show Less</span>
+                                <svg class="thumbnail-show-more-arrow rotated"
                                     fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -1020,7 +1036,7 @@ const categoryTitle = computed(() => {
 })
 
 // Product images from API
-const productImages = computed(() => {
+const allProductImages = computed(() => {
   if (!product.value) return []
   
   const images: string[] = []
@@ -1049,6 +1065,19 @@ const productImages = computed(() => {
   }
   
   return images.length > 0 ? images : ['/placeholder.png']
+})
+
+// Displayed product images (4 by default, all when showMoreImages is true)
+const productImages = computed(() => {
+  if (showMoreImages.value) {
+    return allProductImages.value
+  }
+  return allProductImages.value.slice(0, 4)
+})
+
+// Check if there are more than 4 images
+const hasMoreImages = computed(() => {
+  return allProductImages.value.length > 4
 })
 
 // Available sizes from variants
