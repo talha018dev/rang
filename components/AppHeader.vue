@@ -225,15 +225,74 @@
             </NuxtLink>
           </div>
 
+          <!-- Mobile Search Section -->
+          <div class="mobile-search-section">
+            <div v-if="!showMobileSearch" class="mobile-search-toggle">
+              <UButton
+                color="primary"
+                variant="ghost"
+                class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                icon="i-heroicons-magnifying-glass"
+                @click="showMobileSearch = true"
+              >
+                Search
+              </UButton>
+            </div>
+            <div v-else class="mobile-search-container">
+              <div class="mobile-search-input-wrapper">
+                <UInput
+                  v-model="searchText"
+                  placeholder="Search products..."
+                  class="mobile-search-input"
+                  icon="i-heroicons-magnifying-glass"
+                  @input="handleSearch"
+                  @focus="showSearchResults = true"
+                  autofocus
+                />
+                <UButton
+                  color="primary"
+                  variant="ghost"
+                  icon="i-heroicons-x-mark"
+                  @click="closeMobileSearch"
+                  class="mobile-search-close"
+                />
+              </div>
+              <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)" class="mobile-search-results">
+                <div v-if="isSearching" class="search-loading">
+                  <p>Searching...</p>
+                </div>
+                <div v-else-if="searchOptions.length > 0" class="search-results-list">
+                  <NuxtLink
+                    v-for="option in searchOptions"
+                    :key="option.id"
+                    :to="`/products/${option.category.slug}/${option.slug}`"
+                    class="search-result-item"
+                    @click="closeMobileSearch"
+                  >
+                    <div class="search-result-image">
+                      <NuxtImg
+                        :src="getImageUrl(option.image)"
+                        :alt="option.name"
+                        class="result-image"
+                        loading="lazy"
+                        format="webp"
+                        quality="85"
+                      />
+                    </div>
+                    <div class="search-result-details">
+                      <div class="search-result-name">{{ option.name }}</div>
+                      <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
+                    </div>
+                  </NuxtLink>
+                </div>
+                <div v-else-if="searchText.length >= 2" class="search-empty">
+                  <p>No products found</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="header-drawer-template-buttons">
-            <UButton
-              color="primary"
-              variant="ghost"
-              class="w-full justify-start text-orange-600 hover:bg-orange-50"
-              icon="i-heroicons-magnifying-glass"
-            >
-              Search
-            </UButton>
             <UButton
               color="primary"
               variant="ghost"
@@ -300,6 +359,7 @@ const searchOptions = ref<Product[]>([])
 const isSearching = ref(false)
 const showSearchResults = ref(false)
 const showSearchMenu = ref(false)
+const showMobileSearch = ref(false)
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Toggle search menu
@@ -368,6 +428,14 @@ const closeSearchMenu = () => {
   showSearchMenu.value = false
 }
 
+// Close mobile search
+const closeMobileSearch = () => {
+  searchText.value = ''
+  searchOptions.value = []
+  showSearchResults.value = false
+  showMobileSearch.value = false
+}
+
 // Close search results when clicking outside
 onMounted(() => {
   document.addEventListener('click', (e) => {
@@ -394,6 +462,8 @@ const toggleDrawer = () => {
 // Function to close drawer
 const closeDrawer = () => {
   isDrawerOpen.value = false
+  // Also close mobile search when drawer closes
+  closeMobileSearch()
 }
 
 // Computed property to get current route
