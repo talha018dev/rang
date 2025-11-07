@@ -154,12 +154,47 @@
   width: 1.125rem;
   height: 1.125rem;
   cursor: pointer;
+  border: 1px solid #d1d5db !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-input:checked {
+  background-color: #ea580c;
+  border-color: #ea580c !important;
+}
+
+.checkbox-input:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
 }
 
 .billing-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.billing-section .form-row {
+  gap: 1.25rem;
+  margin-bottom: 0;
+}
+
+.billing-section .form-group {
+  gap: 0.75rem;
 }
 
 /* Payment Section */

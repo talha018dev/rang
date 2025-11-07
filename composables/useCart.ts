@@ -11,6 +11,8 @@ export interface CartItem {
   color?: string
   colorValue?: string
   sku?: string
+  product_id?: number
+  variant_id?: number
 }
 
 const cartItems = ref<CartItem[]>([])

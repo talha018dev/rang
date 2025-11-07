@@ -641,3 +641,10 @@ html {
     width: calc(100% / var(--global-scale));
   }
 }
+
+.flex {
+  display: flex;
+}
+.flex-row {
+  flex-direction: row !important; 
+}

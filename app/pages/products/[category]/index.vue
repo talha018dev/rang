@@ -82,7 +82,7 @@
                     <div v-else-if="error" class="error-state">
                         <p>Error loading products: {{ error }}</p>
                     </div>
-                    <div v-else-if="filteredProducts.length === 0" class="empty-state">
+                    <div v-else-if="isLoading" class="empty-state">
                         <p>No products found in this category.</p>
                     </div>
                     <div v-else class="products-grid">
@@ -384,7 +384,9 @@ const handleQuickAddToCart = (product: Product) => {
     image: getImageUrl(product.image),
     size: size,
     color: color,
-    sku: product.sku
+    sku: product.sku,
+    product_id: product.id,
+    variant_id: firstVariant?.id
   })
 
   alert('Item added to cart!')

@@ -1174,7 +1174,9 @@ const handleAddToCart = () => {
             image: getImageUrl(variantImage),
             size: selectedSize.value,
             color: selectedVariant?.attributes?.color || availableColors.value[selectedColorIndex.value]?.name,
-            sku: selectedVariant?.sku || product.value.sku
+            sku: selectedVariant?.sku || product.value.sku,
+            product_id: product.value.id,
+            variant_id: selectedVariant?.id
         })
     }
 
@@ -1202,7 +1204,9 @@ const addFrequentlyBoughtToCart = () => {
           priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
           image: getImageUrl(variantImage),
           size: variantSize,
-          sku: firstVariant?.sku || item.product?.sku || ''
+          sku: firstVariant?.sku || item.product?.sku || '',
+          product_id: item.id,
+          variant_id: firstVariant?.id
       })
     })
 
@@ -1257,7 +1261,9 @@ const addMatchingSeriesToCart = () => {
           priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
           image: getImageUrl(variantImage),
           size: item.size,
-          sku: selectedVariant?.sku || item.product?.sku || ''
+          sku: selectedVariant?.sku || item.product?.sku || '',
+          product_id: item.id,
+          variant_id: selectedVariant?.id
       })
     })
 

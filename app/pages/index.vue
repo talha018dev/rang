@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-page">
     <!-- Loading Skeleton -->
     <div v-if="isLoading" class="homepage-skeleton">
       <!-- Hero Banner Skeleton -->
@@ -99,7 +99,7 @@
     </div>
 
     <!-- Actual Content -->
-    <div v-else>
+    <div v-else class="home-page-content">
       <HeroBanner />
       <OfferBanner />
       <!-- <AllCategories /> -->
@@ -194,18 +194,15 @@ onMounted(async () => {
 </script>
 
 <style>
-/* Set global scale to 0.75 for home page */
-:root {
+/* Set global scale to 0.75 for home page only */
+.home-page {
   --global-scale: 0.75;
-}
-
-html {
   zoom: var(--global-scale);
 }
 
 /* Firefox fallback */
 @supports not (zoom: 1) {
-  body {
+  .home-page {
     transform: scale(var(--global-scale));
     transform-origin: top left;
     width: calc(100% / var(--global-scale));

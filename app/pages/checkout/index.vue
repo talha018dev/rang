@@ -195,6 +195,20 @@
                     />
                   </div>
                   <div class="form-group">
+                    <label for="state" class="form-label">State *</label>
+                    <input
+                      id="state"
+                      v-model="shippingInfo.state"
+                      type="text"
+                      class="form-input"
+                      required
+                      placeholder="State"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
                     <label for="postalCode" class="form-label">Postal Code *</label>
                     <input
                       id="postalCode"
@@ -205,25 +219,24 @@
                       placeholder="Postal code"
                     />
                   </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="country" class="form-label">Country *</label>
-                  <select
-                    id="country"
-                    v-model="shippingInfo.country"
-                    class="form-input"
-                    required
-                  >
-                    <option value="">Select Country</option>
-                    <option value="Bangladesh">Bangladesh</option>
-                    <option value="India">India</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <div class="form-group">
+                    <label for="country" class="form-label">Country *</label>
+                    <select
+                      id="country"
+                      v-model="shippingInfo.country"
+                      class="form-input"
+                      required
+                    >
+                      <option value="">Select Country</option>
+                      <option value="Bangladesh">Bangladesh</option>
+                      <option value="India">India</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
 
                 <!-- Billing Same as Shipping -->
-                <div class="form-group checkbox-group">
+                <div class="form-group checkbox-group flex-row">
                   <label class="checkbox-label">
                     <input
                       type="checkbox"
@@ -286,6 +299,20 @@
                         placeholder="City"
                       />
                     </div>
+                    <div class="form-group">
+                      <label for="billingState" class="form-label">State *</label>
+                      <input
+                        id="billingState"
+                        v-model="billingInfo.state"
+                        type="text"
+                        class="form-input"
+                        :required="!billingSameAsShipping"
+                        placeholder="State"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-row">
                     <div class="form-group">
                       <label for="billingPostalCode" class="form-label">Postal Code *</label>
                       <input
@@ -484,6 +511,7 @@ const shippingInfo = ref({
   phone: '',
   address: '',
   city: '',
+  state: '',
   postalCode: '',
   country: 'Bangladesh'
 })
@@ -493,6 +521,7 @@ const billingInfo = ref({
   lastName: '',
   address: '',
   city: '',
+  state: '',
   postalCode: ''
 })
 
@@ -509,6 +538,7 @@ watch(billingSameAsShipping, (same) => {
       lastName: shippingInfo.value.lastName,
       address: shippingInfo.value.address,
       city: shippingInfo.value.city,
+      state: shippingInfo.value.state,
       postalCode: shippingInfo.value.postalCode
     }
   }
@@ -522,6 +552,7 @@ watch(shippingInfo, () => {
       lastName: shippingInfo.value.lastName,
       address: shippingInfo.value.address,
       city: shippingInfo.value.city,
+      state: shippingInfo.value.state,
       postalCode: shippingInfo.value.postalCode
     }
   }
@@ -568,7 +599,8 @@ const handlePlaceOrder = async () => {
   if (!shippingInfo.value.firstName || !shippingInfo.value.lastName || 
       !shippingInfo.value.email || !shippingInfo.value.phone ||
       !shippingInfo.value.address || !shippingInfo.value.city ||
-      !shippingInfo.value.postalCode || !shippingInfo.value.country) {
+      !shippingInfo.value.state || !shippingInfo.value.postalCode || 
+      !shippingInfo.value.country) {
     alert('Please fill in all required shipping information.')
     return
   }
@@ -578,36 +610,67 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Validate that cart items have product_id and variant_id
+  const itemsWithoutIds = cartItems.value.filter(
+    item => !item.product_id || !item.variant_id
+  )
+  if (itemsWithoutIds.length > 0) {
+    alert('Some items in your cart are missing required information. Please remove them and add them again.')
+    return
+  }
+
   isPlacingOrder.value = true
 
   try {
-    // Prepare order data
+    // Prepare order data according to API structure
     const orderData = {
-      shipping: shippingInfo.value,
-      billing: billingSameAsShipping.value ? shippingInfo.value : billingInfo.value,
-      paymentMethod: paymentMethod.value,
-      items: cartItems.value,
-      subtotal: totalPrice.value,
-      shippingCost: shippingCost.value,
-      total: grandTotal.value,
-      notes: orderNotes.value,
-      orderDate: new Date().toISOString()
+      coupon_code: null,
+      customer_notes: orderNotes.value || null,
+      shipping_method: paymentMethod.value === 'cash-on-delivery' ? 'cash_on_delivery' : 
+                       paymentMethod.value === 'bank-transfer' ? 'bank_transfer' : 
+                       paymentMethod.value === 'mobile-banking' ? 'mobile_banking' : '',
+      address: {
+        name: `${shippingInfo.value.firstName} ${shippingInfo.value.lastName}`,
+        phone: shippingInfo.value.phone,
+        email: shippingInfo.value.email,
+        line_1: shippingInfo.value.address,
+        line_2: '',
+        city: shippingInfo.value.city,
+        state: shippingInfo.value.state,
+        country: shippingInfo.value.country,
+        postal_code: shippingInfo.value.postalCode
+      },
+      products: cartItems.value.map(item => ({
+        product_id: item.product_id!,
+        variant_id: item.variant_id!,
+        qty: item.quantity
+      }))
     }
 
-    // In a real app, you would send this to your backend API
     console.log('Order Data:', orderData)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    // Make API call to create order
+    const response = await $fetch<any>('https://rangbd.thecell.tech/api/order', {
+      method: 'POST',
+      body: orderData
+    })
 
-    // Clear cart after successful order
-    clearCart()
+    console.log('Order API Response:', response)
 
-    // Navigate to order confirmation page
-    navigateTo('/checkout/success')
-  } catch (error) {
+    // Check if order was successful
+    if (response && (response.success !== false)) {
+      // Clear cart after successful order
+      clearCart()
+
+      // Navigate to order confirmation page
+      navigateTo('/checkout/success')
+    } else {
+      throw new Error((response as any)?.message || 'Failed to create order')
+    }
+  } catch (error: any) {
     console.error('Error placing order:', error)
-    alert('There was an error placing your order. Please try again.')
+    const errorMessage = error?.data?.message || error?.message || 'There was an error placing your order. Please try again.'
+    alert(errorMessage)
   } finally {
     isPlacingOrder.value = false
   }
