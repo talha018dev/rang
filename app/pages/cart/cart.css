@@ -423,3 +423,6 @@
   }
 }
 
+:root {
+  --global-scale: 1 !important;
+}
