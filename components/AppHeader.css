@@ -12,7 +12,7 @@
   color: white;
   z-index: 100;
   position: absolute;
-  top: 42%;
+  top: 25%;
   right: 10px;
   transform: translateY(-50%);
   transition: color 0.15s ease-in-out;
