@@ -6,6 +6,8 @@
 }
 
 .hero-background {
+  width: 100%;
+  height: inherit;
   position: absolute;
   inset: 0;
   background-size: cover;

@@ -61,11 +61,48 @@
 
         <!-- Desktop Header Actions -->
         <div class="header-actions desktop-actions">
-          <button class="action-button">
-            <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+          <div class="search-container">
+            <UInput
+              v-model="searchText"
+              placeholder="Search products..."
+              class="search-input-menu"
+              icon="i-heroicons-magnifying-glass"
+              @input="handleSearch"
+              @focus="showSearchResults = true"
+            />
+            <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)" class="search-results-dropdown">
+              <div v-if="isSearching" class="search-loading">
+                <p>Searching...</p>
+              </div>
+              <div v-else-if="searchOptions.length > 0" class="search-results-list">
+                <NuxtLink
+                  v-for="option in searchOptions"
+                  :key="option.id"
+                  :to="`/products/${option.category.slug}/${option.slug}`"
+                  class="search-result-item"
+                  @click="closeSearchMenu"
+                >
+                  <div class="search-result-image">
+                    <NuxtImg
+                      :src="getImageUrl(option.image)"
+                      :alt="option.name"
+                      class="result-image"
+                      loading="lazy"
+                      format="webp"
+                      quality="85"
+                    />
+                  </div>
+                  <div class="search-result-details">
+                    <div class="search-result-name">{{ option.name }}</div>
+                    <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
+                  </div>
+                </NuxtLink>
+              </div>
+              <div v-else-if="searchText.length >= 2" class="search-empty">
+                <p>No products found</p>
+              </div>
+            </div>
+          </div>
           <button class="action-button-flex">
             <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 13.2504C15.4143 13.2504 15.75 13.5862 15.75 14.0004V14.5004C15.7499 15.3622 15.4073 16.1888 14.7979 16.7982C14.1884 17.4076 13.3619 17.7504 12.5 17.7504H12C11.2708 17.7504 10.5714 17.4603 10.0557 16.9447C9.54007 16.4291 9.25014 15.7296 9.25004 15.0004V11.7504H8.00004C7.58595 11.7504 7.25024 11.4144 7.25004 11.0004C7.25004 10.5862 7.58583 10.2504 8.00004 10.2504H9.25004V8.61853L9.24223 8.55506C9.23691 8.53475 9.2291 8.51495 9.21879 8.49646C9.19808 8.45935 9.16802 8.42802 9.13188 8.40564C9.09577 8.38333 9.05415 8.37052 9.01176 8.36853C8.96933 8.36662 8.92673 8.37597 8.88871 8.3949H8.88774L8.335 8.67127L8.26469 8.70154C7.90925 8.83612 7.50269 8.68256 7.32914 8.33533C7.14417 7.96471 7.29446 7.51347 7.66508 7.32849L8.21781 7.0531L8.42289 6.96619C8.63274 6.89289 8.85573 6.86042 9.07914 6.87049C9.37684 6.88396 9.66643 6.97266 9.91996 7.12928C10.1736 7.286 10.3831 7.5056 10.5284 7.76599C10.6736 8.02633 10.7499 8.31946 10.75 8.61756V10.2504H15L15.0772 10.2543C15.4551 10.2929 15.75 10.6122 15.75 11.0004C15.7499 11.3884 15.4551 11.7079 15.0772 11.7465L15 11.7504H10.75V15.0004C10.7501 15.3318 10.8819 15.6498 11.1163 15.8842C11.3507 16.1185 11.6686 16.2504 12 16.2504H12.5C12.9641 16.2504 13.4092 16.0657 13.7373 15.7377C14.0059 15.4692 14.1758 15.1218 14.2295 14.7504H14C13.586 14.7504 13.2502 14.4144 13.25 14.0004C13.25 13.5862 13.5858 13.2504 14 13.2504H15Z" fill="currentColor"/>
@@ -239,12 +276,87 @@
 import { useRouter } from 'nuxt/app';
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useCart } from '../composables/useCart';
+import type { Product, ProductResponse } from '../types/homepage';
 
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
 
 // Reactive state for drawer
 const isDrawerOpen = ref(false)
+
+// Search functionality
+const searchText = ref('')
+const searchOptions = ref<Product[]>([])
+const isSearching = ref(false)
+const showSearchResults = ref(false)
+let searchTimeout: ReturnType<typeof setTimeout> | null = null
+
+// Helper function to get full image URL
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return ''
+  // If image path already includes http/https, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  // Otherwise, prepend the API base URL
+  return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
+
+// Search function with debounce
+const performSearch = async (query: string) => {
+  if (!query || query.trim().length < 2) {
+    searchOptions.value = []
+    return
+  }
+
+  isSearching.value = true
+  try {
+    const apiUrl = `https://rangbd.thecell.tech/api/product?q=${encodeURIComponent(query.trim())}`
+    const response = await $fetch<ProductResponse>(apiUrl)
+    
+    if (response.success && response.data) {
+      searchOptions.value = response.data.slice(0, 10) // Limit to 10 results
+    } else {
+      searchOptions.value = []
+    }
+  } catch (error) {
+    console.error('Error searching products:', error)
+    searchOptions.value = []
+  } finally {
+    isSearching.value = false
+  }
+}
+
+// Debounced search handler
+const handleSearch = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const query = target.value
+  
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
+  
+  searchTimeout = setTimeout(() => {
+    performSearch(query)
+  }, 300) // 300ms debounce
+}
+
+// Close search menu
+const closeSearchMenu = () => {
+  searchText.value = ''
+  searchOptions.value = []
+  showSearchResults.value = false
+}
+
+// Close search results when clicking outside
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.search-container')) {
+      showSearchResults.value = false
+    }
+  })
+})
 
 // Reactive state for scroll position
 const isScrolled = ref(false)
