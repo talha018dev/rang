@@ -389,7 +389,6 @@ const handleQuickAddToCart = (product: Product) => {
     variant_id: firstVariant?.id
   })
 
-  alert('Item added to cart!')
 }
 </script>
 

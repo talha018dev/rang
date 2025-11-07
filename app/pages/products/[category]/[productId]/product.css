@@ -616,14 +616,12 @@
     padding-left: 0;
     padding-right: 0;
     border-radius: 12px;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); */
   }
   
   .matching-series-products {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    /* justify-content: space-between; */
   }
   
   .matching-series-item {
@@ -635,10 +633,10 @@
     background: white;
     border-radius: 8px;
     padding: 20px;
-    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
     transition: all 0.3s ease;
     cursor: pointer;
     min-width: 350px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   .matching-series-item-mobile {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -647,7 +645,7 @@
   }
   
   .matching-series-item:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
@@ -750,6 +748,29 @@
     }
   }
   
+  /* Matching Series Summary */
+  .matching-series-summary {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1rem 0;
+  }
+
+  .matching-series-summary .total-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: left;
+    margin: 0;
+  }
+
+  .matching-series-summary .total-label {
+    margin-bottom: 0;
+    display: inline;
+  }
+
   /* Frequently Bought Together Section */
   .frequently-bought-section {
     max-width: 1600px;
@@ -813,8 +834,8 @@
   
   .checkbox-label {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
     border: 2px solid #bfdbfe;
     background: transparent;
     cursor: pointer;
@@ -838,7 +859,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: black;
-    font-size: 0.75em;
+    font-size: 0.875em;
     font-weight: bold;
   }
   

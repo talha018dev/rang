@@ -243,7 +243,7 @@
 
                 <div class="matching-series-container" v-if="!isMobile">
                     <div class="matching-series-products">
-                        <div v-for="(item, index) in matchingSeriesItems" :key="index" class="matching-series-item">
+                        <div v-for="(item, index) in displayedMatchingSeriesItems" :key="index" class="matching-series-item">
                             <!-- Checkbox -->
                             <div class="item-checkbox">
                                 <input type="checkbox" :id="`matching-${index}`" v-model="item.checked"
@@ -274,6 +274,17 @@
 
                                 <p class="item-price">TK {{ item.price.toLocaleString() }}</p>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Matching Series Summary -->
+                    <div class="matching-series-summary">
+                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
+                            Add to cart
+                        </button>
+                        <div class="total-price">
+                            <span class="total-label">Total price :</span>
+                            <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
                         </div>
                     </div>
                 </div>
@@ -316,13 +327,13 @@
 
                     <!-- Matching Series Summary -->
                     <div class="matching-series-summary">
+                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
+                            Add to cart
+                        </button>
                         <div class="total-price">
                             <span class="total-label">Total price :</span>
                             <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
                         </div>
-                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
-                            Add to cart
-                        </button>
                     </div>
                 </section>
             </div>
@@ -1124,6 +1135,11 @@ const totalPrice = computed(() => {
     return `Tk ${total.toLocaleString()}`
 })
 
+// Display only first 4 matching series items
+const displayedMatchingSeriesItems = computed(() => {
+    return matchingSeriesItems.value.slice(0, 4)
+})
+
 // Total price for matching series items
 const matchingSeriesTotalPrice = computed(() => {
     const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
@@ -1209,7 +1225,6 @@ const handleAddToCart = () => {
         })
     }
 
-    alert('Item added to cart!')
 }
 
 const handleBuyNow = () => {
@@ -1260,7 +1275,11 @@ const getAvailableSizesForProduct = (product: Product | undefined): string[] => 
 const updateMatchingSeriesSize = (index: number, event: Event) => {
   const selectElement = event.target as HTMLSelectElement
   const newSize = selectElement.value
-  const item = matchingSeriesItems.value[index]
+  // Find the actual item in matchingSeriesItems by index
+  const displayedItem = displayedMatchingSeriesItems.value[index]
+  if (!displayedItem) return
+  const item = matchingSeriesItems.value.find(i => i.id === displayedItem.id)
+  if (!item) return
   
   if (item && item.product) {
     // Find variant with the new size

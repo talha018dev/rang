@@ -244,7 +244,6 @@ const handleAddToCart = (product: Product) => {
     sku: product.sku
   })
   
-  alert('Item added to cart!')
 }
 
 // Set target date (30 days from now)

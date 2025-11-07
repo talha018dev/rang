@@ -219,7 +219,6 @@ const handleQuickAddToCart = (product: any) => {
     size: product.size
   })
   
-  alert('Item added to cart!')
 }
 </script>
 

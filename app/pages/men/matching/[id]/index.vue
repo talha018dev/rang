@@ -985,7 +985,6 @@ const handleAddToCart = () => {
     })
   }
   
-  alert('Item added to cart!')
 }
 
 const handleBuyNow = () => {
