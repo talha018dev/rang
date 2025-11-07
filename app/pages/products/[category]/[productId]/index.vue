@@ -1077,7 +1077,7 @@ const availableColors = computed(() => {
         // Try to get color value from variant or use a default
         colorMap.set(colorName, {
           name: colorName,
-          value: '#ccc' // Default color, you might want to map color names to hex values
+          value: colorName // Default color, you might want to map color names to hex values
         })
       }
     }
