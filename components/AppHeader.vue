@@ -61,45 +61,55 @@
 
         <!-- Desktop Header Actions -->
         <div class="header-actions desktop-actions">
-          <div class="search-container">
-            <UInput
-              v-model="searchText"
-              placeholder="Search products..."
-              class="search-input-menu"
-              icon="i-heroicons-magnifying-glass"
-              @input="handleSearch"
-              @focus="showSearchResults = true"
-            />
-            <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)" class="search-results-dropdown">
-              <div v-if="isSearching" class="search-loading">
-                <p>Searching...</p>
-              </div>
-              <div v-else-if="searchOptions.length > 0" class="search-results-list">
-                <NuxtLink
-                  v-for="option in searchOptions"
-                  :key="option.id"
-                  :to="`/products/${option.category.slug}/${option.slug}`"
-                  class="search-result-item"
-                  @click="closeSearchMenu"
-                >
-                  <div class="search-result-image">
-                    <NuxtImg
-                      :src="getImageUrl(option.image)"
-                      :alt="option.name"
-                      class="result-image"
-                      loading="lazy"
-                      format="webp"
-                      quality="85"
-                    />
-                  </div>
-                  <div class="search-result-details">
-                    <div class="search-result-name">{{ option.name }}</div>
-                    <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
-                  </div>
-                </NuxtLink>
-              </div>
-              <div v-else-if="searchText.length >= 2" class="search-empty">
-                <p>No products found</p>
+          <button class="action-button" @click="toggleSearchMenu">
+            <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          
+          <!-- Search Menu Dropdown -->
+          <div v-if="showSearchMenu" class="search-menu-dropdown">
+            <div class="search-container">
+              <UInput
+                v-model="searchText"
+                placeholder="Search products..."
+                class="search-input-menu"
+                icon="i-heroicons-magnifying-glass"
+                @input="handleSearch"
+                @focus="showSearchResults = true"
+                autofocus
+              />
+              <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)" class="search-results-dropdown">
+                <div v-if="isSearching" class="search-loading">
+                  <p>Searching...</p>
+                </div>
+                <div v-else-if="searchOptions.length > 0" class="search-results-list">
+                  <NuxtLink
+                    v-for="option in searchOptions"
+                    :key="option.id"
+                    :to="`/products/${option.category.slug}/${option.slug}`"
+                    class="search-result-item"
+                    @click="closeSearchMenu"
+                  >
+                    <div class="search-result-image">
+                      <NuxtImg
+                        :src="getImageUrl(option.image)"
+                        :alt="option.name"
+                        class="result-image"
+                        loading="lazy"
+                        format="webp"
+                        quality="85"
+                      />
+                    </div>
+                    <div class="search-result-details">
+                      <div class="search-result-name">{{ option.name }}</div>
+                      <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
+                    </div>
+                  </NuxtLink>
+                </div>
+                <div v-else-if="searchText.length >= 2" class="search-empty">
+                  <p>No products found</p>
+                </div>
               </div>
             </div>
           </div>
@@ -289,7 +299,16 @@ const searchText = ref('')
 const searchOptions = ref<Product[]>([])
 const isSearching = ref(false)
 const showSearchResults = ref(false)
+const showSearchMenu = ref(false)
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
+
+// Toggle search menu
+const toggleSearchMenu = () => {
+  showSearchMenu.value = !showSearchMenu.value
+  if (!showSearchMenu.value) {
+    closeSearchMenu()
+  }
+}
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -346,14 +365,16 @@ const closeSearchMenu = () => {
   searchText.value = ''
   searchOptions.value = []
   showSearchResults.value = false
+  showSearchMenu.value = false
 }
 
 // Close search results when clicking outside
 onMounted(() => {
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement
-    if (!target.closest('.search-container')) {
+    if (!target.closest('.search-container') && !target.closest('.action-button')) {
       showSearchResults.value = false
+      showSearchMenu.value = false
     }
   })
 })
