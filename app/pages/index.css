@@ -4,6 +4,12 @@
   user-select: none;
 }
 
+/* Home Page Content - Position relative for absolute hero section */
+.home-page-content {
+  position: relative;
+  min-height: calc(100svh + 250px);
+}
+
 :root {
   --global-scale: 0.75;
 }

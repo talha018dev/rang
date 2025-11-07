@@ -8,61 +8,41 @@
         <section>
             <!-- Desktop Grid View -->
             <div class="theme-grid">
-                <div 
-                    v-for="(theme, index) in themeImages" 
-                    :key="index"
-                    class="theme-image-container"
-                >
-                    <img 
-                        :src="theme.src" 
-                        :alt="theme.alt" 
-                        class="theme-image"
-                    />
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
-                        <h3 class="theme-name-light">{{ theme.title }}</h3>
-                        <p class="shop-now-blue-button-div">
-                            <ShopNowBlue />
-                        </p>
-                    </div>
+                <div v-for="(theme, index) in themeImages" :key="index" class="theme-image-container">
+                    <NuxtLink :to="theme.link">
+                        <img :src="theme.src" :alt="theme.alt" class="theme-image" />
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
+                            <h3 class="theme-name-light">{{ theme.title }}</h3>
+                            <p class="shop-now-blue-button-div">
+                                <ShopNowBlue />
+                            </p>
+                        </div>
+                    </NuxtLink>
                 </div>
             </div>
-            
+
             <!-- Mobile Carousel View -->
             <div class="theme-carousel">
-                <div 
-                    class="carousel-container"
-                    @mousedown="handleMouseDown"
-                    @mousemove="handleMouseMove"
-                    @mouseup="handleMouseUp"
-                    @mouseleave="handleMouseUp"
-                    @touchstart="handleTouchStart"
-                    @touchmove="handleTouchMove"
-                    @touchend="handleTouchEnd"
-                >
-                    <div 
-                        class="carousel-track" 
-                        :style="{ 
-                            transform: `translateX(${-currentSlide * slideWidth + dragOffset}px)`,
-                            transition: isDragging ? 'none' : 'transform 0.3s ease-in-out'
-                        }"
-                    >
-                        <div 
-                            v-for="(theme, index) in themeImages" 
-                            :key="index"
-                            class="carousel-slide"
-                        >
+                <div class="carousel-container" @mousedown="handleMouseDown" @mousemove="handleMouseMove"
+                    @mouseup="handleMouseUp" @mouseleave="handleMouseUp" @touchstart="handleTouchStart"
+                    @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+                    <div class="carousel-track" :style="{
+                        transform: `translateX(${-currentSlide * slideWidth + dragOffset}px)`,
+                        transition: isDragging ? 'none' : 'transform 0.3s ease-in-out'
+                    }">
+                        <div v-for="(theme, index) in themeImages" :key="index" class="carousel-slide">
                             <div class="theme-image-container">
-                                <img 
-                                    :src="theme.src" 
-                                    :alt="theme.alt" 
-                                    class="theme-image carousel-image"
-                                />
-                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
-                                    <h3 class="theme-name-light">{{ theme.title }}</h3>
-                                    <p class="shop-now-blue-button-div">
-                                        <ShopNowBlue />
-                                    </p>
-                                </div>
+                                <NuxtLink :to="theme.link">
+                                    <img :src="theme.src" :alt="theme.alt" class="theme-image carousel-image" />
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
+                                        <h3 class="theme-name-light">{{ theme.title }}</h3>
+                                        <p class="shop-now-blue-button-div">
+                                            <ShopNowBlue />
+                                        </p>
+                                    </div>
+                                </NuxtLink>
                             </div>
                         </div>
                     </div>
@@ -80,22 +60,26 @@ const themeImages = [
     {
         src: '/theme/theme-1.png',
         alt: 'Theme Rang',
-        title: 'Wedding'
+        title: 'Wedding',
+        link: '/products/wedding'
     },
     {
         src: '/theme/theme-2.png',
         alt: 'Theme Rang',
-        title: 'EID'
+        title: 'EID',
+        link: '/products/eid'
     },
     {
         src: '/theme/theme-1.png',
         alt: 'Theme Rang',
-        title: 'Gaye Holud'
+        title: 'Gaye Holud',
+        link: '/products/gaye-holud'
     },
     {
         src: '/theme/theme-2.png',
         alt: 'Theme Rang',
-        title: 'Durga Puja'
+        title: 'Durga Puja',
+        link: '/products/durga-puja'
     }
 ]
 
@@ -143,7 +127,7 @@ const handleMouseDown = (e: MouseEvent) => {
 const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.value || !isMobile.value) return
     e.preventDefault()
-    
+
     const deltaX = e.clientX - startX.value
     dragOffset.value = deltaX
 }
@@ -151,9 +135,9 @@ const handleMouseMove = (e: MouseEvent) => {
 const handleMouseUp = () => {
     if (!isDragging.value || !isMobile.value) return
     isDragging.value = false
-    
+
     const threshold = slideWidth.value * 0.3
-    
+
     if (Math.abs(dragOffset.value) > threshold) {
         if (dragOffset.value > 0) {
             prevSlide()
@@ -161,7 +145,7 @@ const handleMouseUp = () => {
             nextSlide()
         }
     }
-    
+
     dragOffset.value = 0
 }
 
@@ -170,19 +154,19 @@ const handleTouchStart = (e: TouchEvent) => {
     if (!isMobile.value) return
     isTouch.value = true
     isDragging.value = true
-    startX.value = e.touches[0].clientX
-    startY.value = e.touches[0].clientY
-    lastX.value = e.touches[0].clientX
+    startX.value = e.touches[0]?.clientX || 0
+    startY.value = e.touches[0]?.clientY || 0
+    lastX.value = e.touches[0]?.clientX || 0
     dragOffset.value = 0
 }
 
 const handleTouchMove = (e: TouchEvent) => {
     if (!isDragging.value || !isMobile.value) return
-    
+
     const touch = e.touches[0]
-    const deltaX = touch.clientX - startX.value
-    const deltaY = touch.clientY - startY.value
-    
+    const deltaX = (touch?.clientX || 0) - startX.value
+    const deltaY = (touch?.clientY || 0) - startY.value
+
     // Only prevent default if horizontal swipe is more significant than vertical
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
         e.preventDefault()
@@ -194,9 +178,9 @@ const handleTouchEnd = () => {
     if (!isDragging.value || !isMobile.value) return
     isDragging.value = false
     isTouch.value = false
-    
+
     const threshold = slideWidth.value * 0.3
-    
+
     if (Math.abs(dragOffset.value) > threshold) {
         if (dragOffset.value > 0) {
             prevSlide()
@@ -204,7 +188,7 @@ const handleTouchEnd = () => {
             nextSlide()
         }
     }
-    
+
     dragOffset.value = 0
 }
 

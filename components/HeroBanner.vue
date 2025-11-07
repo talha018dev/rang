@@ -1,24 +1,24 @@
 <template>
   <!-- <section class="hero-section-alt"> -->
-  <section class="hero-section">
-      <div 
-        class="hero-background"
-        :style="{ backgroundImage: `url(${currentBannerUrl})` }"
-      ></div>
+  <section class="hero-banner-container">
+    <section class="hero-section">
+      <NuxtImg v-if="currentBannerUrl" :src="currentBannerUrl" alt="Hero Banner" class="hero-background" format="webp"
+        quality="90" loading="eager" preload />
       <div class="hero-content">
-          <div class="hero-overlay">
-            <p class="hero-subtitle">New Collection</p>
-            <div class="hero-title dm-serif">
-              Durga Puja - 2025
-            </div>
-            <button class="hero-button">
-                <div class="hero-button-text">
-                Shop Now
-              </div>
-              </button>
+        <div class="hero-overlay">
+          <p class="hero-subtitle">New Collection</p>
+          <div class="hero-title dm-serif">
+            Durga Puja - 2025
           </div>
+          <button class="hero-button">
+            <div class="hero-button-text">
+              Shop Now
+            </div>
+          </button>
+        </div>
       </div>
 
+    </section>
   </section>
 </template>
 
@@ -57,7 +57,7 @@ let rotationInterval: ReturnType<typeof setInterval> | null = null;
 
 const startRotation = () => {
   if (banners.value.length <= 1) return; // No need to rotate if only one banner
-  
+
   rotationInterval = setInterval(() => {
     currentBannerIndex.value = (currentBannerIndex.value + 1) % banners.value.length;
   }, 10000); // 10 seconds
