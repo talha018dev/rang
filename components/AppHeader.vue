@@ -309,14 +309,21 @@
             >
               Wishlist
             </UButton>
-            <UButton
-              color="primary"
-              variant="ghost"
-              class="w-full justify-start text-orange-600 hover:bg-orange-50"
-              icon="i-heroicons-shopping-cart"
+            <NuxtLink
+              to="/cart"
+              class="mobile-cart-button"
+              @click="closeDrawer"
             >
-              Cart
-            </UButton>
+              <UButton
+                color="primary"
+                variant="ghost"
+                class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                icon="i-heroicons-shopping-cart"
+              >
+                Cart
+              </UButton>
+              <span v-if="cartTotalItems > 0" class="cart-badge mobile-cart-badge">{{ cartTotalItems }}</span>
+            </NuxtLink>
             <UButton
               color="primary"
               variant="ghost"

@@ -558,13 +558,16 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: flex-start;
+      order:2;
+      width: 100%;
     }
   
     .thumbnail {
       /* width: 120px; */
       height: auto;
       /* height: auto; */
-      width: auto;
+      width: 100px;
+      aspect-ratio: 1;
     }
   
     .product-title {
