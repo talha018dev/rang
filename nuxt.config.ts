@@ -1,5 +1,12 @@
 import { defineNuxtConfig } from "nuxt/config";
 
+// Declare process for TypeScript
+declare const process: {
+  env: {
+    BACKEND_URL?: string;
+  };
+};
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
