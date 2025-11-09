@@ -479,6 +479,7 @@
 import { navigateTo, useHead } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
+import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
 import './checkout.css'
 
@@ -669,7 +670,8 @@ const handlePlaceOrder = async () => {
     console.log('Order Data:', orderData)
     
     // Make API call to create order
-    const response = await $fetch<any>('https://rangbd.thecell.tech/api/order', {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/order`, {
       method: 'POST',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'

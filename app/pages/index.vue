@@ -119,6 +119,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useApi } from '../../composables/useApi'
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
 import HeroBanner from '../../components/HeroBanner.vue'
@@ -175,7 +176,8 @@ onMounted(async () => {
   error.value = null
   
   try {
-    const response = await $fetch<HomepageResponse>('https://rangbd.thecell.tech/api/homepage')
+    const { backendUrl } = useApi()
+    const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`)
     console.log('Homepage API Response:', response)
     
     if (response.success && response.data) {

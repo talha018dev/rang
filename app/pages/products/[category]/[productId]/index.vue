@@ -740,6 +740,7 @@
 import { navigateTo, useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../../../components/AppFooter.vue'
+import { useApi } from '../../../../../composables/useApi'
 import { useCart } from '../../../../../composables/useCart'
 import type { Product } from '../../../../../types/homepage'
 // Get route parameters
@@ -781,7 +782,8 @@ const fetchProductDetails = async () => {
   error.value = null
 
   try {
-    const apiUrl = `https://rangbd.thecell.tech/api/product/${productIdSlug.value}`
+    const { backendUrl } = useApi()
+    const apiUrl = `${backendUrl}/product/${productIdSlug.value}`
     const response = await $fetch<any>(apiUrl)
     console.log('Product Detail API Response:', response)
 

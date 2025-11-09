@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useApi } from '~~/composables/useApi'
 import type { Category, CategoryResponse } from '~~/types/homepage'
 
 // Reactive state
@@ -55,7 +56,8 @@ onMounted(async () => {
   error.value = null
 
   try {
-    const response = await $fetch<CategoryResponse>('https://rangbd.thecell.tech/api/category')
+    const { backendUrl } = useApi()
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/category`)
     console.log('Categories API Response:', response)
 
     if (response.success && response.data) {

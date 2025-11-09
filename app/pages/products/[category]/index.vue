@@ -163,6 +163,7 @@
 import { useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
+import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import type { PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
@@ -222,7 +223,8 @@ const fetchProducts = async () => {
     // Clean category slug (remove any &amp; issues)
     const cleanSlug = categorySlug.value.replace(/&amp;/g, '&')
     // Build API URL with sort and page parameters
-    const apiUrl = `https://rangbd.thecell.tech/api/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
+    const { backendUrl } = useApi()
+    const apiUrl = `${backendUrl}/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
     const response = await $fetch<ProductResponse>(apiUrl)
     console.log('Products API Response:', response)
 

@@ -262,6 +262,7 @@
 <script setup lang="ts">
 import { useRouter } from 'nuxt/app';
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import type { Product, ProductResponse } from '../types/homepage';
 
@@ -308,7 +309,8 @@ const performSearch = async (query: string) => {
 
   isSearching.value = true
   try {
-    const apiUrl = `https://rangbd.thecell.tech/api/product?q=${encodeURIComponent(query.trim())}`
+    const { backendUrl } = useApi()
+    const apiUrl = `${backendUrl}/product?q=${encodeURIComponent(query.trim())}`
     const response = await $fetch<ProductResponse>(apiUrl)
 
     if (response.success && response.data) {

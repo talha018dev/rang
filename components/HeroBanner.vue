@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useApi } from '../composables/useApi';
 import type { HomepageResponse } from '../types/homepage';
 
 // Banners from API
@@ -73,7 +74,8 @@ const stopRotation = () => {
 // Fetch banners from API
 onMounted(async () => {
   try {
-    const response = await $fetch<HomepageResponse>('https://rangbd.thecell.tech/api/homepage');
+    const { backendUrl } = useApi()
+    const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`);
     if (response.success && response.data && response.data.banners) {
       banners.value = response.data.banners;
       // Start rotation if multiple banners
