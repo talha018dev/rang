@@ -235,6 +235,21 @@
                   </div>
                 </div>
 
+                <!-- Shipping Method -->
+                <div class="form-group">
+                  <label for="shippingMethod" class="form-label">Shipping Method *</label>
+                  <select
+                    id="shippingMethod"
+                    v-model="shippingMethod"
+                    class="form-input"
+                    required
+                  >
+                    <option value="">Select Shipping Method</option>
+                    <option value="inside_dhaka">Inside Dhaka</option>
+                    <option value="outside_dhaka">Outside Dhaka</option>
+                  </select>
+                </div>
+
                 <!-- Billing Same as Shipping -->
                 <div class="form-group checkbox-group flex-row">
                   <label class="checkbox-label">
@@ -526,6 +541,7 @@ const billingInfo = ref({
 })
 
 const billingSameAsShipping = ref(true)
+const shippingMethod = ref('')
 const paymentMethod = ref('cash-on-delivery')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
@@ -605,6 +621,11 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  if (!shippingMethod.value) {
+    alert('Please select a shipping method.')
+    return
+  }
+
   if (!paymentMethod.value) {
     alert('Please select a payment method.')
     return
@@ -626,9 +647,7 @@ const handlePlaceOrder = async () => {
     const orderData = {
       coupon_code: null,
       customer_notes: orderNotes.value || null,
-      shipping_method: paymentMethod.value === 'cash-on-delivery' ? 'cash_on_delivery' : 
-                       paymentMethod.value === 'bank-transfer' ? 'bank_transfer' : 
-                       paymentMethod.value === 'mobile-banking' ? 'mobile_banking' : '',
+      shipping_method: shippingMethod.value,
       address: {
         name: `${shippingInfo.value.firstName} ${shippingInfo.value.lastName}`,
         phone: shippingInfo.value.phone,
@@ -652,6 +671,9 @@ const handlePlaceOrder = async () => {
     // Make API call to create order
     const response = await $fetch<any>('https://rangbd.thecell.tech/api/order', {
       method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
       body: orderData
     })
 
