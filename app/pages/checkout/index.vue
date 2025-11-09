@@ -343,7 +343,7 @@
                 </div>
 
                 <!-- Payment Method -->
-                <div class="payment-section">
+                <!-- <div class="payment-section">
                   <h3 class="subsection-title">Payment Method</h3>
                   <div class="payment-options">
                     <label class="payment-option">
@@ -386,6 +386,45 @@
                       </div>
                     </label>
                   </div>
+                </div> -->
+
+                <!-- Coupon Code -->
+                <div class="form-group">
+                  <label for="couponCode" class="form-label">Coupon Code (Optional)</label>
+                  <div class="coupon-input-group">
+                    <input
+                      id="couponCode"
+                      v-model="couponCode"
+                      type="text"
+                      class="form-input coupon-input"
+                      placeholder="Enter coupon code"
+                      :disabled="isValidatingCoupon || couponValidated"
+                    />
+                    <button
+                      type="button"
+                      class="validate-coupon-button"
+                      @click="validateCoupon"
+                      :disabled="!couponCode || isValidatingCoupon || couponValidated"
+                    >
+                      <span v-if="isValidatingCoupon">Validating...</span>
+                      <span v-else-if="couponValidated">✓ Valid</span>
+                      <span v-else>Validate</span>
+                    </button>
+                  </div>
+                  <div v-if="couponError" class="coupon-error">
+                    {{ couponError }}
+                  </div>
+                  <div v-if="couponValidated && couponData" class="coupon-success">
+                    Coupon applied! Discount: {{ formatPrice(couponData.discount || 0) }}
+                  </div>
+                  <button
+                    v-if="couponValidated"
+                    type="button"
+                    class="remove-coupon-button"
+                    @click="removeCoupon"
+                  >
+                    Remove Coupon
+                  </button>
                 </div>
 
                 <!-- Order Notes -->
@@ -442,6 +481,10 @@
                 <div class="total-row">
                   <span class="total-label">Subtotal</span>
                   <span class="total-value">{{ totalPriceDisplay }}</span>
+                </div>
+                <div v-if="couponValidated && couponData" class="total-row">
+                  <span class="total-label">Discount</span>
+                  <span class="total-value discount-value">-{{ formatPrice(couponData.discount || 0) }}</span>
                 </div>
                 <div class="total-row">
                   <span class="total-label">Shipping</span>
@@ -547,6 +590,13 @@ const paymentMethod = ref('cash-on-delivery')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
 
+// Coupon functionality
+const couponCode = ref('')
+const isValidatingCoupon = ref(false)
+const couponValidated = ref(false)
+const couponError = ref('')
+const couponData = ref<any>(null)
+
 // Watch billing same as shipping
 watch(billingSameAsShipping, (same) => {
   if (same) {
@@ -589,13 +639,70 @@ const shippingCostDisplay = computed(() => {
   return `Tk ${shippingCost.value.toLocaleString()}`
 })
 
-const grandTotal = computed(() => {
-  return totalPrice.value + shippingCost.value
-})
 
 const grandTotalDisplay = computed(() => {
   return `Tk ${grandTotal.value.toLocaleString()}`
 })
+
+// Calculate grand total with coupon discount
+const grandTotal = computed(() => {
+  const subtotal = totalPrice.value
+  const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
+  const shipping = shippingCost.value
+  return subtotal - discount + shipping
+})
+
+// Validate coupon function
+const validateCoupon = async () => {
+  if (!couponCode.value || couponCode.value.trim() === '') {
+    couponError.value = 'Please enter a coupon code'
+    return
+  }
+
+  isValidatingCoupon.value = true
+  couponError.value = ''
+  couponValidated.value = false
+  couponData.value = null
+
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/order/validate-coupon`, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: {
+        coupon_code: couponCode.value.trim(),
+        item_total: totalPrice.value
+      }
+    })
+
+    if (response && response.success) {
+      couponValidated.value = true
+      couponData.value = response.data || response
+      couponError.value = ''
+    } else {
+      couponError.value = response?.message || 'Invalid coupon code'
+      couponValidated.value = false
+      couponData.value = null
+    }
+  } catch (error: any) {
+    console.error('Error validating coupon:', error)
+    couponError.value = error?.data?.message || error?.message || 'Failed to validate coupon. Please try again.'
+    couponValidated.value = false
+    couponData.value = null
+  } finally {
+    isValidatingCoupon.value = false
+  }
+}
+
+// Remove coupon function
+const removeCoupon = () => {
+  couponCode.value = ''
+  couponValidated.value = false
+  couponData.value = null
+  couponError.value = ''
+}
 
 const formatPrice = (price: number) => {
   return `Tk ${price.toLocaleString()}`
@@ -646,7 +753,7 @@ const handlePlaceOrder = async () => {
   try {
     // Prepare order data according to API structure
     const orderData = {
-      coupon_code: null,
+      coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
       address: {
