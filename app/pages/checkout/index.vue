@@ -625,14 +625,26 @@ watch(shippingInfo, () => {
   }
 }, { deep: true })
 
-// Shipping cost (can be calculated based on location, weight, etc.)
+// Shipping cost based on selected shipping method
 const shippingCost = computed(() => {
-  // For now, fixed shipping cost
-  // In a real app, this would be calculated based on address, weight, etc.
-  return totalPrice.value > 5000 ? 0 : 100 // Free shipping over 5000, otherwise 100
+  if (!shippingMethod.value) {
+    return 0
+  }
+  
+  // Set shipping cost based on selected method
+  if (shippingMethod.value === 'inside_dhaka') {
+    return 100
+  } else if (shippingMethod.value === 'outside_dhaka') {
+    return 200
+  }
+  
+  return 0
 })
 
 const shippingCostDisplay = computed(() => {
+  if (!shippingMethod.value) {
+    return 'Select shipping method'
+  }
   if (shippingCost.value === 0) {
     return 'Free'
   }
