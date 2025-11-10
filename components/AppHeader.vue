@@ -253,8 +253,8 @@
             </NuxtLink> -->
             <button class="color-inherit flex items-center gap-1">
               <img src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
-                style="filter: brightness(1) invert(0); width: 20px; height: 36px;" />
-                Store Locator
+                style="width: 20px; height: 36px;" />
+              Store Locator
             </button>
 
             <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
