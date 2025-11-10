@@ -439,6 +439,11 @@
   height: 1.25rem;
 }
 
+.store-locator-icon {
+  background: transparent;
+  object-fit: cover;
+}
+
 .action-icon-small {
   width: 1rem;
   height: 1rem;

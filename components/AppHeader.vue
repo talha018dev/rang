@@ -110,14 +110,18 @@
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </button>
-          <NuxtLink to="/store" class="action-button color-inherit">
+          <!-- <NuxtLink to="/store" class="action-button color-inherit">
             <button class="action-button color-inherit">
               <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 10-8 0v4" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14l-1 12H6L5 8z" />
               </svg>
             </button>
-          </NuxtLink>
+          </NuxtLink> -->
+          <button class="action-button color-inherit">
+            <img src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+              style="filter: brightness(0) invert(1); width: 24px; height: 33px;" />
+          </button>
           <NuxtLink to="/cart" class="action-button color-inherit cart-button">
             <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none"
               xmlns="http://www.w3.org/2000/svg">
@@ -237,7 +241,7 @@
               </UButton>
               <span v-if="cartTotalItems > 0" class="cart-badge mobile-cart-badge">{{ cartTotalItems }}</span>
             </NuxtLink>
-            <NuxtLink to="/store" class="action-button color-inherit" style="padding: 0;">
+            <!-- <NuxtLink to="/store" class="action-button color-inherit" style="padding: 0;">
 
               <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50">
                 <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,7 +250,12 @@
                 </svg>
                 Store
               </UButton>
-            </NuxtLink>
+            </NuxtLink> -->
+            <button class="color-inherit flex items-center gap-1">
+              <img src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+                style="filter: brightness(1) invert(0); width: 20px; height: 36px;" />
+                Store Locator
+            </button>
 
             <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-user">
