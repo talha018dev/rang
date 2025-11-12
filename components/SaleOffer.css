@@ -251,3 +251,6 @@
   object-fit: cover;
   object-position: top;
 }
+.category-grid-main-men img {
+  height: 100%;
+}
