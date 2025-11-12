@@ -56,7 +56,7 @@
 
             <div class="product-title">{{ product.name }}</div>
             <button class="share-btn-mobile">
-              <img src="/product-details/ios_share.svg" alt="Share" />
+              <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
             </button>
           </div>
 
@@ -89,7 +89,7 @@
 
               <!-- Share Button -->
               <button class="share-btn">
-                <img src="/product-details/ios_share.svg" alt="Share" />
+                <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
                 <div class="share-text">Share</div>
               </button>
             </div>

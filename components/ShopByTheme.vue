@@ -10,7 +10,7 @@
             <div class="theme-grid">
                 <div v-for="(theme, index) in themeImages" :key="index" class="theme-image-container">
                     <NuxtLink :to="theme.link">
-                        <img :src="theme.src" :alt="theme.alt" class="theme-image" />
+                        <NuxtImg :src="theme.src" :alt="theme.alt" class="theme-image" format="webp" quality="85" loading="lazy" />
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                             <h3 class="theme-name-light">{{ theme.title }}</h3>
@@ -34,7 +34,7 @@
                         <div v-for="(theme, index) in themeImages" :key="index" class="carousel-slide">
                             <div class="theme-image-container">
                                 <NuxtLink :to="theme.link">
-                                    <img :src="theme.src" :alt="theme.alt" class="theme-image carousel-image" />
+                                    <NuxtImg :src="theme.src" :alt="theme.alt" class="theme-image carousel-image" format="webp" quality="85" loading="lazy" />
                                     <div
                                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                                         <h3 class="theme-name-light">{{ theme.title }}</h3>

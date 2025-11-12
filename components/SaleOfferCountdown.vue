@@ -4,7 +4,7 @@
         <!-- Countdown Card (Left Side) -->
         <div v-if="!isMobile" class="countdown-card">
             <!-- Background Image -->
-            <div class="countdown-background" style="background-image: url('/landing-image.png')"></div>
+            <NuxtImg src="/landing-image.png" alt="Deals of the Month" class="countdown-background" format="webp" quality="85" loading="eager" />
             
             <!-- Content Overlay -->
             <div class="countdown-content">
@@ -120,11 +120,13 @@
                 <div class="carousel-card">
                     <NuxtLink :to="`/products/${item.slug}`" class="carousel-link">
                         <div class="carousel-image-container">
-                            <img 
+                            <NuxtImg 
                                 :src="getImageUrl(item.image)" 
                                 :alt="item.name"
                                 class="carousel-image"
                                 loading="lazy"
+                                format="webp"
+                                quality="85"
                             />
                         </div>
                         <div class="carousel-content">

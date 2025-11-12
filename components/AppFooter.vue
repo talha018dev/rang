@@ -5,19 +5,19 @@
       <section class="best-deals-section">
         <div class="best-deals-container">
         <div>
-          <img src="/best-deals.svg" />
+          <NuxtImg src="/best-deals.svg" alt="Best Deals" format="webp" quality="85" loading="lazy" />
           <div>Best Deals</div>
         </div>
         <div>
-          <img src="/supporting-teams.svg" />
+          <NuxtImg src="/supporting-teams.svg" alt="Supporting Teams" format="webp" quality="85" loading="lazy" />
           <div>Supporting Teams</div>
         </div>
         <div>
-          <img src="/best-quality.svg" />
+          <NuxtImg src="/best-quality.svg" alt="Best Quality" format="webp" quality="85" loading="lazy" />
           <div>Best Quality</div>
         </div>
         <div>
-          <img src="/flexible-payment.svg" />
+          <NuxtImg src="/flexible-payment.svg" alt="Flexible Payment" format="webp" quality="85" loading="lazy" />
           <div>Flexible Payment</div>
         </div>
       </div>
@@ -111,7 +111,7 @@
                 </div>
               </a>
               <a href="#" class="app-button google-play">
-                <img src="/play-store-logo.svg"  />
+                <NuxtImg src="/play-store-logo.svg" alt="Google Play" format="webp" quality="85" loading="lazy" />
 
                 <div class="app-text">
                   <span class="app-subtitle">GET IT ON</span>
@@ -126,10 +126,10 @@
             <h3 class="section-heading">Payment Gateway Partner</h3>
             <div class="payment-logos">
               <div class="payment-logo sslcommerz">
-                <img src="/ssl.png" />
+                <NuxtImg src="/ssl.png" alt="SSL Commerz" format="webp" quality="85" loading="lazy" />
               </div>
               <div class="payment-logo paypal">
-                <img src="/paypal.png" />
+                <NuxtImg src="/paypal.png" alt="PayPal" format="webp" quality="85" loading="lazy" />
               </div>
             </div>
           </div>

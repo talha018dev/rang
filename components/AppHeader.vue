@@ -6,7 +6,7 @@
       </div>
       <div class="header-content">
         <div>
-          <img src="/rang-logo.png" alt="logo" class='logo-image' />
+          <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
         </div>
         <nav class="nav">
           <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
@@ -119,8 +119,8 @@
             </button>
           </NuxtLink> -->
           <button class="action-button color-inherit">
-            <img src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
-              style="filter: brightness(0) invert(1); width: 24px; height: 33px;" />
+            <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+              style="filter: brightness(0) invert(1); width: 24px; height: 33px;" format="webp" quality="85" loading="lazy" />
           </button>
           <NuxtLink to="/cart" class="action-button color-inherit cart-button">
             <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -252,8 +252,8 @@
               </UButton>
             </NuxtLink> -->
             <button class="color-inherit flex items-center gap-1">
-              <img src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
-                style="width: 20px; height: 36px;" />
+              <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+                style="width: 20px; height: 36px;" format="webp" quality="85" loading="lazy" />
               Store Locator
             </button>
 

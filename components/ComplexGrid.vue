@@ -11,12 +11,12 @@
 
       <!-- Image: Woman in yellow -->
       <div class="grid-item image-block woman-yellow">
-        <img src="/model-1.jpg" alt="Woman in yellow traditional attire" />
+        <NuxtImg src="/model-1.jpg" alt="Woman in yellow traditional attire" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Man in yellow -->
       <div class="grid-item image-block man-yellow">
-        <img src="/model-2.jpg" alt="Man in yellow traditional attire" />
+        <NuxtImg src="/model-2.jpg" alt="Man in yellow traditional attire" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Text Block: "Customers Diaries" -->
@@ -29,27 +29,27 @@
 
       <!-- Image: Group with rickshaw -->
       <div class="grid-item image-block group-rickshaw">
-        <img src="/group-1.jpg" alt="Group celebrating with decorated rickshaw" />
+        <NuxtImg src="/group-1.jpg" alt="Group celebrating with decorated rickshaw" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Dancing women -->
       <div class="grid-item image-block dancing-women-1">
-        <img src="/dancing-1.jpg" alt="Women dancing in traditional attire" />
+        <NuxtImg src="/dancing-1.jpg" alt="Women dancing in traditional attire" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Woman in white saree -->
       <div class="grid-item image-block woman-saree">
-        <img src="/saree-woman.jpg" alt="Woman in white saree with flowers" />
+        <NuxtImg src="/saree-woman.jpg" alt="Woman in white saree with flowers" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Woman on floor -->
       <div class="grid-item image-block woman-floor">
-        <img src="/woman-floor.jpg" alt="Woman lying on floor with Bengali script" />
+        <NuxtImg src="/woman-floor.jpg" alt="Woman lying on floor with Bengali script" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Family outdoors -->
       <div class="grid-item image-block family-outdoors">
-        <img src="/family-outdoors.jpg" alt="Family in traditional attire outdoors" />
+        <NuxtImg src="/family-outdoors.jpg" alt="Family in traditional attire outdoors" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Text Block: "to Tones" -->
@@ -71,12 +71,12 @@
 
       <!-- Image: Dancing women with temple -->
       <div class="grid-item image-block dancing-women-2">
-        <img src="/dancing-2.jpg" alt="Women dancing with temple backdrop" />
+        <NuxtImg src="/dancing-2.jpg" alt="Women dancing with temple backdrop" format="webp" quality="85" loading="lazy" />
       </div>
 
       <!-- Image: Couple under roof -->
       <div class="grid-item image-block couple-roof">
-        <img src="/couple-roof.jpg" alt="Couple sitting under thatched roof" />
+        <NuxtImg src="/couple-roof.jpg" alt="Couple sitting under thatched roof" format="webp" quality="85" loading="lazy" />
       </div>
     </div>
   </section>

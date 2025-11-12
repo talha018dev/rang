@@ -91,7 +91,7 @@
   
           <!-- Share Button -->
           <button class="share-btn">
-            <img src="/product-details/ios_share.svg" alt="Share" />
+            <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
             Share
           </button>
   

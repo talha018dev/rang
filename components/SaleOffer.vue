@@ -10,7 +10,7 @@
         <section class="sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
-                    <img src="/sale-offer/sale-offer-1.jpg" alt="Category Rang" class="sale-offer-image category-image-rounded"></img>
+                    <NuxtImg src="/sale-offer/sale-offer-1.jpg" alt="Category Rang" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
                     <div class="image-div-text ultimate-sale" style="top: 10px; left: 10px;">
                         <span>Ultimate</span>
                         <div>Sale</div>
@@ -23,10 +23,10 @@
                     </div>
                 </div>
                 <div class="sale-brands-grid-tertiary">
-                    <img src="/sale-offer/sale-offer-2.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
-                    <img src="/sale-offer/sale-offer-3.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
-                    <img src="/sale-offer/sale-offer-4.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
-                    <img src="/sale-offer/sale-offer-5.png" alt="Brand Rang" class="sale-brand-image-cover"></img>
+                    <NuxtImg src="/sale-offer/sale-offer-2.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
+                    <NuxtImg src="/sale-offer/sale-offer-3.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
+                    <NuxtImg src="/sale-offer/sale-offer-4.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
+                    <NuxtImg src="/sale-offer/sale-offer-5.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
                 </div>
             </div>
         </section>

@@ -11,7 +11,7 @@
             <div class="timeless-grid">
                 <div v-for="(image, index) in timelessImages" :key="index" class="timeless-image-container">
                     <NuxtLink :to="image.link">
-                        <img :src="image.src" :alt="image.alt" class="timeless-image" />
+                        <NuxtImg :src="image.src" :alt="image.alt" class="timeless-image" format="webp" quality="85" loading="lazy" />
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                             <h3 class="timeless-name-light">{{ image.title }}</h3>
@@ -35,7 +35,7 @@
                         <div v-for="(image, index) in timelessImages" :key="index" class="carousel-slide">
                             <NuxtLink :to="image.link">
                                 <div class="timeless-image-container">
-                                    <img :src="image.src" :alt="image.alt" class="timeless-image carousel-image" />
+                                    <NuxtImg :src="image.src" :alt="image.alt" class="timeless-image carousel-image" format="webp" quality="85" loading="lazy" />
                                     <div
                                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                                         <h3 class="timeless-name-light">{{ image.title }}</h3>

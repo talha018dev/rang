@@ -12,7 +12,7 @@
         <div class="why-rang-grid">
             <div class="grid-item grid-item-1">
                 <div class="card-image">
-                    <img style="object-position: right;" src="/why-rang-1.png" alt="Festive celebration with people in traditional attire" />
+                    <NuxtImg style="object-position: right;" src="/why-rang-1.png" alt="Festive celebration with people in traditional attire" format="webp" quality="85" loading="lazy" />
                     <!-- <div class="card-overlay">
                         <h3>Because it's Festive</h3>
                     </div> -->
@@ -20,7 +20,7 @@
             </div>
             <div class="grid-item grid-item-2">
                 <div class="card-image">
-                    <img style="object-position: left;" src="/why-rang-2.png" alt="Colorful traditional celebration" />
+                    <NuxtImg style="object-position: left;" src="/why-rang-2.png" alt="Colorful traditional celebration" format="webp" quality="85" loading="lazy" />
                     <!-- <div class="card-overlay">
                         <h3>Because it's Colorful</h3>
                     </div> -->
@@ -28,7 +28,7 @@
             </div>
             <div class="grid-item grid-item-3">
                 <div class="card-image">
-                    <img style="object-position: bottom;" src="/why-rang-3.png" alt="Bangladeshi cultural celebration" />
+                    <NuxtImg style="object-position: bottom;" src="/why-rang-3.png" alt="Bangladeshi cultural celebration" format="webp" quality="85" loading="lazy" />
                     <!-- <div class="card-overlay">
                         <h3>Because it's Bangladesh</h3>
                     </div> -->
