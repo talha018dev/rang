@@ -113,7 +113,7 @@
                 :prev="{ onClick: goToPrevious }"
                 :next="{ onClick: goToNext }"
                 :ui="{
-                    item: 'carousel-slide basis-1/3',
+                    item: 'carousel-slide basis-1/3 w-24',
                     container: 'carousel-container gap-4 !mt-1 !ml-4 !mr-4'
                 }"
             >
