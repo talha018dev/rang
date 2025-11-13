@@ -118,10 +118,13 @@
               </svg>
             </button>
           </NuxtLink> -->
-          <button class="action-button color-inherit">
-            <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
-              style="filter: brightness(0) invert(1); width: 24px; height: 33px;" format="webp" quality="85" loading="lazy" />
-          </button>
+          <NuxtLink to="/store-location-rang" class="action-button color-inherit store-locator-link">
+            <button class="action-button color-inherit">
+              <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+                style="filter: brightness(1) invert(0); width: 24px; height: 34px;" format="webp" quality="85"
+                loading="lazy" />
+            </button>
+          </NuxtLink>
           <NuxtLink to="/cart" class="action-button color-inherit cart-button">
             <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none"
               xmlns="http://www.w3.org/2000/svg">
@@ -251,11 +254,13 @@
                 Store
               </UButton>
             </NuxtLink> -->
-            <button class="color-inherit flex items-center gap-1">
-              <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
-                style="width: 20px; height: 36px;" format="webp" quality="85" loading="lazy" />
-              Store Locator
-            </button>
+            <NuxtLink to="/store-location-rang" class="action-button color-inherit" style="padding: 0;">
+              <button class="color-inherit flex items-center gap-1">
+                <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
+                  style="width: 20px; height: 36px;" format="webp" quality="85" loading="lazy" />
+                Store Locator
+              </button>
+            </NuxtLink>
 
             <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
               icon="i-heroicons-user">
