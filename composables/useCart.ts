@@ -16,20 +16,25 @@ export interface CartItem {
 }
 
 const cartItems = ref<CartItem[]>([])
+// Start with loading true only on client side, false on server
+const isLoading = ref<boolean>(typeof window !== 'undefined')
 let clientInitialized = false
 
 // Initialize cart from localStorage
 const initializeCart = () => {
   // Only run on client side
   if (typeof window === 'undefined') {
+    isLoading.value = false
     return
   }
   
   // Only initialize once on client side
   if (clientInitialized) {
+    isLoading.value = false
     return
   }
   
+  isLoading.value = true
   try {
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
@@ -50,6 +55,10 @@ const initializeCart = () => {
     cartItems.value = []
   } finally {
     clientInitialized = true
+    // Minimum delay to ensure loading state is visible
+    setTimeout(() => {
+      isLoading.value = false
+    }, 300)
   }
 }
 
@@ -142,6 +151,7 @@ export const useCart = () => {
   // Force reload cart from localStorage (useful for debugging/sync issues)
   const reloadCart = () => {
     if (typeof window !== 'undefined') {
+      isLoading.value = true
       try {
         const savedCart = localStorage.getItem('cart')
         if (savedCart) {
@@ -149,11 +159,16 @@ export const useCart = () => {
           if (Array.isArray(parsedCart)) {
             cartItems.value = parsedCart
             console.log('🔄 Cart reloaded from localStorage:', parsedCart.length, 'items')
+            setTimeout(() => {
+              isLoading.value = false
+            }, 100)
             return true
           }
         }
+        isLoading.value = false
       } catch (e) {
         console.error('❌ Error reloading cart:', e)
+        isLoading.value = false
       }
     }
     return false
@@ -161,6 +176,7 @@ export const useCart = () => {
 
   return {
     cartItems: readonly(cartItems),
+    isLoading: readonly(isLoading),
     addToCart,
     removeFromCart,
     updateQuantity,

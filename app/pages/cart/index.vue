@@ -5,13 +5,18 @@
       <div class="cart-content" :key="`cart-${cartItems.length}`">
         <h1 class="cart-title">Shopping Cart</h1>
         
-        <!-- Debug: Remove this after fixing -->
-        <!-- <div style="padding: 10px; background: yellow; margin-bottom: 10px;">
-          Debug: cartItems.length = {{ cartItems.length }}, isEmpty computed = {{ isEmpty }}, direct check = {{ cartItems.length === 0 }}
-        </div> -->
-        
+        <!-- Loading State -->
+        <div v-if="isLoading" class="cart-loading">
+          <div class="loading-spinner">
+            <svg class="spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+          </div>
+          <p class="loading-text">Loading your cart...</p>
+        </div>
+
         <!-- Empty Cart -->
-        <template v-if="cartItems.length === 0">
+        <template v-else-if="cartItems.length === 0">
           <div class="empty-cart" :key="'empty'">
             <div class="empty-cart-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +135,7 @@
 
 <script setup lang="ts">
 import { navigateTo, useHead } from 'nuxt/app'
-import { computed, nextTick, onMounted } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
 import { useCart } from '../../../composables/useCart'
 import './cart.css'
@@ -144,6 +149,7 @@ useHead({
 
 const {
   cartItems,
+  isLoading: isLoadingComputed,
   removeFromCart,
   updateQuantity,
   reloadCart,
@@ -152,31 +158,28 @@ const {
   isEmpty: isEmptyComputed
 } = useCart()
 
+// Create a local loading state that ensures minimum display time
+const isLoading = ref(true)
+
 // Create a local computed to ensure reactivity
 const isEmpty = computed(() => {
-  const length = cartItems.value.length
-  const result = length === 0
-  console.log('isEmpty computed:', result, 'cartItems.length:', length, 'type:', typeof result)
-  return result
+  return cartItems.value.length === 0
 })
-
-// Also create a direct check for debugging
-const hasItems = computed(() => cartItems.value.length > 0)
 
 // Force cart reload on mount to ensure it's loaded
 onMounted(async () => {
-  console.log('🔍 Cart page mounted')
-  console.log('  - isEmpty:', isEmpty.value)
-  console.log('  - cartItems.length:', cartItems.value.length)
-  console.log('  - cartItems:', cartItems.value)
+  // Show loader for minimum duration to ensure it's visible
+  const startTime = Date.now()
+  const minLoadTime = 600 // Minimum 600ms
+  
+  // Wait a bit to ensure cart has been initialized
+  await nextTick()
   
   if (typeof window !== 'undefined') {
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
       try {
         const parsedCart = JSON.parse(savedCart)
-        console.log('  - localStorage has cart with', parsedCart.length, 'items')
-        console.log('  - localStorage cart data:', parsedCart)
         
         // If cart is empty but localStorage has items, there's a sync issue
         if (cartItems.value.length === 0 && parsedCart.length > 0) {
@@ -185,9 +188,7 @@ onMounted(async () => {
           const reloaded = reloadCart()
           if (reloaded) {
             console.log('  - ✅ Cart reloaded successfully')
-            // Force reactivity update
             await nextTick()
-            console.log('  - After nextTick - isEmpty:', isEmpty.value, 'cartItems.length:', cartItems.value.length)
           } else {
             console.error('  - ❌ Failed to reload cart')
           }
@@ -195,10 +196,16 @@ onMounted(async () => {
       } catch (e) {
         console.error('  - Error parsing localStorage cart:', e)
       }
-    } else {
-      console.log('  - No cart found in localStorage')
     }
   }
+  
+  // Wait for minimum load time, then hide loader
+  const elapsed = Date.now() - startTime
+  const remainingTime = Math.max(0, minLoadTime - elapsed)
+  
+  setTimeout(() => {
+    isLoading.value = false
+  }, remainingTime)
 })
 
 const formatPrice = (price: number) => {
@@ -209,4 +216,5 @@ const handleCheckout = () => {
   navigateTo('/checkout')
 }
 </script>
+
 
