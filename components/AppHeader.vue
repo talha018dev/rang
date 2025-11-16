@@ -137,8 +137,8 @@
               </svg>
             </button>
           </NuxtLink> -->
-          <NuxtLink to="/store-location-rang" class="action-button color-inherit store-locator-link">
-            <button class="action-button color-inherit">
+          <NuxtLink to="/store-location-rang" class="action-button p-0 color-inherit store-locator-link">
+            <button class="action-button p-0 color-inherit">
               <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
                 style="filter: brightness(1) invert(0); width: 24px; height: 34px;" format="webp" quality="85"
                 loading="lazy" />
