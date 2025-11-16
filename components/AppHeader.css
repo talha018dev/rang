@@ -213,6 +213,15 @@
   transition: color 0.15s ease-in-out;
 }
 
+.action-button svg:hover {
+  color: #f1592c !important;
+  transition: color 0.15s ease-in-out;
+}
+.action-button-flex:hover svg {
+  color: #f1592c !important;
+  transition: color 0.15s ease-in-out;
+}
+
 /* Search Input Menu Styles */
 .search-menu-dropdown {
   position: absolute;
