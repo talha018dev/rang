@@ -390,3 +390,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.google-play img {
+  width: 20px;
+  height: 24px;
+}

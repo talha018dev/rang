@@ -547,8 +547,8 @@ div [data-vaul-handle] {
 }
 
 .bottom-left {
-  bottom: 16px !important;
-  left: 16px !important;
+  bottom: 40px !important;
+  left: 40px !important;
   top: auto !important;
   right: auto !important;
 }
@@ -587,8 +587,8 @@ div [data-vaul-handle] {
 }
 
 .image-shop-now {
-  bottom: 16px;
-  right: 16px;
+  bottom: 40px;
+  right: 40px;
   position: absolute;
   display: flex;
   align-items: center;
