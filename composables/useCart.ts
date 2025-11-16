@@ -16,23 +16,50 @@ export interface CartItem {
 }
 
 const cartItems = ref<CartItem[]>([])
+let clientInitialized = false
 
-export const useCart = () => {
-  // Load cart from localStorage on initialization
-  if (process.client) {
+// Initialize cart from localStorage
+const initializeCart = () => {
+  // Only run on client side
+  if (typeof window === 'undefined') {
+    return
+  }
+  
+  // Only initialize once on client side
+  if (clientInitialized) {
+    return
+  }
+  
+  try {
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
-      try {
-        cartItems.value = JSON.parse(savedCart)
-      } catch (e) {
-        console.error('Error loading cart from localStorage:', e)
+      const parsedCart = JSON.parse(savedCart)
+      if (Array.isArray(parsedCart)) {
+        cartItems.value = parsedCart
+        console.log('✅ Cart loaded from localStorage:', parsedCart.length, 'items')
+      } else {
+        cartItems.value = []
+        console.log('⚠️ Cart data in localStorage is not an array')
       }
+    } else {
+      cartItems.value = []
+      console.log('ℹ️ No cart found in localStorage')
     }
+  } catch (e) {
+    console.error('❌ Error loading cart from localStorage:', e)
+    cartItems.value = []
+  } finally {
+    clientInitialized = true
   }
+}
+
+export const useCart = () => {
+  // Always try to initialize on client side
+  initializeCart()
 
   // Save cart to localStorage whenever it changes
   const saveCart = () => {
-    if (process.client) {
+    if (typeof window !== 'undefined') {
       localStorage.setItem('cart', JSON.stringify(cartItems.value))
     }
   }
@@ -112,12 +139,33 @@ export const useCart = () => {
 
   const isEmpty = computed(() => cartItems.value.length === 0)
 
+  // Force reload cart from localStorage (useful for debugging/sync issues)
+  const reloadCart = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedCart = localStorage.getItem('cart')
+        if (savedCart) {
+          const parsedCart = JSON.parse(savedCart)
+          if (Array.isArray(parsedCart)) {
+            cartItems.value = parsedCart
+            console.log('🔄 Cart reloaded from localStorage:', parsedCart.length, 'items')
+            return true
+          }
+        }
+      } catch (e) {
+        console.error('❌ Error reloading cart:', e)
+      }
+    }
+    return false
+  }
+
   return {
     cartItems: readonly(cartItems),
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
+    reloadCart,
     totalItems,
     totalPrice,
     totalPriceDisplay,
