@@ -459,6 +459,59 @@
   overflow-y: auto;
 }
 
+/* Mobile Currency Dropdown Styles */
+.mobile-currency-container {
+  position: relative;
+  width: 100%;
+}
+
+.mobile-currency-container :deep(button) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mobile-currency-dropdown {
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  width: 100%;
+}
+
+.mobile-currency-dropdown .currency-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.mobile-currency-dropdown .currency-option:last-child {
+  border-bottom: none;
+}
+
+.mobile-currency-dropdown .currency-option:hover {
+  background-color: #f3f4f6;
+}
+
+.mobile-currency-dropdown .currency-option-active {
+  background-color: #fef3f2;
+  color: #ea580c;
+  font-weight: 500;
+}
+
 /* Mobile Cart Button */
 .mobile-cart-button {
   position: relative;
