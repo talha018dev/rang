@@ -138,6 +138,7 @@ import { navigateTo, useHead } from 'nuxt/app'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
 import { useCart } from '../../../composables/useCart'
+import { useCurrency } from '../../../composables/useCurrency'
 import './cart.css'
 
 useHead({
@@ -157,6 +158,8 @@ const {
   totalPriceDisplay,
   isEmpty: isEmptyComputed
 } = useCart()
+
+const { formatPrice } = useCurrency()
 
 // Create a local loading state that ensures minimum display time
 const isLoading = ref(true)
@@ -208,9 +211,6 @@ onMounted(async () => {
   }, remainingTime)
 })
 
-const formatPrice = (price: number) => {
-  return `Tk ${price.toLocaleString()}`
-}
 
 const handleCheckout = () => {
   navigateTo('/checkout')

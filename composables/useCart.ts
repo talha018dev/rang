@@ -1,4 +1,5 @@
 import { ref, computed, readonly } from 'vue'
+import { useCurrency } from './useCurrency'
 
 export interface CartItem {
   id: string
@@ -142,8 +143,10 @@ export const useCart = () => {
     return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
   })
 
+  const { formatPrice } = useCurrency()
+  
   const totalPriceDisplay = computed(() => {
-    return `Tk ${totalPrice.value.toLocaleString()}`
+    return formatPrice(totalPrice.value)
   })
 
   const isEmpty = computed(() => cartItems.value.length === 0)

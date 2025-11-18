@@ -78,7 +78,7 @@
                     </div>
                     <div class="search-result-details">
                       <div class="search-result-name">{{ option.name }}</div>
-                      <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
+                      <div class="search-result-price">{{ formatPrice(option.price) }}</div>
                     </div>
                   </NuxtLink>
                 </div>
@@ -250,7 +250,7 @@
                     </div>
                     <div class="search-result-details">
                       <div class="search-result-name">{{ option.name }}</div>
-                      <div class="search-result-price">Tk {{ option.price.toLocaleString() }}</div>
+                      <div class="search-result-price">{{ formatPrice(option.price) }}</div>
                     </div>
                   </NuxtLink>
                 </div>
@@ -361,7 +361,7 @@ import type { Product, ProductResponse } from '../types/homepage';
 
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
-const { currency, setCurrency } = useCurrency()
+const { currency, setCurrency, formatPrice } = useCurrency()
 
 // Reactive state for drawer
 const isDrawerOpen = ref(false)

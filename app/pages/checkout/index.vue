@@ -524,6 +524,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
 import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
+import { useCurrency } from '../../../composables/useCurrency'
 import './checkout.css'
 
 // Define page meta to ensure route is recognized
@@ -545,6 +546,8 @@ const {
   isEmpty,
   clearCart
 } = useCart()
+
+const { formatPrice } = useCurrency()
 
 // Loading state for cart initialization
 const isLoadingCart = ref(true)
@@ -648,12 +651,12 @@ const shippingCostDisplay = computed(() => {
   if (shippingCost.value === 0) {
     return 'Free'
   }
-  return `Tk ${shippingCost.value.toLocaleString()}`
+  return formatPrice(shippingCost.value)
 })
 
 
 const grandTotalDisplay = computed(() => {
-  return `Tk ${grandTotal.value.toLocaleString()}`
+  return formatPrice(grandTotal.value)
 })
 
 // Calculate grand total with coupon discount
@@ -716,9 +719,6 @@ const removeCoupon = () => {
   couponError.value = ''
 }
 
-const formatPrice = (price: number) => {
-  return `Tk ${price.toLocaleString()}`
-}
 
 const handleSubmit = () => {
   // Form validation is handled by HTML5 required attributes

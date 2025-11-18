@@ -150,8 +150,8 @@
 
                     <!-- Pricing -->
                     <div class="pricing">
-                        <span class="current-price">Tk {{ product.price.toLocaleString() }}</span>
-                        <span v-if="product.compare_price > product.price" class="original-price">Tk {{ product.compare_price.toLocaleString() }}</span>
+                        <span class="current-price">{{ formatPrice(product.price) }}</span>
+                        <span v-if="product.compare_price > product.price" class="original-price">{{ formatPrice(product.compare_price) }}</span>
                         <span v-if="product.compare_price > product.price" class="discount">
                             -{{ Math.round(((product.compare_price - product.price) / product.compare_price) * 100) }}%
                         </span>
@@ -272,7 +272,7 @@
                                     </select>
                                 </div>
 
-                                <p class="item-price">TK {{ item.price.toLocaleString() }}</p>
+                                <p class="item-price">{{ formatPrice(item.price) }}</p>
                             </div>
                         </div>
                     </div>
@@ -320,7 +320,7 @@
                                     </select>
                                 </div>
 
-                                <p class="item-price">TK {{ item.price.toLocaleString() }}</p>
+                                <p class="item-price">{{ formatPrice(item.price) }}</p>
                             </div>
                         </div>
                     </UCarousel>
@@ -701,7 +701,7 @@
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">{{ relatedProduct.name }}</h3>
-                        <p class="product-price">Tk {{ relatedProduct.price.toLocaleString() }}</p>
+                        <p class="product-price">{{ formatPrice(relatedProduct.price) }}</p>
                     </div>
                 </NuxtLink>
             </div>
@@ -725,7 +725,7 @@
                         loading="lazy" format="webp" quality="85" />
                     <div class="related-products-info">
                         <h3 class="new-arrival-name-light">{{ item.name }}</h3>
-                        <h4 class="related-products-price">Tk {{ item.price.toLocaleString() }}</h4>
+                        <h4 class="related-products-price">{{ formatPrice(item.price) }}</h4>
                     </div>
                 </NuxtLink>
             </UCarousel>
@@ -742,6 +742,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../../../components/AppFooter.vue'
 import { useApi } from '../../../../../composables/useApi'
 import { useCart } from '../../../../../composables/useCart'
+import { useCurrency } from '../../../../../composables/useCurrency'
 import type { Product } from '../../../../../types/homepage'
 // Get route parameters
 import './product.css'
@@ -1134,7 +1135,7 @@ const totalPrice = computed(() => {
     const total = selectedItems.reduce((sum, item) => {
         return sum + (item.priceValue || 0)
     }, 0)
-    return `Tk ${total.toLocaleString()}`
+    return formatPrice(total)
 })
 
 // Display only first 4 matching series items
@@ -1148,7 +1149,7 @@ const matchingSeriesTotalPrice = computed(() => {
     const total = selectedItems.reduce((sum, item) => {
         return sum + (item.price || 0)
     }, 0)
-    return `TK ${total.toLocaleString()}`
+    return formatPrice(total)
 })
 
 const filteredAndSortedReviews = computed(() => {
@@ -1193,6 +1194,7 @@ const decreaseQuantity = () => {
 }
 
 const { addToCart } = useCart()
+const { formatPrice } = useCurrency()
 
 const handleAddToCart = () => {
     if (!product.value) return
@@ -1217,7 +1219,7 @@ const handleAddToCart = () => {
             id: product.value.id.toString(),
             name: product.value.name,
             price: variantPrice,
-            priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
+            priceDisplay: formatPrice(variantPrice),
             image: getImageUrl(variantImage),
             size: selectedSize.value,
             color: selectedVariant?.attributes?.color || availableColors.value[selectedColorIndex.value]?.name,
