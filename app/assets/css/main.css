@@ -533,6 +533,7 @@ div [data-vaul-handle] {
 
 .image-div {
   position: relative;
+  height: 100%;
 }
 .image-div-text {
   position: absolute;
@@ -549,8 +550,19 @@ div [data-vaul-handle] {
 .bottom-left {
   bottom: 40px !important;
   left: 40px !important;
-  top: auto !important;
-  right: auto !important;
+}
+.absolute {
+  position: absolute !important;
+}
+.bottom-right {
+  bottom: 40px !important;
+  right: 40px !important;
+  z-index: 100 !important;
+}
+.top-left {
+  top: 40px !important;
+  left: 40px !important;
+  z-index: 100 !important;
 }
 
 .image-div-text div {
@@ -611,9 +623,15 @@ div [data-vaul-handle] {
   transition: color 0.15s ease-in-out;
 }
 
+@media (max-width: 1024px) {
+  .image-div-text div {
+    font-size: 2.5em;
+  }
+}
+
 @media (max-width: 600px) {
   .image-div-text div {
-    font-size: 1.5em;
+    font-size: 1.75em;
   }
   .image-div-text span {
     font-size: 1em;
