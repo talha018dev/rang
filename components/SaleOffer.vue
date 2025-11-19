@@ -17,8 +17,8 @@
                     </div>
                     <div class="sale-offer-number-container">
                         <div class="sale-offer-number">50% OFF</div>
-                        <div class="sale-offer-shop-now">Shop Now
-                            <Icon name="heroicons:chevron-right" />
+                       <div class="absolute" style="bottom: 10px; right: 40px;">
+                            <ShopNowBlue />
                         </div>
                     </div>
                 </div>
@@ -37,6 +37,7 @@
 import { computed } from 'vue';
 import type { Product } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
+import ShopNowBlue from './ShopNowBlue.vue';
 
 interface Props {
   products?: Product[]

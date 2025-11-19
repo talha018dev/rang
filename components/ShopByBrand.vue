@@ -1,51 +1,66 @@
 <template>
-    <main class="brand-container">
-        <section class="brand-header">
-            <div class="brand-title">
-                <div><span class="brand-title-light">Shop by</span> <span class="brand-title-bold">Brand</span></div>
-            </div>
-        </section>
-        <section>
-            <!-- Loading State -->
-            <div v-if="isLoading" class="brand-grid-main">
-                <div v-for="i in 5" :key="i" class="brand-skeleton">
-                    <div class="skeleton-box"></div>
-                </div>
-            </div>
-            <!-- Brands Grid -->
-            <div v-else-if="brands.length > 0" class="brand-grid-main">
-                <NuxtLink 
-                    v-for="brand in brands" 
-                    :key="brand.slug" 
-                    :to="`/products?brand=${brand.slug}`"
-                    class="brand-item"
-                >
-                    <NuxtImg 
-                        :src="brand.image.url" 
-                        :alt="brand.name" 
-                        class="brand-image" 
-                        format="webp" 
-                        quality="85" 
-                        loading="lazy" 
-                    />
-                </NuxtLink>
-            </div>
-            <!-- Error State -->
-            <div v-else-if="error" class="error-state">
-                <p>Error loading brands: {{ error }}</p>
-            </div>
-            <!-- Empty State -->
-            <div v-else class="empty-state">
-                <p>No brands available</p>
-            </div>
-        </section>
-    </main>
+  <main class="brand-container">
+    <section class="brand-header">
+      <div class="brand-title">
+        <div><span class="brand-title-light">Shop by</span> <span class="brand-title-bold">Brand</span></div>
+      </div>
+    </section>
+    <section>
+      <!-- Loading State -->
+      <div v-if="isLoading" class="brand-grid-main">
+        <div v-for="i in 5" :key="i" class="brand-skeleton">
+          <div class="skeleton-box"></div>
+        </div>
+      </div>
+      <!-- Brands Grid -->
+      <div v-else-if="brands.length > 0" class="brand-grid-main">
+        <NuxtLink v-for="brand in brands" :key="brand.slug" :to="`/products?brand=${brand.slug}`" class="brand-item">
+          <NuxtImg :src="brand.image.url" :alt="brand.name" class="brand-image" format="webp" quality="85"
+            loading="lazy" />
+        </NuxtLink>
+      </div>
+      <!-- Error State -->
+      <div v-else-if="error" class="error-state">
+        <p>Error loading brands: {{ error }}</p>
+      </div>
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <p>No brands available</p>
+      </div>
+    </section>
+    <section class="sale-brands-section-secondary" style="margin-top: 4rem;">
+      <div class="sale-brands-grid-secondary">
+        <div class="image-div category-grid-main-men">
+          <NuxtImg src="/shop-by-brand/shop-by-brand-11.jpg" alt="Category Rang"
+            class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
+
+          <div class="absolute" style="bottom: 40px; right: 40px;">
+            <button class="shop-now-blue-button">
+              <span class="button-text">See All</span>
+              <Icon name="heroicons:arrow-right" class="button-icon" />
+            </button>
+          </div>
+        </div>
+        <div class="sale-brands-grid-tertiary">
+          <NuxtImg src="/sale-offer/sale-offer-2.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp"
+            quality="85" loading="lazy" />
+          <NuxtImg src="/sale-offer/sale-offer-3.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp"
+            quality="85" loading="lazy" />
+          <NuxtImg src="/sale-offer/sale-offer-4.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp"
+            quality="85" loading="lazy" />
+          <NuxtImg src="/sale-offer/sale-offer-5.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp"
+            quality="85" loading="lazy" />
+        </div>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useApi } from '~~/composables/useApi'
 import type { Brand, BrandResponse } from '~~/types/homepage'
+import ShopNowBlue from './ShopNowBlue.vue'
 
 // Reactive state
 const brands = ref<Brand[]>([])
@@ -84,4 +99,5 @@ onMounted(() => {
 
 <style scoped>
 @import './ShopByBrand.css';
+@import './SaleOffer.css';
 </style>
