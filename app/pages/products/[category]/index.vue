@@ -43,6 +43,17 @@
               </svg>
             </div>
             <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedBrand">
+                <option value="">Brand</option>
+                <option v-for="brand in brands" :key="brand.slug" :value="brand.slug">{{ brand.name }}</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
               <select class="filter-select" v-model="selectedSort">
                 <option value="latest">Latest</option>
                 <option value="low-to-high">Low to High</option>
@@ -152,7 +163,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
-import type { PaginationData, Product, ProductResponse } from '~~/types/homepage'
+import type { Brand, BrandResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
 // Get route params
@@ -199,12 +210,14 @@ useHead({
 // Reactive data
 const selectedSize = ref('')
 const selectedPrice = ref('')
+const selectedBrand = ref('')
 const selectedSort = ref('latest') // Default sort is latest
 const currentPage = ref(1)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+const brands = ref<Brand[]>([])
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -217,6 +230,21 @@ const getImageUrl = (imagePath: string): string => {
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
 }
 
+// Fetch brands from API
+const fetchBrands = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<BrandResponse>(`${backendUrl}/brand`)
+    console.log('Brands API Response:', response)
+
+    if (response.success && response.data) {
+      brands.value = response.data
+    }
+  } catch (err) {
+    console.error('Error fetching brands:', err)
+  }
+}
+
 // Fetch products from API
 const fetchProducts = async () => {
   if (!categorySlug.value) return
@@ -227,9 +255,15 @@ const fetchProducts = async () => {
   try {
     // Clean category slug (remove any &amp; issues)
     const cleanSlug = categorySlug.value.replace(/&amp;/g, '&')
-    // Build API URL with sort and page parameters
+    // Build API URL with sort, page, and brand parameters
     const { backendUrl } = useApi()
-    const apiUrl = `${backendUrl}/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
+    let apiUrl = `${backendUrl}/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
+    
+    // Add brand parameter if selected
+    if (selectedBrand.value) {
+      apiUrl += `&brand=${selectedBrand.value}`
+    }
+    
     const response = await $fetch<ProductResponse>(apiUrl)
     console.log('Products API Response:', response)
 
@@ -254,6 +288,7 @@ const fetchProducts = async () => {
 
 // Initial fetch on mount
 onMounted(() => {
+  fetchBrands()
   fetchProducts()
 })
 
@@ -369,7 +404,7 @@ const filteredProducts = computed(() => {
 })
 
 // Watch for filter changes to reset to page 1
-watch([selectedSize, selectedPrice], () => {
+watch([selectedSize, selectedPrice, selectedBrand], () => {
   currentPage.value = 1
   fetchProducts()
 })
