@@ -69,7 +69,7 @@
   .hero-content img {
     aspect-ratio: 3.25;
     object-fit: cover;
-    object-position: 0 20%;
+    object-position:center;
   }
   
   .hero-text {

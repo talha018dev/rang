@@ -1,161 +1,148 @@
 <template>
-    <main class="men-page-gradient">
+  <main class="men-page-gradient">
 
-        <div class="men-page">
-            <AppHeader />
+    <div class="men-page">
+      <AppHeader />
 
-            <!-- Hero Banner Section -->
-            <section class="hero-banner">
-                <div class="hero-content">
-                    <div class="hero-text">{{ categoryTitle }}</div>
-                    <NuxtImg src="/men/men-hero-image.jpg" alt="Men's fashion" class="hero-img" loading="eager"
-                        format="webp" quality="90" />
-                </div>
-            </section>
-
-            <!-- Filter Section -->
-            <section class="filter-section">
-                <div class="filter-container">
-                    <div class="filter-dropdowns">
-                        <div class="filter-dropdown">
-                            <select class="filter-select" v-model="selectedSize">
-                                <option value="">Size</option>
-                                <option v-for="size in availableSizes" :key="size" :value="size">{{ size }}</option>
-                            </select>
-                            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="filter-dropdown">
-                            <select class="filter-select" v-model="selectedPrice">
-                                <option value="">Price</option>
-                                <option value="0-1000">Under Tk 1,000</option>
-                                <option value="1000-2000">Tk 1,000 - 2,000</option>
-                                <option value="2000-3000">Tk 2,000 - 3,000</option>
-                                <option value="3000+">Above Tk 3,000</option>
-                            </select>
-                            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="filter-dropdown">
-                            <select class="filter-select" v-model="selectedSort">
-                                <option value="latest">Latest</option>
-                                <option value="low-to-high">Low to High</option>
-                                <option value="high-to-low">High to Low</option>
-                                <option value="on-sale">On Sale</option>
-                            </select>
-                            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Products Grid Section -->
-            <section class="products-section">
-                <div class="products-container">
-                    <!-- Loading Skeleton -->
-                    <div v-if="isLoading" class="products-grid loading-skeleton">
-                        <div v-for="i in 12" :key="i" class="product-card-wrapper skeleton-product-card">
-                            <div class="product-card">
-                                <div class="product-image-item">
-                                    <div class="skeleton-box skeleton-product-image"></div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="skeleton-box skeleton-product-name"></div>
-                                    <div class="skeleton-box skeleton-product-price"></div>
-                                </div>
-                            </div>
-                            <div class="add-to-cart-quick-btn skeleton-cart-btn">
-                                <div class="skeleton-box skeleton-cart-icon"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else-if="error" class="error-state">
-                        <p>Error loading products: {{ error }}</p>
-                    </div>
-                    <div v-else-if="isLoading" class="empty-state">
-                        <p>No products found in this category.</p>
-                    </div>
-                    <div v-else class="products-grid">
-                        <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
-                            <NuxtLink :to="`/products/${categorySlug}/${product.slug}`" class="product-card">
-                                <div class="product-image-item">
-                                    <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
-                                        format="webp" quality="85" />
-                                </div>
-                                <div class="product-info">
-                                    <h3 class="product-name">{{ product.name }}</h3>
-                                    <p class="product-price">Tk {{ product.price.toLocaleString() }}</p>
-                                </div>
-                            </NuxtLink>
-                            <button class="add-to-cart-quick-btn" @click.stop="handleQuickAddToCart(product)"
-                                title="Add to cart">
-                                <svg class="cart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Pagination Section -->
-            <section v-if="pagination && pagination.last_page > 1" class="pagination-section">
-                <div class="pagination-container">
-                    <div class="pagination">
-                        <button 
-                            class="pagination-btn" 
-                            :disabled="currentPage === 1"
-                            @click="goToPage(currentPage - 1)"
-                        >
-                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Previous
-                        </button>
-                        
-                        <div class="pagination-pages">
-                            <button
-                                v-for="page in visiblePages"
-                                :key="page"
-                                class="pagination-page-btn"
-                                :class="{ 'active': page === currentPage }"
-                                @click="goToPage(page)"
-                            >
-                                {{ page }}
-                            </button>
-                        </div>
-                        
-                        <button 
-                            class="pagination-btn" 
-                            :disabled="currentPage === pagination.last_page"
-                            @click="goToPage(currentPage + 1)"
-                        >
-                            Next
-                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div class="pagination-info">
-                        <p>Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} products</p>
-                    </div>
-                </div>
-            </section>
+      <!-- Hero Banner Section -->
+      <section class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-text">{{ categoryTitle }}</div>
+          <NuxtImg :src="heroImage" :alt="`${categoryTitle} fashion`" class="hero-img" loading="eager" format="webp"
+            quality="90" />
         </div>
-        <AppFooter />
-    </main>
+      </section>
+
+      <!-- Filter Section -->
+      <section class="filter-section">
+        <div class="filter-container">
+          <div class="filter-dropdowns">
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedSize">
+                <option value="">Size</option>
+                <option v-for="size in availableSizes" :key="size" :value="size">{{ size }}</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedPrice">
+                <option value="">Price</option>
+                <option value="0-1000">Under Tk 1,000</option>
+                <option value="1000-2000">Tk 1,000 - 2,000</option>
+                <option value="2000-3000">Tk 2,000 - 3,000</option>
+                <option value="3000+">Above Tk 3,000</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedSort">
+                <option value="latest">Latest</option>
+                <option value="low-to-high">Low to High</option>
+                <option value="high-to-low">High to Low</option>
+                <option value="on-sale">On Sale</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Grid Section -->
+      <section class="products-section">
+        <div class="products-container">
+          <!-- Loading Skeleton -->
+          <div v-if="isLoading" class="products-grid loading-skeleton">
+            <div v-for="i in 12" :key="i" class="product-card-wrapper skeleton-product-card">
+              <div class="product-card">
+                <div class="product-image-item">
+                  <div class="skeleton-box skeleton-product-image"></div>
+                </div>
+                <div class="product-info">
+                  <div class="skeleton-box skeleton-product-name"></div>
+                  <div class="skeleton-box skeleton-product-price"></div>
+                </div>
+              </div>
+              <div class="add-to-cart-quick-btn skeleton-cart-btn">
+                <div class="skeleton-box skeleton-cart-icon"></div>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="error" class="error-state">
+            <p>Error loading products: {{ error }}</p>
+          </div>
+          <div v-else-if="isLoading" class="empty-state">
+            <p>No products found in this category.</p>
+          </div>
+          <div v-else class="products-grid">
+            <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
+              <NuxtLink :to="`/products/${categorySlug}/${product.slug}`" class="product-card">
+                <div class="product-image-item">
+                  <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
+                    format="webp" quality="85" />
+                </div>
+                <div class="product-info">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  <p class="product-price">Tk {{ product.price.toLocaleString() }}</p>
+                </div>
+              </NuxtLink>
+              <button class="add-to-cart-quick-btn" @click.stop="handleQuickAddToCart(product)" title="Add to cart">
+                <svg class="cart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pagination Section -->
+      <section v-if="pagination && pagination.last_page > 1" class="pagination-section">
+        <div class="pagination-container">
+          <div class="pagination">
+            <button class="pagination-btn" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+              <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              Previous
+            </button>
+
+            <div class="pagination-pages">
+              <button v-for="page in visiblePages" :key="page" class="pagination-page-btn"
+                :class="{ 'active': page === currentPage }" @click="goToPage(page)">
+                {{ page }}
+              </button>
+            </div>
+
+            <button class="pagination-btn" :disabled="currentPage === pagination.last_page"
+              @click="goToPage(currentPage + 1)">
+              Next
+              <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="pagination-info">
+            <p>Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} products</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <AppFooter />
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -183,12 +170,30 @@ const categoryTitle = computed(() => {
     .toUpperCase()
 })
 
+// Hero image based on category
+const heroImage = computed(() => {
+  if (categorySlug.value === 'women') {
+    return '/shop-by-category/shop-by-category-2.png'
+  }
+  if (categorySlug.value === 'accessories') {
+    return '/shop-by-category/shop-by-category-55.jpg'
+  }
+  if (categorySlug.value === 'jewelry') {
+    return '/explore/explore-22.png'
+  }
+
+  if (categorySlug.value === 'kids') {
+    return '/explore/explore-1.png'
+  }
+  return '/men/men-hero-image.jpg'
+})
+
 // Meta
 useHead({
-    title: `${categoryTitle.value} Collection - Rang`,
-    meta: [
-        { name: 'description', content: `Discover our exclusive collection of ${categoryTitle.value.toLowerCase()} products.` }
-    ]
+  title: `${categoryTitle.value} Collection - Rang`,
+  meta: [
+    { name: 'description', content: `Discover our exclusive collection of ${categoryTitle.value.toLowerCase()} products.` }
+  ]
 })
 
 // Reactive data
@@ -284,11 +289,11 @@ const goToPage = (page: number) => {
 // Computed property for visible page numbers
 const visiblePages = computed(() => {
   if (!pagination.value) return []
-  
+
   const pages: number[] = []
   const totalPages = pagination.value.last_page
   const current = currentPage.value
-  
+
   // Show up to 5 page numbers
   if (totalPages <= 5) {
     // Show all pages if 5 or fewer
@@ -314,7 +319,7 @@ const visiblePages = computed(() => {
       }
     }
   }
-  
+
   return pages
 })
 
@@ -336,7 +341,7 @@ const availableSizes = computed(() => {
 const filteredProducts = computed(() => {
   return products.value.filter(product => {
     // Size filter - check if any variant matches
-    const sizeMatch = !selectedSize.value || 
+    const sizeMatch = !selectedSize.value ||
       product.variants?.some(variant => variant.attributes?.size === selectedSize.value) || false
 
     // Price filter
@@ -397,19 +402,19 @@ const handleQuickAddToCart = (product: Product) => {
 <style scoped>
 /* Override AppHeader navigation colors for men page */
 :global(.nav-link) {
-    color: black !important;
+  color: black !important;
 }
 
 :global(.nav-link:hover) {
-    color: #ea580c !important;
+  color: #ea580c !important;
 }
 
 /* Override hamburger icon color for men page */
 :global(.mobile-menu-button) {
-    color: black !important;
+  color: black !important;
 }
 
 :global(.mobile-menu-button:hover) {
-    color: #ea580c !important;
+  color: #ea580c !important;
 }
 </style>

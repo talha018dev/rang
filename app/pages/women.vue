@@ -87,10 +87,10 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
+import { useHead } from 'nuxt/app'
 import { computed, ref } from 'vue'
 import AppFooter from '../../components/AppFooter.vue'
 import './men/men.css'
-import { useHead } from 'nuxt/app'
 
 // Meta
 useHead({
