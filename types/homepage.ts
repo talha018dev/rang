@@ -124,3 +124,29 @@ export interface ProductDetailResponse {
   queries: ProductDetailQuery[]
 }
 
+// Brand API types
+export interface BrandImage {
+  name: string
+  url: string
+}
+
+export interface Brand {
+  name: string
+  slug: string
+  image: BrandImage
+}
+
+export interface BrandQuery {
+  query: string
+  bindings: string[]
+  time: number
+}
+
+export interface BrandResponse {
+  success: boolean
+  message: string
+  data: Brand[]
+  pagination: null
+  queries: BrandQuery[]
+}
+
