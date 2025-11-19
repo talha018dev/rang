@@ -93,8 +93,8 @@
           <div v-else-if="error" class="error-state">
             <p>Error loading products: {{ error }}</p>
           </div>
-          <div v-else-if="isLoading" class="empty-state">
-            <p>No products found in this category.</p>
+          <div v-else-if="filteredProducts.length === 0" class="empty-state">
+            <p>No products found matching your filters.</p>
           </div>
           <div v-else class="products-grid">
             <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
