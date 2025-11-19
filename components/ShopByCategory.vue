@@ -12,12 +12,11 @@
                     <div class="image-div category-grid-main-men">
                         <NuxtImg src="/shop-by-category/shop-by-category-1.png" alt="Category Rang"
                             class="category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text" style="top: 10px; left: 10px;">
+                        <div class="image-div-text top-left">
                             <div>Men</div>
-                            <span><span class="by">by</span> Rang Bangladesh</span>
                         </div>
-                        <div class="image-shop-now">Shop Now
-                            <Icon name="heroicons:chevron-right" />
+                        <div class="bottom-right absolute">
+                            <ShopNowBlue />
                         </div>
                     </div>
                 </NuxtLink>
@@ -25,27 +24,50 @@
                     <div class="category-grid-main-women">
                         <NuxtImg src="/shop-by-category/shop-by-category-2.png" alt="Category Rang"
                             class="category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text bottom-left">
-                            <div class="small-image-text">See what’s new in our</div>
+                        <div class="image-div-text top-left">
                             <div>Women</div>
-                            <p>Collection</p>
                         </div>
-                        <div class="image-shop-now">Shop Now
-                            <Icon name="heroicons:chevron-right" />
+                        <div class="bottom-right absolute">
+                            <ShopNowBlue />
                         </div>
                     </div>
                 </NuxtLink>
             </div>
             <div class="category-grid-secondary">
-                <NuxtLink to="/products/kids">
-                    <NuxtImg src="/category-3.png" alt="Category Rang" class="category-image" format="webp" quality="85" loading="lazy" />
+                <NuxtLink to="/products/kids" style="height: 600px;">
+                    <div class="image-div">
+                        <NuxtImg style="object-position: left;" src="/explore/explore-1.png" alt="Category Rang"
+                            class="category-image" format="webp" quality="85" loading="lazy" />
+                        <div class="image-div-text top-left">
+                            <div>Kids</div>
+                        </div>
+                        <div class="bottom-right absolute">
+                            <ShopNowBlue />
+                        </div>
+                    </div>
                 </NuxtLink>
-                <NuxtLink to="/products/home-decor">
-                    <NuxtImg src="/category-4.png" alt="Category Rang" class="category-image" format="webp" quality="85" loading="lazy" />
+                <NuxtLink to="/products/home-decor" style="height: 600px;">
+                    <div class="image-div">
+                        <NuxtImg src="/shop-by-category/shop-by-category-44.jpg" alt="Category Rang"
+                            class="category-image" format="webp" quality="85" loading="lazy" />
+                        <div class="image-div-text top-left">
+                            <div>Home Decor</div>
+                        </div>
+                        <div class="bottom-right absolute">
+                            <ShopNowBlue />
+                        </div>
+                    </div>
                 </NuxtLink>
-                <NuxtLink to="/products/accessories">
-                    <div class="category-image-container">
-                        <NuxtImg src="/category-5.png" alt="Category Rang" class="category-image-rounded" format="webp" quality="85" loading="lazy" />
+                <NuxtLink to="/products/accessories" style="height: 600px;">
+                    <div class="image-div">
+                        <NuxtImg src="/shop-by-category/shop-by-category-55.jpg" alt="Category Rang"
+                            class="category-image-rounded" format="webp" quality="85" loading="lazy" />
+                        <div class="image-div-text top-left">
+                            <div>Accessories</div>
+                        </div>
+                        <div class="bottom-right absolute">
+                            <ShopNowBlue />
+                        </div>
                     </div>
                 </NuxtLink>
             </div>
@@ -54,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-
+import ShopNowBlue from './ShopNowBlue.vue';
 </script>
 
 <style scoped>
