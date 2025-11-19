@@ -15,9 +15,9 @@
                         <span>Ultimate</span>
                         <div>Sale</div>
                     </div>
-                    <div class="sale-offer-number-container">
-                        <div class="sale-offer-number">50% OFF</div>
-                       <div class="absolute" style="bottom: 10px; right: 40px;">
+                    <div class="sale-offer-number-container" style="justify-content: space-between; ">
+                        <div class="sale-offer-number" style="line-height: 3rem;">50% OFF</div>
+                       <div class="" style="bottom: 10px; right: 40px;">
                             <ShopNowBlue />
                         </div>
                     </div>
