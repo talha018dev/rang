@@ -35,7 +35,7 @@
             class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
 
           <div class="absolute" style="bottom: 40px; right: 40px;">
-            <button class="shop-now-blue-button">
+            <button class="shop-now-white-button">
               <span class="button-text">See All</span>
               <Icon name="heroicons:arrow-right" class="button-icon" />
             </button>
@@ -58,9 +58,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useApi } from '~~/composables/useApi'
-import type { Brand, BrandResponse } from '~~/types/homepage'
-import ShopNowBlue from './ShopNowBlue.vue'
+import { useApi } from '../composables/useApi'
+import type { Brand, BrandResponse } from '../types/homepage'
 
 // Reactive state
 const brands = ref<Brand[]>([])

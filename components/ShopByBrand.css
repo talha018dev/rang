@@ -161,3 +161,62 @@
   margin: 0;
   font-size: 1rem;
 }
+
+/* ShopNowWhite button styles */
+.shop-now-white-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.5em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  min-width: 120px;
+  height: 48px;
+}
+
+.shop-now-white-button:hover {
+  color: #f1592c;
+}
+
+.shop-now-white-button:active {
+  color: #f1592c;
+}
+
+.shop-now-white-button:focus {
+  outline: none;
+}
+
+.shop-now-white-button .button-text {
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+.shop-now-white-button .button-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .shop-now-white-button {
+    padding: 10px 20px;
+    font-size: 0.875em;
+    min-width: 100px;
+    height: 44px;
+  }
+  
+  .shop-now-white-button .button-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
