@@ -16,7 +16,7 @@
                             class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                             <h3 class="timeless-name-light">{{ image.title }}</h3>
                             <p class="shop-now-blue-button-div">
-                                <ShopNowWhite />
+                                <ShopNowBlue />
                             </p>
                         </div>
                     </NuxtLink>
@@ -40,7 +40,7 @@
                                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                                         <h3 class="timeless-name-light">{{ image.title }}</h3>
                                         <p class="shop-now-blue-button-div">
-                                            <ShopNowWhite />
+                                            <ShopNowBlue />
                                         </p>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import ShopNowWhite from './ShopNowWhite.vue'
+import ShopNowBlue from './ShopNowBlue.vue'
 
 const timelessImages = [
     {

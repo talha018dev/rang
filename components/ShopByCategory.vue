@@ -16,7 +16,7 @@
                             <div>Men</div>
                         </div>
                         <div class="bottom-right absolute">
-                            <ShopNowBlue />
+                            <ShopNowWhite />
                         </div>
                     </div>
                 </NuxtLink>
@@ -28,7 +28,7 @@
                             <div>Women</div>
                         </div>
                         <div class="bottom-right absolute">
-                            <ShopNowBlue />
+                            <ShopNowWhite />
                         </div>
                     </div>
                 </NuxtLink>
@@ -42,7 +42,7 @@
                             <div>Kids</div>
                         </div>
                         <div class="bottom-right absolute">
-                            <ShopNowBlue />
+                            <ShopNowWhite />
                         </div>
                     </div>
                 </NuxtLink>
@@ -54,7 +54,7 @@
                             <div>Home Decor</div>
                         </div>
                         <div class="bottom-right absolute">
-                            <ShopNowBlue />
+                            <ShopNowWhite />
                         </div>
                     </div>
                 </NuxtLink>
@@ -66,7 +66,7 @@
                             <div>Accessories</div>
                         </div>
                         <div class="bottom-right absolute">
-                            <ShopNowBlue />
+                            <ShopNowWhite />
                         </div>
                     </div>
                 </NuxtLink>
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import ShopNowBlue from './ShopNowBlue.vue';
+import ShopNowWhite from './ShopNowWhite.vue';
 </script>
 
 <style scoped>
