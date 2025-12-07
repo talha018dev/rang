@@ -5,7 +5,7 @@
   border-radius: 0.5rem;
   margin-bottom: 2rem;
   display: flex;
-  height: 400px;
+  /* height: 400px; */
 }
 
 /* Hide desktop version on mobile */
@@ -248,7 +248,8 @@
 .carousel-image-container {
   border-radius: 0.5rem;
   overflow: hidden;
-  height: 200px;
+  /* height: 200px; */
+  aspect-ratio: 0.68;
   width: 100%;
 }
 
@@ -345,6 +346,7 @@
 .carousel-nuxt {
   height: 100%;
   margin-top: 6px !important;
+  margin-bottom: 6px !important;
 }
 
 .carousel-nuxt .carousel-container {

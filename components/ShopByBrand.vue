@@ -14,17 +14,16 @@
       </div>
       <!-- Brands Grid -->
       <div v-else-if="brands.length > 0" class="brand-grid-main">
-        <NuxtLink 
+        <div 
           v-for="brand in brands" 
           :key="brand.slug" 
-          :to="`/products?brand=${brand.slug}`" 
           class="brand-item"
           :class="{ 'brand-item-selected': selectedBrand === brand.slug }"
-          @click.prevent="selectBrand(brand.slug)"
+          @click="selectBrand(brand.slug)"
         >
           <NuxtImg :src="brand.image.url" :alt="brand.name" class="brand-image" format="webp" quality="85"
             loading="lazy" />
-        </NuxtLink>
+        </div>
       </div>
       <!-- Error State -->
       <div v-else-if="error" class="error-state">
@@ -64,7 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from 'nuxt/app'
 import { onMounted, ref } from 'vue'
 import { useApi } from '../composables/useApi'
 import type { Brand, BrandResponse } from '../types/homepage'
@@ -106,8 +104,6 @@ const fetchBrands = async () => {
 // Select brand function
 const selectBrand = (brandSlug: string) => {
   selectedBrand.value = brandSlug
-  // Navigate to products page with selected brand
-  navigateTo(`/products?brand=${brandSlug}`)
 }
 
 // Fetch brands on mount
