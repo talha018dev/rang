@@ -236,12 +236,15 @@ const handleAddToCart = (product: Product) => {
   const firstVariant = product.variants?.[0]
   const size = firstVariant?.attributes?.size
   const color = firstVariant?.attributes?.color
+  const variantPrice = firstVariant?.price || product.price
+  const variantPriceUsd = firstVariant?.price_usd || product.price_usd
 
   addToCart({
     id: product.id.toString(),
     name: product.name,
-    price: product.price,
-    priceDisplay: formatPrice(product.price),
+    price: variantPrice,
+    price_usd: variantPriceUsd,
+    priceDisplay: formatPrice(variantPrice, variantPriceUsd),
     image: getImageUrl(product.image),
     size: size,
     color: color,

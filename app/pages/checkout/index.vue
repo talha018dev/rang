@@ -471,7 +471,7 @@
                       <span v-if="item.color" class="order-item-attr">Color: {{ item.color }}</span>
                       <span class="order-item-attr">Qty: {{ item.quantity }}</span>
                     </div>
-                    <p class="order-item-price">{{ formatPrice(item.price * item.quantity) }}</p>
+                    <p class="order-item-price">{{ formatItemTotal(item) }}</p>
                   </div>
                 </div>
               </div>
@@ -547,7 +547,24 @@ const {
   clearCart
 } = useCart()
 
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
+
+// Format item total price based on current currency
+const formatItemTotal = (item: any) => {
+  if (currency.value === 'USD') {
+    const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0 
+      ? item.price_usd 
+      : (item.price / exchangeRate.value)
+    const totalUsd = itemPriceUsd * item.quantity
+    if (!isFinite(totalUsd) || isNaN(totalUsd)) {
+      return '$0.00'
+    }
+    return `$${totalUsd.toFixed(2)}`
+  } else {
+    const total = item.price * item.quantity
+    return `Tk ${total.toLocaleString()}`
+  }
+}
 
 // Loading state for cart initialization
 const isLoadingCart = ref(true)

@@ -60,7 +60,7 @@
                     <span v-if="item.sku" class="item-attribute">SKU: {{ item.sku }}</span>
                   </div>
                   <div class="item-price-row">
-                    <span class="item-price">{{ item.priceDisplay }}</span>
+                    <span class="item-price">{{ formatPrice(item.price, item.price_usd) }}</span>
                   </div>
                 </div>
                 
@@ -90,7 +90,7 @@
                 </div>
                 
                 <div class="cart-item-total">
-                  <span class="item-total-price">{{ formatPrice(item.price * item.quantity) }}</span>
+                  <span class="item-total-price">{{ formatItemTotal(item) }}</span>
                 </div>
               </div>
             </div>
@@ -159,7 +159,24 @@ const {
   isEmpty: isEmptyComputed
 } = useCart()
 
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
+
+// Format item total price based on current currency
+const formatItemTotal = (item: any) => {
+  if (currency.value === 'USD') {
+    const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0 
+      ? item.price_usd 
+      : (item.price / exchangeRate.value)
+    const totalUsd = itemPriceUsd * item.quantity
+    if (!isFinite(totalUsd) || isNaN(totalUsd)) {
+      return '$0.00'
+    }
+    return `$${totalUsd.toFixed(2)}`
+  } else {
+    const total = item.price * item.quantity
+    return `Tk ${total.toLocaleString()}`
+  }
+}
 
 // Create a local loading state that ensures minimum display time
 const isLoading = ref(true)

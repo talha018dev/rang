@@ -5,7 +5,8 @@ export interface CartItem {
   id: string
   name: string
   price: number
-  priceDisplay: string
+  price_usd?: number
+  priceDisplay: string // Kept for backward compatibility, but will be recalculated
   image: string
   quantity: number
   size?: string
@@ -139,14 +140,32 @@ export const useCart = () => {
     return cartItems.value.reduce((total, item) => total + item.quantity, 0)
   })
 
+  const { formatPrice, currency, exchangeRate } = useCurrency()
+  
   const totalPrice = computed(() => {
-    return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
+    if (currency.value === 'USD') {
+      // Sum USD prices if available, otherwise convert BDT prices
+      return cartItems.value.reduce((total, item) => {
+        const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0 
+          ? item.price_usd 
+          : (item.price / exchangeRate.value)
+        return total + (itemPriceUsd * item.quantity)
+      }, 0)
+    } else {
+      return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
+    }
   })
-
-  const { formatPrice } = useCurrency()
   
   const totalPriceDisplay = computed(() => {
-    return formatPrice(totalPrice.value)
+    if (currency.value === 'USD') {
+      const totalUsd = totalPrice.value
+      if (!isFinite(totalUsd) || isNaN(totalUsd)) {
+        return '$0.00'
+      }
+      return `$${totalUsd.toFixed(2)}`
+    } else {
+      return `Tk ${totalPrice.value.toLocaleString()}`
+    }
   })
 
   const isEmpty = computed(() => cartItems.value.length === 0)

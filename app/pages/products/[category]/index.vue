@@ -426,6 +426,7 @@ const handleQuickAddToCart = (product: Product) => {
     id: product.id.toString(),
     name: product.name,
     price: variantPrice,
+    price_usd: variantPriceUsd,
     priceDisplay: formatPrice(variantPrice, variantPriceUsd),
     image: getImageUrl(product.image),
     size: size,
