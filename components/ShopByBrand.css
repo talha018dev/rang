@@ -4,6 +4,7 @@
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  min-height: calc(100dvh - 102px) !important;
 }
 .brand-container img:hover{
   /* transform: scale(1.05); */

@@ -4,6 +4,7 @@
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  min-height: calc(100dvh - 102px) !important;
 }
 .timeless-container img:hover{
   /* transform: scale(1.02); */
@@ -56,6 +57,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+  height: calc(100dvh - 175px);
 }
 
 .timeless-image {
