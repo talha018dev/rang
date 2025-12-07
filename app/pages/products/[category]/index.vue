@@ -54,6 +54,18 @@
               </svg>
             </div>
             <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedCombo">
+                <option value="">Combo</option>
+                <option value="true">Only combo products</option>
+                <option value="false">Except combo products</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
               <select class="filter-select" v-model="selectedSort">
                 <option value="latest">Latest</option>
                 <option value="low-to-high">Low to High</option>
@@ -212,6 +224,7 @@ useHead({
 const selectedSize = ref('')
 const selectedPrice = ref('')
 const selectedBrand = ref('')
+const selectedCombo = ref('')
 const selectedSort = ref('latest') // Default sort is latest
 const currentPage = ref(1)
 const products = ref<Product[]>([])
@@ -263,6 +276,11 @@ const fetchProducts = async () => {
     // Add brand parameter if selected
     if (selectedBrand.value) {
       apiUrl += `&brand=${selectedBrand.value}`
+    }
+    
+    // Add combo parameter if selected
+    if (selectedCombo.value !== '') {
+      apiUrl += `&combo=${selectedCombo.value}`
     }
     
     const response = await $fetch<ProductResponse>(apiUrl)
@@ -405,7 +423,7 @@ const filteredProducts = computed(() => {
 })
 
 // Watch for filter changes to reset to page 1
-watch([selectedSize, selectedPrice, selectedBrand], () => {
+watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
   currentPage.value = 1
   fetchProducts()
 })
