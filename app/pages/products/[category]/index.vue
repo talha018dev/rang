@@ -1,7 +1,7 @@
 <template>
   <main class="men-page-gradient">
 
-    <div class="men-page">
+    <div class="men-page" :class="{ 'women-category': categorySlug === 'women' }">
       <AppHeader />
 
       <!-- Hero Banner Section -->
