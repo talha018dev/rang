@@ -645,8 +645,8 @@ watch(shippingInfo, () => {
   }
 }, { deep: true })
 
-// Shipping cost based on selected shipping method
-const shippingCost = computed(() => {
+// Shipping cost in BDT (base currency)
+const shippingCostBDT = computed(() => {
   if (!shippingMethod.value) {
     return 0
   }
@@ -661,27 +661,70 @@ const shippingCost = computed(() => {
   return 0
 })
 
+// Shipping cost in current currency
+const shippingCost = computed(() => {
+  if (currency.value === 'USD') {
+    // Convert BDT shipping cost to USD
+    return shippingCostBDT.value / exchangeRate.value
+  }
+  return shippingCostBDT.value
+})
+
 const shippingCostDisplay = computed(() => {
   if (!shippingMethod.value) {
     return 'Select shipping method'
   }
-  if (shippingCost.value === 0) {
+  if (shippingCostBDT.value === 0) {
     return 'Free'
   }
-  return formatPrice(shippingCost.value)
-})
-
-
-const grandTotalDisplay = computed(() => {
-  return formatPrice(grandTotal.value)
+  if (currency.value === 'USD') {
+    const usdShipping = shippingCost.value
+    if (!isFinite(usdShipping) || isNaN(usdShipping)) {
+      return '$0.00'
+    }
+    return `$${usdShipping.toFixed(2)}`
+  }
+  return `Tk ${shippingCostBDT.value.toLocaleString()}`
 })
 
 // Calculate grand total with coupon discount
 const grandTotal = computed(() => {
   const subtotal = totalPrice.value
   const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
+  
+  // Convert discount to current currency if needed
+  let discountInCurrentCurrency = discount
+  if (currency.value === 'USD' && discount > 0) {
+    discountInCurrentCurrency = discount / exchangeRate.value
+  }
+  
   const shipping = shippingCost.value
-  return subtotal - discount + shipping
+  const total = subtotal - discountInCurrentCurrency + shipping
+  
+  // Check for invalid values
+  if (!isFinite(total) || isNaN(total)) {
+    return 0
+  }
+  
+  return total
+})
+
+const grandTotalDisplay = computed(() => {
+  if (!shippingMethod.value) {
+    // Show subtotal only when no shipping method is selected
+    return totalPriceDisplay.value
+  }
+  
+  // Format grandTotal directly (it's already in the correct currency)
+  if (currency.value === 'USD') {
+    const totalUsd = grandTotal.value
+    if (!isFinite(totalUsd) || isNaN(totalUsd)) {
+      return '$0.00'
+    }
+    return `$${totalUsd.toFixed(2)}`
+  } else {
+    return `Tk ${grandTotal.value.toLocaleString()}`
+  }
 })
 
 // Validate coupon function
