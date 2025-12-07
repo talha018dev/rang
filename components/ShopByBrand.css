@@ -85,11 +85,29 @@
 .brand-grid-main .brand-item {
   width: fit-content;
   margin: 0 0rem;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
-.brand-grid-main .brand-item:first-child {
+
+.brand-grid-main .brand-item:hover {
+  transform: scale(1.05);
+}
+
+.brand-grid-main .brand-item-selected {
   transform: scale(1.25);
   position: relative;
-  left: -12px;
+}
+
+.brand-grid-main .brand-item-selected::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #F1592C;
+  border-radius: 2px;
 }
 
 .brand-image {

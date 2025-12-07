@@ -14,7 +14,14 @@
       </div>
       <!-- Brands Grid -->
       <div v-else-if="brands.length > 0" class="brand-grid-main">
-        <NuxtLink v-for="brand in brands" :key="brand.slug" :to="`/products?brand=${brand.slug}`" class="brand-item">
+        <NuxtLink 
+          v-for="brand in brands" 
+          :key="brand.slug" 
+          :to="`/products?brand=${brand.slug}`" 
+          class="brand-item"
+          :class="{ 'brand-item-selected': selectedBrand === brand.slug }"
+          @click.prevent="selectBrand(brand.slug)"
+        >
           <NuxtImg :src="brand.image.url" :alt="brand.name" class="brand-image" format="webp" quality="85"
             loading="lazy" />
         </NuxtLink>
@@ -57,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+import { navigateTo } from 'nuxt/app'
 import { onMounted, ref } from 'vue'
 import { useApi } from '../composables/useApi'
 import type { Brand, BrandResponse } from '../types/homepage'
@@ -65,6 +73,7 @@ import type { Brand, BrandResponse } from '../types/homepage'
 const brands = ref<Brand[]>([])
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+const selectedBrand = ref<string>('')
 
 // Fetch brands from API
 const fetchBrands = async () => {
@@ -78,6 +87,10 @@ const fetchBrands = async () => {
 
     if (response.success && response.data) {
       brands.value = response.data
+      // Set first brand as selected by default
+      if (brands.value.length > 0 && brands.value[0]) {
+        selectedBrand.value = brands.value[0].slug
+      }
     } else {
       error.value = 'Failed to load brands'
     }
@@ -88,6 +101,13 @@ const fetchBrands = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+// Select brand function
+const selectBrand = (brandSlug: string) => {
+  selectedBrand.value = brandSlug
+  // Navigate to products page with selected brand
+  navigateTo(`/products?brand=${brandSlug}`)
 }
 
 // Fetch brands on mount
