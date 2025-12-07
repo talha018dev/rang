@@ -150,8 +150,8 @@
 
                     <!-- Pricing -->
                     <div class="pricing">
-                        <span class="current-price">{{ formatPrice(product.price) }}</span>
-                        <span v-if="product.compare_price > product.price" class="original-price">{{ formatPrice(product.compare_price) }}</span>
+                        <span class="current-price">{{ formatPrice(product.price, product.price_usd) }}</span>
+                        <span v-if="product.compare_price > product.price" class="original-price">{{ formatPrice(product.compare_price, product.compare_price_usd) }}</span>
                         <span v-if="product.compare_price > product.price" class="discount">
                             -{{ Math.round(((product.compare_price - product.price) / product.compare_price) * 100) }}%
                         </span>
@@ -282,7 +282,7 @@
                                     </select>
                                 </div>
 
-                                <p class="item-price">{{ formatPrice(item.price) }}</p>
+                                <p class="item-price">{{ formatPrice(item.price, item.price_usd) }}</p>
                             </div>
                         </div>
                     </div>
@@ -330,7 +330,7 @@
                                     </select>
                                 </div>
 
-                                <p class="item-price">{{ formatPrice(item.price) }}</p>
+                                <p class="item-price">{{ formatPrice(item.price, item.price_usd) }}</p>
                             </div>
                         </div>
                     </UCarousel>
@@ -426,7 +426,7 @@
 
                             <div class="item-details">
                                 <p class="item-description">{{ item.description }}</p>
-                                <p class="item-price">{{ item.price }}</p>
+                                <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
                             </div>
                         </div>
                     </div>
@@ -452,7 +452,7 @@
 
                             <div class="item-details">
                                 <p class="item-description">{{ item.description }}</p>
-                                <p class="item-price">{{ item.price }}</p>
+                                <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
                             </div>
                         </div>
                     </UCarousel>
@@ -721,7 +721,7 @@
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">{{ relatedProduct.name }}</h3>
-                        <p class="product-price">{{ formatPrice(relatedProduct.price) }}</p>
+                        <p class="product-price">{{ formatPrice(relatedProduct.price, relatedProduct.price_usd) }}</p>
                     </div>
                 </NuxtLink>
             </div>
@@ -745,7 +745,7 @@
                         loading="lazy" format="webp" quality="85" />
                     <div class="related-products-info">
                         <h3 class="new-arrival-name-light">{{ item.name }}</h3>
-                        <h4 class="related-products-price">{{ formatPrice(item.price) }}</h4>
+                        <h4 class="related-products-price">{{ formatPrice(item.price, item.price_usd) }}</h4>
                     </div>
                 </NuxtLink>
             </UCarousel>
@@ -911,6 +911,7 @@ const matchingSeriesItems = ref<Array<{
   name: string
   size: string
   price: number
+  price_usd?: number
   slug: string
   product: Product
 }>>([])
@@ -931,6 +932,12 @@ watch(relatedProducts, (newRelatedProducts) => {
     const minPrice = product.variants?.length > 0
       ? Math.min(...product.variants.map(v => v.price))
       : product.price
+    
+    // Get the minimum USD price from variants or use product price_usd
+    const minPriceUsd = product.variants?.length > 0
+      ? Math.min(...product.variants.map(v => v.price_usd || 0).filter(p => p > 0))
+      : product.price_usd
+    const finalPriceUsd = minPriceUsd && minPriceUsd > 0 ? minPriceUsd : undefined
 
     return {
       id: product.id,
@@ -939,6 +946,7 @@ watch(relatedProducts, (newRelatedProducts) => {
       name: product.name,
       size: defaultSize,
       price: minPrice,
+      price_usd: finalPriceUsd,
       slug: product.slug,
       product: product // Store full product for reference
     }
@@ -1151,11 +1159,22 @@ const availableColors = computed(() => {
 
 // Computed properties
 const totalPrice = computed(() => {
+    const { currency, exchangeRate } = useCurrency()
     const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
-    const total = selectedItems.reduce((sum, item) => {
+    
+    if (currency.value === 'USD') {
+      // Sum USD prices if available, otherwise convert BDT prices
+      const totalUsd = selectedItems.reduce((sum, item) => {
+        const priceUsd = item.product?.price_usd !== undefined && item.product.price_usd > 0 ? item.product.price_usd : item.priceValue / exchangeRate.value
+        return sum + priceUsd
+      }, 0)
+      return formatPrice(0, totalUsd)
+    } else {
+      const total = selectedItems.reduce((sum, item) => {
         return sum + (item.priceValue || 0)
-    }, 0)
-    return formatPrice(total)
+      }, 0)
+      return formatPrice(total)
+    }
 })
 
 // Display only first 4 matching series items
@@ -1165,11 +1184,22 @@ const displayedMatchingSeriesItems = computed(() => {
 
 // Total price for matching series items
 const matchingSeriesTotalPrice = computed(() => {
+    const { currency, exchangeRate } = useCurrency()
     const selectedItems = matchingSeriesItems.value.filter(item => item.checked)
-    const total = selectedItems.reduce((sum, item) => {
+    
+    if (currency.value === 'USD') {
+      // Sum USD prices if available, otherwise convert BDT prices
+      const totalUsd = selectedItems.reduce((sum, item) => {
+        const priceUsd = item.price_usd !== undefined && item.price_usd > 0 ? item.price_usd : item.price / exchangeRate.value
+        return sum + priceUsd
+      }, 0)
+      return formatPrice(0, totalUsd)
+    } else {
+      const total = selectedItems.reduce((sum, item) => {
         return sum + (item.price || 0)
-    }, 0)
-    return formatPrice(total)
+      }, 0)
+      return formatPrice(total)
+    }
 })
 
 const filteredAndSortedReviews = computed(() => {
@@ -1232,6 +1262,7 @@ const handleAddToCart = () => {
     }) || product.value.variants?.find(variant => variant.attributes?.size === selectedSize.value)
 
     const variantPrice = selectedVariant?.price || product.value.price
+    const variantPriceUsd = selectedVariant?.price_usd || product.value.price_usd
     const variantImage = selectedVariant?.image || product.value.image
 
     for (let i = 0; i < quantity.value; i++) {
@@ -1239,7 +1270,7 @@ const handleAddToCart = () => {
             id: product.value.id.toString(),
             name: product.value.name,
             price: variantPrice,
-            priceDisplay: formatPrice(variantPrice),
+            priceDisplay: formatPrice(variantPrice, variantPriceUsd),
             image: getImageUrl(variantImage),
             size: selectedSize.value,
             color: selectedVariant?.attributes?.color || availableColors.value[selectedColorIndex.value]?.name,
@@ -1262,6 +1293,7 @@ const addFrequentlyBoughtToCart = () => {
       // Get first variant or use product price
       const firstVariant = item.product?.variants?.[0]
       const variantPrice = firstVariant?.price || item.priceValue
+      const variantPriceUsd = firstVariant?.price_usd || item.product?.price_usd
       const variantImage = firstVariant?.image || item.product?.image || item.image
       const variantSize = firstVariant?.attributes?.size
 
@@ -1269,7 +1301,7 @@ const addFrequentlyBoughtToCart = () => {
           id: item.id.toString(),
           name: item.name,
           price: variantPrice,
-          priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
+          priceDisplay: formatPrice(variantPrice, variantPriceUsd),
           image: getImageUrl(variantImage),
           size: variantSize,
           sku: firstVariant?.sku || item.product?.sku || '',
@@ -1311,6 +1343,7 @@ const updateMatchingSeriesSize = (index: number, event: Event) => {
     if (variant) {
       item.size = newSize
       item.price = variant.price
+      item.price_usd = variant.price_usd
     }
   }
 }
@@ -1324,13 +1357,14 @@ const addMatchingSeriesToCart = () => {
       ) || item.product?.variants?.[0]
       
       const variantPrice = selectedVariant?.price || item.price
+      const variantPriceUsd = selectedVariant?.price_usd || item.product?.price_usd
       const variantImage = selectedVariant?.image || item.image
       
       addToCart({
           id: item.id.toString(),
           name: item.name,
           price: variantPrice,
-          priceDisplay: `Tk ${variantPrice.toLocaleString()}`,
+          priceDisplay: formatPrice(variantPrice, variantPriceUsd),
           image: getImageUrl(variantImage),
           size: item.size,
           sku: selectedVariant?.sku || item.product?.sku || '',

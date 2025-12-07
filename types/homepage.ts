@@ -13,6 +13,8 @@ export interface ProductVariant {
   image: string
   price: number
   compare_price: number
+  price_usd?: number
+  compare_price_usd?: number
   attributes: ProductVariantAttributes
 }
 
@@ -30,6 +32,8 @@ export interface Product {
   description: string
   price: number
   compare_price: number
+  price_usd?: number
+  compare_price_usd?: number
   images: Record<string, string>
   category: ProductCategory
   variants: ProductVariant[]

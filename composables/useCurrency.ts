@@ -33,18 +33,20 @@ export const useCurrency = () => {
   })
 
   // Convert price based on currency
-  const formatPrice = (price: number): string => {
+  const formatPrice = (price: number, priceUsd?: number): string => {
     if (currency.value === 'USD') {
-      const usdPrice = price / exchangeRate.value
+      // Use price_usd from API if available and valid, otherwise convert using exchange rate
+      const usdPrice = priceUsd !== undefined && priceUsd > 0 ? priceUsd : price / exchangeRate.value
       return `$${usdPrice.toFixed(2)}`
     }
     return `Tk ${price.toLocaleString()}`
   }
 
   // Get raw price in current currency
-  const getPrice = (price: number): number => {
+  const getPrice = (price: number, priceUsd?: number): number => {
     if (currency.value === 'USD') {
-      return price / exchangeRate.value
+      // Use price_usd from API if available, otherwise convert using exchange rate
+      return priceUsd !== undefined ? priceUsd : price / exchangeRate.value
     }
     return price
   }

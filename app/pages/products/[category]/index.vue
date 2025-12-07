@@ -105,7 +105,7 @@
                 </div>
                 <div class="product-info">
                   <h3 class="product-name">{{ product.name }}</h3>
-                  <p class="product-price">Tk {{ product.price.toLocaleString() }}</p>
+                  <p class="product-price">{{ formatPrice(product.price, product.price_usd) }}</p>
                 </div>
               </NuxtLink>
               <button class="add-to-cart-quick-btn" @click.stop="handleQuickAddToCart(product)" title="Add to cart">
@@ -163,6 +163,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
+import { useCurrency } from '~~/composables/useCurrency'
 import type { Brand, BrandResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
@@ -411,18 +412,21 @@ watch([selectedSize, selectedPrice, selectedBrand], () => {
 
 // Cart functionality
 const { addToCart } = useCart()
+const { formatPrice } = useCurrency()
 
 const handleQuickAddToCart = (product: Product) => {
   // Get the first variant or use product defaults
   const firstVariant = product.variants?.[0]
   const size = firstVariant?.attributes?.size
   const color = firstVariant?.attributes?.color
+  const variantPrice = firstVariant?.price || product.price
+  const variantPriceUsd = firstVariant?.price_usd || product.price_usd
 
   addToCart({
     id: product.id.toString(),
     name: product.name,
-    price: product.price,
-    priceDisplay: `Tk ${product.price.toLocaleString()}`,
+    price: variantPrice,
+    priceDisplay: formatPrice(variantPrice, variantPriceUsd),
     image: getImageUrl(product.image),
     size: size,
     color: color,

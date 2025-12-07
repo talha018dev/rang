@@ -33,9 +33,9 @@
               <div class="product-info">
                 <h3 class="product-name">{{ item.name }}</h3>
                 <div class="product-price">
-                  <span class="current-price">Tk {{ item.price.toLocaleString() }}</span>
+                  <span class="current-price">{{ formatPrice(item.price, item.price_usd) }}</span>
                   <span v-if="item.compare_price > item.price" class="compare-price">
-                    Tk {{ item.compare_price.toLocaleString() }}
+                    {{ formatPrice(item.compare_price, item.compare_price_usd) }}
                   </span>
                 </div>
               </div>
@@ -54,12 +54,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { HomepageSection } from '../types/homepage';
+import { useCurrency } from '../composables/useCurrency';
 
 interface Props {
   sections: HomepageSection[] | null
 }
 
 const props = defineProps<Props>()
+const { formatPrice } = useCurrency()
 
 // Computed property to ensure sections are valid
 const validSections = computed(() => {
