@@ -213,9 +213,19 @@
                     <div class="color-selection">
                         <label class="selection-label">Color</label>
                         <div class="color-options">
-                            <div v-for="(color, index) in availableColors" :key="index" class="color-option"
-                                :class="{ selected: selectedColorIndex === index }"
-                                :style="{ backgroundColor: color.value || '#ccc' }" @click="selectedColorIndex = index" :title="color.name"></div>
+                            <div 
+                                v-for="(color, index) in availableColors" 
+                                :key="index" 
+                                class="color-option-wrapper"
+                                @click="selectedColorIndex = index"
+                            >
+                                <div
+                                    class="color-option"
+                                    :class="{ selected: selectedColorIndex === index }"
+                                    :style="{ backgroundColor: color.value || '#ccc' }"
+                                ></div>
+                                <span class="color-name">{{ color.name }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -363,9 +373,19 @@
                 <div class="color-selection">
                     <label class="selection-label">Color</label>
                     <div class="color-options">
-                        <div v-for="(color, index) in availableColors" :key="index" class="color-option"
-                            :class="{ selected: selectedColorIndex === index }"
-                            :style="{ backgroundColor: color.value || '#ccc' }" @click="selectedColorIndex = index" :title="color.name"></div>
+                        <div 
+                            v-for="(color, index) in availableColors" 
+                            :key="index" 
+                            class="color-option-wrapper"
+                            @click="selectedColorIndex = index"
+                        >
+                            <div
+                                class="color-option"
+                                :class="{ selected: selectedColorIndex === index }"
+                                :style="{ backgroundColor: color.value || '#ccc' }"
+                            ></div>
+                            <span class="color-name">{{ color.name }}</span>
+                        </div>
                     </div>
                 </div>
 

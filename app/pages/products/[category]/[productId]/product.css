@@ -410,6 +410,15 @@
     margin-top: 10px;
   }
   
+  .color-option-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    min-width: 50px;
+  }
+  
   .color-option {
     width: 40px;
     height: 40px;
@@ -427,6 +436,21 @@
   .color-option.selected {
     border-color: #333;
     box-shadow: 0 0 0 2px #e18719;
+  }
+  
+  .color-option-wrapper .color-name {
+    font-size: 0.875em;
+    color: #333;
+    text-align: center;
+    font-weight: 500;
+    white-space: nowrap;
+    display: block;
+    line-height: 1.2;
+    margin-top: 4px;
+    font-family: Poppins, sans-serif;
+    visibility: visible;
+    opacity: 1;
+    width: 100%;
   }
   
   /* Quantity Selector */
