@@ -74,9 +74,17 @@
 }
 
 .brand-grid-main {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* display: grid;
+  grid-template-columns: repeat(5, 1fr); */
+  display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.brand-grid-main .brand-item {
+  width: fit-content;
+  margin: 0 -0.5rem;
 }
 
 .brand-image {
