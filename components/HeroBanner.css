@@ -1,6 +1,6 @@
 /* HeroBanner Styles */
 .hero-banner-container {
-  height: calc(100svh - 115px);
+  height: calc(100svh - 140px);
   position: relative;
 }
 

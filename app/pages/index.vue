@@ -198,7 +198,7 @@ onMounted(async () => {
 <style>
 /* Set global scale to 0.75 for home page only */
 .home-page {
-  --global-scale: 0.75;
+  /* --global-scale: 0.75; */
   zoom: var(--global-scale);
 }
 

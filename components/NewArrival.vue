@@ -10,9 +10,10 @@
       <!-- Carousel -->
       <UCarousel ref="carouselRef" v-slot="{ item }" :items="validProducts" :ui="{
         item: 'basis-1/4 flex',
+        
         container: 'rounded-lg'
-      }" class="rounded-lg" :slides-per-view="4" :slides-per-group="1" :autoplay="false" :infinite="true"
-        tabindex="0" @keydown="handleKeydown">
+      }" class="rounded-lg new-arrival-carousel" :slides-per-view="4" :slides-per-group="1" :autoplay="false" :infinite="true" tabindex="0"
+        @keydown="handleKeydown">
         <div class="carousel-item">
           <NuxtLink :to="`/products/${item?.category?.slug}/${item.slug}`">
 
@@ -34,9 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import ShopNowBlue from './ShopNowBlue.vue'
-import type { Product } from '../types/homepage'
+import { computed, ref } from 'vue';
+import type { Product } from '../types/homepage';
+import ShopNowBlue from './ShopNowBlue.vue';
 
 interface Props {
   products?: Product[]
