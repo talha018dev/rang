@@ -289,13 +289,13 @@
                     
                     <!-- Matching Series Summary -->
                     <div class="matching-series-summary">
-                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
-                            Add to cart
-                        </button>
                         <div class="total-price">
                             <span class="total-label">Total price :</span>
                             <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
                         </div>
+                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
+                            Add to cart
+                        </button>
                     </div>
                 </div>
                 <section v-if="isMobile">
@@ -337,13 +337,13 @@
 
                     <!-- Matching Series Summary -->
                     <div class="matching-series-summary">
-                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
-                            Add to cart
-                        </button>
                         <div class="total-price">
                             <span class="total-label">Total price :</span>
                             <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
                         </div>
+                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
+                            Add to cart
+                        </button>
                     </div>
                 </section>
             </div>
@@ -456,17 +456,17 @@
                             </div>
                         </div>
                     </UCarousel>
+                </div>
 
-                    <!-- Summary Section -->
-                    <div class="frequently-bought-summary">
-                        <div class="total-price">
-                            <span class="total-label">Total price :</span>
-                            <span class="total-amount">{{ totalPrice }}</span>
-                        </div>
-                        <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
-                            Add to cart
-                        </button>
+                <!-- Summary Section - Below the products -->
+                <div class="frequently-bought-summary">
+                    <div class="total-price">
+                        <span class="total-label">Total price :</span>
+                        <span class="total-amount">{{ totalPrice }}</span>
                     </div>
+                    <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
+                        Add to cart
+                    </button>
                 </div>
             </div>
         </div>

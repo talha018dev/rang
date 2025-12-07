@@ -779,8 +779,9 @@
   /* Matching Series Summary */
   .matching-series-summary {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 1.5rem;
     margin-top: 2rem;
     padding: 1rem 0;
@@ -790,8 +791,9 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    text-align: left;
+    text-align: center;
     margin: 0;
+    justify-content: center;
   }
 
   .matching-series-summary .total-label {
@@ -948,18 +950,23 @@
     align-items: center;
     gap: 20px;
     min-width: 200px;
+    margin-top: 30px;
   }
   
   .total-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     text-align: center;
+    justify-content: center;
   }
   
   .total-label {
     font-size: 1em;
     color: #374151;
     font-weight: 500;
-    display: block;
-    margin-bottom: 4px;
+    display: inline;
+    margin-bottom: 0;
   }
   
   .total-amount {
