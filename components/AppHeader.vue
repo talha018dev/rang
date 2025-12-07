@@ -6,7 +6,9 @@
       </div>
       <div class="header-content">
         <div>
-          <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
+          <NuxtLink to="/">
+            <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
+          </NuxtLink>
         </div>
         <nav class="nav">
           <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
