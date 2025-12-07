@@ -175,9 +175,10 @@
     height: 100%; */
     width: 100%;
     height: 677px;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: top;
     transition: transform 0.3s ease;
-    transform: scale(1.3); /* Zoomed in by default */
+    /* transform: scale(1.3); Zoomed in by default */
     transform-origin: center center;
   }
   
