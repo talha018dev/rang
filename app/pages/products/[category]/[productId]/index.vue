@@ -934,10 +934,17 @@ watch(relatedProducts, (newRelatedProducts) => {
       : product.price
     
     // Get the minimum USD price from variants or use product price_usd
-    const minPriceUsd = product.variants?.length > 0
-      ? Math.min(...product.variants.map(v => v.price_usd || 0).filter(p => p > 0))
-      : product.price_usd
-    const finalPriceUsd = minPriceUsd && minPriceUsd > 0 ? minPriceUsd : undefined
+    let finalPriceUsd: number | undefined = undefined
+    if (product.variants?.length > 0) {
+      const usdPrices = product.variants.map(v => v.price_usd).filter(p => p !== undefined && p !== null && p > 0) as number[]
+      if (usdPrices.length > 0) {
+        finalPriceUsd = Math.min(...usdPrices)
+      } else if (product.price_usd !== undefined && product.price_usd > 0) {
+        finalPriceUsd = product.price_usd
+      }
+    } else if (product.price_usd !== undefined && product.price_usd > 0) {
+      finalPriceUsd = product.price_usd
+    }
 
     return {
       id: product.id,
@@ -1190,10 +1197,17 @@ const matchingSeriesTotalPrice = computed(() => {
     if (currency.value === 'USD') {
       // Sum USD prices if available, otherwise convert BDT prices
       const totalUsd = selectedItems.reduce((sum, item) => {
-        const priceUsd = item.price_usd !== undefined && item.price_usd > 0 ? item.price_usd : item.price / exchangeRate.value
+        let priceUsd: number
+        if (item.price_usd !== undefined && item.price_usd !== null && item.price_usd > 0) {
+          priceUsd = item.price_usd
+        } else if (item.price && exchangeRate.value > 0) {
+          priceUsd = item.price / exchangeRate.value
+        } else {
+          priceUsd = 0
+        }
         return sum + priceUsd
       }, 0)
-      return formatPrice(0, totalUsd)
+      return formatPrice(0, totalUsd > 0 ? totalUsd : undefined)
     } else {
       const total = selectedItems.reduce((sum, item) => {
         return sum + (item.price || 0)
@@ -1310,7 +1324,7 @@ const addFrequentlyBoughtToCart = () => {
       })
     })
 
-    alert(`Added ${selectedItems.length} item(s) to cart!`)
+    // alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 
 // Helper function to get available sizes for a product
@@ -1373,7 +1387,7 @@ const addMatchingSeriesToCart = () => {
       })
     })
 
-    alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
+    // alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
 }
 
 // Nuxt UI Carousel references

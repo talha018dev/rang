@@ -852,7 +852,7 @@
     const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
     console.log('Adding to cart:', selectedItems)
     // In a real app, this would add the selected items to the cart
-    alert(`Added ${selectedItems.length} item(s) to cart!`)
+    // alert(`Added ${selectedItems.length} item(s) to cart!`)
   }
   
   

@@ -36,7 +36,18 @@ export const useCurrency = () => {
   const formatPrice = (price: number, priceUsd?: number): string => {
     if (currency.value === 'USD') {
       // Use price_usd from API if available and valid, otherwise convert using exchange rate
-      const usdPrice = priceUsd !== undefined && priceUsd > 0 ? priceUsd : price / exchangeRate.value
+      let usdPrice: number
+      if (priceUsd !== undefined && priceUsd !== null && priceUsd > 0) {
+        usdPrice = priceUsd
+      } else if (price && exchangeRate.value > 0) {
+        usdPrice = price / exchangeRate.value
+      } else {
+        usdPrice = 0
+      }
+      // Check for invalid values
+      if (!isFinite(usdPrice) || isNaN(usdPrice)) {
+        usdPrice = 0
+      }
       return `$${usdPrice.toFixed(2)}`
     }
     return `Tk ${price.toLocaleString()}`

@@ -1007,7 +1007,7 @@ const addFrequentlyBoughtToCart = () => {
     })
   })
   
-  alert(`Added ${selectedItems.length} item(s) to cart!`)
+  // alert(`Added ${selectedItems.length} item(s) to cart!`)
 }
 
 const addMatchingSeriesToCart = () => {
@@ -1023,7 +1023,7 @@ const addMatchingSeriesToCart = () => {
     })
   })
   
-  alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
+  // alert(`Added ${selectedItems.length} matching series item(s) to cart!`)
 }
 
 // Nuxt UI Carousel references
