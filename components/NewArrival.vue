@@ -8,19 +8,33 @@
 
     <section>
       <!-- Carousel -->
-      <UCarousel ref="carouselRef" v-slot="{ item }" :items="validProducts" :ui="{
-        item: 'basis-1/4 flex',
-        container: 'rounded-lg'
-      }" class="rounded-lg" :slides-per-view="4" :slides-per-group="1" :autoplay="false" :infinite="true"
-        tabindex="0" @keydown="handleKeydown">
+      <UCarousel 
+        ref="carouselRef" 
+        v-slot="{ item }" 
+        :items="validProducts" 
+        class="carousel-nuxt"
+        :slides-per-view="4"
+        :space-between="16"
+        :prev="{ onClick: goToPrevious }"
+        :next="{ onClick: goToNext }"
+        :ui="{
+          item: 'carousel-slide basis-1/4 w-24',
+          container: 'carousel-container gap-4 !mt-1 !ml-4 !mr-4'
+        }"
+        tabindex="0" 
+        @keydown="handleKeydown">
         <div class="carousel-item">
-          <NuxtLink :to="`/products/${item?.category?.slug}/${item.slug}`">
-
-            <NuxtImg :src="getImageUrl(item.image)" :alt="item.name"
-              class="w-full h-80 object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-              loading="lazy" format="webp" quality="85" />
-            <div
-              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
+          <NuxtLink :to="`/products/${item?.category?.slug}/${item.slug}`" class="carousel-link">
+            <div class="carousel-image-container">
+              <NuxtImg 
+                :src="getImageUrl(item.image)" 
+                :alt="item.name"
+                class="carousel-image"
+                loading="lazy" 
+                format="webp" 
+                quality="85" />
+            </div>
+            <div class="carousel-content-overlay">
               <h3 class="new-arrival-name-light">{{ item.name }}</h3>
               <p class="shop-now-blue-button-div">
                 <ShopNowBlue />
@@ -34,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import ShopNowBlue from './ShopNowBlue.vue'
-import type { Product } from '../types/homepage'
+import { computed, ref } from 'vue';
+import type { Product } from '../types/homepage';
+import ShopNowBlue from './ShopNowBlue.vue';
 
 interface Props {
   products?: Product[]
@@ -47,6 +61,19 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const carouselRef = ref()
+
+// Manual navigation functions
+const goToNext = () => {
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.scrollNext()
+  }
+}
+
+const goToPrevious = () => {
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.scrollPrev()
+  }
+}
 
 // Computed property to ensure products are valid
 const validProducts = computed(() => {
@@ -70,16 +97,10 @@ const getImageUrl = (imagePath: string): string => {
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'ArrowLeft') {
     event.preventDefault()
-    // Navigate to previous slide
-    if (carouselRef.value) {
-      carouselRef.value.prev()
-    }
+    goToPrevious()
   } else if (event.key === 'ArrowRight') {
     event.preventDefault()
-    // Navigate to next slide
-    if (carouselRef.value) {
-      carouselRef.value.next()
-    }
+    goToNext()
   }
 }
 </script>
