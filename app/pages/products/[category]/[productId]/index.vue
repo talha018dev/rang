@@ -143,9 +143,11 @@
                     <div class="product-title-share-btn">
 
                         <div class="product-title">{{ product.name }}</div>
-                        <button class="share-btn-mobile">
-                            <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
-                        </button>
+                        <UTooltip :text="shareTooltipText" :open="showShareTooltipMobile">
+                            <button class="share-btn-mobile" @click.stop.prevent="handleShare($event, 'mobile')">
+                                <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                            </button>
+                        </UTooltip>
                     </div>
 
                     <!-- Pricing -->
@@ -178,10 +180,12 @@
                             </div>
 
                             <!-- Share Button -->
-                            <button class="share-btn">
-                                <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
-                                <div class="share-text">Share</div>
-                            </button>
+                            <UTooltip :text="shareTooltipText" :open="showShareTooltipDesktop">
+                                <button class="share-btn" @click.stop.prevent="handleShare($event, 'desktop')">
+                                    <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                                    <div class="share-text">Share</div>
+                                </button>
+                            </UTooltip>
                         </div>
                     </div>
                 </div>
@@ -794,6 +798,9 @@ const selectedColorIndex = ref(0)
 const selectedSize = ref('')
 const quantity = ref(1)
 const showMoreImages = ref(false)
+const showShareTooltipMobile = ref(false)
+const showShareTooltipDesktop = ref(false)
+const shareTooltipText = ref('Link copied!')
 
 // Fetch product details from API
 const fetchProductDetails = async () => {
@@ -1300,6 +1307,70 @@ const handleAddToCart = () => {
 const handleBuyNow = () => {
     handleAddToCart()
     navigateTo('/cart')
+}
+
+// Share functionality - uses native share on mobile, clipboard on desktop
+const handleShare = async (event: Event, buttonType: 'mobile' | 'desktop') => {
+    event.preventDefault()
+    event.stopPropagation()
+    
+    if (!product.value) return
+    
+    const productUrl = window.location.href
+    const productName = product.value.name
+    const shareText = `Check out ${productName} on Rang Bangladesh!`
+    
+    // Check if on mobile device
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    
+    // Use native share API only on mobile devices
+    if (isMobileDevice && navigator.share) {
+        try {
+            await navigator.share({
+                title: productName,
+                text: shareText,
+                url: productUrl
+            })
+        } catch (err) {
+            // User cancelled or error - fall through to clipboard
+            if ((err as Error).name === 'AbortError') {
+                return // User cancelled, do nothing
+            }
+            // For other errors, fall through to clipboard
+        }
+        return
+    }
+    
+    // Clipboard fallback for desktop browsers
+    const showTooltip = () => {
+        if (buttonType === 'mobile') {
+            showShareTooltipMobile.value = true
+            setTimeout(() => {
+                showShareTooltipMobile.value = false
+            }, 2000)
+        } else {
+            showShareTooltipDesktop.value = true
+            setTimeout(() => {
+                showShareTooltipDesktop.value = false
+            }, 2000)
+        }
+    }
+    
+    try {
+        await navigator.clipboard.writeText(productUrl)
+        showTooltip()
+    } catch (err) {
+        // Final fallback for older browsers
+        const textArea = document.createElement('textarea')
+        textArea.value = productUrl
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        showTooltip()
+    }
 }
 
 const addFrequentlyBoughtToCart = () => {
