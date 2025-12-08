@@ -270,9 +270,14 @@
     transform: scale(1);
   }
 
-  /* Disable image hover effect for women category */
+  /* Set scale to 1 for women category images */
+  .women-category .product-img {
+    transform: scale(1);
+  }
+
+  /* Keep scale at 1 on hover for women category */
   .women-category .product-card:hover .product-img {
-    transform: scale(2.1);
+    transform: scale(1);
   }
   
   .product-info {
