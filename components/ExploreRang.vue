@@ -72,6 +72,70 @@
                 </NuxtLink>
             </div>
         </section>
+        <section class="explore-rang2-section">
+            <div class="explore-rang2-flex1">
+                <div class="explore-rang2-flex1-img-container">
+                    <NuxtImg 
+                        src="/explore/explore-1.png" 
+                        alt="Explore Rang" 
+                        class="explore-rang2-flex1-img"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                </div>
+                <div class="explore-rang2-flex1-img-container">
+                    <NuxtImg 
+                        src="/explore/explore-22.png" 
+                        alt="Explore Rang" 
+                        class="explore-rang2-flex1-img"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                </div>
+            </div>
+            <div class="explore-rang2-flex2">
+                <div class="explore-rang2-flex2-img-container">
+                    <NuxtImg 
+                        src="/explore/explore-33.jpg" 
+                        alt="Explore Rang" 
+                        class="explore-rang2-flex2-img"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="top-left-text">
+                        <div>Matching</div>
+                    </div>
+                </div>
+                <div class="explore-rang2-flex2-img-container">
+                    <NuxtImg 
+                        src="/explore/explore-44.png" 
+                        alt="Explore Rang" 
+                        class="explore-rang2-flex2-img"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                </div>
+                <div class="explore-rang2-flex2-img-container">
+                    <NuxtImg 
+                        src="/explore/explore-55.png" 
+                        alt="Explore Rang" 
+                        class="explore-rang2-flex2-img"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                </div>
+            </div>
+        </section>
     </main>
 </template>
 
@@ -81,4 +145,5 @@ import ShopNowWhite from './ShopNowWhite.vue';
 
 <style scoped>
 @import './ExploreRang.css';
+@import './ExploreRang2.css';
 </style>

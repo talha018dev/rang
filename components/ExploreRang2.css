@@ -1,0 +1,97 @@
+.explore-rang2-flex1 {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    font-family: Poppins, "Poppins Fallback: Arial";
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 4em;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(254, 244, 232, 0.7);
+    -webkit-text-stroke: 1px white;
+}
+
+.explore-rang2-flex1-img-container {
+    position: relative;
+}
+
+.explore-rang2-flex1-img-container:first-child {
+    flex:1.5;
+}
+.explore-rang2-flex1-img-container:last-child {
+    flex: 1;
+}
+.explore-rang2-flex1-img:first-child {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.explore-rang2-flex1-img:last-child {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.explore-rang2-flex2 {
+    display: flex;
+    gap: 0.5rem;
+
+    font-family: Poppins, "Poppins Fallback: Arial";
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 4em;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(254, 244, 232, 0.7);
+    -webkit-text-stroke: 1px white;
+}
+
+.explore-rang2-flex2-img-container {
+    position: relative;
+}
+
+.explore-rang2-flex2-img-container:first-child {
+    flex:1;
+}
+.explore-rang2-flex2-img-container:nth-child(2) {
+    flex: 1;
+}
+.explore-rang2-flex2-img-container:last-child {
+    flex: 1;
+}
+.explore-rang2-flex2-img:first-child {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.explore-rang2-flex2-img:nth-child(2) {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.explore-rang2-flex2-img:last-child {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.top-left-text {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    font-size: 1em;
+    
+}
+.bottom-right-text {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 1em;
+}
