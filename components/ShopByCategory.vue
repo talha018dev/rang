@@ -6,69 +6,71 @@
                 </div>
             </div>
         </section>
-        <section>
-            <div class="category-grid-main">
-                <NuxtLink to="/products/men">
-                    <div class="image-div category-grid-main-men">
-                        <NuxtImg src="/shop-by-category/shop-by-category-1.png" alt="Category Rang"
-                            class="category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Men</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
+        <section class="shop-by-category-section bg-blue-500">
+            <div class="flex gap-2 mb-2!">
+                <NuxtLink to="/products/men" class="relative flex-[1] aspect-square">
+                    <NuxtImg 
+                        src="/shop-by-category/shop-by-category-1.png" 
+                        alt="Explore Rang" 
+                        class="w-full h-full! object-cover rounded-lg!"
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Men</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
-                <NuxtLink to="/products/women">
-                    <div class="category-grid-main-women">
-                        <NuxtImg src="/shop-by-category/shop-by-category-2.png" alt="Category Rang"
-                            class="category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Women</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
+                <NuxtLink to="/products/women" class="relative flex-[1.5] aspect-[1.73]">
+                    <NuxtImg 
+                        src="/shop-by-category/shop-by-category-2.png" 
+                        alt="Explore Rang" 
+                        class="w-full h-full! object-cover rounded-lg!"
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl!  top-10 left-10 z-20 explore-rang-top-text">Women</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
-            <div class="category-grid-secondary">
-                <NuxtLink to="/products/kids" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg style="object-position: left;" src="/explore/explore-1.png" alt="Category Rang"
-                            class="category-image" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Kids</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
+            <div class="flex gap-2">
+                <NuxtLink to="/products/kids" class="relative flex-[1] aspect-[0.82]">
+                    <NuxtImg 
+                        src="/explore/explore-1.png" 
+                        alt="Explore Rang" 
+                        class="w-full h-full! object-cover object-left rounded-lg!"
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Kids</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
-                <NuxtLink to="/products/home-decor" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg src="/shop-by-category/shop-by-category-44.jpg" alt="Category Rang"
-                            class="category-image" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Home Decor</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
+                <NuxtLink to="/products/home-decor" class="relative flex-[1] aspect-[0.82]">
+                    <NuxtImg 
+                        src="/shop-by-category/shop-by-category-44.jpg" 
+                        alt="Explore Rang" 
+                       class="w-full h-full! object-cover rounded-lg!"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Home Decor</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
-                <NuxtLink to="/products/accessories" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg src="/shop-by-category/shop-by-category-55.jpg" alt="Category Rang"
-                            class="category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Accessories</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
+                <NuxtLink to="/products/accessories" class="relative flex-[1] aspect-[0.82]">
+                    <NuxtImg 
+                        src="/shop-by-category/shop-by-category-55.jpg" 
+                        alt="Explore Rang" 
+                       class="w-full h-full! object-cover rounded-lg!"
+                        style="height: 100%;" 
+                        format="webp" 
+                        quality="85" 
+                        loading="lazy" 
+                    />
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Accessories</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
         </section>

@@ -6,134 +6,72 @@
                         Bangladesh</span></div>
             </div>
         </section>
-        <section class="explore-grid-container">
-            <div class="explore-grid-main">
-                <NuxtLink to="/products/family">
-                    <div class="image-div explore-grid-main-image">
-                        <NuxtImg src="/explore/explore-1.png" alt="Explore Rang" class="category-image-rounded"
-                            style="height: 100%;" format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Family</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
-                </NuxtLink>
-                <NuxtLink to="/products/jewelry">
-                    <div class="image-div">
-                        <NuxtImg src="/explore/explore-22.png" alt="Explore Rang" class="explore-image-rounded"
-                            format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Jewelry</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
-                </NuxtLink>
-            </div>
-            <div class="explore-grid-secondary">
-                <NuxtLink to="/products/matching" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg src="/explore/explore-33.jpg" alt="Explore Rang" class="explore-image-rounded"
-                            format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Matching</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
-                </NuxtLink>
-                <NuxtLink to="/products/couple" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg src="/explore/explore-44.png" alt="Explore Rang" class="explore-image-rounded"
-                            format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Couple</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
-                </NuxtLink>
-                <NuxtLink to="/products/gifts-crafts" style="height: 600px;">
-                    <div class="image-div">
-                        <NuxtImg src="/explore/explore-55.png" alt="Explore Rang" class="explore-image-rounded"
-                            format="webp" quality="85" loading="lazy" />
-                        <div class="image-div-text top-left">
-                            <div>Gifts & Crafts</div>
-                        </div>
-                        <div class="bottom-right absolute">
-                            <ShopNowWhite />
-                        </div>
-                    </div>
-                </NuxtLink>
-            </div>
-        </section>
-        <section class="explore-rang2-section">
-            <div class="explore-rang2-flex1">
-                <div class="explore-rang2-flex1-img-container">
+        <section class="explore-rang2-section ">
+            <div class="flex gap-2 mb-2!">
+                <NuxtLink to="/products/family" class="relative flex-[1.5] aspect-[1.73]">
                     <NuxtImg 
                         src="/explore/explore-1.png" 
                         alt="Explore Rang" 
-                        class="explore-rang2-flex1-img"
-                        style="height: 100%;" 
+                        class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
                         quality="85" 
                         loading="lazy" 
                     />
-                </div>
-                <div class="explore-rang2-flex1-img-container">
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Family</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                </NuxtLink>
+                <NuxtLink to="/products/jewelry" class="relative flex-[1] aspect-[1]">
                     <NuxtImg 
                         src="/explore/explore-22.png" 
                         alt="Explore Rang" 
-                        class="explore-rang2-flex1-img"
-                        style="height: 100%;" 
+                        class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
                         quality="85" 
                         loading="lazy" 
                     />
-                </div>
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl!  top-10 left-10 z-20 explore-rang-top-text">Jewelry</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                </NuxtLink>
             </div>
-            <div class="explore-rang2-flex2">
-                <div class="explore-rang2-flex2-img-container">
+            <div class="flex gap-2">
+                <NuxtLink to="/products/couple" class="relative flex-[1]  aspect-[0.82]">
                     <NuxtImg 
                         src="/explore/explore-33.jpg" 
                         alt="Explore Rang" 
-                        class="explore-rang2-flex2-img"
-                        style="height: 100%;" 
+                        class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="top-left-text">
-                        <div>Matching</div>
-                    </div>
-                </div>
-                <div class="explore-rang2-flex2-img-container">
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Matching</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                </NuxtLink>
+                <NuxtLink to="/products/gifts-crafts" class="relative flex-[1] aspect-[0.82]">
                     <NuxtImg 
                         src="/explore/explore-44.png" 
                         alt="Explore Rang" 
-                        class="explore-rang2-flex2-img"
+                       class="w-full h-full! object-cover rounded-lg!"
                         style="height: 100%;" 
                         format="webp" 
                         quality="85" 
                         loading="lazy" 
                     />
-                </div>
-                <div class="explore-rang2-flex2-img-container">
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Couple</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                </NuxtLink>
+                <NuxtLink to="/products/gifts-crafts" class="relative flex-[1] aspect-[0.82]">
                     <NuxtImg 
                         src="/explore/explore-55.png" 
                         alt="Explore Rang" 
-                        class="explore-rang2-flex2-img"
+                       class="w-full h-full! object-cover rounded-lg!"
                         style="height: 100%;" 
                         format="webp" 
                         quality="85" 
                         loading="lazy" 
                     />
-                </div>
+                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-10 left-10 z-20 explore-rang-top-text">Gifts & Crafts</div>
+                    <div class="explore-rang-bottom-text text-lg! md:text-xl! lg:text-2xl! absolute bottom-10 right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                </NuxtLink>
             </div>
         </section>
     </main>
@@ -145,5 +83,4 @@ import ShopNowWhite from './ShopNowWhite.vue';
 
 <style scoped>
 @import './ExploreRang.css';
-@import './ExploreRang2.css';
 </style>

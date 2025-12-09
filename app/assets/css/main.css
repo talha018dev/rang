@@ -1,5 +1,11 @@
-@import '@nuxt/ui';
 @import 'tailwindcss';
+@import '@nuxt/ui';
+
+/* Tell Tailwind v4 where to scan for classes */
+@source "../../../components/**/*.vue";
+@source "../../../app/**/*.vue";
+@source "../../../pages/**/*.vue";
+@source "../../../layouts/**/*.vue";
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 
 /* CSS Reset - Remove all user agent stylesheet defaults */
@@ -684,4 +690,21 @@ html {
 .py-0 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+}
+
+.explore-rang-top-text {
+  font-family: Poppins, 'Poppins Fallback: Arial';
+  font-weight: 600;
+  font-style: SemiBold;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(254, 244, 232, 0.7);
+  -webkit-text-stroke: 1px white;
+}
+.explore-rang-bottom-text {
+  font-family: Poppins, 'Poppins Fallback: Arial';
+  font-weight: 500;
+  font-size: 1.5em;
+  line-height: 100%;
+  letter-spacing: 0%;
 }
