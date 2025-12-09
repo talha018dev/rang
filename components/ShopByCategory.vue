@@ -6,7 +6,7 @@
                 </div>
             </div>
         </section>
-        <section class="shop-by-category-section bg-blue-500">
+        <section class="shop-by-category-section">
             <div class="flex gap-2 mb-2!">
                 <NuxtLink to="/products/men" class="relative flex-[1] aspect-square">
                     <NuxtImg 
