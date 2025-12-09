@@ -38,16 +38,19 @@
       <div class="sale-brands-grid-secondary" :style="products.length === 0 ? { gridTemplateColumns: '1fr' } : {}">
         <div class="image-div category-grid-main-men">
           <!-- First product image -->
-          <NuxtImg 
+          <NuxtLink 
             v-if="products.length > 0" 
-            :src="getImageUrl(products[0].image)" 
-            :alt="products[0].name"
-            class="sale-offer-image category-image-rounded" 
-            format="webp" 
-            quality="85" 
-            loading="lazy" 
-          />
-          
+            :to="`/products/${products[0].category?.slug || 'all'}/${products[0].slug}`"
+          >
+            <NuxtImg 
+              :src="getImageUrl(products[0].image)" 
+              :alt="products[0].name"
+              class="sale-offer-image category-image-rounded" 
+              format="webp" 
+              quality="85" 
+              loading="lazy" 
+            />
+          </NuxtLink>
 
           <div class="absolute" style="bottom: 40px; right: 40px;">
             <NuxtLink :to="`/products?brand=${selectedBrand}`">
