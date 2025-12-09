@@ -19,7 +19,7 @@
         :next="{ onClick: goToNext }"
         :ui="{
           item: 'carousel-slide basis-1/4 w-24',
-          container: 'carousel-container gap-4 !mt-1 !ml-4 !mr-4'
+          container: 'carousel-container gap-4 !mt-1 px-0!'
         }"
         tabindex="0" 
         @keydown="handleKeydown">
