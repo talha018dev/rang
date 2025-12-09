@@ -35,7 +35,7 @@
       </div>
     </section>
     <section class="sale-brands-section-secondary" style="margin-top: 4rem;">
-      <div class="sale-brands-grid-secondary">
+      <div class="sale-brands-grid-secondary" :style="products.length === 0 ? { gridTemplateColumns: '1fr' } : {}">
         <div class="image-div category-grid-main-men">
           <!-- First product image -->
           <NuxtImg 
@@ -47,15 +47,7 @@
             quality="85" 
             loading="lazy" 
           />
-          <NuxtImg 
-            v-else 
-            src="/shop-by-brand/shop-by-brand-11.jpg" 
-            alt="Category Rang"
-            class="sale-offer-image category-image-rounded" 
-            format="webp" 
-            quality="85" 
-            loading="lazy" 
-          />
+          
 
           <div class="absolute" style="bottom: 40px; right: 40px;">
             <NuxtLink :to="`/products?brand=${selectedBrand}`">
@@ -93,8 +85,8 @@
           </template>
           <!-- Empty State - only show when API returns no products -->
           <template v-else-if="products.length === 0">
-            <div class="empty-products">
-              <p>No products available for this brand</p>
+            <div class="empty-products" style="grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
+              <p style="text-align: center;">No products available for this brand</p>
             </div>
           </template>
         </div>
@@ -104,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useApi } from '../composables/useApi'
 import type { Brand, BrandResponse, Product, ProductResponse } from '../types/homepage'
 
@@ -178,17 +170,13 @@ const fetchBrands = async () => {
   }
 }
 
-// Select brand function
-const selectBrand = (brandSlug: string) => {
+// Select brand function - calls API with new brand query param
+const selectBrand = async (brandSlug: string) => {
+  if (brandSlug === selectedBrand.value) return // Skip if already selected
+  
   selectedBrand.value = brandSlug
+  await fetchProductsByBrand(brandSlug)
 }
-
-// Watch for brand selection changes and fetch products
-watch(selectedBrand, (newBrand) => {
-  if (newBrand) {
-    fetchProductsByBrand(newBrand)
-  }
-})
 
 // Fetch brands on mount
 onMounted(() => {
