@@ -11,13 +11,13 @@
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
                     <NuxtImg src="/sale-offer/sale-offer-1.jpg" alt="Category Rang" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
-                    <div class="image-div-text ultimate-sale" style="top: 10px; left: 10px;">
-                        <span>Ultimate</span>
-                        <div>Sale</div>
+                    <div class="absolute! text-white! top-4! left-4!">
+                        <div class="text-lg! sm:text-6xl! font-bold!">Ultimate</div>
+                        <div class="text-lg! sm:text-6xl!">Sale</div>
                     </div>
-                    <div class="sale-offer-number-container" style="justify-content: space-between; ">
-                        <div class="sale-offer-number" style="line-height: 3rem;">50% OFF</div>
-                       <div class="" style="bottom: 10px; right: 40px;">
+                    <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; ">
+                        <div class="text-lg! sm:text-6xl! font-bold!">50% OFF</div>
+                       <div class="text-lg!">
                             <ShopNowWhite />
                         </div>
                     </div>

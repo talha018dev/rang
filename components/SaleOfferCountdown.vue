@@ -130,11 +130,11 @@
                             />
                         </div>
                         <div class="carousel-content">
-                            <h3 class="carousel-title">{{ item.name }}</h3>
+                            <h3 class="carousel-title line-clamp-1!">{{ item.name }}</h3>
                             <p class="carousel-stock">{{ item.variants?.length || 0 }} in stock</p>
                         </div>
                         <div class="carousel-price-section">
-                            <p v-if="item.compare_price > item.price" class="carousel-old-price">{{ formatPrice(item.compare_price) }}</p>
+                            <p v-if="item.compare_price > item.price" class="carousel-old-price ">{{ formatPrice(item.compare_price) }}</p>
                             <div class="carousel-price-row">
                                 <p class="carousel-current-price">{{ formatPrice(item.price) }}</p>
                                 <button class="carousel-cart-button" @click.stop="handleAddToCart(item)">

@@ -195,28 +195,28 @@
   }
 }
 
-.ultimate-sale {
+/* .ultimate-sale {
   top: 50px !important;
   left: 20px !important;
-}
+} */
 
-.ultimate-sale span {
+/* .ultimate-sale span {
   font-size: 3.5em !important;
 }
 .ultimate-sale div {
   font-size: 4.5em !important;
-}
-.sale-offer-number {
+} */
+/* .sale-offer-number {
   font-size: 2.5em !important;
   bottom: 0 !important;
-}
+} */
 .sale-offer-number-container {
   display: flex;
   align-items: center;
   position: absolute;
-  bottom: 50px;
+  /* bottom: 50px;
   left: 20px;
-  width: calc(100% - 40px);
+  width: calc(100% - 40px); */
   color: white;
   font-family: Poppins;
   font-weight: 700;
@@ -224,7 +224,7 @@
   font-size: 1.5em;
   line-height: 100%;
   letter-spacing: 0%;
-  height: 50px;
+  /* height: 50px; */
 }
 
 @media (max-width: 800px) {
