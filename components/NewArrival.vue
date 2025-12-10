@@ -34,9 +34,9 @@
                 format="webp" 
                 quality="85" />
             </div>
-            <div class="carousel-content-overlay">
-              <h3 class="new-arrival-name-light">{{ item.name }}</h3>
-              <p class="shop-now-blue-button-div">
+            <div class="carousel-content-overlay p-0 md:p-1">
+              <h3 class="new-arrival-name-light text-xs! md:text-base! text-center!">{{ item.name }}</h3>
+              <p class=" mt-2! mb-2! md:mb-6! text-center!">
                 <ShopNowBlue />
               </p>
             </div>
