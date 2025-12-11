@@ -214,6 +214,21 @@
                   </select>
                 </div>
 
+                <!-- Payment Option -->
+                <div class="form-group">
+                  <label for="paymentMethod" class="form-label">Payment Option *</label>
+                  <select
+                    id="paymentMethod"
+                    v-model="paymentMethod"
+                    class="form-input"
+                    required
+                  >
+                    <option value="">Select Payment Option</option>
+                    <option value="cash-on-delivery">Cash on Delivery</option>
+                    <option value="online-sslcommerz">Online (via SSLCOMMERZ)</option>
+                  </select>
+                </div>
+
                 <!-- Billing Same as Shipping -->
                 <div class="form-group checkbox-group flex-row">
                   <label class="checkbox-label">
@@ -544,7 +559,7 @@ const shippingMethod = ref('')
 const selectedOutlet = ref('')
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
-const paymentMethod = ref('cash-on-delivery')
+const paymentMethod = ref('')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
 
@@ -748,6 +763,12 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Validate payment method
+  if (!paymentMethod.value) {
+    alert('Please select a payment option.')
+    return
+  }
+
   // Validate that cart items have product_id and variant_id (or products array for combo items in new format)
   console.log('Cart items for validation:', cartItems.value)
   const itemsWithoutIds = cartItems.value.filter(item => {
@@ -856,6 +877,7 @@ const handlePlaceOrder = async () => {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
+      payment_method: paymentMethod.value,
       address: {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
