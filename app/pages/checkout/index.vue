@@ -179,18 +179,38 @@
                   />
                 </div>
 
-                <!-- Delivery Type -->
+                <!-- Delivery Options -->
                 <div class="form-group">
-                  <label for="shippingMethod" class="form-label">Delivery Type *</label>
+                  <label for="shippingMethod" class="form-label">Delivery Options *</label>
                   <select
                     id="shippingMethod"
                     v-model="shippingMethod"
                     class="form-input"
                     required
                   >
-                    <option value="">Select Delivery Type</option>
-                    <option value="inside_dhaka">Inside Dhaka</option>
-                    <option value="outside_dhaka">Outside Dhaka</option>
+                    <option value="">Select Delivery Option</option>
+                    <option value="outlet">Outlet</option>
+                    <option value="home_delivery">Home Delivery</option>
+                  </select>
+                </div>
+
+                <!-- Outlet Selection (shown when Outlet is selected) -->
+                <div v-if="shippingMethod === 'outlet'" class="form-group">
+                  <label for="selectedOutlet" class="form-label">Select Outlet *</label>
+                  <select
+                    id="selectedOutlet"
+                    v-model="selectedOutlet"
+                    class="form-input"
+                    :required="shippingMethod === 'outlet'"
+                  >
+                    <option value="">Select Outlet</option>
+                    <option 
+                      v-for="location in locations" 
+                      :key="location.name" 
+                      :value="location.name"
+                    >
+                      {{ location.name }}
+                    </option>
                   </select>
                 </div>
 
@@ -470,12 +490,33 @@ const formatItemTotal = (item: any) => {
 // Loading state for cart initialization
 const isLoadingCart = ref(true)
 
+// Fetch locations from API
+const fetchLocations = async () => {
+  isLoadingLocations.value = true
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>('https://rangbd.thecell.tech/api/locations')
+    console.log('Locations API Response:', response)
+    
+    if (response.success && response.data && Array.isArray(response.data)) {
+      locations.value = response.data
+    }
+  } catch (error) {
+    console.error('Error fetching locations:', error)
+  } finally {
+    isLoadingLocations.value = false
+  }
+}
+
 // Client-side redirect if cart is empty
 onMounted(() => {
   // Simulate cart loading time to show skeleton
   setTimeout(() => {
     isLoadingCart.value = false
   }, 300)
+  
+  // Fetch locations on mount
+  fetchLocations()
   
   if (isEmpty.value) {
     // Optionally redirect to cart page
@@ -500,9 +541,19 @@ const billingInfo = ref({
 
 const billingSameAsShipping = ref(true)
 const shippingMethod = ref('')
+const selectedOutlet = ref('')
+const locations = ref<any[]>([])
+const isLoadingLocations = ref(false)
 const paymentMethod = ref('cash-on-delivery')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
+
+// Watch shipping method to reset outlet selection when changed
+watch(shippingMethod, (newValue) => {
+  if (newValue !== 'outlet') {
+    selectedOutlet.value = ''
+  }
+})
 
 // Coupon functionality
 const couponCode = ref('')
@@ -540,10 +591,10 @@ const shippingCostBDT = computed(() => {
   }
   
   // Set shipping cost based on selected method
-  if (shippingMethod.value === 'inside_dhaka') {
-    return 100
-  } else if (shippingMethod.value === 'outside_dhaka') {
-    return 200
+  if (shippingMethod.value === 'outlet') {
+    return 0 // Free for outlet pickup
+  } else if (shippingMethod.value === 'home_delivery') {
+    return 100 // Default home delivery cost (can be adjusted)
   }
   
   return 0
@@ -560,7 +611,7 @@ const shippingCost = computed(() => {
 
 const shippingCostDisplay = computed(() => {
   if (!shippingMethod.value) {
-    return 'Select shipping method'
+    return 'Select delivery option'
   }
   if (shippingCostBDT.value === 0) {
     return 'Free'
@@ -687,7 +738,13 @@ const handlePlaceOrder = async () => {
   }
 
   if (!shippingMethod.value) {
-    alert('Please select a delivery type.')
+    alert('Please select a delivery option.')
+    return
+  }
+
+  // Validate outlet selection if outlet is selected
+  if (shippingMethod.value === 'outlet' && !selectedOutlet.value) {
+    alert('Please select an outlet.')
     return
   }
 
@@ -795,7 +852,7 @@ const handlePlaceOrder = async () => {
     }
 
     // Prepare order data according to API structure
-    const orderData = {
+    const orderData: any = {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
@@ -811,6 +868,11 @@ const handlePlaceOrder = async () => {
         postal_code: ''
       },
       products: productsData
+    }
+
+    // Add outlet information if outlet is selected
+    if (shippingMethod.value === 'outlet' && selectedOutlet.value) {
+      orderData.outlet_name = selectedOutlet.value
     }
 
     console.log('Order Data:', orderData)
