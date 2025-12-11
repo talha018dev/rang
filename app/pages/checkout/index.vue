@@ -121,51 +121,36 @@
             <section class="checkout-section">
               <h2 class="section-title">Shipping Information</h2>
               <form class="checkout-form" @submit.prevent="handleSubmit">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="firstName" class="form-label">First Name *</label>
-                    <input
-                      id="firstName"
-                      v-model="shippingInfo.firstName"
-                      type="text"
-                      class="form-input"
-                      required
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="lastName" class="form-label">Last Name *</label>
-                    <input
-                      id="lastName"
-                      v-model="shippingInfo.lastName"
-                      type="text"
-                      class="form-input"
-                      required
-                      placeholder="Enter your last name"
-                    />
-                  </div>
+                <div class="form-group">
+                  <label for="fullName" class="form-label">Full Name *</label>
+                  <input
+                    id="fullName"
+                    v-model="shippingInfo.fullName"
+                    type="text"
+                    class="form-input"
+                    required
+                    placeholder="Enter your full name"
+                  />
                 </div>
 
                 <div class="form-group">
-                  <label for="email" class="form-label">Email Address *</label>
+                  <label for="email" class="form-label">Email Address</label>
                   <input
                     id="email"
                     v-model="shippingInfo.email"
                     type="email"
                     class="form-input"
-                    required
                     placeholder="your.email@example.com"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="phone" class="form-label">Phone Number *</label>
+                  <label for="phone" class="form-label">Phone Number</label>
                   <input
                     id="phone"
                     v-model="shippingInfo.phone"
                     type="tel"
                     class="form-input"
-                    required
                     placeholder="01XXXXXXXXX"
                   />
                 </div>
@@ -182,69 +167,28 @@
                   />
                 </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="city" class="form-label">City *</label>
-                    <input
-                      id="city"
-                      v-model="shippingInfo.city"
-                      type="text"
-                      class="form-input"
-                      required
-                      placeholder="City"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="state" class="form-label">State *</label>
-                    <input
-                      id="state"
-                      v-model="shippingInfo.state"
-                      type="text"
-                      class="form-input"
-                      required
-                      placeholder="State"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="postalCode" class="form-label">Postal Code *</label>
-                    <input
-                      id="postalCode"
-                      v-model="shippingInfo.postalCode"
-                      type="text"
-                      class="form-input"
-                      required
-                      placeholder="Postal code"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="country" class="form-label">Country *</label>
-                    <select
-                      id="country"
-                      v-model="shippingInfo.country"
-                      class="form-input"
-                      required
-                    >
-                      <option value="">Select Country</option>
-                      <option value="Bangladesh">Bangladesh</option>
-                      <option value="India">India</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Shipping Method -->
                 <div class="form-group">
-                  <label for="shippingMethod" class="form-label">Shipping Method *</label>
+                  <label for="city" class="form-label">City *</label>
+                  <input
+                    id="city"
+                    v-model="shippingInfo.city"
+                    type="text"
+                    class="form-input"
+                    required
+                    placeholder="City"
+                  />
+                </div>
+
+                <!-- Delivery Type -->
+                <div class="form-group">
+                  <label for="shippingMethod" class="form-label">Delivery Type *</label>
                   <select
                     id="shippingMethod"
                     v-model="shippingMethod"
                     class="form-input"
                     required
                   >
-                    <option value="">Select Shipping Method</option>
+                    <option value="">Select Delivery Type</option>
                     <option value="inside_dhaka">Inside Dhaka</option>
                     <option value="outside_dhaka">Outside Dhaka</option>
                   </select>
@@ -265,80 +209,37 @@
                 <!-- Billing Information (if different) -->
                 <div v-if="!billingSameAsShipping" class="billing-section">
                   <h3 class="subsection-title">Billing Information</h3>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="billingFirstName" class="form-label">First Name *</label>
-                      <input
-                        id="billingFirstName"
-                        v-model="billingInfo.firstName"
-                        type="text"
-                        class="form-input"
-                        :required="!billingSameAsShipping"
-                        placeholder="Enter your first name"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="billingLastName" class="form-label">Last Name *</label>
-                      <input
-                        id="billingLastName"
-                        v-model="billingInfo.lastName"
-                        type="text"
-                        class="form-input"
-                        :required="!billingSameAsShipping"
-                        placeholder="Enter your last name"
-                      />
-                    </div>
+                  <div class="form-group">
+                    <label for="billingFullName" class="form-label">Full Name</label>
+                    <input
+                      id="billingFullName"
+                      v-model="billingInfo.fullName"
+                      type="text"
+                      class="form-input"
+                      placeholder="Enter your full name"
+                    />
                   </div>
 
                   <div class="form-group">
-                    <label for="billingAddress" class="form-label">Address *</label>
+                    <label for="billingAddress" class="form-label">Address</label>
                     <input
                       id="billingAddress"
                       v-model="billingInfo.address"
                       type="text"
                       class="form-input"
-                      :required="!billingSameAsShipping"
                       placeholder="Street address"
                     />
                   </div>
 
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="billingCity" class="form-label">City *</label>
-                      <input
-                        id="billingCity"
-                        v-model="billingInfo.city"
-                        type="text"
-                        class="form-input"
-                        :required="!billingSameAsShipping"
-                        placeholder="City"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="billingState" class="form-label">State *</label>
-                      <input
-                        id="billingState"
-                        v-model="billingInfo.state"
-                        type="text"
-                        class="form-input"
-                        :required="!billingSameAsShipping"
-                        placeholder="State"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="billingPostalCode" class="form-label">Postal Code *</label>
-                      <input
-                        id="billingPostalCode"
-                        v-model="billingInfo.postalCode"
-                        type="text"
-                        class="form-input"
-                        :required="!billingSameAsShipping"
-                        placeholder="Postal code"
-                      />
-                    </div>
+                  <div class="form-group">
+                    <label for="billingCity" class="form-label">City</label>
+                    <input
+                      id="billingCity"
+                      v-model="billingInfo.city"
+                      type="text"
+                      class="form-input"
+                      placeholder="City"
+                    />
                   </div>
                 </div>
 
@@ -584,24 +485,17 @@ onMounted(() => {
 
 // Form data
 const shippingInfo = ref({
-  firstName: '',
-  lastName: '',
+  fullName: '',
   email: '',
   phone: '',
   address: '',
-  city: '',
-  state: '',
-  postalCode: '',
-  country: 'Bangladesh'
+  city: ''
 })
 
 const billingInfo = ref({
-  firstName: '',
-  lastName: '',
+  fullName: '',
   address: '',
-  city: '',
-  state: '',
-  postalCode: ''
+  city: ''
 })
 
 const billingSameAsShipping = ref(true)
@@ -621,12 +515,9 @@ const couponData = ref<any>(null)
 watch(billingSameAsShipping, (same) => {
   if (same) {
     billingInfo.value = {
-      firstName: shippingInfo.value.firstName,
-      lastName: shippingInfo.value.lastName,
+      fullName: shippingInfo.value.fullName,
       address: shippingInfo.value.address,
-      city: shippingInfo.value.city,
-      state: shippingInfo.value.state,
-      postalCode: shippingInfo.value.postalCode
+      city: shippingInfo.value.city
     }
   }
 })
@@ -635,12 +526,9 @@ watch(billingSameAsShipping, (same) => {
 watch(shippingInfo, () => {
   if (billingSameAsShipping.value) {
     billingInfo.value = {
-      firstName: shippingInfo.value.firstName,
-      lastName: shippingInfo.value.lastName,
+      fullName: shippingInfo.value.fullName,
       address: shippingInfo.value.address,
-      city: shippingInfo.value.city,
-      state: shippingInfo.value.state,
-      postalCode: shippingInfo.value.postalCode
+      city: shippingInfo.value.city
     }
   }
 }, { deep: true })
@@ -792,22 +680,14 @@ const handlePlaceOrder = async () => {
   }
 
   // Validate required fields
-  if (!shippingInfo.value.firstName || !shippingInfo.value.lastName || 
-      !shippingInfo.value.email || !shippingInfo.value.phone ||
-      !shippingInfo.value.address || !shippingInfo.value.city ||
-      !shippingInfo.value.state || !shippingInfo.value.postalCode || 
-      !shippingInfo.value.country) {
-    alert('Please fill in all required shipping information.')
+  if (!shippingInfo.value.fullName || 
+      !shippingInfo.value.address || !shippingInfo.value.city) {
+    alert('Please fill in all required fields: Full Name, Address, and City.')
     return
   }
 
   if (!shippingMethod.value) {
-    alert('Please select a shipping method.')
-    return
-  }
-
-  if (!paymentMethod.value) {
-    alert('Please select a payment method.')
+    alert('Please select a delivery type.')
     return
   }
 
@@ -829,15 +709,15 @@ const handlePlaceOrder = async () => {
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
       address: {
-        name: `${shippingInfo.value.firstName} ${shippingInfo.value.lastName}`,
-        phone: shippingInfo.value.phone,
-        email: shippingInfo.value.email,
+        name: shippingInfo.value.fullName,
+        phone: shippingInfo.value.phone || '',
+        email: shippingInfo.value.email || '',
         line_1: shippingInfo.value.address,
         line_2: '',
         city: shippingInfo.value.city,
-        state: shippingInfo.value.state,
-        country: shippingInfo.value.country,
-        postal_code: shippingInfo.value.postalCode
+        state: '',
+        country: 'Bangladesh',
+        postal_code: ''
       },
       products: cartItems.value.map(item => ({
         product_id: item.product_id!,
