@@ -4,6 +4,7 @@ import { defineNuxtConfig } from "nuxt/config";
 declare const process: {
   env: {
     BACKEND_URL?: string;
+    META_PIXEL_ID?: string;
   };
 };
 
@@ -17,7 +18,8 @@ export default defineNuxtConfig({
     // Private keys (only available on server-side)
     // Public keys (exposed to client-side)
     public: {
-      backendUrl: process.env.BACKEND_URL || 'https://rangbd.thecell.tech/api'
+      backendUrl: process.env.BACKEND_URL || 'https://rangbd.thecell.tech/api',
+      metaPixelId: process.env.META_PIXEL_ID || '605654101638947'
     }
   }
 })
