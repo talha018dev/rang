@@ -691,11 +691,76 @@ const handlePlaceOrder = async () => {
     return
   }
 
-  // Validate that cart items have product_id and variant_id
-  const itemsWithoutIds = cartItems.value.filter(
-    item => !item.product_id || !item.variant_id
-  )
+  // Validate that cart items have product_id and variant_id (or products array for combo items in new format)
+  console.log('Cart items for validation:', cartItems.value)
+  const itemsWithoutIds = cartItems.value.filter(item => {
+    // Check if item is a combo product with new format (has products array)
+    const hasProductsArray = (item as any).products && Array.isArray((item as any).products) && (item as any).products.length > 0
+    
+    console.log('Validating item:', {
+      id: item.id,
+      name: item.name,
+      hasProductsArray,
+      products: (item as any).products,
+      product_id: item.product_id,
+      variant_id: item.variant_id
+    })
+    
+    if (hasProductsArray) {
+      // New format: check if product_id exists and products array has valid entries
+      const productId = (item as any).product_id || item.product_id
+      if (!productId) {
+        console.log('Combo product missing product_id')
+        return true // Invalid - missing product_id
+      }
+      // Check if all products in the array have product_id and variant_id
+      const hasInvalidProducts = (item as any).products.some((p: any) => !p.product_id || !p.variant_id)
+      if (hasInvalidProducts) {
+        console.log('Invalid products array - missing product_id or variant_id:', (item as any).products)
+      }
+      return hasInvalidProducts
+    }
+    
+    // Check for old format (backward compatibility)
+    const hasComboProducts = (item as any).combo_products && Array.isArray((item as any).combo_products)
+    const isCombo = (item as any).is_combo === true || hasComboProducts
+    
+    if (isCombo && hasComboProducts) {
+      const comboProducts = (item as any).combo_products
+      if (comboProducts.length === 0) {
+        console.log('Invalid combo product - empty array')
+        return true // Invalid combo product - empty array
+      }
+      // Check if all combo products have product_id and variant_id (or can be extracted from full product object)
+      const hasInvalidComboProducts = comboProducts.some((cp: any) => {
+        // Check if it's in the direct format (product_id/variant_id)
+        if (cp.product_id && cp.variant_id) {
+          return false // Valid
+        }
+        // Check if it's a full product object with id and variants
+        if (cp.id && cp.variants && Array.isArray(cp.variants) && cp.variants.length > 0) {
+          const firstVariant = cp.variants[0]
+          if (firstVariant?.id) {
+            return false // Valid - can extract product_id and variant_id
+          }
+        }
+        return true // Invalid - missing required data
+      })
+      if (hasInvalidComboProducts) {
+        console.log('Invalid combo products - missing product_id or variant_id:', comboProducts)
+      }
+      return hasInvalidComboProducts
+    }
+    
+    // For regular products, check product_id and variant_id
+    const missingIds = !item.product_id || !item.variant_id
+    if (missingIds) {
+      console.log('Regular product missing product_id or variant_id')
+    }
+    return missingIds
+  })
   if (itemsWithoutIds.length > 0) {
+    console.error('Items without valid IDs:', itemsWithoutIds)
     alert('Some items in your cart are missing required information. Please remove them and add them again.')
     return
   }
@@ -703,6 +768,32 @@ const handlePlaceOrder = async () => {
   isPlacingOrder.value = true
 
   try {
+    const { backendUrl } = useApi()
+    
+    // Prepare products array - handle combo products differently
+    const productsData: any[] = []
+    
+    for (const item of cartItems.value) {
+      // Check if item is a combo product with the new format (has products array)
+      const hasProductsArray = (item as any).products && Array.isArray((item as any).products) && (item as any).products.length > 0
+      
+      if (hasProductsArray) {
+        // For combo products in new format, append the entire object with product_id, qty, and products array
+        productsData.push({
+          product_id: (item as any).product_id || item.product_id,
+          qty: (item as any).qty || item.quantity || 1,
+          products: (item as any).products
+        })
+      } else {
+        // For regular products, send with quantity
+        productsData.push({
+          product_id: item.product_id!,
+          variant_id: item.variant_id!,
+          qty: item.quantity
+        })
+      }
+    }
+
     // Prepare order data according to API structure
     const orderData = {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
@@ -719,17 +810,12 @@ const handlePlaceOrder = async () => {
         country: 'Bangladesh',
         postal_code: ''
       },
-      products: cartItems.value.map(item => ({
-        product_id: item.product_id!,
-        variant_id: item.variant_id!,
-        qty: item.quantity
-      }))
+      products: productsData
     }
 
     console.log('Order Data:', orderData)
     
     // Make API call to create order
-    const { backendUrl } = useApi()
     const response = await $fetch<any>(`${backendUrl}/order`, {
       method: 'POST',
       headers: {

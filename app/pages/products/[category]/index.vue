@@ -440,7 +440,11 @@ const handleQuickAddToCart = (product: Product) => {
   const variantPrice = firstVariant?.price || product.price
   const variantPriceUsd = firstVariant?.price_usd || product.price_usd
 
-  addToCart({
+  // Check if product is a combo product
+  const isCombo = (product as any).is_combo === true
+  const comboProducts = (product as any).combo_products
+
+  const cartItem: any = {
     id: product.id.toString(),
     name: product.name,
     price: variantPrice,
@@ -452,7 +456,40 @@ const handleQuickAddToCart = (product: Product) => {
     sku: product.sku,
     product_id: product.id,
     variant_id: firstVariant?.id
-  })
+  }
+
+  // Add combo product properties if it's a combo - new format
+  if (isCombo && Array.isArray(comboProducts) && comboProducts.length > 0) {
+    // Extract product_id and variant_id from each combo product
+    const productsArray = comboProducts.map((comboProduct: any) => {
+      // Handle both formats: direct product_id/variant_id or full product object
+      if (comboProduct.product_id && comboProduct.variant_id) {
+        return {
+          product_id: comboProduct.product_id,
+          variant_id: comboProduct.variant_id
+        }
+      } else if (comboProduct.id) {
+        // Full product object - extract product_id and get first variant
+        const productId = comboProduct.id
+        const firstVariant = comboProduct.variants?.[0]
+        if (firstVariant?.id) {
+          return {
+            product_id: productId,
+            variant_id: firstVariant.id
+          }
+        }
+      }
+      return null
+    }).filter((p: any) => p !== null)
+
+    if (productsArray.length > 0) {
+      cartItem.product_id = product.id
+      cartItem.qty = 1
+      cartItem.products = productsArray
+    }
+  }
+
+  addToCart(cartItem)
 
 }
 </script>

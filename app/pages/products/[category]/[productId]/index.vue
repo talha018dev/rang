@@ -1286,8 +1286,12 @@ const handleAddToCart = () => {
     const variantPriceUsd = selectedVariant?.price_usd || product.value.price_usd
     const variantImage = selectedVariant?.image || product.value.image
 
+    // Check if product is a combo product
+    const isCombo = (product.value as any).is_combo === true
+    const comboProducts = (product.value as any).combo_products
+
     for (let i = 0; i < quantity.value; i++) {
-        addToCart({
+        const cartItem: any = {
             id: product.value.id.toString(),
             name: product.value.name,
             price: variantPrice,
@@ -1299,7 +1303,40 @@ const handleAddToCart = () => {
             sku: selectedVariant?.sku || product.value.sku,
             product_id: product.value.id,
             variant_id: selectedVariant?.id
-        })
+        }
+
+        // Add combo product properties if it's a combo - new format
+        if (isCombo && Array.isArray(comboProducts) && comboProducts.length > 0) {
+            // Extract product_id and variant_id from each combo product
+            const productsArray = comboProducts.map((comboProduct: any) => {
+                // Handle both formats: direct product_id/variant_id or full product object
+                if (comboProduct.product_id && comboProduct.variant_id) {
+                    return {
+                        product_id: comboProduct.product_id,
+                        variant_id: comboProduct.variant_id
+                    }
+                } else if (comboProduct.id) {
+                    // Full product object - extract product_id and get first variant
+                    const productId = comboProduct.id
+                    const firstVariant = comboProduct.variants?.[0]
+                    if (firstVariant?.id) {
+                        return {
+                            product_id: productId,
+                            variant_id: firstVariant.id
+                        }
+                    }
+                }
+                return null
+            }).filter((p: any) => p !== null)
+
+            if (productsArray.length > 0) {
+                cartItem.product_id = product.value.id
+                cartItem.qty = 1
+                cartItem.products = productsArray
+            }
+        }
+
+        addToCart(cartItem)
     }
 
 }
