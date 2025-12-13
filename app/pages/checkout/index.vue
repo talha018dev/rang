@@ -243,8 +243,8 @@
                     required
                   >
                     <option value="">Select Payment Option</option>
-                    <option value="cash-on-delivery">Cash on Delivery</option>
-                    <option value="online-sslcommerz">Online (via SSLCOMMERZ)</option>
+                    <option value="cash_on_delivery">Cash on Delivery</option>
+                    <option value="online">Online (via SSLCOMMERZ)</option>
                   </select>
                 </div>
 
@@ -942,11 +942,6 @@ const handlePlaceOrder = async () => {
     // Add outlet information if outlet is selected
     if (shippingMethod.value === 'store_pickup' && selectedOutlet.value) {
       orderData.pickup_location_id = selectedOutlet.value
-      // Also include outlet name if needed for reference
-      const selectedLocation = locations.value.find(loc => loc.id === selectedOutlet.value)
-      if (selectedLocation) {
-        orderData.outlet_name = selectedLocation.name
-      }
     }
 
     console.log('Order Data:', orderData)
