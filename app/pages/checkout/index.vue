@@ -189,19 +189,19 @@
                     required
                   >
                     <option value="">Select Delivery Option</option>
-                    <option value="outlet">Outlet</option>
+                    <option value="store_pickup">Outlet</option>
                     <option value="home_delivery">Home Delivery</option>
                   </select>
                 </div>
 
                 <!-- Outlet Selection (shown when Outlet is selected) -->
-                <div v-if="shippingMethod === 'outlet'" class="form-group">
+                <div v-if="shippingMethod === 'store_pickup'" class="form-group">
                   <label for="selectedOutlet" class="form-label">Select Outlet *</label>
                   <select
                     id="selectedOutlet"
                     v-model="selectedOutlet"
                     class="form-input"
-                    :required="shippingMethod === 'outlet'"
+                    :required="shippingMethod === 'store_pickup'"
                   >
                     <option value="">Select Outlet</option>
                     <option 
@@ -606,7 +606,7 @@ const shippingCostBDT = computed(() => {
   }
   
   // Set shipping cost based on selected method
-  if (shippingMethod.value === 'outlet') {
+  if (shippingMethod.value === 'store_pickup') {
     return 0 // Free for outlet pickup
   } else if (shippingMethod.value === 'home_delivery') {
     return 100 // Default home delivery cost (can be adjusted)
@@ -758,7 +758,7 @@ const handlePlaceOrder = async () => {
   }
 
   // Validate outlet selection if outlet is selected
-  if (shippingMethod.value === 'outlet' && !selectedOutlet.value) {
+  if (shippingMethod.value === 'store_pickup' && !selectedOutlet.value) {
     alert('Please select an outlet.')
     return
   }
@@ -893,7 +893,7 @@ const handlePlaceOrder = async () => {
     }
 
     // Add outlet information if outlet is selected
-    if (shippingMethod.value === 'outlet' && selectedOutlet.value) {
+    if (shippingMethod.value === 'store_pickup' && selectedOutlet.value) {
       orderData.outlet_name = selectedOutlet.value
     }
 
