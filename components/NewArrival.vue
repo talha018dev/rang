@@ -14,11 +14,14 @@
         :items="validProducts" 
         class="carousel-nuxt"
         :slides-per-view="4"
+        :slides-per-group="1"
         :space-between="16"
+        :autoplay="false"
+        :infinite="false"
         :prev="{ onClick: goToPrevious }"
         :next="{ onClick: goToNext }"
         :ui="{
-          item: 'carousel-slide basis-1/4 w-24',
+          item: 'carousel-slide',
           container: 'carousel-container gap-4 !mt-1 px-0!'
         }"
         tabindex="0" 
