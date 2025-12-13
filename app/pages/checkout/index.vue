@@ -180,6 +180,17 @@
                 </div>
 
                 <div class="form-group">
+                  <label for="postalCode" class="form-label">Postal Code</label>
+                  <input
+                    id="postalCode"
+                    v-model="shippingInfo.postalCode"
+                    type="text"
+                    class="form-input"
+                    placeholder="Postal Code"
+                  />
+                </div>
+
+                <div class="form-group">
                   <label for="country" class="form-label">Country *</label>
                   <select
                     id="country"
@@ -589,6 +600,7 @@ const shippingInfo = ref({
   phone: '',
   address: '',
   city: '',
+  postalCode: '',
   country: ''
 })
 
@@ -934,7 +946,7 @@ const handlePlaceOrder = async () => {
         city: shippingInfo.value.city,
         state: '',
         country: shippingInfo.value.country,
-        postal_code: ''
+        postal_code: shippingInfo.value.postalCode || ''
       },
       products: productsData
     }
