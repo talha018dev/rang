@@ -974,8 +974,20 @@ const handlePlaceOrder = async () => {
       // Clear cart after successful order
       clearCart()
 
-      // Navigate to order confirmation page
-      navigateTo('/checkout/success')
+      // Get order number from response (for testing use 202511JJC)
+      const orderNumber = (response as any)?.data?.number
+      
+      // Determine gateway based on payment method
+      const gateway = paymentMethod.value === 'cash_on_delivery' ? 'cod' : 'ssl'
+
+      // Navigate to order confirmation page with order number and gateway
+      navigateTo({
+        path: '/checkout/success',
+        query: {
+          orderNumber: orderNumber,
+          gateway: gateway
+        }
+      })
     } else {
       throw new Error((response as any)?.message || 'Failed to create order')
     }
