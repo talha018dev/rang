@@ -225,8 +225,8 @@
                     <option value="">Select Outlet</option>
                     <option 
                       v-for="location in locations" 
-                      :key="location.name" 
-                      :value="location.name"
+                      :key="location.id || location.name" 
+                      :value="location.id"
                     >
                       {{ location.name }}
                     </option>
@@ -600,7 +600,7 @@ const billingInfo = ref({
 
 const billingSameAsShipping = ref(true)
 const shippingMethod = ref('')
-const selectedOutlet = ref('')
+const selectedOutlet = ref<number | string>('')
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
 const paymentMethod = ref('')
@@ -609,7 +609,7 @@ const isPlacingOrder = ref(false)
 
 // Watch shipping method to reset outlet selection when changed
 watch(shippingMethod, (newValue) => {
-  if (newValue !== 'outlet') {
+  if (newValue !== 'store_pickup') {
     selectedOutlet.value = ''
   }
 })
@@ -941,7 +941,12 @@ const handlePlaceOrder = async () => {
 
     // Add outlet information if outlet is selected
     if (shippingMethod.value === 'store_pickup' && selectedOutlet.value) {
-      orderData.outlet_name = selectedOutlet.value
+      orderData.pickup_location_id = selectedOutlet.value
+      // Also include outlet name if needed for reference
+      const selectedLocation = locations.value.find(loc => loc.id === selectedOutlet.value)
+      if (selectedLocation) {
+        orderData.outlet_name = selectedLocation.name
+      }
     }
 
     console.log('Order Data:', orderData)
