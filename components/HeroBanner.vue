@@ -6,13 +6,23 @@
         quality="90" loading="eager" preload />
       <div class="hero-content">
         <div class="hero-overlay">
-          <p class="hero-subtitle">New Collection</p>
+          <p class="hero-subtitle">{{ ctaData?.subtitle || 'New Collection' }}</p>
           <div class="hero-title dm-serif">
-            Durga Puja - 2025
+            {{ ctaData?.title || 'Durga Puja - 2025' }}
           </div>
-          <button class="hero-button">
+          <NuxtLink v-if="ctaData?.button_url && !isExternalUrl(ctaData.button_url)" :to="ctaData.button_url" class="hero-button">
             <div class="hero-button-text">
-              Shop Now
+              {{ ctaData?.button_text || 'Shop Now' }}
+            </div>
+          </NuxtLink>
+          <a v-else-if="ctaData?.button_url && isExternalUrl(ctaData.button_url)" :href="ctaData.button_url" class="hero-button" target="_blank" rel="noopener noreferrer">
+            <div class="hero-button-text">
+              {{ ctaData?.button_text || 'Shop Now' }}
+            </div>
+          </a>
+          <button v-else class="hero-button">
+            <div class="hero-button-text">
+              {{ ctaData?.button_text || 'Shop Now' }}
             </div>
           </button>
         </div>
@@ -25,11 +35,19 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
-import type { HomepageResponse } from '../types/homepage';
+import type { HomepageCTA, HomepageResponse } from '../types/homepage';
 
 // Banners from API
 const banners = ref<string[]>([]);
 const currentBannerIndex = ref(0);
+
+// CTA data from API
+const ctaData = ref<HomepageCTA | null>(null);
+
+// Helper function to check if URL is external
+const isExternalUrl = (url: string): boolean => {
+  return url.startsWith('http://') || url.startsWith('https://');
+};
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -71,20 +89,27 @@ const stopRotation = () => {
   }
 };
 
-// Fetch banners from API
+// Fetch banners and CTA from API
 onMounted(async () => {
   try {
     const { backendUrl } = useApi()
     const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`);
-    if (response.success && response.data && response.data.banners) {
-      banners.value = response.data.banners;
-      // Start rotation if multiple banners
-      if (banners.value.length > 1) {
-        startRotation();
+    if (response.success && response.data) {
+      // Set banners
+      if (response.data.banners) {
+        banners.value = response.data.banners;
+        // Start rotation if multiple banners
+        if (banners.value.length > 1) {
+          startRotation();
+        }
+      }
+      // Set CTA data
+      if (response.data.cta) {
+        ctaData.value = response.data.cta;
       }
     }
   } catch (err) {
-    console.error('Error fetching banners:', err);
+    console.error('Error fetching homepage data:', err);
   }
 });
 

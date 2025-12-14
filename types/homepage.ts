@@ -45,9 +45,17 @@ export interface HomepageSection {
   products: Product[]
 }
 
+export interface HomepageCTA {
+  title: string
+  subtitle: string
+  button_text: string
+  button_url: string
+}
+
 export interface HomepageData {
   banners: string[]
   sections: HomepageSection[]
+  cta?: HomepageCTA
 }
 
 export interface HomepageQuery {
