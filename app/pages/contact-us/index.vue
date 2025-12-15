@@ -127,6 +127,34 @@
           </form>
         </section>
       </div>
+
+      <!-- Google Map Section -->
+      <section class="map-section">
+        <h2 class="section-title">Find Us on Map</h2>
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps?q=91+West+Masdair,+Narayanganj,+Dhaka,+Bangladesh&hl=en&z=14&output=embed"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Rang Bangladesh Location"
+          ></iframe>
+        </div>
+        <div class="map-actions">
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=91+West+Masdair,+Narayanganj,+Dhaka,+Bangladesh"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="map-link-button"
+          >
+            <Icon name="heroicons:map" class="map-link-icon" />
+            <span>Get Directions</span>
+          </a>
+        </div>
+      </section>
     </div>
   </main>
 </template>
