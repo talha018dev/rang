@@ -169,12 +169,12 @@
             </svg>
             <span v-if="cartTotalItems > 0" class="cart-badge">{{ cartTotalItems }}</span>
           </NuxtLink>
-          <button class="action-button">
+          <NuxtLink :to="accountLink" class="action-button color-inherit">
             <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-          </button>
+          </NuxtLink>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -342,10 +342,12 @@
               </button>
             </NuxtLink>
 
-            <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
-              icon="i-heroicons-user">
-              Account
-            </UButton>
+            <NuxtLink :to="accountLink" class="w-full">
+              <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                icon="i-heroicons-user">
+                Account
+              </UButton>
+            </NuxtLink>
           </div>
         </div>
       </template>
@@ -364,6 +366,18 @@ import type { Product, ProductResponse } from '../types/homepage';
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
 const { currency, setCurrency, formatPrice } = useCurrency()
+
+// Check if user is authenticated (has token)
+const hasToken = computed(() => {
+  if (typeof window === 'undefined') return false
+  const token = localStorage.getItem('auth_token')
+  return !!token
+})
+
+// Account link based on authentication status
+const accountLink = computed(() => {
+  return hasToken.value ? '/profile' : '/login'
+})
 
 // Reactive state for drawer
 const isDrawerOpen = ref(false)
