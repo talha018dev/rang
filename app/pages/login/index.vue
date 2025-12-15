@@ -272,8 +272,9 @@ const handleUpdateProfile = async () => {
 
 // Handle successful login
 const handleLoginSuccess = async () => {
-  // Redirect to home page or dashboard
+  // Redirect to home page
   await router.push('/')
+  // Alternative: use navigateTo('/') for Nuxt 3
 }
 
 // Go back to phone step
