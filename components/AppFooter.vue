@@ -48,10 +48,18 @@
           <div class="social-media">
             <h4 class="social-heading">Social Media For Rang Bangladesh</h4>
             <div class="social-icons">
-              <a href="#" class="social-icon"><Icon name="tabler:brand-facebook" /></a>
-                <a href="#" class="social-icon"><Icon name="simple-icons:x" /></a>
-                <a href="#" class="social-icon"><Icon name="tabler:brand-youtube" /></a>
-              <a href="#" class="social-icon"><Icon name="mdi:instagram" /></a>
+              <a href="https://www.facebook.com/rangbangladesh/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
+                <Icon name="tabler:brand-facebook" />
+              </a>
+              <a href="https://x.com/RangBangladesh" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="X (Twitter)">
+                <Icon name="simple-icons:x" />
+              </a>
+              <a href="https://www.instagram.com/rang_bangladesh_official/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                <Icon name="mdi:instagram" />
+              </a>
+              <a href="https://www.linkedin.com/company/rang-bangladesh" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+                <Icon name="mdi:linkedin" />
+              </a>
             </div>
           </div>
         </div>
