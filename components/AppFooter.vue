@@ -68,12 +68,12 @@
         <div class="footer-section">
           <h3 class="section-heading">Categories</h3>
           <ul class="footer-links">
-            <li><a href="#">Shop All Categories</a></li>
-            <li><a href="#">Women</a></li>
-            <li><a href="#">Men</a></li>
-            <li><a href="#">Boys</a></li>
-            <li><a href="#">Girls</a></li>
-            <li><a href="#">Accessories</a></li>
+            <li><NuxtLink to="/products/all">Shop All Categories</NuxtLink></li>
+            <li><a href="/products/women">Women</a></li>
+            <li><a href="/products/men">Men</a></li>
+            <li><a href="/products/boys">Boys</a></li>
+            <li><a href="/products/girls">Girls</a></li>
+            <li><a href="/products/accessories">Accessories</a></li>
           </ul>
         </div>
 
