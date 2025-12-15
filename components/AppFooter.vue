@@ -73,13 +73,13 @@
         <div class="footer-section">
           <h3 class="section-heading">Information</h3>
           <ul class="footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Terms & Conditions</a></li>
-            <li><a href="#">Returns & Exchanges</a></li>
-            <li><a href="#">Shipping & Delivery</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Fabric Care Guide</a></li>
-            <li><a href="#">BLOG/NEWS</a></li>
+            <li><NuxtLink to="/about-us">About Us</NuxtLink></li>
+            <li><NuxtLink to="/terms-conditions">Terms & Conditions</NuxtLink></li>
+            <li><NuxtLink to="/returns-exchanges">Returns & Exchanges</NuxtLink></li>
+            <li><NuxtLink to="/shipping-delivery">Shipping & Delivery</NuxtLink></li>
+            <li><NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink></li>
+            <li><NuxtLink to="/fabric-care-guide">Fabric Care Guide</NuxtLink></li>
+            <li><NuxtLink to="/blognews">BLOG/NEWS</NuxtLink></li>
           </ul>
         </div>
 
@@ -87,13 +87,13 @@
         <div class="footer-section">
           <h3 class="section-heading">Quick Links</h3>
           <ul class="footer-links">
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Store Location</a></li>
-            <li><a href="#">My account</a></li>
+            <li><NuxtLink to="/contact-us">Contact Us</NuxtLink></li>
+            <li><NuxtLink to="/store-location-rang">Store Location</NuxtLink></li>
+            <li><NuxtLink to="/login">My account</NuxtLink></li>
             <li><a href="#">Order Tracking</a></li>
-            <li><a href="#">Size Guide</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Career</a></li>
+            <li><NuxtLink to="/size-guide">Size Guide</NuxtLink></li>
+            <li><NuxtLink to="/faq">FAQ</NuxtLink></li>
+            <li><NuxtLink to="/career">Career</NuxtLink></li>
           </ul>
         </div>
 
