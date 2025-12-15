@@ -309,10 +309,12 @@
                 </button>
               </div>
             </div>
-            <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
-              icon="i-heroicons-heart">
-              Wishlist
-            </UButton>
+            <NuxtLink :to="wishlistLink" class="w-full" @click="closeDrawer">
+              <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                icon="i-heroicons-heart">
+                Wishlist
+              </UButton>
+            </NuxtLink>
             <NuxtLink to="/cart" class="mobile-cart-button" @click="closeDrawer">
               <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
                 icon="i-heroicons-shopping-cart">
