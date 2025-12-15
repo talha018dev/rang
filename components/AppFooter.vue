@@ -98,7 +98,7 @@
             <li><NuxtLink to="/contact-us">Contact Us</NuxtLink></li>
             <li><NuxtLink to="/store-location-rang">Store Location</NuxtLink></li>
             <li><NuxtLink to="/login">My account</NuxtLink></li>
-            <li><a href="#">Order Tracking</a></li>
+            <li><a href="/order-tracking">Order Tracking</a></li>
             <li><NuxtLink to="/size-guide">Size Guide</NuxtLink></li>
             <li><NuxtLink to="/faq">FAQ</NuxtLink></li>
             <li><NuxtLink to="/career">Career</NuxtLink></li>

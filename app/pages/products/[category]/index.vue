@@ -271,7 +271,12 @@ const fetchProducts = async () => {
     const cleanSlug = categorySlug.value.replace(/&amp;/g, '&')
     // Build API URL with sort, page, and brand parameters
     const { backendUrl } = useApi()
-    let apiUrl = `${backendUrl}/product?category=${cleanSlug}&sort=${selectedSort.value}&page=${currentPage.value}`
+    let apiUrl = `${backendUrl}/product?sort=${selectedSort.value}&page=${currentPage.value}`
+    
+    // Only add category parameter if cleanSlug is not "all"
+    if (cleanSlug !== 'all') {
+      apiUrl += `&category=${cleanSlug}`
+    }
     
     // Add brand parameter if selected
     if (selectedBrand.value) {
