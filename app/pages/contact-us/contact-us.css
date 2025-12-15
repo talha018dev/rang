@@ -1,0 +1,359 @@
+/* Contact Us Page Styles */
+.contact-us-page {
+  min-height: 100vh;
+  padding: 2rem 0;
+  background-color: #f9fafb;
+}
+
+.contact-us-container {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.contact-us-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contact-us-title {
+  font-family: Poppins, sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 1rem 0;
+}
+
+.contact-us-subtitle {
+  font-family: Poppins, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.section-title {
+  font-family: Poppins, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 2rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #ea580c;
+}
+
+/* Contact Information Section */
+.contact-info-section {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.contact-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.contact-icon-wrapper {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background-color: #fef3e7;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea580c;
+}
+
+.contact-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.contact-details {
+  flex: 1;
+}
+
+.contact-label {
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 0.5rem 0;
+}
+
+.contact-value {
+  font-family: Poppins, sans-serif;
+  font-size: 0.9375rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.contact-value + .contact-value {
+  margin-top: 0.25rem;
+}
+
+.contact-link {
+  color: #ea580c;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-link:hover {
+  color: #c2410c;
+  text-decoration: underline;
+}
+
+.social-item .contact-details {
+  width: 100%;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  color: #4b5563;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-icon-link:hover {
+  background-color: #ea580c;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Contact Form Section */
+.contact-form-section {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.contact-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-family: Poppins, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  color: #374151;
+  background-color: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background-color: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #c2410c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.3), 0 2px 4px -1px rgba(234, 88, 12, 0.2);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submit-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.3);
+}
+
+.submit-message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-family: Poppins, sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.submit-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.submit-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .contact-content {
+    gap: 2rem;
+  }
+
+  .contact-us-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-us-page {
+    padding: 1.5rem 0;
+  }
+
+  .contact-us-container {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .contact-us-title {
+    font-size: 2rem;
+  }
+
+  .contact-us-subtitle {
+    font-size: 1rem;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-info-section,
+  .contact-form-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-us-title {
+    font-size: 1.75rem;
+  }
+
+  .contact-info-section,
+  .contact-form-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contact-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .social-icons {
+    gap: 0.75rem;
+  }
+
+  .social-icon-link {
+    width: 36px;
+    height: 36px;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
