@@ -211,7 +211,12 @@ const handleVerifyOTP = async () => {
       
       // Store token in localStorage
       if (typeof window !== 'undefined' && token.value) {
-        localStorage.setItem('auth_token', token.value)
+        try {
+          localStorage.setItem('auth_token', token.value)
+          console.log('Token saved to localStorage successfully')
+        } catch (error) {
+          console.error('Error saving token to localStorage:', error)
+        }
       }
 
       // Check if name is missing
