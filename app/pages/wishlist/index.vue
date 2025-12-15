@@ -1,7 +1,5 @@
 <template>
   <main class="wishlist-page">
-    <AppHeader />
-    
     <div class="wishlist-container">
       <!-- Page Header -->
       <section class="wishlist-header">
@@ -91,12 +89,11 @@
 <script setup lang="ts">
 import { useHead, useRouter } from 'nuxt/app'
 import { onMounted, ref } from 'vue'
+import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
 import type { Product } from '~~/types/homepage'
-import AppHeader from '~~/components/AppHeader.vue'
-import AppFooter from '~~/components/AppFooter.vue'
 import './wishlist.css'
 
 // Type definitions
@@ -108,6 +105,11 @@ interface WishlistResponse {
   success: boolean
   message?: string
   data?: WishlistItem[]
+}
+
+interface DeleteResponse {
+  success: boolean
+  message?: string
 }
 
 // Meta
@@ -192,7 +194,7 @@ const handleRemoveFromWishlist = async (itemId: number) => {
   }
 
   try {
-    const response = await $fetch(`${backendUrl}/wishlist/${itemId}`, {
+    const response = await $fetch<DeleteResponse>(`${backendUrl}/wishlist/${itemId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
