@@ -1,0 +1,375 @@
+/* Page Content Styles */
+.page-content {
+  min-height: 100vh;
+  padding: 2rem 0;
+  background-color: #f9fafb;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 3rem 1rem;
+}
+
+.loading-spinner {
+  margin-bottom: 1.5rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f4f6;
+  border-top-color: #ea580c;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Error State */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.error-icon {
+  width: 64px;
+  height: 64px;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.error-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.error-title {
+  font-family: Poppins, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 1rem 0;
+}
+
+.error-message {
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+  max-width: 500px;
+}
+
+.error-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  background-color: #ea580c;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.error-button:hover {
+  background-color: #c2410c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.3), 0 2px 4px -1px rgba(234, 88, 12, 0.2);
+}
+
+.error-button:active {
+  transform: translateY(0);
+}
+
+/* Page Container */
+.page-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Page Header */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #ea580c;
+}
+
+.page-title {
+  font-family: Poppins, sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Page Body */
+.page-body {
+  background: white;
+  padding: 3rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.page-content-wrapper {
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #374151;
+}
+
+/* Style HTML content from API */
+.page-content-wrapper :deep(p) {
+  margin: 0 0 1.5rem 0;
+  color: #374151;
+}
+
+.page-content-wrapper :deep(h1),
+.page-content-wrapper :deep(h2),
+.page-content-wrapper :deep(h3),
+.page-content-wrapper :deep(h4),
+.page-content-wrapper :deep(h5),
+.page-content-wrapper :deep(h6) {
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+  color: #000;
+  margin: 2rem 0 1rem 0;
+  line-height: 1.3;
+}
+
+.page-content-wrapper :deep(h1) {
+  font-size: 2rem;
+}
+
+.page-content-wrapper :deep(h2) {
+  font-size: 1.75rem;
+}
+
+.page-content-wrapper :deep(h3) {
+  font-size: 1.5rem;
+}
+
+.page-content-wrapper :deep(h4) {
+  font-size: 1.25rem;
+}
+
+.page-content-wrapper :deep(h5) {
+  font-size: 1.125rem;
+}
+
+.page-content-wrapper :deep(h6) {
+  font-size: 1rem;
+}
+
+.page-content-wrapper :deep(ul),
+.page-content-wrapper :deep(ol) {
+  margin: 0 0 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.page-content-wrapper :deep(li) {
+  margin: 0.5rem 0;
+  color: #374151;
+}
+
+.page-content-wrapper :deep(a) {
+  color: #ea580c;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.page-content-wrapper :deep(a:hover) {
+  color: #c2410c;
+  border-bottom-color: #c2410c;
+}
+
+.page-content-wrapper :deep(strong),
+.page-content-wrapper :deep(b) {
+  font-weight: 600;
+  color: #000;
+}
+
+.page-content-wrapper :deep(em),
+.page-content-wrapper :deep(i) {
+  font-style: italic;
+}
+
+.page-content-wrapper :deep(blockquote) {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid #ea580c;
+  background-color: #fef3e7;
+  border-radius: 0.375rem;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.page-content-wrapper :deep(code) {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875em;
+  color: #ea580c;
+}
+
+.page-content-wrapper :deep(pre) {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.page-content-wrapper :deep(pre code) {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.page-content-wrapper :deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.page-content-wrapper :deep(th),
+.page-content-wrapper :deep(td) {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-content-wrapper :deep(th) {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #000;
+}
+
+.page-content-wrapper :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.page-content-wrapper :deep(hr) {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .page-body {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: 1.5rem 0;
+  }
+
+  .page-container {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .page-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .page-content-wrapper {
+    font-size: 0.9375rem;
+  }
+
+  .page-content-wrapper :deep(h1) {
+    font-size: 1.75rem;
+  }
+
+  .page-content-wrapper :deep(h2) {
+    font-size: 1.5rem;
+  }
+
+  .page-content-wrapper :deep(h3) {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .page-body {
+    padding: 1.5rem 1rem;
+  }
+
+  .page-content-wrapper {
+    font-size: 0.875rem;
+  }
+
+  .page-content-wrapper :deep(h1) {
+    font-size: 1.5rem;
+  }
+
+  .page-content-wrapper :deep(h2) {
+    font-size: 1.25rem;
+  }
+
+  .page-content-wrapper :deep(h3) {
+    font-size: 1.125rem;
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+  }
+
+  .error-message {
+    font-size: 0.875rem;
+  }
+}
+
