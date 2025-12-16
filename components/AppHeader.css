@@ -15,8 +15,14 @@
   top: 24px;
   right: 10px;
   transform: translateY(-50%);
-  transition: color 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, font-size 0.3s ease-in-out;
   cursor: pointer;
+}
+
+/* Make heading text bigger on home page when not scrolled */
+.header-home:not(.header-scrolled) .heading-text {
+  font-size: 1.8em;
+  /* top: 48px; */
 }
 
 /* Make heading black on all pages except home page */
@@ -144,6 +150,12 @@
 }
 .logo-image {
   height: 70px;
+  transition: height 0.3s ease-in-out;
+}
+
+/* Make logo bigger on home page when not scrolled */
+.header-home:not(.header-scrolled) .logo-image {
+  height: 100px;
 }
 
 .nav {
