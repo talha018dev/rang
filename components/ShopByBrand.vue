@@ -41,16 +41,25 @@
           <NuxtLink 
             v-if="products.length > 0" 
             :to="`/products/${products[0]?.category?.slug || 'all'}/${products[0]?.slug}`"
+            class="product-image-wrapper"
           >
-            <NuxtImg 
-              :src="getImageUrl(products[0]?.image || '')" 
-              :alt="products[0]?.name || ''"
-              class="sale-offer-image category-image-rounded" 
-              format="webp" 
-              quality="85" 
-              loading="lazy" 
-            />
+            <div class="product-image-container" :class="{ 'flip-animation': isLoadingProducts }">
+              <NuxtImg 
+                :src="getImageUrl(products[0]?.image || '')" 
+                :alt="products[0]?.name || ''"
+                class="sale-offer-image category-image-rounded" 
+                format="webp" 
+                quality="85" 
+                loading="lazy" 
+              />
+            </div>
           </NuxtLink>
+          <!-- Loading placeholder for first product -->
+          <div v-else-if="isLoadingProducts" class="product-image-wrapper">
+            <div class="product-image-container flip-animation">
+              <div class="image-placeholder"></div>
+            </div>
+          </div>
 
           <div class="absolute" style="bottom: 40px; right: 40px;">
             <NuxtLink :to="`/products?brand=${selectedBrand}`">
@@ -62,29 +71,33 @@
           </div>
         </div>
         <div class="sale-brands-grid-tertiary">
-          <!-- Loading State for Products -->
-          <template v-if="isLoadingProducts">
-            <div v-for="i in 4" :key="i" class="product-skeleton">
-              <div class="skeleton-box"></div>
-            </div>
-          </template>
           <!-- Next 4 products from API (products[1] to products[4]) -->
-          <template v-else-if="products.length > 1">
+          <template v-if="products.length > 1">
             <NuxtLink 
               v-for="product in products.slice(1, 5)" 
               :key="product.id"
               :to="`/products/${product.category?.slug || 'all'}/${product.slug}`"
               class="brand-product-link"
             >
-              <NuxtImg 
-                :src="getImageUrl(product.image)" 
-                :alt="product.name" 
-                class="sale-brand-image-cover" 
-                format="webp"
-                quality="85" 
-                loading="lazy" 
-              />
+              <div class="product-image-container" :class="{ 'flip-animation': isLoadingProducts }">
+                <NuxtImg 
+                  :src="getImageUrl(product.image)" 
+                  :alt="product.name" 
+                  class="sale-brand-image-cover" 
+                  format="webp"
+                  quality="85" 
+                  loading="lazy" 
+                />
+              </div>
             </NuxtLink>
+          </template>
+          <!-- Loading State for Products - show placeholders with flip animation -->
+          <template v-else-if="isLoadingProducts">
+            <div v-for="i in 4" :key="i" class="brand-product-link">
+              <div class="product-image-container flip-animation">
+                <div class="image-placeholder"></div>
+              </div>
+            </div>
           </template>
           <!-- Empty State - only show when API returns no products -->
           <template v-else-if="products.length === 0">
