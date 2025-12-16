@@ -1,7 +1,7 @@
 <template>
   <main class="men-page-gradient">
 
-    <div class="men-page" :class="{ 'women-category': categorySlug === 'women' }">
+    <div class="men-page" :class="{ 'women-category': isWomenCategory }">
       <AppHeader />
 
       <!-- Hero Banner Section -->
@@ -176,12 +176,26 @@ import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
-import type { Brand, BrandResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
+import type { Brand, BrandResponse, Category, CategoryResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
 // Get route params
 const route = useRoute()
 const categorySlug = computed(() => route.params.category as string)
+
+console.log('qqqqqqqqqq',categorySlug.value);
+
+// Check if current category is women or a child of women
+const isWomenCategory = computed(() => {
+  if (categorySlug.value === 'women') return true
+  
+  // Check if it's a child of women by checking the categories
+  const womenCategory = categories.value.find(cat => cat.slug === 'women')
+  if (!womenCategory || !womenCategory.children) return false
+  
+  // Check if current category slug matches any child of women
+  return womenCategory.children.some(child => child.slug === categorySlug.value)
+})
 
 // Format category slug to title
 const categoryTitle = computed(() => {
@@ -232,6 +246,7 @@ const pagination = ref<PaginationData | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
+const categories = ref<Category[]>([])
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -256,6 +271,21 @@ const fetchBrands = async () => {
     }
   } catch (err) {
     console.error('Error fetching brands:', err)
+  }
+}
+
+// Fetch categories from API
+const fetchCategories = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/category`)
+    console.log('Categories API Response:', response)
+
+    if (response.success && response.data) {
+      categories.value = response.data
+    }
+  } catch (err) {
+    console.error('Error fetching categories:', err)
   }
 }
 
@@ -313,6 +343,7 @@ const fetchProducts = async () => {
 // Initial fetch on mount
 onMounted(() => {
   fetchBrands()
+  fetchCategories()
   fetchProducts()
 })
 
