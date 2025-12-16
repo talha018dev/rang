@@ -14,38 +14,99 @@
           <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
             Home
           </NuxtLink>
-          <NuxtLink to="/products/women" :class="getNavLinkClass(isWomenActive)">
-            Women
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </NuxtLink>
-          <NuxtLink to="/products/men" :class="getNavLinkClass(isMenActive)">
-            Men
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </NuxtLink>
-          <NuxtLink to="/products/kids" :class="getNavLinkClass(isKidsActive)">
-            Kids
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </NuxtLink>
-          <NuxtLink to="/products/jewelry" :class="getNavLinkClass(isJewelryActive)">
-            Jewelry
-            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </NuxtLink>
+          
+          <!-- Women Dropdown -->
+          <div class="nav-dropdown" @mouseenter="handleWomenMouseEnter" @mouseleave="handleWomenMouseLeave">
+            <NuxtLink to="/products/women" :class="getNavLinkClass(isWomenActive)" class="nav-link-with-dropdown">
+              Women
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </NuxtLink>
+            <div v-if="showWomenDropdown && womenCategory && womenCategory.children && womenCategory.children.length > 0" class="nav-dropdown-menu">
+              <NuxtLink 
+                v-for="child in womenCategory.children" 
+                :key="child.slug"
+                :to="`/products/${womenCategory.slug}/${child.slug}`"
+                class="nav-dropdown-item"
+                @click="showWomenDropdown = false">
+                {{ child.name?.replace(/&amp;/g, '&') }}
+                <span class="nav-dropdown-count">({{ child.products_count }})</span>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Men Dropdown -->
+          <div class="nav-dropdown" @mouseenter="handleMenMouseEnter" @mouseleave="handleMenMouseLeave">
+            <NuxtLink to="/products/men" :class="getNavLinkClass(isMenActive)" class="nav-link-with-dropdown">
+              Men
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </NuxtLink>
+            <div v-if="showMenDropdown && menCategory && menCategory.children && menCategory.children.length > 0" class="nav-dropdown-menu">
+              <NuxtLink 
+                v-for="child in menCategory.children" 
+                :key="child.slug"
+                :to="`/products/${menCategory.slug}/${child.slug}`"
+                class="nav-dropdown-item"
+                @click="showMenDropdown = false">
+                {{ child.name?.replace(/&amp;/g, '&') }}
+                <span class="nav-dropdown-count">({{ child.products_count }})</span>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Kids Dropdown -->
+          <div class="nav-dropdown" @mouseenter="handleKidsMouseEnter" @mouseleave="handleKidsMouseLeave">
+            <NuxtLink to="/products/kids" :class="getNavLinkClass(isKidsActive)" class="nav-link-with-dropdown">
+              Kids
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </NuxtLink>
+            <div v-if="showKidsDropdown && kidsCategory && kidsCategory.children && kidsCategory.children.length > 0" class="nav-dropdown-menu">
+              <NuxtLink 
+                v-for="child in kidsCategory.children" 
+                :key="child.slug"
+                :to="`/products/${kidsCategory.slug}/${child.slug}`"
+                class="nav-dropdown-item"
+                @click="showKidsDropdown = false">
+                {{ child.name?.replace(/&amp;/g, '&') }}
+                <span class="nav-dropdown-count">({{ child.products_count }})</span>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Jewelry Dropdown -->
+          <div class="nav-dropdown" @mouseenter="handleJewelryMouseEnter" @mouseleave="handleJewelryMouseLeave">
+            <NuxtLink to="/products/jewelry" :class="getNavLinkClass(isJewelryActive)" class="nav-link-with-dropdown">
+              Jewelry
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </NuxtLink>
+            <div v-if="showJewelryDropdown && jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0" class="nav-dropdown-menu">
+              <NuxtLink 
+                v-for="child in jewelryCategory.children" 
+                :key="child.slug"
+                :to="`/products/${jewelryCategory.slug}/${child.slug}`"
+                class="nav-dropdown-item"
+                @click="showJewelryDropdown = false">
+                {{ child.name?.replace(/&amp;/g, '&') }}
+                <span class="nav-dropdown-count">({{ child.products_count }})</span>
+              </NuxtLink>
+            </div>
+          </div>
+
           <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)">
             Accessories
           </NuxtLink>
@@ -204,18 +265,111 @@
             <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)" @click="closeDrawer">
               Home
             </NuxtLink>
-            <NuxtLink to="/products/women" :class="getNavLinkClass(isWomenActive)" @click="closeDrawer">
-              Women
-            </NuxtLink>
-            <NuxtLink to="/products/men" :class="getNavLinkClass(isMenActive)" @click="closeDrawer">
-              Men
-            </NuxtLink>
-            <NuxtLink to="/products/kids" :class="getNavLinkClass(isKidsActive)" @click="closeDrawer">
-              Kids
-            </NuxtLink>
-            <NuxtLink to="/products/jewelry" :class="getNavLinkClass(isJewelryActive)" @click="closeDrawer">
-              Jewelry
-            </NuxtLink>
+            
+            <!-- Women Mobile Dropdown -->
+            <div class="mobile-nav-dropdown">
+              <button 
+                :class="getNavLinkClass(isWomenActive)" 
+                class="mobile-nav-dropdown-toggle"
+                @click="showMobileWomenDropdown = !showMobileWomenDropdown">
+                Women
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileWomenDropdown }">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div v-if="showMobileWomenDropdown && womenCategory && womenCategory.children && womenCategory.children.length > 0" class="mobile-nav-dropdown-menu">
+                <NuxtLink 
+                  v-for="child in womenCategory.children" 
+                  :key="child.slug"
+                  :to="`/products/${womenCategory.slug}/${child.slug}`"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  {{ child.name?.replace(/&amp;/g, '&') }}
+                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Men Mobile Dropdown -->
+            <div class="mobile-nav-dropdown">
+              <button 
+                :class="getNavLinkClass(isMenActive)" 
+                class="mobile-nav-dropdown-toggle"
+                @click="showMobileMenDropdown = !showMobileMenDropdown">
+                Men
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileMenDropdown }">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div v-if="showMobileMenDropdown && menCategory && menCategory.children && menCategory.children.length > 0" class="mobile-nav-dropdown-menu">
+                <NuxtLink 
+                  v-for="child in menCategory.children" 
+                  :key="child.slug"
+                  :to="`/products/${menCategory.slug}/${child.slug}`"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  {{ child.name?.replace(/&amp;/g, '&') }}
+                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Kids Mobile Dropdown -->
+            <div class="mobile-nav-dropdown">
+              <button 
+                :class="getNavLinkClass(isKidsActive)" 
+                class="mobile-nav-dropdown-toggle"
+                @click="showMobileKidsDropdown = !showMobileKidsDropdown">
+                Kids
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileKidsDropdown }">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div v-if="showMobileKidsDropdown && kidsCategory && kidsCategory.children && kidsCategory.children.length > 0" class="mobile-nav-dropdown-menu">
+                <NuxtLink 
+                  v-for="child in kidsCategory.children" 
+                  :key="child.slug"
+                  :to="`/products/${kidsCategory.slug}/${child.slug}`"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  {{ child.name?.replace(/&amp;/g, '&') }}
+                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
+                </NuxtLink>
+              </div>
+            </div>
+
+            <!-- Jewelry Mobile Dropdown -->
+            <div class="mobile-nav-dropdown">
+              <button 
+                :class="getNavLinkClass(isJewelryActive)" 
+                class="mobile-nav-dropdown-toggle"
+                @click="showMobileJewelryDropdown = !showMobileJewelryDropdown">
+                Jewelry
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileJewelryDropdown }">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div v-if="showMobileJewelryDropdown && jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0" class="mobile-nav-dropdown-menu">
+                <NuxtLink 
+                  v-for="child in jewelryCategory.children" 
+                  :key="child.slug"
+                  :to="`/products/${jewelryCategory.slug}/${child.slug}`"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  {{ child.name?.replace(/&amp;/g, '&') }}
+                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
+                </NuxtLink>
+              </div>
+            </div>
+
             <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)" @click="closeDrawer">
               Accessories
             </NuxtLink>
@@ -363,7 +517,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
-import type { Product, ProductResponse } from '../types/homepage';
+import type { Category, CategoryResponse, Product, ProductResponse } from '../types/homepage';
 
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
@@ -493,8 +647,96 @@ onMounted(() => {
     if (!target.closest('.mobile-currency-container')) {
       showMobileCurrencyDropdown.value = false
     }
+    // Close category dropdowns when clicking outside
+    if (!target.closest('.nav-dropdown')) {
+      showWomenDropdown.value = false
+      showMenDropdown.value = false
+      showKidsDropdown.value = false
+      showJewelryDropdown.value = false
+    }
   })
 })
+
+// Categories state
+const categories = ref<Category[]>([])
+const showWomenDropdown = ref(false)
+const showMenDropdown = ref(false)
+const showKidsDropdown = ref(false)
+const showJewelryDropdown = ref(false)
+
+// Timeout refs for dropdown delays
+let womenDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+let menDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+let kidsDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+let jewelryDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+
+// Dropdown handlers with delay
+const handleWomenMouseEnter = () => {
+  if (womenDropdownTimeout) clearTimeout(womenDropdownTimeout)
+  showWomenDropdown.value = true
+}
+
+const handleWomenMouseLeave = () => {
+  womenDropdownTimeout = setTimeout(() => {
+    showWomenDropdown.value = false
+  }, 150)
+}
+
+const handleMenMouseEnter = () => {
+  if (menDropdownTimeout) clearTimeout(menDropdownTimeout)
+  showMenDropdown.value = true
+}
+
+const handleMenMouseLeave = () => {
+  menDropdownTimeout = setTimeout(() => {
+    showMenDropdown.value = false
+  }, 150)
+}
+
+const handleKidsMouseEnter = () => {
+  if (kidsDropdownTimeout) clearTimeout(kidsDropdownTimeout)
+  showKidsDropdown.value = true
+}
+
+const handleKidsMouseLeave = () => {
+  kidsDropdownTimeout = setTimeout(() => {
+    showKidsDropdown.value = false
+  }, 150)
+}
+
+const handleJewelryMouseEnter = () => {
+  if (jewelryDropdownTimeout) clearTimeout(jewelryDropdownTimeout)
+  showJewelryDropdown.value = true
+}
+
+const handleJewelryMouseLeave = () => {
+  jewelryDropdownTimeout = setTimeout(() => {
+    showJewelryDropdown.value = false
+  }, 150)
+}
+const showMobileWomenDropdown = ref(false)
+const showMobileMenDropdown = ref(false)
+const showMobileKidsDropdown = ref(false)
+const showMobileJewelryDropdown = ref(false)
+
+// Computed properties for specific categories
+const womenCategory = computed(() => categories.value.find(cat => cat.slug === 'women'))
+const menCategory = computed(() => categories.value.find(cat => cat.slug === 'men'))
+const kidsCategory = computed(() => categories.value.find(cat => cat.slug === 'kids'))
+const jewelryCategory = computed(() => categories.value.find(cat => cat.slug === 'jewelry'))
+
+// Fetch categories
+const fetchCategories = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/category`)
+    if (response.success && response.data) {
+      categories.value = response.data
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error)
+  }
+}
 
 // Reactive state for scroll position
 const isScrolled = ref(false)
@@ -515,6 +757,11 @@ const closeDrawer = () => {
   closeMobileSearch()
   // Also close mobile currency dropdown when drawer closes
   showMobileCurrencyDropdown.value = false
+  // Close all mobile category dropdowns
+  showMobileWomenDropdown.value = false
+  showMobileMenDropdown.value = false
+  showMobileKidsDropdown.value = false
+  showMobileJewelryDropdown.value = false
 }
 
 // Currency dropdown functions
@@ -589,6 +836,8 @@ onMounted(async () => {
   })
   // Initialize scroll state on mount
   handleScroll()
+  // Fetch categories
+  fetchCategories()
 })
 
 // Remove scroll event listener on unmount
