@@ -40,11 +40,11 @@
           <!-- First product image -->
           <NuxtLink 
             v-if="products.length > 0" 
-            :to="`/products/${products[0].category?.slug || 'all'}/${products[0].slug}`"
+            :to="`/products/${products[0]?.category?.slug || 'all'}/${products[0]?.slug}`"
           >
             <NuxtImg 
-              :src="getImageUrl(products[0].image)" 
-              :alt="products[0].name"
+              :src="getImageUrl(products[0]?.image || '')" 
+              :alt="products[0]?.name || ''"
               class="sale-offer-image category-image-rounded" 
               format="webp" 
               quality="85" 
