@@ -29,7 +29,7 @@
               <NuxtLink 
                 v-for="child in womenCategory.children" 
                 :key="child.slug"
-                :to="`/products/${womenCategory.slug}/${child.slug}`"
+                :to="`/products/${child.slug}`"
                 class="nav-dropdown-item"
                 @click="showWomenDropdown = false">
                 {{ child.name?.replace(/&amp;/g, '&') }}
@@ -52,7 +52,7 @@
               <NuxtLink 
                 v-for="child in menCategory.children" 
                 :key="child.slug"
-                :to="`/products/${menCategory.slug}/${child.slug}`"
+                :to="`/products/${child.slug}`"
                 class="nav-dropdown-item"
                 @click="showMenDropdown = false">
                 {{ child.name?.replace(/&amp;/g, '&') }}
@@ -75,7 +75,7 @@
               <NuxtLink 
                 v-for="child in kidsCategory.children" 
                 :key="child.slug"
-                :to="`/products/${kidsCategory.slug}/${child.slug}`"
+                :to="`/products/${child.slug}`"
                 class="nav-dropdown-item"
                 @click="showKidsDropdown = false">
                 {{ child.name?.replace(/&amp;/g, '&') }}
@@ -98,7 +98,7 @@
               <NuxtLink 
                 v-for="child in jewelryCategory.children" 
                 :key="child.slug"
-                :to="`/products/${jewelryCategory.slug}/${child.slug}`"
+                :to="`/products/${child.slug}`"
                 class="nav-dropdown-item"
                 @click="showJewelryDropdown = false">
                 {{ child.name?.replace(/&amp;/g, '&') }}
