@@ -76,10 +76,10 @@ const themeImages = [
         link: '/products/gaye-holud'
     },
     {
-        src: '/theme/theme-2.png',
+        src: '/victory-day/victory-day-1.webp',
         alt: 'Theme Rang',
-        title: 'Durga Puja',
-        link: '/products/durga-puja'
+        title: 'Victory Day',
+        link: '/products/victory-day'
     }
 ]
 

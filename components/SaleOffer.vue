@@ -10,7 +10,7 @@
         <section class="sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
-                    <NuxtImg src="/sale-offer/sale-offer-1.jpg" alt="Category Rang" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
+                    <NuxtImg src="/sale-offer/ultimate-sale-2.webp" alt="Category Rang" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
                     <div class="absolute! text-white! top-4! left-4!">
                         <div class="text-lg! sm:text-6xl! font-bold!">Ultimate</div>
                         <div class="text-lg! sm:text-6xl!">Sale</div>

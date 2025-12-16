@@ -67,25 +67,25 @@ import ShopNowBlue from './ShopNowBlue.vue'
 
 const timelessImages = [
     {
-        src: '/timeless/timeless-1.png',
+        src: '/timeless/benarashi.webp',
         alt: 'Timeless Rang',
         title: 'Banarasi Saree',
         link: '/products/banarasi-saree'
     },
     {
-        src: '/timeless/timeless-2.png',
+        src: '/timeless/jamdani.webp',
         alt: 'Timeless Rang',
         title: 'Jamdani Saree',
         link: '/products/jamdani-saree'
     },
     {
-        src: '/timeless/timeless-1.png',
+        src: '/timeless/silk.webp',
         alt: 'Timeless Rang',
         title: 'Silk Saree',
         link: '/products/silk-saree'
     },
     {
-        src: '/timeless/timeless-2.png',
+        src: '/timeless/cotton.webp',
         alt: 'Timeless Rang',
         title: 'Cotton Saree',
         link: '/products/cotton-saree'
