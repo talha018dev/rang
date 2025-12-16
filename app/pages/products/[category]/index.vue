@@ -191,10 +191,15 @@ const isWomenCategory = computed(() => {
   
   // Check if it's a child of women by checking the categories
   const womenCategory = categories.value.find(cat => cat.slug === 'women')
-  if (!womenCategory || !womenCategory.children) return false
+  if (!womenCategory || !womenCategory.children) {
+    console.log('Women category not found or has no children')
+    return false
+  }
   
   // Check if current category slug matches any child of women
-  return womenCategory.children.some(child => child.slug === categorySlug.value)
+  const isChild = womenCategory.children.some(child => child.slug === categorySlug.value)
+  console.log('Is women category:', isChild, 'for slug:', categorySlug.value)
+  return isChild
 })
 
 // Format category slug to title

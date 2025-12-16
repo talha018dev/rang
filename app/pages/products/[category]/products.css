@@ -267,10 +267,6 @@
     aspect-ratio: 0.82;
   }
   
-  .product-card:hover .product-img {
-    transform: scale(1);
-  }
-
   /* Apply zoom effect to women category and its children */
   .women-category .product-image-item {
     overflow: hidden;
@@ -283,13 +279,18 @@
     object-fit: cover;
     object-position: center;
     transition: transform 0.4s ease;
-    transform: scale(2.1); /* Zoomed in by default */
+    transform: scale(1); /* Normal size by default */
     transform-origin: center center;
     aspect-ratio: 0.82;
   }
 
   .women-category .product-card:hover .product-img {
-    transform: scale(1); /* Zoom out on hover */
+    transform: scale(1.1); /* Zoom in on hover */
+  }
+
+  /* General hover effect for non-women categories (men page style) */
+  .men-page:not(.women-category) .product-card:hover .product-img {
+    transform: scale(1);
   }
   
   .product-info {
