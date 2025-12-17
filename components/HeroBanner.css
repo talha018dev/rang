@@ -97,3 +97,9 @@
   padding-bottom: 0.25rem;
   display: inline-block;
 }
+
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5em;
+  }
+}
