@@ -5,7 +5,7 @@
         <h1 class="heading-text">RANG BANGLADESH</h1>
       </div>
       <div class="header-content">
-        <div>
+        <div class="min-w-[200px]">
           <NuxtLink to="/">
             <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
           </NuxtLink>
