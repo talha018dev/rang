@@ -807,17 +807,14 @@
   }
 }
 
-@media (min-width: 1201px) {
+@media (min-width: 1451px) {
   .mobile-nav-links {
     display: none;
   }
 }
 
-@media (max-width: 1200px) {
-  .nav {
-    display: none;
-  }
-
+@media (max-width: 1450px) {
+  /* Only hide desktop actions (header-actions), keep nav items visible */
   .desktop-actions {
     display: none;
   }
@@ -826,16 +823,13 @@
     display: block;
   }
 
-  .nav-link {
-    font-size: 0.85rem;
-  }
-
-  .nav-link-home {
-    font-size: 0.85rem;
+  /* Hide dropdown icons in desktop nav when under 1450px */
+  .nav .nav-icon {
+    display: none;
   }
 }
 
-@media (min-width: 1201px) {
+@media (min-width: 1451px) {
   .mobile-menu-button {
     display: none;
   }
@@ -843,6 +837,11 @@
   .desktop-actions {
     display: flex;
     align-items: flex-end;
+  }
+
+  /* Show dropdown icons in desktop nav when above 1450px */
+  .nav .nav-icon {
+    display: inline-block;
   }
 }
 .header-drawer [data-vaul-drawer][data-vaul-snap-points='false'][data-vaul-drawer-direction='right'][data-state='open'] {
