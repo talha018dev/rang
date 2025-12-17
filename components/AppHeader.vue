@@ -110,6 +110,9 @@
           <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)">
             Accessories
           </NuxtLink>
+          <NuxtLink to="/products/chobir-bazar" :class="getNavLinkClass(isChobirBazarActive)">
+            Chobir Bazar
+          </NuxtLink>
         </nav>
 
         <!-- Desktop Header Actions -->
@@ -372,6 +375,10 @@
 
             <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)" @click="closeDrawer">
               Accessories
+            </NuxtLink>
+
+            <NuxtLink to="/products/chobir-bazar" :class="getNavLinkClass(isChobirBazarActive)" @click="closeDrawer">
+              Chobir Bazar
             </NuxtLink>
           </div>
 
@@ -795,6 +802,7 @@ const isMenActive = computed(() => currentRoute.value === '/men')
 const isKidsActive = computed(() => currentRoute.value === '/kids')
 const isJewelryActive = computed(() => currentRoute.value === '/jewelry')
 const isAccessoriesActive = computed(() => currentRoute.value === '/accessories')
+const isChobirBazarActive = computed(() => currentRoute.value === '/chobir-bazar')
 
 // Function to get nav link class based on active state and current page
 const getNavLinkClass = (isActive: boolean) => {
