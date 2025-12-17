@@ -267,8 +267,8 @@
                       v-model="billingSameAsShipping"
                       class="checkbox-input"
                     />
-                    <span>Billing address same as shipping</span>
                   </label>
+                  <span>Billing address same as shipping</span>
                 </div>
 
                 <!-- Billing Information (if different) -->
