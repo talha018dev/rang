@@ -107,6 +107,44 @@
             </div>
           </div>
 
+          <!-- Collections Dropdown -->
+          <div class="nav-dropdown" @mouseenter="handleCollectionsMouseEnter" @mouseleave="handleCollectionsMouseLeave">
+            <NuxtLink to="/collections" :class="getNavLinkClass(isCollectionsActive)" class="nav-link-with-dropdown">
+              Collections
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </NuxtLink>
+            <div v-if="showCollectionsDropdown" class="nav-dropdown-menu">
+              <NuxtLink 
+                to="/collections/family"
+                class="nav-dropdown-item"
+                @click="showCollectionsDropdown = false">
+                Family Collection
+              </NuxtLink>
+              <NuxtLink 
+                to="/collections/matching"
+                class="nav-dropdown-item"
+                @click="showCollectionsDropdown = false">
+                Matching Collection
+              </NuxtLink>
+              <NuxtLink 
+                to="/collections/event"
+                class="nav-dropdown-item"
+                @click="showCollectionsDropdown = false">
+                Event Collection
+              </NuxtLink>
+              <NuxtLink 
+                to="/collections/others"
+                class="nav-dropdown-item"
+                @click="showCollectionsDropdown = false">
+                Others
+              </NuxtLink>
+            </div>
+          </div>
+
           <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)">
             Accessories
           </NuxtLink>
@@ -405,6 +443,54 @@
               </div>
             </div>
 
+            <!-- Collections Mobile Dropdown -->
+            <div class="mobile-nav-dropdown">
+              <div class="mobile-nav-dropdown-header">
+                <NuxtLink 
+                  to="/collections" 
+                  :class="getNavLinkClass(isCollectionsActive)" 
+                  class="mobile-nav-link"
+                  @click="closeDrawer">
+                  Collections
+                </NuxtLink>
+                <button 
+                  class="mobile-nav-dropdown-toggle"
+                  @click.stop="showMobileCollectionsDropdown = !showMobileCollectionsDropdown">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileCollectionsDropdown }">
+                    <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+              <div v-if="showMobileCollectionsDropdown" class="mobile-nav-dropdown-menu">
+                <NuxtLink 
+                  to="/collections/family"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  Family Collection
+                </NuxtLink>
+                <NuxtLink 
+                  to="/collections/matching"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  Matching Collection
+                </NuxtLink>
+                <NuxtLink 
+                  to="/collections/event"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  Event Collection
+                </NuxtLink>
+                <NuxtLink 
+                  to="/collections/others"
+                  class="mobile-nav-dropdown-item"
+                  @click="closeDrawer">
+                  Others
+                </NuxtLink>
+              </div>
+            </div>
+
             <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)" @click="closeDrawer">
               Accessories
             </NuxtLink>
@@ -692,6 +778,7 @@ onMounted(() => {
       showMenDropdown.value = false
       showKidsDropdown.value = false
       showJewelryDropdown.value = false
+      showCollectionsDropdown.value = false
     }
   })
 })
@@ -702,12 +789,14 @@ const showWomenDropdown = ref(false)
 const showMenDropdown = ref(false)
 const showKidsDropdown = ref(false)
 const showJewelryDropdown = ref(false)
+const showCollectionsDropdown = ref(false)
 
 // Timeout refs for dropdown delays
 let womenDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 let menDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 let kidsDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 let jewelryDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+let collectionsDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Dropdown handlers with delay
 const handleWomenMouseEnter = () => {
@@ -753,10 +842,23 @@ const handleJewelryMouseLeave = () => {
     showJewelryDropdown.value = false
   }, 150)
 }
+
+const handleCollectionsMouseEnter = () => {
+  if (collectionsDropdownTimeout) clearTimeout(collectionsDropdownTimeout)
+  showCollectionsDropdown.value = true
+}
+
+const handleCollectionsMouseLeave = () => {
+  collectionsDropdownTimeout = setTimeout(() => {
+    showCollectionsDropdown.value = false
+  }, 150)
+}
+
 const showMobileWomenDropdown = ref(false)
 const showMobileMenDropdown = ref(false)
 const showMobileKidsDropdown = ref(false)
 const showMobileJewelryDropdown = ref(false)
+const showMobileCollectionsDropdown = ref(false)
 
 // Computed properties for specific categories
 const womenCategory = computed(() => categories.value.find(cat => cat.slug === 'women'))
@@ -801,6 +903,7 @@ const closeDrawer = () => {
   showMobileMenDropdown.value = false
   showMobileKidsDropdown.value = false
   showMobileJewelryDropdown.value = false
+  showMobileCollectionsDropdown.value = false
 }
 
 // Currency dropdown functions
@@ -833,6 +936,7 @@ const isWomenActive = computed(() => currentRoute.value === '/women')
 const isMenActive = computed(() => currentRoute.value === '/men')
 const isKidsActive = computed(() => currentRoute.value === '/kids')
 const isJewelryActive = computed(() => currentRoute.value === '/jewelry')
+const isCollectionsActive = computed(() => currentRoute.value.startsWith('/collections'))
 const isAccessoriesActive = computed(() => currentRoute.value === '/accessories')
 const isChobirBazarActive = computed(() => currentRoute.value === '/chobir-bazar')
 
