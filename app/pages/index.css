@@ -1,3 +1,6 @@
+/* Import Bixby CF font */
+@import url('https://fonts.googleapis.com/css2?family=Bixby+CF:wght@400;500;600;700&display=swap');
+
 /* Homepage Skeleton Loader Styles */
 .homepage-skeleton {
   pointer-events: none;
@@ -9,6 +12,12 @@
   position: relative;
   min-height: calc(100svh + 250px);
   top: -175px;
+  font-family: 'Bixby CF', sans-serif;
+}
+
+/* Apply Bixby CF font to all elements within home page */
+.home-page * {
+  font-family: 'Bixby CF', sans-serif;
 }
 
 @media (max-width: 800px) {
