@@ -209,6 +209,17 @@
                   </select>
                 </div>
 
+                <div class="form-group">
+                  <label for="stateDistrict" class="form-label">State/District</label>
+                  <input
+                    id="stateDistrict"
+                    v-model="shippingInfo.stateDistrict"
+                    type="text"
+                    class="form-input"
+                    placeholder="State or District"
+                  />
+                </div>
+
                 <!-- Delivery Options -->
                 <div class="form-group">
                   <label for="shippingMethod" class="form-label">Delivery Options *</label>
@@ -553,6 +564,69 @@ const fetchLocations = async () => {
   }
 }
 
+// Function to get location from browser
+const getBrowserLocation = async () => {
+  if (!navigator.geolocation) {
+    console.log('Geolocation is not supported by this browser.')
+    return
+  }
+
+  try {
+    const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      })
+    })
+
+    const { latitude, longitude } = position.coords
+
+    // Use reverse geocoding API to get address details
+    try {
+      // Using OpenStreetMap Nominatim API (free, no API key required)
+      const response = await $fetch<any>(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`, {
+        headers: {
+          'User-Agent': 'Rang Bangladesh E-commerce' // Required by Nominatim
+        }
+      })
+
+      if (response && response.address) {
+        const address = response.address
+
+        // Populate country if available and not already set
+        if (address.country && !shippingInfo.value.country) {
+          shippingInfo.value.country = address.country
+        }
+
+        // Populate state/district if available and not already set
+        if (!shippingInfo.value.stateDistrict) {
+          // Try different possible fields for state/district
+          const stateDistrict = address.state || 
+                               address.region || 
+                               address.province || 
+                               address.district || 
+                               address.county || 
+                               ''
+          if (stateDistrict) {
+            shippingInfo.value.stateDistrict = stateDistrict
+          }
+        }
+
+        // Optionally populate city if not already set
+        if (address.city && !shippingInfo.value.city) {
+          shippingInfo.value.city = address.city
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching reverse geocoding:', error)
+    }
+  } catch (error) {
+    console.log('Error getting location:', error)
+    // User denied location access or error occurred
+  }
+}
+
 // Client-side redirect if cart is empty
 onMounted(() => {
   // Simulate cart loading time to show skeleton
@@ -562,6 +636,11 @@ onMounted(() => {
   
   // Fetch locations on mount
   fetchLocations()
+  
+  // Try to get browser location to populate country and state/district
+  if (typeof window !== 'undefined') {
+    getBrowserLocation()
+  }
   
   if (isEmpty.value) {
     // Optionally redirect to cart page
@@ -601,7 +680,8 @@ const shippingInfo = ref({
   address: '',
   city: '',
   postalCode: '',
-  country: ''
+  country: '',
+  stateDistrict: ''
 })
 
 const billingInfo = ref({
@@ -944,7 +1024,7 @@ const handlePlaceOrder = async () => {
         line_1: shippingInfo.value.address,
         line_2: '',
         city: shippingInfo.value.city,
-        state: '',
+        state: shippingInfo.value.stateDistrict || '',
         country: shippingInfo.value.country,
         postal_code: shippingInfo.value.postalCode || ''
       },
