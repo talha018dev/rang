@@ -774,23 +774,23 @@
 
 /* Responsive Design */
 @media (max-width: 800px) {
-  .nav {
-    display: none;
-  }
-
   /* Hide logo on screens under 800px */
   .header-content > div:first-child {
     display: none;
   }
 }
 
-@media (min-width: 801px) {
+@media (min-width: 1201px) {
   .mobile-nav-links {
     display: none;
   }
 }
 
 @media (max-width: 1200px) {
+  .nav {
+    display: none;
+  }
+
   .desktop-actions {
     display: none;
   }
