@@ -5,9 +5,16 @@
 }
 
 /* Home Page Content - Position relative for absolute hero section */
-.home-page-content {
+.home-page {
   position: relative;
   min-height: calc(100svh + 250px);
+  top: -175px;
+}
+
+@media (max-width: 800px) {
+  .home-page {
+    top: -85px;
+  }
 }
 
 :root {
