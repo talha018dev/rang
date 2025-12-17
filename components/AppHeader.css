@@ -743,6 +743,11 @@
   }
   .heading-text {
     right: 0;
+    font-size: 1em;
+  }
+  /* Make heading text smaller on home page when not scrolled below 600px */
+  .header-home:not(.header-scrolled) .heading-text {
+    font-size: 1.2em;
   }
 }
 
