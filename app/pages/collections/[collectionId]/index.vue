@@ -123,12 +123,15 @@
         </section>
       </div>
     </div>
+
+    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import AppFooter from '~~/components/AppFooter.vue'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
 
