@@ -232,6 +232,8 @@
                     <option value="">Select Delivery Option</option>
                     <option value="store_pickup">Outlet</option>
                     <option value="home_delivery">Home Delivery</option>
+                    <option value="shundorban">Shundorban</option>
+                    <option value="sa_paribahan_manual">SA Paribahan (manual)</option>
                   </select>
                 </div>
 
@@ -268,6 +270,18 @@
                     <option value="cash_on_delivery">Cash on Delivery</option>
                     <option value="online">Online (via SSLCOMMERZ)</option>
                   </select>
+                </div>
+
+                <!-- Gift Package Checkbox -->
+                <div class="form-group checkbox-group flex-row">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      v-model="isGiftPackage"
+                      class="checkbox-input"
+                    />
+                  </label>
+                  <span>Is it gift package</span>
                 </div>
 
                 <!-- Billing Same as Shipping -->
@@ -466,6 +480,10 @@
                 <div class="total-row">
                   <span class="total-label">Shipping</span>
                   <span class="total-value">{{ shippingCostDisplay }}</span>
+                </div>
+                <div v-if="isGiftPackage" class="total-row">
+                  <span class="total-label">Gift Package</span>
+                  <span class="total-value">{{ giftPackageChargeDisplay }}</span>
                 </div>
                 <div class="total-row total-row-final">
                   <span class="total-label">Total</span>
@@ -698,6 +716,7 @@ const isLoadingLocations = ref(false)
 const paymentMethod = ref('')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
+const isGiftPackage = ref(false)
 
 // Watch shipping method to reset outlet selection when changed
 watch(shippingMethod, (newValue) => {
@@ -746,6 +765,10 @@ const shippingCostBDT = computed(() => {
     return 0 // Free for outlet pickup
   } else if (shippingMethod.value === 'home_delivery') {
     return 100 // Default home delivery cost (can be adjusted)
+  } else if (shippingMethod.value === 'shundorban') {
+    return 0 // Shundorban shipping cost (can be adjusted)
+  } else if (shippingMethod.value === 'sa_paribahan_manual') {
+    return 0 // SA Paribahan manual shipping cost (can be adjusted)
   }
   
   return 0
@@ -758,6 +781,38 @@ const shippingCost = computed(() => {
     return shippingCostBDT.value / exchangeRate.value
   }
   return shippingCostBDT.value
+})
+
+// Gift package charge in BDT (base currency)
+const giftPackageChargeBDT = computed(() => {
+  return isGiftPackage.value ? 50 : 0 // 50 BDT for gift package (can be adjusted)
+})
+
+// Gift package charge in current currency
+const giftPackageCharge = computed(() => {
+  if (!isGiftPackage.value) {
+    return 0
+  }
+  if (currency.value === 'USD') {
+    // Convert BDT gift package charge to USD
+    return giftPackageChargeBDT.value / exchangeRate.value
+  }
+  return giftPackageChargeBDT.value
+})
+
+// Gift package charge display
+const giftPackageChargeDisplay = computed(() => {
+  if (!isGiftPackage.value) {
+    return ''
+  }
+  if (currency.value === 'USD') {
+    const usdCharge = giftPackageCharge.value
+    if (!isFinite(usdCharge) || isNaN(usdCharge)) {
+      return '$0.00'
+    }
+    return `$${usdCharge.toFixed(2)}`
+  }
+  return `Tk ${giftPackageChargeBDT.value.toLocaleString()}`
 })
 
 const shippingCostDisplay = computed(() => {
@@ -789,7 +844,8 @@ const grandTotal = computed(() => {
   }
   
   const shipping = shippingCost.value
-  const total = subtotal - discountInCurrentCurrency + shipping
+  const giftPackage = giftPackageCharge.value
+  const total = subtotal - discountInCurrentCurrency + shipping + giftPackage
   
   // Check for invalid values
   if (!isFinite(total) || isNaN(total)) {
@@ -1017,6 +1073,8 @@ const handlePlaceOrder = async () => {
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
       payment_method: paymentMethod.value,
+      is_gift_package: isGiftPackage.value,
+      gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
       address: {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
