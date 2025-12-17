@@ -256,7 +256,7 @@
       <template #content>
         <div class="p-6 bg-white header-drawer-template">
           <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-orange-600"></h3>
+            <h1 class="mobile-nav-heading">RANG BANGLADESH</h1>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
           </div>
 
