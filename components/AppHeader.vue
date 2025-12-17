@@ -271,17 +271,25 @@
             
             <!-- Women Mobile Dropdown -->
             <div class="mobile-nav-dropdown">
-              <button 
-                :class="getNavLinkClass(isWomenActive)" 
-                class="mobile-nav-dropdown-toggle"
-                @click="showMobileWomenDropdown = !showMobileWomenDropdown">
-                Women
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileWomenDropdown }">
-                  <path fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
+              <div class="mobile-nav-dropdown-header">
+                <NuxtLink 
+                  to="/products/women" 
+                  :class="getNavLinkClass(isWomenActive)" 
+                  class="mobile-nav-link"
+                  @click="closeDrawer">
+                  Women
+                </NuxtLink>
+                <button 
+                  v-if="womenCategory && womenCategory.children && womenCategory.children.length > 0"
+                  class="mobile-nav-dropdown-toggle"
+                  @click.stop="showMobileWomenDropdown = !showMobileWomenDropdown">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileWomenDropdown }">
+                    <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
               <div v-if="showMobileWomenDropdown && womenCategory && womenCategory.children && womenCategory.children.length > 0" class="mobile-nav-dropdown-menu">
                 <NuxtLink 
                   v-for="child in womenCategory.children" 
@@ -297,17 +305,25 @@
 
             <!-- Men Mobile Dropdown -->
             <div class="mobile-nav-dropdown">
-              <button 
-                :class="getNavLinkClass(isMenActive)" 
-                class="mobile-nav-dropdown-toggle"
-                @click="showMobileMenDropdown = !showMobileMenDropdown">
-                Men
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileMenDropdown }">
-                  <path fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
+              <div class="mobile-nav-dropdown-header">
+                <NuxtLink 
+                  to="/products/men" 
+                  :class="getNavLinkClass(isMenActive)" 
+                  class="mobile-nav-link"
+                  @click="closeDrawer">
+                  Men
+                </NuxtLink>
+                <button 
+                  v-if="menCategory && menCategory.children && menCategory.children.length > 0"
+                  class="mobile-nav-dropdown-toggle"
+                  @click.stop="showMobileMenDropdown = !showMobileMenDropdown">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileMenDropdown }">
+                    <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
               <div v-if="showMobileMenDropdown && menCategory && menCategory.children && menCategory.children.length > 0" class="mobile-nav-dropdown-menu">
                 <NuxtLink 
                   v-for="child in menCategory.children" 
@@ -323,17 +339,25 @@
 
             <!-- Kids Mobile Dropdown -->
             <div class="mobile-nav-dropdown">
-              <button 
-                :class="getNavLinkClass(isKidsActive)" 
-                class="mobile-nav-dropdown-toggle"
-                @click="showMobileKidsDropdown = !showMobileKidsDropdown">
-                Kids
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileKidsDropdown }">
-                  <path fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
+              <div class="mobile-nav-dropdown-header">
+                <NuxtLink 
+                  to="/products/kids" 
+                  :class="getNavLinkClass(isKidsActive)" 
+                  class="mobile-nav-link"
+                  @click="closeDrawer">
+                  Kids
+                </NuxtLink>
+                <button 
+                  v-if="kidsCategory && kidsCategory.children && kidsCategory.children.length > 0"
+                  class="mobile-nav-dropdown-toggle"
+                  @click.stop="showMobileKidsDropdown = !showMobileKidsDropdown">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileKidsDropdown }">
+                    <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
               <div v-if="showMobileKidsDropdown && kidsCategory && kidsCategory.children && kidsCategory.children.length > 0" class="mobile-nav-dropdown-menu">
                 <NuxtLink 
                   v-for="child in kidsCategory.children" 
@@ -349,17 +373,25 @@
 
             <!-- Jewelry Mobile Dropdown -->
             <div class="mobile-nav-dropdown">
-              <button 
-                :class="getNavLinkClass(isJewelryActive)" 
-                class="mobile-nav-dropdown-toggle"
-                @click="showMobileJewelryDropdown = !showMobileJewelryDropdown">
-                Jewelry
-                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileJewelryDropdown }">
-                  <path fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
+              <div class="mobile-nav-dropdown-header">
+                <NuxtLink 
+                  to="/products/jewelry" 
+                  :class="getNavLinkClass(isJewelryActive)" 
+                  class="mobile-nav-link"
+                  @click="closeDrawer">
+                  Jewelry
+                </NuxtLink>
+                <button 
+                  v-if="jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0"
+                  class="mobile-nav-dropdown-toggle"
+                  @click.stop="showMobileJewelryDropdown = !showMobileJewelryDropdown">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileJewelryDropdown }">
+                    <path fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
               <div v-if="showMobileJewelryDropdown && jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0" class="mobile-nav-dropdown-menu">
                 <NuxtLink 
                   v-for="child in jewelryCategory.children" 
