@@ -169,92 +169,65 @@
 
                 <div class="form-group">
                   <label for="country" class="form-label">Country *</label>
-                  <div class="searchable-select-wrapper">
-                    <input
-                      v-model="countrySearchQuery"
-                      type="text"
-                      class="form-input search-input"
-                      placeholder="Search country..."
-                      @input="filterCountries"
-                    />
-                    <select
-                      id="country"
-                      v-model="shippingInfo.country"
-                      class="form-input"
-                      required
-                      @change="handleCountryChange"
+                  <select
+                    id="country"
+                    v-model="shippingInfo.country"
+                    class="form-input"
+                    required
+                    @change="handleCountryChange"
+                  >
+                    <option value="">Select Country</option>
+                    <option
+                      v-for="country in countries"
+                      :key="country"
+                      :value="country"
                     >
-                      <option value="">Select Country</option>
-                      <option
-                        v-for="country in filteredCountries"
-                        :key="country"
-                        :value="country"
-                      >
-                        {{ country }}
-                      </option>
-                    </select>
-                  </div>
+                      {{ country }}
+                    </option>
+                  </select>
                 </div>
 
                 <div class="form-group">
                   <label for="stateDistrict" class="form-label">State/District *</label>
-                  <div class="searchable-select-wrapper">
-                    <input
-                      v-if="shippingInfo.country"
-                      v-model="stateSearchQuery"
-                      type="text"
-                      class="form-input search-input"
-                      placeholder="Search state/district..."
-                      @input="filterStates"
-                    />
-                    <select
-                      id="stateDistrict"
-                      v-model="shippingInfo.stateDistrict"
-                      class="form-input"
-                      :disabled="!shippingInfo.country"
-                      :required="!!shippingInfo.country"
-                      @change="handleStateChange"
+                  <select
+                    id="stateDistrict"
+                    v-model="shippingInfo.stateDistrict"
+                    class="form-input"
+                    :disabled="!shippingInfo.country"
+                    :required="!!shippingInfo.country"
+                    :key="`state-${shippingInfo.country || 'none'}`"
+                    @change="handleStateChange"
+                  >
+                    <option value="" selected>Select State/District</option>
+                    <option
+                      v-for="state in availableStates"
+                      :key="state"
+                      :value="state"
                     >
-                      <option value="">Select State/District</option>
-                      <option
-                        v-for="state in filteredStates"
-                        :key="state"
-                        :value="state"
-                      >
-                        {{ state }}
-                      </option>
-                    </select>
-                  </div>
+                      {{ state }}
+                    </option>
+                  </select>
                 </div>
 
                 <div class="form-group">
                   <label for="city" class="form-label">City *</label>
-                  <div class="searchable-select-wrapper">
-                    <input
-                      v-if="shippingInfo.stateDistrict"
-                      v-model="citySearchQuery"
-                      type="text"
-                      class="form-input search-input"
-                      placeholder="Search city..."
-                      @input="filterCities"
-                    />
-                    <select
-                      id="city"
-                      v-model="shippingInfo.city"
-                      class="form-input"
-                      :disabled="!shippingInfo.stateDistrict"
-                      :required="!!shippingInfo.stateDistrict"
+                  <select
+                    id="city"
+                    v-model="shippingInfo.city"
+                    class="form-input"
+                    :disabled="!shippingInfo.stateDistrict"
+                    :required="!!shippingInfo.stateDistrict"
+                    :key="`city-${shippingInfo.stateDistrict || 'none'}`"
+                  >
+                    <option value="">Select City</option>
+                    <option
+                      v-for="city in availableCities"
+                      :key="city"
+                      :value="city"
                     >
-                      <option value="">Select City</option>
-                      <option
-                        v-for="city in filteredCities"
-                        :key="city"
-                        :value="city"
-                      >
-                        {{ city }}
-                      </option>
-                    </select>
-                  </div>
+                      {{ city }}
+                    </option>
+                  </select>
                 </div>
 
                 <div class="form-group">
@@ -281,7 +254,7 @@
                     <option value="store_pickup">Outlet</option>
                     <option value="home_delivery">Home Delivery</option>
                     <option value="shundorban">Shundorban</option>
-                    <option value="sa_paribahan_manual">SA Paribahan (manual)</option>
+                    <option value="sa_paribahan_manual">SA Paribahan</option>
                   </select>
                 </div>
 
@@ -831,13 +804,8 @@ const shippingInfo = ref({
   city: '',
   postalCode: '',
   country: 'Bangladesh', // Default to Bangladesh
-  stateDistrict: ''
+  stateDistrict: '' // Default to empty to show "Select State/District" placeholder
 })
-
-// Search state for dropdowns
-const countrySearchQuery = ref('')
-const stateSearchQuery = ref('')
-const citySearchQuery = ref('')
 
 // Computed property for available states/districts based on country
 const availableStates = computed(() => {
@@ -855,63 +823,44 @@ const availableCities = computed(() => {
   return [] // For other countries or no state selected, return empty array
 })
 
-// Filtered countries based on search
-const filteredCountries = computed(() => {
-  if (!countrySearchQuery.value) {
-    return countries
-  }
-  const query = countrySearchQuery.value.toLowerCase()
-  return countries.filter(country => country.toLowerCase().includes(query))
-})
-
-// Filtered states based on search
-const filteredStates = computed(() => {
-  const states = availableStates.value
-  if (!stateSearchQuery.value) {
-    return states
-  }
-  const query = stateSearchQuery.value.toLowerCase()
-  return states.filter(state => state.toLowerCase().includes(query))
-})
-
-// Filtered cities based on search
-const filteredCities = computed(() => {
-  const cities = availableCities.value
-  if (!citySearchQuery.value) {
-    return cities
-  }
-  const query = citySearchQuery.value.toLowerCase()
-  return cities.filter(city => city.toLowerCase().includes(query))
-})
-
-// Filter functions (search is handled by computed properties)
-const filterCountries = () => {
-  // Search filtering is handled by filteredCountries computed property
-}
-
-const filterStates = () => {
-  // Search filtering is handled by filteredStates computed property
-}
-
-const filterCities = () => {
-  // Search filtering is handled by filteredCities computed property
-}
-
 // Handler for country change
 const handleCountryChange = () => {
   // Reset state and city when country changes
   shippingInfo.value.stateDistrict = ''
   shippingInfo.value.city = ''
-  stateSearchQuery.value = ''
-  citySearchQuery.value = ''
 }
 
 // Handler for state change
 const handleStateChange = () => {
   // Reset city when state changes
   shippingInfo.value.city = ''
-  citySearchQuery.value = ''
 }
+
+// Watch for country changes to ensure state is reset and placeholder shows
+watch(() => shippingInfo.value.country, (newCountry) => {
+  if (!newCountry || newCountry === '') {
+    shippingInfo.value.stateDistrict = ''
+    shippingInfo.value.city = ''
+  } else {
+    // Ensure state is reset when country changes
+    if (shippingInfo.value.stateDistrict && !availableStates.value.includes(shippingInfo.value.stateDistrict)) {
+      shippingInfo.value.stateDistrict = ''
+      shippingInfo.value.city = ''
+    }
+  }
+})
+
+// Watch for state changes to ensure city is reset and placeholder shows
+watch(() => shippingInfo.value.stateDistrict, (newState) => {
+  if (!newState || newState === '') {
+    shippingInfo.value.city = ''
+  } else {
+    // Ensure city is reset when state changes
+    if (shippingInfo.value.city && !availableCities.value.includes(shippingInfo.value.city)) {
+      shippingInfo.value.city = ''
+    }
+  }
+})
 
 const billingInfo = ref({
   fullName: '',
