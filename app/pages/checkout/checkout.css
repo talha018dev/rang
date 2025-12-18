@@ -216,7 +216,38 @@
   margin-top: 0.5rem;
 }
 
-.checkbox-label {
+.checkout-checkbox-label {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ea580c;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkout-checkbox-label:hover {
+  border-color: #ea580c;
+}
+
+.checkout-checkbox-input:checked + .checkout-checkbox-label {
+  background: #ea580c;
+  border-color: #ea580c;
+}
+
+.checkout-checkbox-input:checked + .checkout-checkbox-label::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 0.875em;
+  font-weight: bold;
+}
+
+.checkout-checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -225,25 +256,27 @@
   color: #374151;
 }
 
-.checkbox-input {
-  width: 1.125rem;
-  height: 1.125rem;
+.checkout-checkbox-input {
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   border: 1px solid #d1d5db !important;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
   position: relative;
   flex-shrink: 0;
+  background-color: white;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.checkbox-input:checked {
-  background-color: #ea580c;
+.checkout-checkbox-input:checked {
+  background-color: #ea580c !important;
   border-color: #ea580c !important;
 }
 
-.checkbox-input:checked::after {
-  content: '';
+.checkout-checkbox-input:checked::after {
+  content: '' !important;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -252,6 +285,7 @@
   height: 8px;
   border: solid white;
   border-width: 0 2px 2px 0;
+  display: block;
 }
 
 .billing-section {
