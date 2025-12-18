@@ -168,15 +168,93 @@
                 </div>
 
                 <div class="form-group">
+                  <label for="country" class="form-label">Country *</label>
+                  <div class="searchable-select-wrapper">
+                    <input
+                      v-model="countrySearchQuery"
+                      type="text"
+                      class="form-input search-input"
+                      placeholder="Search country..."
+                      @input="filterCountries"
+                    />
+                    <select
+                      id="country"
+                      v-model="shippingInfo.country"
+                      class="form-input"
+                      required
+                      @change="handleCountryChange"
+                    >
+                      <option value="">Select Country</option>
+                      <option
+                        v-for="country in filteredCountries"
+                        :key="country"
+                        :value="country"
+                      >
+                        {{ country }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="stateDistrict" class="form-label">State/District *</label>
+                  <div class="searchable-select-wrapper">
+                    <input
+                      v-if="shippingInfo.country"
+                      v-model="stateSearchQuery"
+                      type="text"
+                      class="form-input search-input"
+                      placeholder="Search state/district..."
+                      @input="filterStates"
+                    />
+                    <select
+                      id="stateDistrict"
+                      v-model="shippingInfo.stateDistrict"
+                      class="form-input"
+                      :disabled="!shippingInfo.country"
+                      :required="!!shippingInfo.country"
+                      @change="handleStateChange"
+                    >
+                      <option value="">Select State/District</option>
+                      <option
+                        v-for="state in filteredStates"
+                        :key="state"
+                        :value="state"
+                      >
+                        {{ state }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
                   <label for="city" class="form-label">City *</label>
-                  <input
-                    id="city"
-                    v-model="shippingInfo.city"
-                    type="text"
-                    class="form-input"
-                    required
-                    placeholder="City"
-                  />
+                  <div class="searchable-select-wrapper">
+                    <input
+                      v-if="shippingInfo.stateDistrict"
+                      v-model="citySearchQuery"
+                      type="text"
+                      class="form-input search-input"
+                      placeholder="Search city..."
+                      @input="filterCities"
+                    />
+                    <select
+                      id="city"
+                      v-model="shippingInfo.city"
+                      class="form-input"
+                      :disabled="!shippingInfo.stateDistrict"
+                      :required="!!shippingInfo.stateDistrict"
+                    >
+                      <option value="">Select City</option>
+                      <option
+                        v-for="city in filteredCities"
+                        :key="city"
+                        :value="city"
+                      >
+                        {{ city }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="form-group">
@@ -187,36 +265,6 @@
                     type="text"
                     class="form-input"
                     placeholder="Postal Code"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="country" class="form-label">Country *</label>
-                  <select
-                    id="country"
-                    v-model="shippingInfo.country"
-                    class="form-input"
-                    required
-                  >
-                    <option value="">Select Country</option>
-                    <option
-                      v-for="country in countries"
-                      :key="country"
-                      :value="country"
-                    >
-                      {{ country }}
-                    </option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="stateDistrict" class="form-label">State/District</label>
-                  <input
-                    id="stateDistrict"
-                    v-model="shippingInfo.stateDistrict"
-                    type="text"
-                    class="form-input"
-                    placeholder="State or District"
                   />
                 </div>
 
@@ -670,10 +718,11 @@ onMounted(() => {
   }
 })
 
-// List of all countries
+// List of all countries (Bangladesh first for default)
 const countries = [
+  'Bangladesh',
   'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
-  'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan',
+  'Azerbaijan', 'Bahamas', 'Bahrain', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan',
   'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia',
   'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica',
   'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt',
@@ -694,6 +743,85 @@ const countries = [
   'Yemen', 'Zambia', 'Zimbabwe'
 ]
 
+// Bangladesh Districts/States
+const bangladeshDistricts = [
+  'Dhaka', 'Gazipur', 'Narayanganj', 'Tangail', 'Manikganj', 'Munshiganj', 'Narsingdi', 'Kishoreganj', 'Netrokona', 'Jamalpur',
+  'Sherpur', 'Mymensingh', 'Faridpur', 'Gopalganj', 'Madaripur', 'Shariatpur', 'Rajbari', 'Chittagong', 'Cox\'s Bazar', 'Bandarban',
+  'Rangamati', 'Khagrachhari', 'Feni', 'Noakhali', 'Lakshmipur', 'Chandpur', 'Comilla', 'Brahmanbaria', 'Sylhet', 'Moulvibazar',
+  'Habiganj', 'Sunamganj', 'Rajshahi', 'Natore', 'Pabna', 'Sirajganj', 'Bogra', 'Joypurhat', 'Naogaon', 'Chapai Nawabganj',
+  'Rangpur', 'Dinajpur', 'Gaibandha', 'Kurigram', 'Lalmonirhat', 'Nilphamari', 'Panchagarh', 'Thakurgaon', 'Barisal', 'Barguna',
+  'Bhola', 'Jhalokati', 'Patuakhali', 'Pirojpur', 'Khulna', 'Bagerhat', 'Chuadanga', 'Jashore', 'Jhenaidah', 'Magura',
+  'Meherpur', 'Narail', 'Satkhira', 'Kushtia'
+]
+
+// Bangladesh Cities by District
+const bangladeshCities: Record<string, string[]> = {
+  'Dhaka': ['Dhaka', 'Dhanmondi', 'Gulshan', 'Banani', 'Uttara', 'Mirpur', 'Wari', 'Old Dhaka', 'Tejgaon', 'Ramna', 'Motijheel', 'Kotwali', 'Lalbagh', 'Sutrapur', 'Sabujbagh', 'Dhanmondi', 'Shyamoli', 'Mohammadpur', 'Kafrul', 'Cantonment'],
+  'Gazipur': ['Gazipur', 'Kaliakair', 'Kapasia', 'Sreepur', 'Tongi'],
+  'Narayanganj': ['Narayanganj', 'Bandar', 'Rupganj', 'Sonargaon', 'Araihazar'],
+  'Tangail': ['Tangail', 'Kalihati', 'Bhuapur', 'Delduar', 'Ghatail', 'Gopalpur', 'Madhupur', 'Mirzapur', 'Nagarpur', 'Sakhipur'],
+  'Manikganj': ['Manikganj', 'Singair', 'Shibalaya', 'Saturia', 'Harirampur', 'Ghior', 'Daulatpur'],
+  'Munshiganj': ['Munshiganj', 'Sreenagar', 'Sirajdikhan', 'Lohajang', 'Gazaria', 'Tongibari'],
+  'Narsingdi': ['Narsingdi', 'Belabo', 'Monohardi', 'Palash', 'Raipura', 'Shibpur'],
+  'Kishoreganj': ['Kishoreganj', 'Bajitpur', 'Bhairab', 'Hossainpur', 'Itna', 'Karimganj', 'Katiadi', 'Kuliarchar', 'Mithamain', 'Nikli', 'Pakundia', 'Tarail'],
+  'Netrokona': ['Netrokona', 'Atpara', 'Barhatta', 'Durgapur', 'Khaliajuri', 'Kalmakanda', 'Kendua', 'Madan', 'Mohanganj', 'Purbadhala'],
+  'Jamalpur': ['Jamalpur', 'Baksiganj', 'Dewanganj', 'Islampur', 'Madarganj', 'Melandaha', 'Sarishabari'],
+  'Sherpur': ['Sherpur', 'Jhenaigati', 'Nakla', 'Nalitabari', 'Sreebardi'],
+  'Mymensingh': ['Mymensingh', 'Bhaluka', 'Dhobaura', 'Fulbaria', 'Gaffargaon', 'Gauripur', 'Haluaghat', 'Ishwarganj', 'Muktagachha', 'Nandail', 'Phulpur', 'Tarakanda'],
+  'Faridpur': ['Faridpur', 'Alfadanga', 'Bhanga', 'Boalmari', 'Charbhadrasan', 'Madhukhali', 'Nagarkanda', 'Sadarpur', 'Saltha'],
+  'Gopalganj': ['Gopalganj', 'Kashiani', 'Kotalipara', 'Muksudpur', 'Tungipara'],
+  'Madaripur': ['Madaripur', 'Kalkini', 'Rajoir', 'Shibchar'],
+  'Shariatpur': ['Shariatpur', 'Bhedarganj', 'Damudya', 'Gosairhat', 'Naria', 'Zajira'],
+  'Rajbari': ['Rajbari', 'Baliakandi', 'Goalandaghat', 'Pangsha'],
+  'Chittagong': ['Chittagong', 'Anwara', 'Banshkhali', 'Boalkhali', 'Chandanaish', 'Fatikchhari', 'Hathazari', 'Lohagara', 'Mirsharai', 'Patiya', 'Raujan', 'Sandwip', 'Satkania', 'Sitakunda'],
+  'Cox\'s Bazar': ['Cox\'s Bazar', 'Chakaria', 'Kutubdia', 'Maheshkhali', 'Ramu', 'Teknaf', 'Ukhia'],
+  'Bandarban': ['Bandarban', 'Alikadam', 'Lama', 'Naikhongchhari', 'Rowangchhari', 'Ruma', 'Thanchi'],
+  'Rangamati': ['Rangamati', 'Bagaichhari', 'Barkal', 'Juraichhari', 'Kaptai', 'Kawkhali', 'Langadu', 'Naniarchar', 'Rajsthali'],
+  'Khagrachhari': ['Khagrachhari', 'Dighinala', 'Lakshmichhari', 'Mahalchhari', 'Manikchhari', 'Matiranga', 'Panchhari', 'Ramgarh'],
+  'Feni': ['Feni', 'Chhagalnaiya', 'Daganbhuiyan', 'Parshuram', 'Sonagazi'],
+  'Noakhali': ['Noakhali', 'Begumganj', 'Chatkhil', 'Companiganj', 'Hatiya', 'Kabirhat', 'Senbagh', 'Subarnachar'],
+  'Lakshmipur': ['Lakshmipur', 'Ramganj', 'Raipur', 'Ramgati'],
+  'Chandpur': ['Chandpur', 'Faridganj', 'Hajiganj', 'Kachua', 'Matlab Dakshin', 'Matlab Uttar', 'Shahrasti'],
+  'Comilla': ['Comilla', 'Barura', 'Brahmanpara', 'Burichong', 'Chandina', 'Chauddagram', 'Daudkandi', 'Debidwar', 'Homna', 'Laksam', 'Meghna', 'Monohargonj', 'Muradnagar', 'Nangalkot', 'Titas'],
+  'Brahmanbaria': ['Brahmanbaria', 'Akhaura', 'Bancharampur', 'Bijoynagar', 'Kasba', 'Nabinagar', 'Nasirnagar', 'Sarail'],
+  'Sylhet': ['Sylhet', 'Balaganj', 'Beanibazar', 'Bishwanath', 'Balaganj', 'Companigonj', 'Fenchuganj', 'Golapganj', 'Gowainghat', 'Jaintiapur', 'Kanaighat', 'Osmani Nagar', 'Zakiganj'],
+  'Moulvibazar': ['Moulvibazar', 'Barlekha', 'Juri', 'Kamalganj', 'Kulaura', 'Rajnagar', 'Sreemangal'],
+  'Habiganj': ['Habiganj', 'Ajmiriganj', 'Bahubal', 'Baniyachong', 'Chunarughat', 'Lakhai', 'Madhabpur', 'Nabiganj', 'Shaistaganj'],
+  'Sunamganj': ['Sunamganj', 'Bishwamvarpur', 'Chhatak', 'Derai', 'Dharampasha', 'Dharmapasha', 'Dowarabazar', 'Jagannathpur', 'Jamalganj', 'Sullah', 'Tahirpur'],
+  'Rajshahi': ['Rajshahi', 'Bagha', 'Bagmara', 'Charghat', 'Durgapur', 'Godagari', 'Mohanpur', 'Paba', 'Puthia', 'Tanore'],
+  'Natore': ['Natore', 'Bagatipara', 'Baraigram', 'Gurudaspur', 'Lalpur', 'Singra'],
+  'Pabna': ['Pabna', 'Atgharia', 'Bera', 'Bhangura', 'Chatmohar', 'Faridpur', 'Ishwardi', 'Santhia', 'Sujanagar'],
+  'Sirajganj': ['Sirajganj', 'Belkuchi', 'Chauhali', 'Kamarkhanda', 'Kazipur', 'Raiganj', 'Shahjadpur', 'Tarash', 'Ullahpara'],
+  'Bogra': ['Bogra', 'Adamdighi', 'Dhunat', 'Dhupchanchia', 'Gabtali', 'Kahaloo', 'Nandigram', 'Sariakandi', 'Shajahanpur', 'Sherpur', 'Shibganj', 'Sonatala'],
+  'Joypurhat': ['Joypurhat', 'Akkelpur', 'Kalai', 'Khetlal', 'Panchbibi'],
+  'Naogaon': ['Naogaon', 'Atrai', 'Badalgachhi', 'Dhamoirhat', 'Manda', 'Mohadevpur', 'Niamatpur', 'Patnitala', 'Porsha', 'Raninagar', 'Sapahar'],
+  'Chapai Nawabganj': ['Chapai Nawabganj', 'Bholahat', 'Gomastapur', 'Nachole', 'Shibganj'],
+  'Rangpur': ['Rangpur', 'Badarganj', 'Gangachara', 'Kaunia', 'Mithapukur', 'Pirgacha', 'Pirganj', 'Taraganj'],
+  'Dinajpur': ['Dinajpur', 'Birampur', 'Birganj', 'Biral', 'Bochaganj', 'Chirirbandar', 'Fulbari', 'Ghoraghat', 'Hakimpur', 'Kaharole', 'Khansama', 'Nawabganj', 'Parbatipur'],
+  'Gaibandha': ['Gaibandha', 'Fulchhari', 'Gobindaganj', 'Palashbari', 'Sadullapur', 'Saghata', 'Sundarganj'],
+  'Kurigram': ['Kurigram', 'Bhurungamari', 'Char Rajibpur', 'Chilmari', 'Phulbari', 'Rajarhat', 'Raomari', 'Ulipur'],
+  'Lalmonirhat': ['Lalmonirhat', 'Aditmari', 'Hatibandha', 'Kaliganj', 'Patgram'],
+  'Nilphamari': ['Nilphamari', 'Dimla', 'Domar', 'Jaldhaka', 'Kishoreganj', 'Saidpur'],
+  'Panchagarh': ['Panchagarh', 'Atwari', 'Boda', 'Debiganj', 'Tetulia'],
+  'Thakurgaon': ['Thakurgaon', 'Baliadangi', 'Haripur', 'Pirganj', 'Ranisankail'],
+  'Barisal': ['Barisal', 'Agailjhara', 'Babuganj', 'Bakerganj', 'Banaripara', 'Gaurnadi', 'Hizla', 'Mehendiganj', 'Muladi', 'Wazirpur'],
+  'Barguna': ['Barguna', 'Amtali', 'Bamna', 'Betagi', 'Patharghata', 'Taltali'],
+  'Bhola': ['Bhola', 'Borhanuddin', 'Char Fasson', 'Daulatkhan', 'Lalmohan', 'Manpura', 'Tazumuddin'],
+  'Jhalokati': ['Jhalokati', 'Kathalia', 'Nalchity', 'Rajapur'],
+  'Patuakhali': ['Patuakhali', 'Bauphal', 'Dashmina', 'Dumki', 'Galachipa', 'Kalapara', 'Mirzaganj', 'Rangabali'],
+  'Pirojpur': ['Pirojpur', 'Bhandaria', 'Kaukhali', 'Mathbaria', 'Nazirpur', 'Nesarabad', 'Zianagar'],
+  'Khulna': ['Khulna', 'Batiaghata', 'Dacope', 'Dumuria', 'Dighalia', 'Dumuria', 'Dacope', 'Fultala', 'Koyra', 'Paikgachha', 'Phultala', 'Rupsa', 'Terokhada'],
+  'Bagerhat': ['Bagerhat', 'Chitalmari', 'Fakirhat', 'Kachua', 'Mollahat', 'Mongla', 'Morrelganj', 'Rampal', 'Sarankhola'],
+  'Chuadanga': ['Chuadanga', 'Alamdanga', 'Damurhuda', 'Jibannagar'],
+  'Jashore': ['Jashore', 'Abhaynagar', 'Bagherpara', 'Chaugachha', 'Jhikargachha', 'Keshabpur', 'Manirampur', 'Sharsha'],
+  'Jhenaidah': ['Jhenaidah', 'Harinakunda', 'Kaliganj', 'Kotchandpur', 'Maheshpur', 'Shailkupa'],
+  'Magura': ['Magura', 'Mohammadpur', 'Shalikha', 'Sreepur'],
+  'Meherpur': ['Meherpur', 'Gangni', 'Mujibnagar'],
+  'Narail': ['Narail', 'Kalia', 'Lohagara'],
+  'Satkhira': ['Satkhira', 'Assasuni', 'Debhata', 'Kalaroa', 'Kaliganj', 'Shyamnagar', 'Tala'],
+  'Kushtia': ['Kushtia', 'Bheramara', 'Daulatpur', 'Khoksa', 'Kumarkhali', 'Mirpur']
+}
+
 // Form data
 const shippingInfo = ref({
   fullName: '',
@@ -702,9 +830,88 @@ const shippingInfo = ref({
   address: '',
   city: '',
   postalCode: '',
-  country: '',
+  country: 'Bangladesh', // Default to Bangladesh
   stateDistrict: ''
 })
+
+// Search state for dropdowns
+const countrySearchQuery = ref('')
+const stateSearchQuery = ref('')
+const citySearchQuery = ref('')
+
+// Computed property for available states/districts based on country
+const availableStates = computed(() => {
+  if (shippingInfo.value.country === 'Bangladesh') {
+    return bangladeshDistricts
+  }
+  return [] // For other countries, return empty array (can be extended later)
+})
+
+// Computed property for available cities based on country and state
+const availableCities = computed(() => {
+  if (shippingInfo.value.country === 'Bangladesh' && shippingInfo.value.stateDistrict) {
+    return bangladeshCities[shippingInfo.value.stateDistrict] || []
+  }
+  return [] // For other countries or no state selected, return empty array
+})
+
+// Filtered countries based on search
+const filteredCountries = computed(() => {
+  if (!countrySearchQuery.value) {
+    return countries
+  }
+  const query = countrySearchQuery.value.toLowerCase()
+  return countries.filter(country => country.toLowerCase().includes(query))
+})
+
+// Filtered states based on search
+const filteredStates = computed(() => {
+  const states = availableStates.value
+  if (!stateSearchQuery.value) {
+    return states
+  }
+  const query = stateSearchQuery.value.toLowerCase()
+  return states.filter(state => state.toLowerCase().includes(query))
+})
+
+// Filtered cities based on search
+const filteredCities = computed(() => {
+  const cities = availableCities.value
+  if (!citySearchQuery.value) {
+    return cities
+  }
+  const query = citySearchQuery.value.toLowerCase()
+  return cities.filter(city => city.toLowerCase().includes(query))
+})
+
+// Filter functions (search is handled by computed properties)
+const filterCountries = () => {
+  // Search filtering is handled by filteredCountries computed property
+}
+
+const filterStates = () => {
+  // Search filtering is handled by filteredStates computed property
+}
+
+const filterCities = () => {
+  // Search filtering is handled by filteredCities computed property
+}
+
+// Handler for country change
+const handleCountryChange = () => {
+  // Reset state and city when country changes
+  shippingInfo.value.stateDistrict = ''
+  shippingInfo.value.city = ''
+  stateSearchQuery.value = ''
+  citySearchQuery.value = ''
+}
+
+// Handler for state change
+const handleStateChange = () => {
+  // Reset city when state changes
+  shippingInfo.value.city = ''
+  citySearchQuery.value = ''
+}
 
 const billingInfo = ref({
   fullName: '',
