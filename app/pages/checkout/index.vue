@@ -145,13 +145,14 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="phone" class="form-label">Phone Number</label>
+                  <label for="phone" class="form-label">Phone Number *</label>
                   <input
                     id="phone"
                     v-model="shippingInfo.phone"
                     type="tel"
                     class="form-input"
                     placeholder="01XXXXXXXXX"
+                    required
                   />
                 </div>
 
@@ -1170,11 +1171,12 @@ const handlePlaceOrder = async () => {
 
   // Validate required fields
   if (!shippingInfo.value.fullName || 
+      !shippingInfo.value.phone ||
       !shippingInfo.value.address || 
       !shippingInfo.value.city || 
       !shippingInfo.value.country || 
       shippingInfo.value.country.trim() === '') {
-    alert('Please fill in all required fields: Full Name, Address, City, and Country.')
+    alert('Please fill in all required fields: Full Name, Phone Number, Address, City, and Country.')
     return
   }
 
