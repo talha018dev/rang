@@ -21,7 +21,7 @@
 
 /* Make heading text bigger on home page when not scrolled */
 .header-home:not(.header-scrolled) .heading-text {
-  font-size: 1.8em;
+  font-size: 1.6em;
   /* top: 48px; */
 }
 
@@ -174,7 +174,7 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 0.5rem;
 }
 
 .nav-link-home {
@@ -800,6 +800,13 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1000px) {
+  /* Hide desktop navigation under 1000px */
+  .nav {
+    display: none;
+  }
+}
+
 @media (max-width: 800px) {
   /* Hide logo on screens under 800px */
   .header-content > div:first-child {
