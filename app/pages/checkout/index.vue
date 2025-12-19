@@ -199,7 +199,7 @@
                     :key="`state-${shippingInfo.country || 'none'}`"
                     @change="handleStateChange"
                   >
-                    <option value="" selected>Select State/District</option>
+                    <option value="">Select State/District</option>
                     <option
                       v-for="state in availableStates"
                       :key="state"
@@ -216,8 +216,7 @@
                     id="city"
                     v-model="shippingInfo.city"
                     class="form-input"
-                    :disabled="!shippingInfo.stateDistrict"
-                    :required="!!shippingInfo.stateDistrict"
+                    
                     :key="`city-${shippingInfo.stateDistrict || 'none'}`"
                   >
                     <option value="">Select City</option>
@@ -671,6 +670,7 @@ const getBrowserLocation = async () => {
         }
 
         // Populate state/district if available and not already set
+        // Only set if it matches one of the available states
         if (!shippingInfo.value.stateDistrict) {
           // Try different possible fields for state/district
           const stateDistrict = address.state || 
@@ -679,14 +679,19 @@ const getBrowserLocation = async () => {
                                address.district || 
                                address.county || 
                                ''
-          if (stateDistrict) {
+          // Only set if it matches one of the available states to avoid clearing
+          if (stateDistrict && availableStates.value.includes(stateDistrict)) {
             shippingInfo.value.stateDistrict = stateDistrict
           }
         }
 
         // Optionally populate city if not already set
+        // Only set if it matches one of the available cities
         if (address.city && !shippingInfo.value.city) {
-          shippingInfo.value.city = address.city
+          // Only set if it matches one of the available cities to avoid clearing
+          if (availableCities.value.includes(address.city)) {
+            shippingInfo.value.city = address.city
+          }
         }
       }
     } catch (error) {
@@ -711,13 +716,13 @@ onMounted(async () => {
   // Fetch shipping methods on mount
   fetchShippingMethods()
   
-  // Try to get browser location to populate country and state/district
-  if (typeof window !== 'undefined') {
-    getBrowserLocation()
-  }
-  
   // Force checkbox styles to be applied after navigation
   await nextTick()
+  
+  // Ensure stateDistrict and city are set to empty string to show default option after DOM is ready
+  shippingInfo.value.stateDistrict = ''
+  shippingInfo.value.city = ''
+  
   if (typeof window !== 'undefined') {
     // Force reflow to ensure CSS is applied
     const checkboxes = document.querySelectorAll('.checkout-checkbox-input')
@@ -726,7 +731,30 @@ onMounted(async () => {
       const htmlElement = checkbox as HTMLElement
       void htmlElement.offsetHeight
     })
+    
+    // Ensure the select elements show the default option
+    await nextTick()
+    const stateSelect = document.getElementById('stateDistrict') as HTMLSelectElement
+    if (stateSelect) {
+      stateSelect.value = ''
+      stateSelect.selectedIndex = 0
+    }
+    
+    const citySelect = document.getElementById('city') as HTMLSelectElement
+    if (citySelect) {
+      citySelect.value = ''
+      citySelect.selectedIndex = 0
+    }
   }
+  
+  // Try to get browser location to populate country and state/district
+  // Run this after ensuring the default is set to avoid conflicts
+  // Use a small delay to ensure the select is properly initialized
+  setTimeout(() => {
+    if (typeof window !== 'undefined') {
+      getBrowserLocation()
+    }
+  }, 100)
   
   if (isEmpty.value) {
     // Optionally redirect to cart page
@@ -885,8 +913,11 @@ watch(() => shippingInfo.value.country, (newCountry) => {
     shippingInfo.value.stateDistrict = ''
     shippingInfo.value.city = ''
   } else {
-    // Ensure state is reset when country changes
-    if (shippingInfo.value.stateDistrict && !availableStates.value.includes(shippingInfo.value.stateDistrict)) {
+    // Ensure state is reset when country changes only if it's not empty and doesn't match
+    // Don't clear if it's already empty (to preserve the placeholder)
+    if (shippingInfo.value.stateDistrict && 
+        shippingInfo.value.stateDistrict !== '' && 
+        !availableStates.value.includes(shippingInfo.value.stateDistrict)) {
       shippingInfo.value.stateDistrict = ''
       shippingInfo.value.city = ''
     }
@@ -898,8 +929,11 @@ watch(() => shippingInfo.value.stateDistrict, (newState) => {
   if (!newState || newState === '') {
     shippingInfo.value.city = ''
   } else {
-    // Ensure city is reset when state changes
-    if (shippingInfo.value.city && !availableCities.value.includes(shippingInfo.value.city)) {
+    // Ensure city is reset when state changes only if it's not empty and doesn't match
+    // Don't clear if it's already empty (to preserve the placeholder)
+    if (shippingInfo.value.city && 
+        shippingInfo.value.city !== '' && 
+        !availableCities.value.includes(shippingInfo.value.city)) {
       shippingInfo.value.city = ''
     }
   }
