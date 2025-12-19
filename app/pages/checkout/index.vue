@@ -250,12 +250,16 @@
                     v-model="shippingMethod"
                     class="form-input"
                     required
+                    :disabled="isLoadingShippingMethods"
                   >
                     <option value="">Select Delivery Option</option>
-                    <option value="store_pickup">Outlet</option>
-                    <option value="home_delivery">Home Delivery</option>
-                    <option value="shundorban">Shundorban</option>
-                    <option value="sa_paribahan_manual">SA Paribahan</option>
+                    <option
+                      v-for="method in shippingMethods"
+                      :key="method.slug"
+                      :value="method.slug"
+                    >
+                      {{ method.slug === 'store_pickup' ? 'Outlet' : method.name }}
+                    </option>
                   </select>
                 </div>
 
@@ -608,6 +612,29 @@ const fetchLocations = async () => {
   }
 }
 
+// Fetch shipping methods from API
+const fetchShippingMethods = async () => {
+  isLoadingShippingMethods.value = true
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/order/shipping-methods`, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    console.log('Shipping Methods API Response:', response)
+    
+    if (response.success && response.data && Array.isArray(response.data)) {
+      shippingMethods.value = response.data
+    }
+  } catch (error) {
+    console.error('Error fetching shipping methods:', error)
+  } finally {
+    isLoadingShippingMethods.value = false
+  }
+}
+
 // Function to get location from browser
 const getBrowserLocation = async () => {
   if (!navigator.geolocation) {
@@ -680,6 +707,9 @@ onMounted(async () => {
   
   // Fetch locations on mount
   fetchLocations()
+  
+  // Fetch shipping methods on mount
+  fetchShippingMethods()
   
   // Try to get browser location to populate country and state/district
   if (typeof window !== 'undefined') {
@@ -886,6 +916,8 @@ const shippingMethod = ref('')
 const selectedOutlet = ref<number | string>('')
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
+const shippingMethods = ref<any[]>([])
+const isLoadingShippingMethods = ref(false)
 const paymentMethod = ref('')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
@@ -933,15 +965,17 @@ const shippingCostBDT = computed(() => {
     return 0
   }
   
-  // Set shipping cost based on selected method
+  // Find the selected shipping method from API data
+  const selectedMethod = shippingMethods.value.find(method => method.slug === shippingMethod.value)
+  if (selectedMethod) {
+    return selectedMethod.cost || 0
+  }
+  
+  // Fallback to default values if API data not loaded yet
   if (shippingMethod.value === 'store_pickup') {
     return 0 // Free for outlet pickup
   } else if (shippingMethod.value === 'home_delivery') {
     return 100 // Default home delivery cost (can be adjusted)
-  } else if (shippingMethod.value === 'shundorban') {
-    return 0 // Shundorban shipping cost (can be adjusted)
-  } else if (shippingMethod.value === 'sa_paribahan_manual') {
-    return 0 // SA Paribahan manual shipping cost (can be adjusted)
   }
   
   return 0
