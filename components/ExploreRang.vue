@@ -17,7 +17,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Family</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Family</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/jewelry" class="relative flex-[1] aspect-[1]">
@@ -29,7 +29,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl!  top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Jewelry</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl!  top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Jewelry</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
@@ -43,7 +43,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Matching</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Matching</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/gifts-crafts" class="relative flex-[1] aspect-[0.82]">
@@ -56,7 +56,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Couple</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Couple</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/gifts-crafts" class="relative flex-[1] aspect-[0.82]">
@@ -69,7 +69,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Gifts & Crafts</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Gifts & Crafts</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import ShopNowWhite from './ShopNowWhite.vue';
 </script>
 
 <style scoped>

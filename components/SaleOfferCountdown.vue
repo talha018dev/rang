@@ -118,7 +118,7 @@
                 }"
             >
                 <div class="carousel-card">
-                    <NuxtLink :to="`/products/${item.slug}`" class="carousel-link">
+                    <NuxtLink :to="`/products/${item.category?.slug}/${item.slug}`" class="carousel-link">
                         <div class="carousel-image-container">
                             <NuxtImg 
                                 :src="getImageUrl(item.image)" 

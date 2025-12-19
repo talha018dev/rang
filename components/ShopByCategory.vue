@@ -17,7 +17,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Men</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Men</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/women" class="relative flex-[1.5] aspect-[1.73]">
@@ -29,7 +29,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl!  top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Women</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl!  top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Women</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
@@ -43,7 +43,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Kids</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Kids</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/home-decor" class="relative flex-[1] aspect-[0.82]">
@@ -56,7 +56,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Home Decor</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Home Decor</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
                 <NuxtLink to="/products/accessories" class="relative flex-[1] aspect-[0.82]">
@@ -69,7 +69,7 @@
                         quality="85" 
                         loading="lazy" 
                     />
-                    <div class="absolute text-2xl! md:text-3xl! lg:text-6xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Accessories</div>
+                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">Accessories</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
                 </NuxtLink>
             </div>
@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import ShopNowWhite from './ShopNowWhite.vue';
 </script>
 
 <style scoped>
