@@ -130,6 +130,7 @@
                     class="form-input"
                     required
                     placeholder="Enter your full name"
+                    @blur="handleAddressFieldBlur"
                   />
                 </div>
 
@@ -141,6 +142,7 @@
                     type="email"
                     class="form-input"
                     placeholder="your.email@example.com"
+                    @blur="handleAddressFieldBlur"
                   />
                 </div>
 
@@ -153,6 +155,7 @@
                     class="form-input"
                     placeholder="01XXXXXXXXX"
                     required
+                    @blur="handleAddressFieldBlur"
                   />
                 </div>
 
@@ -165,6 +168,7 @@
                     class="form-input"
                     required
                     placeholder="Street address"
+                    @blur="handleAddressFieldBlur"
                   />
                 </div>
 
@@ -176,6 +180,7 @@
                     class="form-input"
                     required
                     @change="handleCountryChange"
+                    @blur="handleAddressFieldBlur"
                   >
                     <option value="">Select Country</option>
                     <option
@@ -198,6 +203,7 @@
                     :required="!!shippingInfo.country"
                     :key="`state-${shippingInfo.country || 'none'}`"
                     @change="handleStateChange"
+                    @blur="handleAddressFieldBlur"
                   >
                     <option value="">Select State/District</option>
                     <option
@@ -218,6 +224,7 @@
                     class="form-input"
                     
                     :key="`city-${shippingInfo.stateDistrict || 'none'}`"
+                    @blur="handleAddressFieldBlur"
                   >
                     <option value="">Select City</option>
                     <option
@@ -238,6 +245,7 @@
                     type="text"
                     class="form-input"
                     placeholder="Postal Code"
+                    @blur="handleAddressFieldBlur"
                   />
                 </div>
 
@@ -611,26 +619,71 @@ const fetchLocations = async () => {
   }
 }
 
-// Fetch shipping methods from API
-const fetchShippingMethods = async () => {
+// Fetch shipping methods from API with address data
+const fetchShippingMethods = async (addressData?: any) => {
   isLoadingShippingMethods.value = true
   try {
     const { backendUrl } = useApi()
+    
+    // Prepare request body with address data if provided
+    const requestBody = addressData || {}
+    
     const response = await $fetch<any>(`${backendUrl}/order/shipping-methods`, {
       method: 'POST',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
-      }
+      },
+      body: requestBody
     })
     console.log('Shipping Methods API Response:', response)
     
     if (response.success && response.data && Array.isArray(response.data)) {
+      // Store the currently selected shipping method slug before updating
+      const currentSelectedSlug = shippingMethod.value
+      
+      // Update shipping methods
       shippingMethods.value = response.data
+      
+      // If the previously selected method still exists, keep it selected
+      // Otherwise, reset to empty
+      if (currentSelectedSlug) {
+        const methodStillExists = response.data.some((method: any) => method.slug === currentSelectedSlug)
+        if (!methodStillExists) {
+          shippingMethod.value = ''
+        }
+      }
     }
   } catch (error) {
     console.error('Error fetching shipping methods:', error)
   } finally {
     isLoadingShippingMethods.value = false
+  }
+}
+
+// Handler for address field blur events
+const handleAddressFieldBlur = async () => {
+  // Call the existing function to fetch shipping methods with current address data
+  await fetchShippingMethodsWithAddress()
+}
+
+// Function to fetch shipping methods with current address data
+const fetchShippingMethodsWithAddress = async () => {
+  // Collect all address data
+  const addressData = {
+    name: shippingInfo.value.fullName || '',
+    phone: shippingInfo.value.phone || '',
+    email: shippingInfo.value.email || '',
+    line_1: shippingInfo.value.address || '',
+    line_2: '',
+    city: shippingInfo.value.city || '',
+    state: shippingInfo.value.stateDistrict || '',
+    country: shippingInfo.value.country || '',
+    postal_code: shippingInfo.value.postalCode || ''
+  }
+  
+  // Only call API if we have at least some address data
+  if (addressData.country || addressData.city || addressData.state || addressData.line_1) {
+    await fetchShippingMethods(addressData)
   }
 }
 
