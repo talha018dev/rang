@@ -234,7 +234,7 @@
               </button>
             </div>
           </div>
-          <NuxtLink :to="wishlistLink" class="action-button color-inherit">
+          <NuxtLink v-if="hasToken" :to="wishlistLink" class="action-button color-inherit">
             <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -588,7 +588,7 @@
                 </button>
               </div>
             </div>
-            <NuxtLink :to="wishlistLink" class="w-full" @click="closeDrawer">
+            <NuxtLink v-if="hasToken" :to="wishlistLink" class="w-full" @click="closeDrawer">
               <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
                 icon="i-heroicons-heart">
                 Wishlist
