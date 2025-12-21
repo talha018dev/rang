@@ -158,7 +158,7 @@ const fetchWishlist = async () => {
   error.value = null
 
   try {
-    const response = await $fetch<WishlistResponse>(`${backendUrl}/wishlist`, {
+    const response = await $fetch<WishlistResponse>(`${backendUrl}/profile/wishlist`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
