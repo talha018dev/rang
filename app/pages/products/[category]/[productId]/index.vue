@@ -143,11 +143,39 @@
                     <div class="product-title-share-btn">
 
                         <div class="product-title">{{ product.name }}</div>
-                        <UTooltip :text="shareTooltipText" :open="showShareTooltipMobile">
-                            <button class="share-btn-mobile" @click.stop.prevent="handleShare($event, 'mobile')">
-                                <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                        <div class="product-actions-mobile">
+                            <!-- Wishlist Button (only for logged-in users) -->
+                            <button 
+                                v-if="isLoggedIn" 
+                                class="wishlist-btn-mobile" 
+                                @click.stop.prevent="handleToggleWishlist"
+                                :title="isInWishlist(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+                            >
+                                <svg 
+                                    v-if="isInWishlist(product?.id)" 
+                                    class="wishlist-icon filled" 
+                                    fill="currentColor" 
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <svg 
+                                    v-else 
+                                    class="wishlist-icon outline" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
                             </button>
-                        </UTooltip>
+                            <UTooltip :text="shareTooltipText" :open="showShareTooltipMobile">
+                                <button class="share-btn-mobile" @click.stop.prevent="handleShare($event, 'mobile')">
+                                    <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                                </button>
+                            </UTooltip>
+                        </div>
                     </div>
 
                     <!-- Pricing -->
@@ -179,13 +207,42 @@
                                 SKU: {{ product.sku }}
                             </div>
 
-                            <!-- Share Button -->
-                            <UTooltip :text="shareTooltipText" :open="showShareTooltipDesktop">
-                                <button class="share-btn" @click.stop.prevent="handleShare($event, 'desktop')">
-                                    <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
-                                    <div class="share-text">Share</div>
+                            <div class="share-wishlist-buttons">
+                                <!-- Wishlist Button (only for logged-in users) -->
+                                <button 
+                                    v-if="isLoggedIn" 
+                                    class="wishlist-btn-desktop" 
+                                    @click.stop.prevent="handleToggleWishlist"
+                                    :title="isInWishlist(product?.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+                                >
+                                    <svg 
+                                        v-if="isInWishlist(product?.id)" 
+                                        class="wishlist-icon filled" 
+                                        fill="currentColor" 
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <svg 
+                                        v-else 
+                                        class="wishlist-icon outline" 
+                                        fill="none" 
+                                        stroke="currentColor" 
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <div class="wishlist-text">Wishlist</div>
                                 </button>
-                            </UTooltip>
+                                <!-- Share Button -->
+                                <UTooltip :text="shareTooltipText" :open="showShareTooltipDesktop">
+                                    <button class="share-btn" @click.stop.prevent="handleShare($event, 'desktop')">
+                                        <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                                        <div class="share-text">Share</div>
+                                    </button>
+                                </UTooltip>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -767,6 +824,7 @@ import AppFooter from '../../../../../components/AppFooter.vue'
 import { useApi } from '../../../../../composables/useApi'
 import { useCart } from '../../../../../composables/useCart'
 import { useCurrency } from '../../../../../composables/useCurrency'
+import { useWishlist } from '../../../../../composables/useWishlist'
 import type { Product } from '../../../../../types/homepage'
 // Get route parameters
 import './product.css'
@@ -892,6 +950,7 @@ onMounted(() => {
   fetchProductDetails()
   handleResize()
   window.addEventListener('resize', handleResize)
+  initializeWishlist()
 })
 
 // Meta - update when product is loaded
@@ -1266,6 +1325,16 @@ const decreaseQuantity = () => {
 
 const { addToCart } = useCart()
 const { formatPrice } = useCurrency()
+
+// Wishlist functionality
+const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()
+
+// Handle wishlist toggle
+const handleToggleWishlist = async () => {
+  if (product.value?.id) {
+    await toggleWishlist(product.value.id)
+  }
+}
 
 const handleAddToCart = () => {
     if (!product.value) return

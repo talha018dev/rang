@@ -249,6 +249,60 @@
     color: #374151;
     transition: color 0.2s ease;
   }
+
+  /* Wishlist Icon Button */
+  .wishlist-icon-btn {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  
+  .product-card-wrapper:hover .wishlist-icon-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Disable wishlist button hover effect for women category */
+  .women-category .product-card-wrapper:hover .wishlist-icon-btn {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  
+  .wishlist-icon-btn:hover {
+    background-color: #ea580c;
+    transform: scale(1.1);
+  }
+  
+  .wishlist-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: color 0.2s ease;
+  }
+
+  .wishlist-icon.outline {
+    color: #374151;
+  }
+
+  .wishlist-icon.filled {
+    color: #ea580c;
+  }
+  
+  .wishlist-icon-btn:hover .wishlist-icon {
+    color: white;
+  }
   
   .men-page .product-image-item {
     /* height: 440px; */

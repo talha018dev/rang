@@ -114,6 +114,32 @@
                 <div class="product-image-item">
                   <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
                     format="webp" quality="85" />
+                  <!-- Wishlist Icon (only for logged-in users) -->
+                  <button 
+                    v-if="isLoggedIn" 
+                    class="wishlist-icon-btn" 
+                    @click.stop="handleToggleWishlist(product.id)"
+                    :title="isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+                  >
+                    <svg 
+                      v-if="isInWishlist(product.id)" 
+                      class="wishlist-icon filled" 
+                      fill="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <svg 
+                      v-else 
+                      class="wishlist-icon outline" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
                 </div>
                 <div class="product-info">
                   <h3 class="product-name">{{ product.name }}</h3>
@@ -176,6 +202,7 @@ import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
+import { useWishlist } from '~~/composables/useWishlist'
 import type { Brand, BrandResponse, Category, CategoryResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
@@ -350,6 +377,7 @@ onMounted(() => {
   fetchBrands()
   fetchCategories()
   fetchProducts()
+  initializeWishlist()
 })
 
 // Watch for category slug changes
@@ -472,6 +500,14 @@ watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
 // Cart functionality
 const { addToCart } = useCart()
 const { formatPrice } = useCurrency()
+
+// Wishlist functionality
+const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()
+
+// Handle wishlist toggle
+const handleToggleWishlist = async (productId: number) => {
+  await toggleWishlist(productId)
+}
 
 const handleQuickAddToCart = (product: Product) => {
   // Get the first variant or use product defaults
