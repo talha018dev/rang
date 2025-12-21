@@ -1427,7 +1427,7 @@ const handlePlaceOrder = async () => {
       customer_notes: orderNotes.value || null,
       shipping_method: shippingMethod.value,
       payment_method: paymentMethod.value,
-      is_gift_package: isGiftPackage.value,
+      is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
       combo_offer_discount: hasComboProducts.value ? comboOfferDiscountBDT.value : 0,
       address: {
