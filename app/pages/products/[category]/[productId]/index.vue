@@ -1331,8 +1331,8 @@ const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWish
 
 // Handle wishlist toggle
 const handleToggleWishlist = async () => {
-  if (product.value?.id && product.value?.sku) {
-    await toggleWishlist(product.value.id, product.value.sku)
+  if (product.value?.id && product.value?.slug) {
+    await toggleWishlist(product.value.id, product.value.slug)
   }
 }
 

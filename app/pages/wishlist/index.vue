@@ -66,7 +66,7 @@
                 </button>
                 <button 
                   class="action-btn remove-btn" 
-                  @click.stop="handleRemoveFromWishlist(item.id)" 
+                  @click.stop="handleRemoveFromWishlist(item)" 
                   title="Remove from wishlist"
                 >
                   <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@ const fetchWishlist = async () => {
 }
 
 // Remove item from wishlist
-const handleRemoveFromWishlist = async (itemId: number) => {
+const handleRemoveFromWishlist = async (item: WishlistItem) => {
   const token = getToken()
   
   if (!token) {
@@ -194,16 +194,19 @@ const handleRemoveFromWishlist = async (itemId: number) => {
   }
 
   try {
-    const response = await $fetch<DeleteResponse>(`${backendUrl}/wishlist/${itemId}`, {
-      method: 'DELETE',
+    const response = await $fetch<DeleteResponse>(`${backendUrl}/profile/wishlist`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
+      },
+      body: {
+        product: item.slug
       }
     })
 
     if (response.success) {
       // Remove item from local state
-      wishlistItems.value = wishlistItems.value.filter(item => item.id !== itemId)
+      wishlistItems.value = wishlistItems.value.filter(wishlistItem => wishlistItem.id !== item.id)
     }
   } catch (err: any) {
     console.error('Error removing from wishlist:', err)

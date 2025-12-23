@@ -1,3 +1,4 @@
+import { $fetch } from 'ofetch'
 import { computed, ref } from 'vue'
 import { useApi } from './useApi'
 
@@ -60,7 +61,7 @@ export const useWishlist = () => {
   }
 
   // Add or remove item from wishlist
-  const toggleWishlist = async (productId: number, sku: string): Promise<boolean> => {
+  const toggleWishlist = async (productId: number, slug: string): Promise<boolean> => {
     const token = getToken()
     if (!token) {
       return false
@@ -76,7 +77,7 @@ export const useWishlist = () => {
           'Content-Type': 'application/json'
         },
         body: {
-          product: sku
+          product: slug
         }
       })
 
