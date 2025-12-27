@@ -10,7 +10,7 @@
             <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
           </NuxtLink>
         </div>
-        <nav class="nav">
+        <nav class="nav items-end!">
           <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
             Home
           </NuxtLink>
@@ -154,7 +154,7 @@
         </nav>
 
         <!-- Desktop Header Actions -->
-        <div class="header-actions desktop-actions">
+        <div class="header-actions desktop-actions ml-auto!">
           <button class="action-button" @click="toggleSearchMenu">
             <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -280,7 +280,7 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="mobile-menu-button" @click="toggleDrawer">
+        <button class="mobile-menu-button ml-auto!" @click="toggleDrawer">
           <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>

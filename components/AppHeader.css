@@ -163,7 +163,7 @@
 
 .header-content {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: flex-end;
 }
 .logo-image {
@@ -827,7 +827,7 @@
   }
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1200px) {
   /* Only hide desktop actions (header-actions), keep nav items visible */
   .desktop-actions {
     display: none;
