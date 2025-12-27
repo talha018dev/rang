@@ -3,10 +3,10 @@
     <div class="profile-container">
       <div class="profile-content">
         <!-- Navigation Cards -->
-        <div class="flex flex-wrap gap-4 w-full justify-center mb-6">
+        <div class="flex flex-wrap gap-4 w-full justify-center mb-6 max-w-[600px]">
           <NuxtLink 
             to="/myprofile"
-            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px]"
+            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px] h-[100px]"
             :class="$route.path === '/myprofile' ? 'border-orange-600 bg-orange-50' : 'border-gray-200 hover:border-orange-300'">
             <div class="w-8 h-8 text-orange-600">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
@@ -18,7 +18,7 @@
           
           <NuxtLink 
             to="/address"
-            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px]"
+            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px] h-[100px]"
             :class="$route.path === '/address' ? 'border-orange-600 bg-orange-50' : 'border-gray-200 hover:border-orange-300'">
             <div class="w-8 h-8 text-orange-600">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
@@ -31,7 +31,7 @@
           
           <NuxtLink 
             to="/orders"
-            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px]"
+            class="flex flex-col items-center justify-center gap-2 p-6 bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-md min-w-[120px] flex-1 max-w-[200px] h-[100px]"
             :class="$route.path === '/orders' ? 'border-orange-600 bg-orange-50' : 'border-gray-200 hover:border-orange-300'">
             <div class="w-8 h-8 text-orange-600">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
@@ -101,13 +101,6 @@
               {{ errorMessage }}
             </div>
           </form>
-
-          <div class="logout-section">
-            <button type="button" class="logout-button" @click="handleLogout" :disabled="isLoggingOut">
-              <span v-if="!isLoggingOut">Logout</span>
-              <span v-else>Logging out...</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -159,7 +152,6 @@ const formData = ref({
 // UI state
 const isLoading = ref(false)
 const isLoadingProfile = ref(false)
-const isLoggingOut = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 
@@ -268,42 +260,6 @@ const handleUpdateProfile = async () => {
     }
   } finally {
     isLoading.value = false
-  }
-}
-
-// Handle logout
-const handleLogout = async () => {
-  isLoggingOut.value = true
-  
-  try {
-    // Clear all localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.clear()
-      console.log('LocalStorage cleared successfully')
-    }
-    
-    // Redirect to home page
-    const currentPath = route.path
-    if (currentPath === '/' || currentPath === '/home') {
-      if (typeof window !== 'undefined') {
-        window.location.reload()
-      }
-    } else {
-      await router.push('/')
-    }
-  } catch (error) {
-    console.error('Error during logout:', error)
-    // Even if there's an error, try to redirect
-    const currentPath = route.path
-    if (currentPath === '/' || currentPath === '/home') {
-      if (typeof window !== 'undefined') {
-        window.location.reload()
-      }
-    } else {
-      await router.push('/')
-    }
-  } finally {
-    isLoggingOut.value = false
   }
 }
 
