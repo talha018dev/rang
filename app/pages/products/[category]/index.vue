@@ -118,7 +118,7 @@
                   <button 
                     v-if="isLoggedIn" 
                     class="wishlist-icon-btn" 
-                    @click.stop="handleToggleWishlist(product)"
+                    @click.stop.prevent="handleToggleWishlist($event, product)"
                     :title="isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
                   >
                     <svg 
@@ -511,7 +511,9 @@ const { formatPrice } = useCurrency()
 const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()
 
 // Handle wishlist toggle
-const handleToggleWishlist = async (product: Product) => {
+const handleToggleWishlist = async (event: Event, product: Product) => {
+  event.preventDefault()
+  event.stopPropagation()
   if (product.id && product.slug) {
     await toggleWishlist(product.id, product.slug)
   }
