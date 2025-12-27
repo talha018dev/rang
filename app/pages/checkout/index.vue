@@ -1340,10 +1340,10 @@ const handlePlaceOrder = async () => {
         console.log('Combo product missing product_id')
         return true // Invalid - missing product_id
       }
-      // Check if all products in the array have product_id and variant_id
-      const hasInvalidProducts = (item as any).products.some((p: any) => !p.product_id || !p.variant_id)
+      // Check if all products in the array have product_id (variant_id is optional for products without variants)
+      const hasInvalidProducts = (item as any).products.some((p: any) => !p.product_id)
       if (hasInvalidProducts) {
-        console.log('Invalid products array - missing product_id or variant_id:', (item as any).products)
+        console.log('Invalid products array - missing product_id:', (item as any).products)
       }
       return hasInvalidProducts
     }
@@ -1379,12 +1379,12 @@ const handlePlaceOrder = async () => {
       return hasInvalidComboProducts
     }
     
-    // For regular products, check product_id and variant_id
-    const missingIds = !item.product_id || !item.variant_id
-    if (missingIds) {
-      console.log('Regular product missing product_id or variant_id')
+    // For regular products, check product_id (variant_id is optional for products without variants)
+    const missingProductId = !item.product_id
+    if (missingProductId) {
+      console.log('Regular product missing product_id')
     }
-    return missingIds
+    return missingProductId
   })
   if (itemsWithoutIds.length > 0) {
     console.error('Items without valid IDs:', itemsWithoutIds)
@@ -1413,11 +1413,16 @@ const handlePlaceOrder = async () => {
         })
       } else {
         // For regular products, send with quantity
-        productsData.push({
+        // variant_id is optional for products without variants
+        const productData: any = {
           product_id: item.product_id!,
-          variant_id: item.variant_id!,
           qty: item.quantity
-        })
+        }
+        // Only include variant_id if it exists (products with variants)
+        if (item.variant_id) {
+          productData.variant_id = item.variant_id
+        }
+        productsData.push(productData)
       }
     }
 

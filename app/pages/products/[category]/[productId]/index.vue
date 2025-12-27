@@ -261,9 +261,10 @@
                     </div>
                 </div>
 
-                <!-- Size Selection -->
-                <div class="product-details-p-2" v-if="!isMobile && availableSizes.length > 0">
-                    <div class="size-selection">
+                <!-- Product Details Section (Desktop) -->
+                <div class="product-details-p-2" v-if="!isMobile">
+                    <!-- Size Selection -->
+                    <div v-if="availableSizes.length > 0" class="size-selection">
                         <label class="selection-label">Size</label>
                         <div class="size-radio-group">
                             <label v-for="size in availableSizes" :key="size" class="size-radio-option"
@@ -322,7 +323,7 @@
         </div>
 
         <!-- Matching Series Section -->
-        <div class="matching-series-section-container">
+        <div v-if="matchingSeriesItems.length > 0" class="matching-series-section-container">
             <div class="matching-series-section">
                 <h2 class="section-title">Explore Our Matching Series:</h2>
 
