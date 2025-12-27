@@ -318,7 +318,8 @@
     overflow: hidden;
   }
   
-  .men-page .product-img {
+  /* Product image styles - applies to all categories */
+  .product-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -327,18 +328,18 @@
     top: 0;
     left: 0;
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    transform: scale(1); /* Normal size */
+    transform: scale(1);
     transform-origin: center center;
     aspect-ratio: 0.82;
   }
 
-  /* Default image (2nd image) - visible by default */
+  /* Default image (index 0) - visible by default */
   .product-img-default {
     opacity: 1;
     transform: translateX(0) scale(1);
   }
 
-  /* Hover image (3rd image) - hidden by default, positioned to the right */
+  /* Hover image (index 1) - hidden by default, positioned to the right */
   .product-img-hover {
     opacity: 0;
     transform: translateX(100%) scale(1);
@@ -351,47 +352,6 @@
   }
 
   .product-card:hover .product-img-hover {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-  
-  /* Apply zoom effect to women category and its children */
-  .women-category .product-image-item {
-    overflow: hidden;
-    position: relative;
-  }
-
-  .women-category .product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    transform: scale(1); /* Normal size by default */
-    transform-origin: center center;
-    aspect-ratio: 0.82;
-  }
-
-  /* Women category image transitions */
-  .women-category .product-img-default {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-
-  .women-category .product-img-hover {
-    opacity: 0;
-    transform: translateX(100%) scale(1);
-  }
-
-  .women-category .product-card:hover .product-img-default {
-    transform: translateX(-100%) scale(1);
-    opacity: 0;
-  }
-
-  .women-category .product-card:hover .product-img-hover {
     transform: translateX(0) scale(1);
     opacity: 1;
   }
