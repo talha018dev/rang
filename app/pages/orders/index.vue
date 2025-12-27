@@ -195,7 +195,9 @@ const fetchOrders = async () => {
     const response = await $fetch<OrdersResponse>(`${backendUrl}/order`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
     })
 
