@@ -69,6 +69,159 @@
             </button>
           </div>
         </div>
+
+        <!-- Address Section -->
+        <div class="profile-card address-card">
+          <h2 class="section-title">Address Information</h2>
+          <p class="section-subtitle">Manage your delivery address</p>
+          
+          <form @submit.prevent="handleUpdateAddress" class="profile-form">
+            <div class="form-group">
+              <label for="address-title" class="form-label">Address Title <span class="required">*</span></label>
+              <input
+                id="address-title"
+                v-model="addressFormData.title"
+                type="text"
+                class="form-input"
+                placeholder="e.g., Home, Office, Amar Bashs"
+                required
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address-name" class="form-label">Name <span class="required">*</span></label>
+              <input
+                id="address-name"
+                v-model="addressFormData.address.name"
+                type="text"
+                class="form-input"
+                placeholder="Enter name"
+                required
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address-phone" class="form-label">Phone <span class="required">*</span></label>
+              <input
+                id="address-phone"
+                v-model="addressFormData.address.phone"
+                type="tel"
+                class="form-input"
+                placeholder="Enter phone number"
+                required
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address-email" class="form-label">Email</label>
+              <input
+                id="address-email"
+                v-model="addressFormData.address.email"
+                type="email"
+                class="form-input"
+                placeholder="Enter email"
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address-line-1" class="form-label">Address Line 1 <span class="required">*</span></label>
+              <input
+                id="address-line-1"
+                v-model="addressFormData.address.line_1"
+                type="text"
+                class="form-input"
+                placeholder="Enter address line 1"
+                required
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="address-line-2" class="form-label">Address Line 2</label>
+              <input
+                id="address-line-2"
+                v-model="addressFormData.address.line_2"
+                type="text"
+                class="form-input"
+                placeholder="Enter address line 2 (optional)"
+                :disabled="isLoadingAddress"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-half">
+                <label for="address-city" class="form-label">City <span class="required">*</span></label>
+                <input
+                  id="address-city"
+                  v-model="addressFormData.address.city"
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter city"
+                  required
+                  :disabled="isLoadingAddress"
+                />
+              </div>
+
+              <div class="form-group form-group-half">
+                <label for="address-state" class="form-label">State <span class="required">*</span></label>
+                <input
+                  id="address-state"
+                  v-model="addressFormData.address.state"
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter state"
+                  required
+                  :disabled="isLoadingAddress"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-half">
+                <label for="address-country" class="form-label">Country <span class="required">*</span></label>
+                <input
+                  id="address-country"
+                  v-model="addressFormData.address.country"
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter country"
+                  required
+                  :disabled="isLoadingAddress"
+                />
+              </div>
+
+              <div class="form-group form-group-half">
+                <label for="address-postal-code" class="form-label">Postal Code <span class="required">*</span></label>
+                <input
+                  id="address-postal-code"
+                  v-model="addressFormData.address.postal_code"
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter postal code"
+                  required
+                  :disabled="isLoadingAddress"
+                />
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-button" :disabled="isLoadingAddress">
+              <span v-if="!isLoadingAddress">Update Address</span>
+              <span v-else>Updating...</span>
+            </button>
+
+            <div v-if="addressSuccessMessage" class="success-message">
+              {{ addressSuccessMessage }}
+            </div>
+
+            <div v-if="addressErrorMessage" class="error-message">
+              {{ addressErrorMessage }}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </main>
@@ -95,6 +248,29 @@ interface ProfileResponse {
   data?: ProfileData
 }
 
+interface AddressData {
+  name: string
+  phone: string
+  email: string
+  line_1: string
+  line_2: string
+  city: string
+  state: string
+  country: string
+  postal_code: string
+}
+
+interface AddressFormData {
+  title: string
+  address: AddressData
+}
+
+interface AddressResponse {
+  success: boolean
+  message?: string
+  data?: any
+}
+
 // Meta
 useHead({
   title: 'My Profile - Rang Bangladesh',
@@ -113,12 +289,31 @@ const formData = ref({
   email: ''
 })
 
+// Address form data
+const addressFormData = ref<AddressFormData>({
+  title: '',
+  address: {
+    name: '',
+    phone: '',
+    email: '',
+    line_1: '',
+    line_2: '',
+    city: '',
+    state: '',
+    country: '',
+    postal_code: ''
+  }
+})
+
 // UI state
 const isLoading = ref(false)
 const isLoadingProfile = ref(false)
+const isLoadingAddress = ref(false)
 const isLoggingOut = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const addressErrorMessage = ref('')
+const addressSuccessMessage = ref('')
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -225,6 +420,105 @@ const handleUpdateProfile = async () => {
     }
   } finally {
     isLoading.value = false
+  }
+}
+
+// Update address
+const handleUpdateAddress = async () => {
+  // Validate required fields
+  if (!addressFormData.value.title.trim()) {
+    addressErrorMessage.value = 'Address title is required'
+    return
+  }
+
+  if (!addressFormData.value.address.name.trim()) {
+    addressErrorMessage.value = 'Name is required'
+    return
+  }
+
+  if (!addressFormData.value.address.phone.trim()) {
+    addressErrorMessage.value = 'Phone is required'
+    return
+  }
+
+  if (!addressFormData.value.address.line_1.trim()) {
+    addressErrorMessage.value = 'Address line 1 is required'
+    return
+  }
+
+  if (!addressFormData.value.address.city.trim()) {
+    addressErrorMessage.value = 'City is required'
+    return
+  }
+
+  if (!addressFormData.value.address.state.trim()) {
+    addressErrorMessage.value = 'State is required'
+    return
+  }
+
+  if (!addressFormData.value.address.country.trim()) {
+    addressErrorMessage.value = 'Country is required'
+    return
+  }
+
+  if (!addressFormData.value.address.postal_code.trim()) {
+    addressErrorMessage.value = 'Postal code is required'
+    return
+  }
+
+  const token = getToken()
+  
+  if (!token) {
+    await router.push('/login')
+    return
+  }
+
+  isLoadingAddress.value = true
+  addressErrorMessage.value = ''
+  addressSuccessMessage.value = ''
+
+  try {
+    const response = await $fetch<AddressResponse>(`${backendUrl}/profile/address`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: {
+        title: addressFormData.value.title.trim(),
+        address: {
+          name: addressFormData.value.address.name.trim(),
+          phone: addressFormData.value.address.phone.trim(),
+          email: addressFormData.value.address.email.trim() || '',
+          line_1: addressFormData.value.address.line_1.trim(),
+          line_2: addressFormData.value.address.line_2.trim() || '',
+          city: addressFormData.value.address.city.trim(),
+          state: addressFormData.value.address.state.trim(),
+          country: addressFormData.value.address.country.trim(),
+          postal_code: addressFormData.value.address.postal_code.trim()
+        }
+      }
+    })
+
+    if (response.success) {
+      addressSuccessMessage.value = 'Address updated successfully!'
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        addressSuccessMessage.value = ''
+      }, 3000)
+    } else {
+      addressErrorMessage.value = response.message || 'Failed to update address. Please try again.'
+    }
+  } catch (error: any) {
+    addressErrorMessage.value = error.data?.message || error.message || 'Failed to update address. Please try again.'
+    console.error('Error updating address:', error)
+    
+    // If unauthorized, redirect to login
+    if (error.status === 401 || error.statusCode === 401) {
+      await router.push('/login')
+    }
+  } finally {
+    isLoadingAddress.value = false
   }
 }
 
