@@ -674,7 +674,7 @@ const hasToken = computed(() => {
 
 // Account link based on authentication status
 const accountLink = computed(() => {
-  return hasToken.value ? '/profile' : '/login'
+  return hasToken.value ? '/myprofile' : '/login'
 })
 
 // Wishlist link based on authentication status
