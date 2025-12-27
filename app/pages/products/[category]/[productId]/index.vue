@@ -323,7 +323,7 @@
                             </div>
 
                             <!-- Product Image -->
-                            <div class="item-image">
+                            <div class="item-image w-full! h-full!">
                                 <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
                                     <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
                                         format="webp" quality="85" />
@@ -365,14 +365,14 @@
                             item: 'matching-series-item',
                             container: 'matching-series-products mobile-layout',
                         }" class="matching-series-carousel mobile-layout">
-                        <div class="matching-series-item matching-series-item-mobile">
+                        <div class=" w-full flex items-center gap-2">
                             <div class="item-checkbox">
                                 <input type="checkbox" :id="`mobile-matching-${item.name}`" v-model="item.checked"
                                     class="checkbox-input" />
                                 <label :for="`mobile-matching-${item.name}`" class="checkbox-label"></label>
                             </div>
 
-                            <div class="item-image">
+                            <div class="item-image w-full!">
                                 <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
                                     <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
                                         format="webp" quality="85" />
@@ -380,7 +380,7 @@
                             </div>
 
                             <div class="item-details">
-                                <p class="item-name">{{ item.name }}</p>
+                                <p class="item-name line-clamp-1 min-h-[20px]">{{ item.name }}</p>
 
                                 <!-- Size Selector -->
                                 <div class="size-selector">
@@ -486,7 +486,7 @@
                             </div>
 
                             <div class="item-details">
-                                <p class="item-description">{{ item.description }}</p>
+                                <p class="item-description line-clamp-2 min-h-[40px]">{{ item.description }}</p>
                                 <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
                             </div>
                         </div>
@@ -512,7 +512,7 @@
                             </div>
 
                             <div class="item-details">
-                                <p class="item-description">{{ item.description }}</p>
+                                <p class="item-description line-clamp-2 min-h-[40px]">{{ item.description }}</p>
                                 <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
                             </div>
                         </div>

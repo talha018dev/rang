@@ -915,7 +915,7 @@
 
 .frequently-bought-products {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   /* flex-wrap: wrap; */
   gap: 20px;
   flex: 1;
@@ -981,7 +981,7 @@
   min-height: 280px;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   position: relative;
 }
 
@@ -2531,6 +2531,9 @@
   .matching-series-item {
     flex: 0 0 calc(50vw - 20px) !important;
     max-width: calc(50vw - 20px) !important;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   /* Matching Series Summary */
