@@ -700,6 +700,9 @@
   .thumbnail {
     width: 80px;
     height: 80px;
+
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -1606,7 +1609,7 @@
   font-size: 0.875em;
   cursor: pointer;
   appearance: none;
-  min-width: 450px;
+  min-width: min(100%,450px);
   height: 47px;
 
   font-family: Poppins;

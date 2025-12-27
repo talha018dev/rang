@@ -1,7 +1,7 @@
 <template>
   <main class="men-page-gradient">
 
-    <div class="men-page" :class="{ 'women-category': isWomenCategory }">
+    <div class="men-page pb-30! sm:pb-0!" :class="{ 'women-category': isWomenCategory }">
       <AppHeader />
 
       <!-- Hero Banner Section -->
@@ -131,7 +131,7 @@
                     </svg>
                     <svg 
                       v-else 
-                      class="wishlist-icon outline" 
+                      class="wishlist-icon" 
                       fill="currentColor" 
                       viewBox="0 0 24 24"
                     >

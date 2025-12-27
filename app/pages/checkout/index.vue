@@ -2,7 +2,7 @@
   <main class="checkout-page">
     <div class="checkout-container">
       
-      <div class="checkout-content">
+      <div class="checkout-content pb-30! sm:pb-0!">
         <h1 class="checkout-title">Checkout</h1>
         
         <!-- Loading Skeleton -->

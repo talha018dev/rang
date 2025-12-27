@@ -143,7 +143,7 @@
                     <div class="product-title-share-btn">
 
                         <div class="product-title">{{ product.name }}</div>
-                        <div class="product-actions-mobile">
+                        <div class="product-actions-mobile flex! sm:hidden!">
                             <!-- Wishlist Button (only for logged-in users) -->
                             <button 
                                 v-if="isLoggedIn" 
@@ -161,7 +161,7 @@
                                 </svg>
                                 <svg 
                                     v-else 
-                                    class="wishlist-icon outline" 
+                                    class="wishlist-icon" 
                                     fill="none" 
                                     stroke="currentColor" 
                                     viewBox="0 0 24 24"
@@ -172,7 +172,14 @@
                             </button>
                             <UTooltip :text="shareTooltipText" :open="showShareTooltipMobile">
                                 <button class="share-btn-mobile" @click.stop.prevent="handleShare($event, 'mobile')">
-                                    <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                                    <NuxtImg 
+                                        class="w-3 h-3"
+                                        src="/product-details/ios_share.svg" 
+                                        alt="Share"
+                                        format="webp"
+                                        quality="85" 
+                                        loading="lazy" 
+                                    />
                                 </button>
                             </UTooltip>
                         </div>
@@ -225,7 +232,7 @@
                                     </svg>
                                     <svg 
                                         v-else 
-                                        class="wishlist-icon outline" 
+                                        class="wishlist-icon" 
                                         fill="none" 
                                         stroke="currentColor" 
                                         viewBox="0 0 24 24"
@@ -238,7 +245,14 @@
                                 <!-- Share Button -->
                                 <UTooltip :text="shareTooltipText" :open="showShareTooltipDesktop">
                                     <button class="share-btn" @click.stop.prevent="handleShare($event, 'desktop')">
-                                        <NuxtImg src="/product-details/ios_share.svg" alt="Share" format="webp" quality="85" loading="lazy" />
+                                        <NuxtImg
+                                        class="w-4 h-4"
+                                        src="/product-details/ios_share.svg"
+                                         alt="Share"
+                                          format="webp"
+                                           quality="85" 
+                                           loading="lazy" 
+                                        />
                                         <div class="share-text">Share</div>
                                     </button>
                                 </UTooltip>
