@@ -74,7 +74,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 4px;
-  min-width: 300px;
+  min-width: min(100%, 300px);
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e7eb;
@@ -104,7 +104,8 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 16px;
-  min-width: 300px;
+  /* min-width: 300px; */
+  min-width: min(100%, 300px);
   margin-top: 20px;
 }
 
