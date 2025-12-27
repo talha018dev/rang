@@ -625,12 +625,26 @@
               </button>
             </NuxtLink>
 
-            <NuxtLink :to="accountLink" class="w-full">
+            <NuxtLink :to="accountLink" class="w-full" @click="closeDrawer">
               <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
                 icon="i-heroicons-user">
                 Account
               </UButton>
             </NuxtLink>
+            
+            <!-- Logout/Login Button -->
+            <NuxtLink v-if="!hasToken" to="/login" class="w-full" @click="closeDrawer">
+              <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                icon="i-heroicons-arrow-right-on-rectangle">
+                Login
+              </UButton>
+            </NuxtLink>
+            <button v-else @click="handleLogout" class="w-full">
+              <UButton color="primary" variant="ghost" class="w-full justify-start text-red-600 hover:bg-red-50"
+                icon="i-heroicons-arrow-right-on-rectangle">
+                Logout
+              </UButton>
+            </button>
           </div>
         </div>
       </template>
@@ -903,9 +917,28 @@ const closeDrawer = () => {
   // Close all mobile category dropdowns
   showMobileWomenDropdown.value = false
   showMobileMenDropdown.value = false
-  showMobileKidsDropdown.value = false
-  showMobileJewelryDropdown.value = false
-  showMobileCollectionsDropdown.value = false
+}
+
+// Handle logout
+const handleLogout = async () => {
+  try {
+    // Clear all localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.clear()
+      console.log('LocalStorage cleared successfully')
+    }
+    
+    // Close drawer
+    closeDrawer()
+    
+    // Redirect to home page
+    await router.push('/')
+  } catch (error) {
+    console.error('Error during logout:', error)
+    // Even if there's an error, try to redirect
+    closeDrawer()
+    await router.push('/')
+  }
 }
 
 // Currency dropdown functions
