@@ -112,6 +112,13 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  position: relative;
+}
+
+.sale-brands-grid-tertiary > * {
+  min-height: 200px;
+  aspect-ratio: 1;
+  position: relative;
 }
 
 .sale-brand-image-cover {

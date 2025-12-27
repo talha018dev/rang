@@ -21,8 +21,15 @@
           :class="{ 'brand-item-selected': selectedBrand === brand.slug }"
           @click="selectBrand(brand.slug)"
         >
-          <NuxtImg :src="brand.image.url" :alt="brand.name" class="brand-image" format="webp" quality="85"
-            loading="lazy" />
+          <NuxtImg 
+            :src="brand.image.url" 
+            :alt="brand.name" 
+            class="brand-image image-fade" 
+            format="webp" 
+            quality="85"
+            loading="lazy"
+            @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
+          />
         </div>
       </div>
       <!-- Error State -->
@@ -36,32 +43,36 @@
     </section>
     <section class="sale-brands-section-secondary" style="margin-top: 4rem;">
       <div class="sale-brands-grid-secondary" :style="products.length === 0 ? { gridTemplateColumns: '1fr' } : {}">
-        <div class="image-div category-grid-main-men">
+        <div class="image-div category-grid-main-men" v-if="products.length > 0 || isLoadingProducts">
           <!-- First product image -->
-          <NuxtLink 
-            v-if="products.length > 0" 
-            :to="`/products/${products[0]?.category?.slug || 'all'}/${products[0]?.slug}`"
-            class="product-image-wrapper"
-          >
-            <div class="product-image-container" :class="{ 'flip-animation': isLoadingProducts }">
-              <NuxtImg 
-                :src="getImageUrl(products[0]?.image || '')" 
-                :alt="products[0]?.name || ''"
-                class="sale-offer-image category-image-rounded" 
-                format="webp" 
-                quality="85" 
-                loading="lazy" 
-              />
-            </div>
-          </NuxtLink>
-          <!-- Loading placeholder for first product -->
-          <div v-else-if="isLoadingProducts" class="product-image-wrapper">
-            <div class="product-image-container flip-animation">
-              <div class="image-placeholder"></div>
-            </div>
+          <div class="product-image-wrapper">
+            <Transition name="fade-slide" mode="out-in">
+              <NuxtLink 
+                v-if="products.length > 0 && !isLoadingProducts" 
+                :key="products[0]?.id"
+                :to="`/products/${products[0]?.category?.slug || 'all'}/${products[0]?.slug}`"
+                class="product-image-link"
+              >
+                <div class="product-image-container">
+                  <NuxtImg 
+                    :src="getImageUrl(products[0]?.image || '')" 
+                    :alt="products[0]?.name || ''"
+                    class="sale-offer-image category-image-rounded image-fade" 
+                    format="webp" 
+                    quality="85" 
+                    loading="lazy"
+                    @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
+                  />
+                </div>
+              </NuxtLink>
+              <!-- Loading placeholder for first product -->
+              <div v-else-if="isLoadingProducts" key="loading" class="product-image-container flip-animation">
+                <div class="image-placeholder"></div>
+              </div>
+            </Transition>
           </div>
 
-          <div class="absolute" style="bottom: 40px; right: 40px;">
+          <div class="absolute" style="bottom: 40px; right: 40px;" v-if="products.length > 0 || isLoadingProducts">
             <NuxtLink :to="`/products?brand=${selectedBrand}`">
               <button class="shop-now-white-button">
                 <span class="button-text">See All</span>
@@ -70,42 +81,49 @@
             </NuxtLink>
           </div>
         </div>
-        <div class="sale-brands-grid-tertiary">
+        <TransitionGroup name="fade-slide" tag="div" class="sale-brands-grid-tertiary" v-if="products.length > 1 || isLoadingProducts">
           <!-- Next 4 products from API (products[1] to products[4]) -->
-          <template v-if="products.length > 1">
-            <NuxtLink 
-              v-for="product in products.slice(1, 5)" 
-              :key="product.id"
-              :to="`/products/${product.category?.slug || 'all'}/${product.slug}`"
-              class="brand-product-link"
-            >
-              <div class="product-image-container" :class="{ 'flip-animation': isLoadingProducts }">
-                <NuxtImg 
-                  :src="getImageUrl(product.image)" 
-                  :alt="product.name" 
-                  class="sale-brand-image-cover" 
-                  format="webp"
-                  quality="85" 
-                  loading="lazy" 
-                />
-              </div>
-            </NuxtLink>
-          </template>
+          <NuxtLink 
+            v-for="product in products.slice(1, 5)" 
+            v-if="!isLoadingProducts && products.length > 1"
+            :key="product.id"
+            :to="`/products/${product.category?.slug || 'all'}/${product.slug}`"
+            class="brand-product-link"
+          >
+            <div class="product-image-container">
+              <NuxtImg 
+                :src="getImageUrl(product.image)" 
+                :alt="product.name" 
+                class="sale-brand-image-cover image-fade" 
+                format="webp"
+                quality="85" 
+                loading="lazy"
+                @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
+              />
+            </div>
+          </NuxtLink>
           <!-- Loading State for Products - show placeholders with flip animation -->
-          <template v-else-if="isLoadingProducts">
-            <div v-for="i in 4" :key="i" class="brand-product-link">
-              <div class="product-image-container flip-animation">
-                <div class="image-placeholder"></div>
-              </div>
+          <div 
+            v-for="i in 4" 
+            v-if="isLoadingProducts"
+            :key="`loading-${i}`" 
+            class="brand-product-link"
+          >
+            <div class="product-image-container flip-animation">
+              <div class="image-placeholder"></div>
             </div>
-          </template>
-          <!-- Empty State - only show when API returns no products -->
-          <template v-else-if="products.length === 0">
-            <div class="empty-products" style="grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
-              <p style="text-align: center;">No products available for this brand</p>
-            </div>
-          </template>
-        </div>
+          </div>
+        </TransitionGroup>
+        <!-- Empty State - only show when API returns no products -->
+        <Transition name="fade-slide">
+          <div 
+            v-if="products.length === 0 && !isLoadingProducts" 
+            key="empty" 
+            class="empty-products-compact"
+          >
+            <p>No products available for this brand</p>
+          </div>
+        </Transition>
       </div>
     </section>
   </main>

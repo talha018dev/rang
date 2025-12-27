@@ -203,6 +203,21 @@
   font-size: 1rem;
 }
 
+/* Compact empty products state */
+.empty-products-compact {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+  font-family: Poppins, sans-serif;
+  min-height: auto;
+}
+
+.empty-products-compact p {
+  margin: 0;
+  font-size: 1rem;
+}
+
 /* ShopNowWhite button styles */
 .shop-now-white-button {
   display: inline-flex;
@@ -251,14 +266,27 @@
 .product-image-wrapper {
   width: 100%;
   height: 100%;
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.product-image-link {
+  width: 100%;
+  height: 100%;
   display: block;
   text-decoration: none;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .product-image-container {
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }
@@ -295,6 +323,67 @@
   100% {
     transform: rotateY(360deg);
   }
+}
+
+/* Image Fade-In Animation */
+.image-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.image-fade.loaded {
+  opacity: 1;
+}
+
+/* Filter Transition Animations */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+}
+
+/* Transition group for product grid */
+.fade-slide-move {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Ensure brand product links maintain size during transitions */
+.brand-product-link {
+  position: relative;
+  min-height: 200px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  display: block;
+}
+
+.brand-product-link .product-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure grid maintains layout during transitions */
+.sale-brands-grid-tertiary {
+  position: relative;
+}
+
+.sale-brands-grid-tertiary > * {
+  min-height: 200px;
+  aspect-ratio: 1;
 }
 
 /* Responsive adjustments */
