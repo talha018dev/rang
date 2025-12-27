@@ -47,12 +47,12 @@
                   />
                 </div>
                 <div class="product-info">
-                  <h3 class="product-name">{{ item.name }}</h3>
+                  <h3 class="product-name line-clamp-1 h-[20px]">{{ item.name }}</h3>
                   <p class="product-price">{{ formatPrice(item.price, item.price_usd) }}</p>
                 </div>
               </NuxtLink>
               
-              <div class="product-actions">
+              <div class="product-actions flex-wrap">
                 <button 
                   class="action-btn add-to-cart-btn" 
                   @click.stop="handleAddToCart(item)" 
