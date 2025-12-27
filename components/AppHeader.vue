@@ -297,7 +297,9 @@
       <template #content>
         <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
-            <h1 class="mobile-nav-heading">RANG BANGLADESH</h1>
+            <NuxtLink to="/" @click="closeDrawer">
+              <NuxtImg src="/rang-logo.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo" format="webp" quality="90" loading="eager" />
+            </NuxtLink>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
           </div>
 
