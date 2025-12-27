@@ -40,8 +40,9 @@ html {
 
 .profile-content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   gap: 2rem;
 }
@@ -238,9 +239,6 @@ html {
 }
 
 /* Address Section */
-.address-card {
-  /* margin-top: 2rem; */
-}
 
 .section-title {
   font-family: Poppins, sans-serif;
@@ -270,19 +268,10 @@ html {
   margin-bottom: 1.5rem;
 }
 
-/* Saved Addresses Section */
-.addresses-section {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-.addresses-title {
-  font-family: Poppins, sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 1.5rem;
+/* Saved Addresses Card */
+.addresses-card {
+  width: 100%;
+  max-width: 100%;
 }
 
 .addresses-table-container {
@@ -358,10 +347,6 @@ html {
   .addresses-table th,
   .addresses-table td {
     padding: 0.5rem 0.75rem;
-  }
-
-  .addresses-title {
-    font-size: 1.25rem;
   }
 }
 

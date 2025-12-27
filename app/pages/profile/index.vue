@@ -221,52 +221,53 @@
               {{ addressErrorMessage }}
             </div>
           </form>
+        </div>
 
-          <!-- Saved Addresses Table -->
-          <div class="addresses-section">
-            <h3 class="addresses-title">Saved Addresses</h3>
-            
-            <div v-if="isLoadingAddresses" class="loading-state">
-              <p>Loading addresses...</p>
-            </div>
+        <!-- Saved Addresses Card -->
+        <div class="profile-card addresses-card p-4!">
+          <h2 class="section-title">Saved Addresses</h2>
+          <p class="section-subtitle">View your saved delivery addresses</p>
+          
+          <div v-if="isLoadingAddresses" class="loading-state">
+            <p>Loading addresses...</p>
+          </div>
 
-            <div v-else-if="addressesList.length === 0" class="empty-state">
-              <p>No saved addresses found.</p>
-            </div>
+          <div v-else-if="addressesList.length === 0" class="empty-state">
+            <p>No saved addresses found.</p>
+          </div>
 
-            <div v-else class="addresses-table-container">
-              <table class="addresses-table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Country</th>
-                    <th>Postal Code</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(address, index) in addressesList" :key="index">
-                    <td>{{ address.title || '-' }}</td>
-                    <td>{{ address.address?.name || '-' }}</td>
-                    <td>{{ address.address?.phone || '-' }}</td>
-                    <td>{{ address.address?.email || '-' }}</td>
-                    <td>
-                      {{ address.address?.line_1 || '' }}
-                      <span v-if="address.address?.line_2">, {{ address.address.line_2 }}</span>
-                    </td>
-                    <td>{{ address.address?.city || '-' }}</td>
-                    <td>{{ address.address?.state || '-' }}</td>
-                    <td>{{ address.address?.country || '-' }}</td>
-                    <td>{{ address.address?.postal_code || '-' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div v-else class="addresses-table-container">
+            <table class="addresses-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Address</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Country</th>
+                  <th>Postal Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(address, index) in addressesList" :key="index">
+                  <td>{{ address.title || '-' }}</td>
+                  <td>{{ address.address?.name || '-' }}</td>
+                  <td>{{ address.address?.phone || '-' }}</td>
+                  <td>{{ address.address?.email || '-' }}</td>
+                  <td>
+                    {{ address.address?.line_1 || '' }}
+                    <span v-if="address.address?.line_2">, {{ address.address.line_2 }}</span>
+                  </td>
+                  <td>{{ address.address?.city || '-' }}</td>
+                  <td>{{ address.address?.state || '-' }}</td>
+                  <td>{{ address.address?.country || '-' }}</td>
+                  <td>{{ address.address?.postal_code || '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
