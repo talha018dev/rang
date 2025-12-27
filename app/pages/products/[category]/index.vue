@@ -112,8 +112,24 @@
             <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
               <NuxtLink :to="`/products/${categorySlug}/${product.slug}`" class="product-card">
                 <div class="product-image-item">
-                  <NuxtImg :src="getImageUrl(product.image)" :alt="product.name" class="product-img" loading="lazy"
-                    format="webp" quality="85" />
+                  <div class="product-image-container">
+                    <NuxtImg 
+                      :src="getImageUrl(getProductImage(product, false))" 
+                      :alt="product.name" 
+                      class="product-img product-img-default"
+                      loading="lazy"
+                      format="webp" 
+                      quality="85" 
+                    />
+                    <NuxtImg 
+                      :src="getImageUrl(getProductImage(product, true))" 
+                      :alt="product.name" 
+                      class="product-img product-img-hover"
+                      loading="lazy"
+                      format="webp" 
+                      quality="85" 
+                    />
+                  </div>
                   <!-- Wishlist Icon (only for logged-in users) -->
                   <button 
                     v-if="isLoggedIn" 
@@ -290,6 +306,59 @@ const getImageUrl = (imagePath: string): string => {
   }
   // Otherwise, prepend the API base URL
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
+
+// Get all product images (main image, images object, variant images)
+const getAllProductImages = (product: Product): string[] => {
+  const images: string[] = []
+  
+  // Add main image
+  if (product.image) {
+    images.push(product.image)
+  }
+  
+  // Add images from images object
+  if (product.images && typeof product.images === 'object') {
+    Object.values(product.images).forEach(img => {
+      if (img && !images.includes(img)) {
+        images.push(img)
+      }
+    })
+  }
+  
+  // Add variant images
+  if (product.variants) {
+    product.variants.forEach(variant => {
+      if (variant.image && !images.includes(variant.image)) {
+        images.push(variant.image)
+      }
+    })
+  }
+  
+  return images
+}
+
+// Get product image based on hover state
+// Default: 1st image (index 0), Hover: 2nd image (index 1)
+const getProductImage = (product: Product, isHover: boolean): string => {
+  const allImages = getAllProductImages(product)
+  
+  // If no images, return product.image as fallback or empty string
+  if (allImages.length === 0) return product.image || ''
+  
+  // If only 1 image, return it for both default and hover
+  if (allImages.length === 1) return allImages[0] || product.image || ''
+  
+  // Default: 1st image (index 0)
+  // Hover: 2nd image (index 1) if available, otherwise use first image
+  if (isHover) {
+    // Use 2nd image (index 1) if available, otherwise use first image
+    const hoverImage = allImages.length >= 2 ? allImages[1] : allImages[0]
+    return hoverImage || product.image || ''
+  } else {
+    // Use 1st image (index 0)
+    return allImages[0] || product.image || ''
+  }
 }
 
 // Fetch brands from API
