@@ -103,7 +103,7 @@
             </div>
           </div>
           <div v-else-if="error" class="error-state">
-            <p>Error loading products: {{ error }}</p>
+            <p>{{ error }}</p>
           </div>
           <div v-else-if="filteredProducts.length === 0" class="empty-state">
             <p>No products found matching your filters.</p>
@@ -276,7 +276,7 @@ const selectedSort = ref('latest') // Default sort is latest
 const currentPage = ref(1)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
-const isLoading = ref(false)
+const isLoading = ref(true)
 const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
 const categories = ref<Category[]>([])
@@ -364,9 +364,14 @@ const fetchProducts = async () => {
       console.log('Products loaded:', products.value.length)
       console.log('Pagination:', pagination.value)
     }
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
-    error.value = errorMessage
+  } catch (err: any) {
+    // Check if it's a 404 error
+    if (err?.statusCode === 404 || err?.status === 404 || err?.response?.status === 404) {
+      error.value = 'This category has no products'
+    } else {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+      error.value = errorMessage
+    }
     console.error('Error fetching products:', err)
   } finally {
     isLoading.value = false
