@@ -639,11 +639,11 @@ const handleLogout = async () => {
     }
     
     // Redirect to login page
-    await router.push('/login')
+    await router.push('')
   } catch (error) {
     console.error('Error during logout:', error)
     // Even if there's an error, try to redirect
-    await router.push('/login')
+    await router.push('')
   } finally {
     isLoggingOut.value = false
   }

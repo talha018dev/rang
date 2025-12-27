@@ -41,7 +41,8 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: #F7941C
+  color: #F7941C;
+  position: relative;
 }
 
 .icon {
@@ -94,6 +95,25 @@
   z-index: -1;
   opacity: 0.6;
 } */
+
+.cart-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: #ea580c;
+  color: white;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0 0.25rem;
+  line-height: 1;
+  border: 2px solid white;
+}
 
 /* Show mobile footer only on screens under 600px */
 @media (max-width: 599px) {

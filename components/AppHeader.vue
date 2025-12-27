@@ -295,7 +295,7 @@
       body: ''
     }">
       <template #content>
-        <div class="p-6 bg-white header-drawer-template">
+        <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
             <h1 class="mobile-nav-heading">RANG BANGLADESH</h1>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
