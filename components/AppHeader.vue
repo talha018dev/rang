@@ -653,13 +653,14 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'nuxt/app';
+import { useRoute, useRouter } from 'nuxt/app';
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
 import type { Category, CategoryResponse, Product, ProductResponse } from '../types/homepage';
 
+const route = useRoute()
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
 const { currency, setCurrency, formatPrice } = useCurrency()
@@ -931,13 +932,29 @@ const handleLogout = async () => {
     // Close drawer
     closeDrawer()
     
-    // Redirect to home page
-    await router.push('/')
+    // Check if we're already on home page, if so refresh, otherwise navigate
+    const currentPath = route.path
+    if (currentPath === '/' || currentPath === '/home') {
+      // Already on home page, refresh to update UI
+      if (typeof window !== 'undefined') {
+        window.location.reload()
+      }
+    } else {
+      // Navigate to home page
+      await router.push('/')
+    }
   } catch (error) {
     console.error('Error during logout:', error)
-    // Even if there's an error, try to redirect
+    // Even if there's an error, try to redirect or refresh
     closeDrawer()
-    await router.push('/')
+    const currentPath = route.path
+    if (currentPath === '/' || currentPath === '/home') {
+      if (typeof window !== 'undefined') {
+        window.location.reload()
+      }
+    } else {
+      await router.push('/')
+    }
   }
 }
 
