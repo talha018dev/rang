@@ -262,7 +262,7 @@
                 </div>
 
                 <!-- Size Selection -->
-                <div class="product-details-p-2" v-if="!isMobile">
+                <div class="product-details-p-2" v-if="!isMobile && availableSizes.length > 0">
                     <div class="size-selection">
                         <label class="selection-label">Size</label>
                         <div class="size-radio-group">
@@ -423,7 +423,7 @@
                 </section>
             </div>
             <div class="product-details-p-2-mobile" v-if="isMobile">
-                <div class="size-selection">
+                <div class="size-selection" v-if="availableSizes.length > 0">
                     <label class="selection-label">Size</label>
                     <div class="size-radio-group">
                         <label v-for="size in availableSizes" :key="size" class="size-radio-option"
@@ -1353,17 +1353,21 @@ const handleToggleWishlist = async () => {
 const handleAddToCart = () => {
     if (!product.value) return
     
-    if (!selectedSize.value) {
+    // Size is mandatory only if product has variants
+    const hasVariants = product.value.variants && product.value.variants.length > 0
+    if (hasVariants && !selectedSize.value) {
         alert('Please select a size')
         return
     }
 
-    // Find the variant matching selected size and color
-    const selectedVariant = product.value.variants?.find(variant => {
-      const sizeMatch = variant.attributes?.size === selectedSize.value
-      const colorMatch = availableColors.value[selectedColorIndex.value]?.name === variant.attributes?.color
-      return sizeMatch && (selectedColorIndex.value === -1 || colorMatch)
-    }) || product.value.variants?.find(variant => variant.attributes?.size === selectedSize.value)
+    // Find the variant matching selected size and color (only if variants exist)
+    const selectedVariant = hasVariants ? (
+      product.value.variants?.find(variant => {
+        const sizeMatch = variant.attributes?.size === selectedSize.value
+        const colorMatch = availableColors.value[selectedColorIndex.value]?.name === variant.attributes?.color
+        return sizeMatch && (selectedColorIndex.value === -1 || colorMatch)
+      }) || product.value.variants?.find(variant => variant.attributes?.size === selectedSize.value)
+    ) : null
 
     const variantPrice = selectedVariant?.price || product.value.price
     const variantPriceUsd = selectedVariant?.price_usd || product.value.price_usd
@@ -1381,7 +1385,7 @@ const handleAddToCart = () => {
             price_usd: variantPriceUsd,
             priceDisplay: formatPrice(variantPrice, variantPriceUsd),
             image: getImageUrl(variantImage),
-            size: selectedSize.value,
+            size: hasVariants ? selectedSize.value : undefined,
             color: selectedVariant?.attributes?.color || availableColors.value[selectedColorIndex.value]?.name,
             sku: selectedVariant?.sku || product.value.sku,
             product_id: product.value.id,
