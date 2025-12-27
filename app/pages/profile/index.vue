@@ -61,6 +61,13 @@
               {{ errorMessage }}
             </div>
           </form>
+
+          <div class="logout-section">
+            <button type="button" class="logout-button" @click="handleLogout" :disabled="isLoggingOut">
+              <span v-if="!isLoggingOut">Logout</span>
+              <span v-else>Logging out...</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -109,6 +116,7 @@ const formData = ref({
 // UI state
 const isLoading = ref(false)
 const isLoadingProfile = ref(false)
+const isLoggingOut = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 
@@ -217,6 +225,28 @@ const handleUpdateProfile = async () => {
     }
   } finally {
     isLoading.value = false
+  }
+}
+
+// Handle logout
+const handleLogout = async () => {
+  isLoggingOut.value = true
+  
+  try {
+    // Clear all localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.clear()
+      console.log('LocalStorage cleared successfully')
+    }
+    
+    // Redirect to login page
+    await router.push('/login')
+  } catch (error) {
+    console.error('Error during logout:', error)
+    // Even if there's an error, try to redirect
+    await router.push('/login')
+  } finally {
+    isLoggingOut.value = false
   }
 }
 
