@@ -221,6 +221,53 @@
               {{ addressErrorMessage }}
             </div>
           </form>
+
+          <!-- Saved Addresses Table -->
+          <div class="addresses-section">
+            <h3 class="addresses-title">Saved Addresses</h3>
+            
+            <div v-if="isLoadingAddresses" class="loading-state">
+              <p>Loading addresses...</p>
+            </div>
+
+            <div v-else-if="addressesList.length === 0" class="empty-state">
+              <p>No saved addresses found.</p>
+            </div>
+
+            <div v-else class="addresses-table-container">
+              <table class="addresses-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Postal Code</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(address, index) in addressesList" :key="index">
+                    <td>{{ address.title || '-' }}</td>
+                    <td>{{ address.address?.name || '-' }}</td>
+                    <td>{{ address.address?.phone || '-' }}</td>
+                    <td>{{ address.address?.email || '-' }}</td>
+                    <td>
+                      {{ address.address?.line_1 || '' }}
+                      <span v-if="address.address?.line_2">, {{ address.address.line_2 }}</span>
+                    </td>
+                    <td>{{ address.address?.city || '-' }}</td>
+                    <td>{{ address.address?.state || '-' }}</td>
+                    <td>{{ address.address?.country || '-' }}</td>
+                    <td>{{ address.address?.postal_code || '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -271,6 +318,18 @@ interface AddressResponse {
   data?: any
 }
 
+interface SavedAddress {
+  id?: number
+  title?: string
+  address?: AddressData
+}
+
+interface AddressesListResponse {
+  success: boolean
+  message?: string
+  data?: SavedAddress[]
+}
+
 // Meta
 useHead({
   title: 'My Profile - Rang Bangladesh',
@@ -305,10 +364,14 @@ const addressFormData = ref<AddressFormData>({
   }
 })
 
+// Saved addresses list
+const addressesList = ref<SavedAddress[]>([])
+
 // UI state
 const isLoading = ref(false)
 const isLoadingProfile = ref(false)
 const isLoadingAddress = ref(false)
+const isLoadingAddresses = ref(false)
 const isLoggingOut = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
@@ -423,6 +486,42 @@ const handleUpdateProfile = async () => {
   }
 }
 
+// Fetch saved addresses
+const fetchAddresses = async () => {
+  const token = getToken()
+  
+  if (!token) {
+    return
+  }
+
+  isLoadingAddresses.value = true
+
+  try {
+    const response = await $fetch<AddressesListResponse>(`${backendUrl}/profile/address`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    if (response.success && response.data) {
+      addressesList.value = response.data
+    } else {
+      addressesList.value = []
+    }
+  } catch (error: any) {
+    console.error('Error fetching addresses:', error)
+    addressesList.value = []
+    
+    // If unauthorized, don't redirect here as user might still be viewing profile
+    if (error.status === 401 || error.statusCode === 401) {
+      // Silent fail for addresses fetch
+    }
+  } finally {
+    isLoadingAddresses.value = false
+  }
+}
+
 // Update address
 const handleUpdateAddress = async () => {
   // Validate required fields
@@ -502,6 +601,9 @@ const handleUpdateAddress = async () => {
     if (response.success) {
       addressSuccessMessage.value = 'Address updated successfully!'
       
+      // Refresh addresses list after successful update
+      await fetchAddresses()
+      
       // Clear success message after 3 seconds
       setTimeout(() => {
         addressSuccessMessage.value = ''
@@ -547,6 +649,7 @@ const handleLogout = async () => {
 // Fetch profile on mount
 onMounted(() => {
   fetchProfile()
+  fetchAddresses()
 })
 </script>
 
