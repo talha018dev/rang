@@ -1,5 +1,5 @@
 <template>
-  <main class="profile-page">
+  <main class="profile-page pb-30! sm:pb-0!">
     <div class="profile-container">
       <div class="profile-content">
         <div class="profile-card">
@@ -272,12 +272,14 @@
         </div>
       </div>
     </div>
+    <AppFooter />
   </main>
 </template>
 
 <script setup lang="ts">
 import { useHead, useRouter } from 'nuxt/app'
 import { onMounted, ref } from 'vue'
+import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import './profile.css'
 
