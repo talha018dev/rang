@@ -191,7 +191,7 @@
   z-index: 100;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .sale-offer-text {
     font-size: 1.875em;
   }
@@ -234,7 +234,7 @@
   /* height: 50px; */
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .sale-offer-number-container {
     font-size: 1.25em !important;
   }

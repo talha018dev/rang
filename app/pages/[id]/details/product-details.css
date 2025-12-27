@@ -528,7 +528,7 @@
   }
   
   /* Responsive Design */
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .product-container {
       flex-direction: column;
       gap: 30px;
@@ -700,7 +700,7 @@
   }
   
   /* Responsive Design for Matching Series */
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .matching-series-products {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -929,7 +929,7 @@
   }
   
   /* Responsive Design for Frequently Bought Together */
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .frequently-bought-container {
       flex-direction: column;
       gap: 30px;
@@ -1136,7 +1136,7 @@
   }
   
   /* Responsive Design for Product Information */
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .product-info-container {
       grid-template-columns: 1fr;
       gap: 30px;
@@ -1691,7 +1691,7 @@
   }
   
   /* Responsive Design for Reviews */
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .reviews-summary {
       grid-template-columns: 1fr;
       gap: 30px;
@@ -1889,7 +1889,7 @@
     }
   }
   
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .related-products-section {
       margin: 40px auto 0;
       padding: 0 15px;
@@ -1971,7 +1971,7 @@
     gap: 8px;
   }
   
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     .review-item {
       /* grid-template-columns: 100px 1fr 100px; */
       grid-template-columns: 1fr;

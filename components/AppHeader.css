@@ -814,8 +814,8 @@
   }
 }
 
-@media (max-width: 800px) {
-  /* Hide logo on screens under 800px */
+@media (max-width: 768px) {
+  /* Hide logo on screens under 768px */
   .header-content > div:first-child {
     display: none;
   }

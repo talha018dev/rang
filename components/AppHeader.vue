@@ -280,7 +280,7 @@
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="mobile-menu-button ml-auto!" @click="toggleDrawer">
+        <button class="mobile-menu-button mr-auto! md:mr-0! ml-0! md:ml-auto!" @click="toggleDrawer">
           <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>

@@ -20,7 +20,7 @@
   font-family: 'Bixby CF', sans-serif;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .home-page {
     top: -85px;
   }

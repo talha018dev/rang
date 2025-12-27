@@ -7,7 +7,7 @@
   padding: 0.25rem 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .offer-banner {
     margin-top: 1rem;
   }
