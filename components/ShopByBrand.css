@@ -366,6 +366,9 @@
   aspect-ratio: 1;
   overflow: hidden;
   display: block;
+
+  width: 100%;
+  height: 100%;
 }
 
 .brand-product-link .product-image-container {
