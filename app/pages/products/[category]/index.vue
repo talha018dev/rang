@@ -257,21 +257,32 @@ const categoryTitle = computed(() => {
     .toUpperCase()
 })
 
+// Helper function to find category by slug (including nested children)
+const findCategoryBySlug = (categories: Category[], slug: string): Category | null => {
+  for (const category of categories) {
+    if (category.slug === slug) {
+      return category
+    }
+    if (category.children && category.children.length > 0) {
+      const found = findCategoryBySlug(category.children, slug)
+      if (found) return found
+    }
+  }
+  return null
+}
+
 // Hero image based on category
 const heroImage = computed(() => {
-  if (categorySlug.value === 'women') {
-    return '/shop-by-category/shop-by-category-2.png'
+  // Try to find the category from the API response
+  if (categories.value.length > 0 && categorySlug.value) {
+    const category = findCategoryBySlug(categories.value, categorySlug.value)
+    if (category && (category as any).cover && (category as any).cover.preview_url) {
+      // Use the cover image from API if available
+      return getImageUrl((category as any).cover.preview_url)
+    }
   }
-  if (categorySlug.value === 'accessories') {
-    return '/shop-by-category/shop-by-category-55.jpg'
-  }
-  if (categorySlug.value === 'jewelry') {
-    return '/explore/explore-22.png'
-  }
-
-  if (categorySlug.value === 'kids') {
-    return '/explore/explore-1.png'
-  }
+  
+  // Fallback to default image
   return '/men/men-hero-image.jpg'
 })
 
