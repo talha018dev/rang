@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useHead, useRoute } from 'nuxt/app'
+  import { navigateTo, useHead, useRoute } from 'nuxt/app'
 import { onMounted } from 'vue'
 import AppFooter from '../../../../components/AppFooter.vue'
 import { useApi } from '../../../../composables/useApi'
@@ -93,9 +93,14 @@ onMounted(async () => {
         return
       }
     }
+    
+    // If no redirect URL found, redirect to order page with paymentFailed flag
+    await navigateTo(`/orders/${orderNumber}?paymentFailed=true`)
   } catch (error: any) {
     console.error('Error calling payment redirect API:', error)
-    // Don't show error to user as order is already placed successfully
+    // On API failure, redirect to order page with paymentFailed flag
+    const orderNumber = (route.query.orderNumber as string) || '202511JJC'
+    await navigateTo(`/orders/${orderNumber}?paymentFailed=true`)
   }
 })
 </script>

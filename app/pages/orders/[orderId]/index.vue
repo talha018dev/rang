@@ -14,6 +14,29 @@
           </button>
         </div>
 
+        <!-- Payment Failed Alert -->
+        <div v-if="showPaymentFailedAlert" class="payment-failed-alert">
+          <div class="alert-content">
+            <div class="alert-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="alert-text">
+              <h3 class="alert-title">Payment Failed</h3>
+              <p class="alert-message">We couldn't redirect you to the payment gateway. Please try again to complete your payment.</p>
+            </div>
+            <button @click="retryPayment" class="retry-payment-button">
+              Try Again
+            </button>
+            <button @click="dismissAlert" class="dismiss-button">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <!-- Loading State -->
         <div v-if="isLoading" class="loading-state">
           <p class="loading-text">Loading order details...</p>
@@ -303,6 +326,7 @@ const order = ref<Order | null>(null)
 // UI state
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+const showPaymentFailedAlert = ref(false)
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -399,9 +423,65 @@ const printInvoice = () => {
   window.print()
 }
 
+// Check for payment failed query parameter
+const checkPaymentFailed = () => {
+  const paymentFailed = route.query.paymentFailed
+  if (paymentFailed === 'true') {
+    showPaymentFailedAlert.value = true
+    // Remove query parameter from URL without reload
+    router.replace({ query: { ...route.query, paymentFailed: undefined } })
+  }
+}
+
+// Retry payment
+const retryPayment = async () => {
+  if (!order.value) return
+  
+  try {
+    const { backendUrl } = useApi()
+    const gateway = 'ssl' // Default gateway, can be made dynamic if needed
+    
+    const response = await $fetch<any>(`${backendUrl}/payment/redirect/${order.value.number}?gateway=${gateway}`, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        ...(getToken() ? { 'Authorization': `Bearer ${getToken()}` } : {})
+      }
+    })
+    
+    // Check if API response is successful and contains a URL
+    if (response && (response.success !== false)) {
+      const redirectUrl = response.url || 
+                         response.redirect_url || 
+                         response.data?.url || 
+                         response.data?.redirect_url ||
+                         (response.data && typeof response.data === 'string' ? response.data : null)
+      
+      if (redirectUrl) {
+        // Redirect to the URL from the response in a new tab
+        window.open(redirectUrl, '_blank')
+        showPaymentFailedAlert.value = false
+        return
+      }
+    }
+    
+    // If no redirect URL, show error
+    error.value = 'Failed to get payment URL. Please contact support.'
+  } catch (err: any) {
+    console.error('Error retrying payment:', err)
+    error.value = err.data?.message || err.message || 'Failed to initiate payment. Please try again later.'
+  }
+}
+
+// Dismiss alert
+const dismissAlert = () => {
+  showPaymentFailedAlert.value = false
+}
+
 // Fetch order details on mount
 onMounted(() => {
   fetchOrderDetails()
+  checkPaymentFailed()
 })
 </script>
 
@@ -446,6 +526,87 @@ onMounted(() => {
 .back-icon {
   width: 1rem;
   height: 1rem;
+}
+
+/* Payment Failed Alert */
+.payment-failed-alert {
+  margin-bottom: 1.5rem;
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  color: #dc2626;
+}
+
+.alert-text {
+  flex: 1;
+}
+
+.alert-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 0.25rem 0;
+}
+
+.alert-message {
+  font-size: 0.875rem;
+  color: #7f1d1d;
+  margin: 0;
+}
+
+.retry-payment-button {
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.retry-payment-button:hover {
+  background: #b91c1c;
+}
+
+.dismiss-button {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #991b1b;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background 0.2s;
+}
+
+.dismiss-button:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.dismiss-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* Loading & Error States */
@@ -899,6 +1060,24 @@ onMounted(() => {
   .table-header,
   .table-cell {
     padding: 0.5rem;
+  }
+
+  .payment-failed-alert {
+    padding: 0.75rem;
+  }
+
+  .alert-content {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .alert-text {
+    flex-basis: 100%;
+  }
+
+  .retry-payment-button {
+    flex: 1;
+    min-width: 120px;
   }
 }
 </style>
