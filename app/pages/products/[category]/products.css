@@ -354,6 +354,48 @@
   .product-card:hover .product-img-hover {
     transform: translateX(0) scale(1);
     opacity: 1;
+    z-index: 1;
+  }
+
+  /* Hover delayed image (index 2) - hidden by default, positioned to the right */
+  .product-img-hover-delayed {
+    opacity: 0;
+    transform: translateX(100%) scale(1);
+    z-index: 2;
+  }
+
+  /* After 1 second of hover, transition from 2nd to 3rd image (only if 3rd image exists) */
+  .product-card:hover .product-img-hover-delayed {
+    animation: slideInDelayed 0.5s ease-in-out 1s forwards;
+  }
+
+  /* When 3rd image exists and appears, hide the 2nd image */
+  /* Only apply animation when delayed image exists in the container */
+  .product-image-container:has(.product-img-hover-delayed) .product-card:hover .product-img-hover,
+  .product-card:hover .product-image-container:has(.product-img-hover-delayed) .product-img-hover {
+    animation: slideOutDelayed 0.5s ease-in-out 1s forwards;
+  }
+
+  @keyframes slideInDelayed {
+    0% {
+      transform: translateX(100%) scale(1);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutDelayed {
+    0% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-100%) scale(1);
+      opacity: 0;
+    }
   }
   
   .product-info {

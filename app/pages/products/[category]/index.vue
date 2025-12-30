@@ -114,7 +114,7 @@
                 <div class="product-image-item">
                   <div class="product-image-container">
                     <NuxtImg 
-                      :src="getImageUrl(getProductImage(product, false))" 
+                      :src="getImageUrl(getProductImage(product, 0))" 
                       :alt="product.name" 
                       class="product-img product-img-default"
                       loading="lazy"
@@ -122,9 +122,18 @@
                       quality="85" 
                     />
                     <NuxtImg 
-                      :src="getImageUrl(getProductImage(product, true))" 
+                      :src="getImageUrl(getProductImage(product, 1))" 
                       :alt="product.name" 
                       class="product-img product-img-hover"
+                      loading="lazy"
+                      format="webp" 
+                      quality="85" 
+                    />
+                    <NuxtImg 
+                      v-if="getProductImage(product, 2) !== ''"
+                      :src="getImageUrl(getProductImage(product, 2) || '')" 
+                      :alt="product.name" 
+                      class="product-img product-img-hover-delayed"
                       loading="lazy"
                       format="webp" 
                       quality="85" 
@@ -349,27 +358,30 @@ const getAllProductImages = (product: Product): string[] => {
   return images
 }
 
-// Get product image based on hover state
-// Default: 1st image (index 0), Hover: 2nd image (index 1)
-const getProductImage = (product: Product, isHover: boolean): string => {
+// Get product image based on image index
+// index 0: 1st image (default), index 1: 2nd image (hover), index 2: 3rd image (hover delayed)
+const getProductImage = (product: Product, imageIndex: number): string => {
   const allImages = getAllProductImages(product)
   
   // If no images, return product.image as fallback or empty string
   if (allImages.length === 0) return product.image || ''
   
-  // If only 1 image, return it for both default and hover
+  // If only 1 image, return it for all states
   if (allImages.length === 1) return allImages[0] || product.image || ''
   
-  // Default: 1st image (index 0)
-  // Hover: 2nd image (index 1) if available, otherwise use first image
-  if (isHover) {
-    // Use 2nd image (index 1) if available, otherwise use first image
-    const hoverImage = allImages.length >= 2 ? allImages[1] : allImages[0]
-    return hoverImage || product.image || ''
-  } else {
-    // Use 1st image (index 0)
+  // Return image at specified index, or fallback to available images
+  if (imageIndex === 0) {
+    // Default: 1st image (index 0)
     return allImages[0] || product.image || ''
+  } else if (imageIndex === 1) {
+    // Hover: 2nd image (index 1) if available, otherwise use first image
+    return allImages.length >= 2 && allImages[1] ? allImages[1] : (allImages[0] || product.image || '')
+  } else if (imageIndex === 2) {
+    // Hover delayed: 3rd image (index 2) if available, otherwise return empty string (don't show)
+    return allImages.length >= 3 && allImages[2] ? allImages[2] : ''
   }
+  
+  return product.image || ''
 }
 
 // Fetch brands from API
