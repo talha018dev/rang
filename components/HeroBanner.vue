@@ -1,6 +1,5 @@
 <template>
-  <section class="hero-banner-container" @mouseenter="pauseRotation" @mouseleave="resumeRotation">
-    <section class="hero-section">
+  <section class="hero-section">
       <!-- Slider Container -->
       <div class="hero-slider-wrapper">
         <div 
@@ -84,7 +83,9 @@
         </div>
       </div>
     </section>
-  </section>
+  <!-- <section class="hero-banner-container" @mouseenter="pauseRotation" @mouseleave="resumeRotation">
+    
+  </section> -->
 </template>
 
 <script setup lang="ts">
