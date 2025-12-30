@@ -288,6 +288,12 @@
                       {{ location.name }}
                     </option>
                   </select>
+                  <!-- Display selected outlet address -->
+                  <div v-if="selectedOutlet && selectedOutletLocation" class="outlet-address">
+                    <p class="outlet-address-label">Outlet Address:</p>
+                    <p class="outlet-address-text">{{ selectedOutletLocation.address }}</p>
+                    <p v-if="selectedOutletLocation.phone" class="outlet-address-phone">Phone: {{ selectedOutletLocation.phone }}</p>
+                  </div>
                 </div>
 
                 <!-- Payment Option -->
@@ -1021,6 +1027,14 @@ const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
 const shippingMethods = ref<any[]>([])
 const isLoadingShippingMethods = ref(false)
+
+// Computed property to get the selected outlet location
+const selectedOutletLocation = computed(() => {
+  if (!selectedOutlet.value || locations.value.length === 0) {
+    return null
+  }
+  return locations.value.find(location => location.id === selectedOutlet.value || location.id?.toString() === selectedOutlet.value.toString())
+})
 const paymentMethod = ref('')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
