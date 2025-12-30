@@ -1,0 +1,905 @@
+<template>
+  <main class="order-details-page pb-30! sm:pb-0!">
+    <div class="order-details-container">
+      <div class="order-details-content">
+        <!-- Back Button -->
+        <div class="mb-6">
+          <button 
+            @click="goBack"
+            class="back-button">
+            <svg class="back-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Orders
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div v-if="isLoading" class="loading-state">
+          <p class="loading-text">Loading order details...</p>
+        </div>
+
+        <!-- Error State -->
+        <div v-else-if="error" class="error-state">
+          <p class="error-text">{{ error }}</p>
+          <button 
+            @click="fetchOrderDetails" 
+            class="retry-button">
+            Try Again
+          </button>
+        </div>
+
+        <!-- Invoice Content -->
+        <div v-else-if="order" class="invoice-container">
+          <!-- Invoice Header -->
+          <div class="invoice-header">
+            <div class="invoice-header-left">
+              <h1 class="invoice-title">Order Invoice</h1>
+              <p class="invoice-number">Order #{{ order.number }}</p>
+            </div>
+            <div class="invoice-header-right">
+              <div class="status-badge" :class="getStatusClass(order.status)">
+                {{ order.readable_status || order.status }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Invoice Info Section -->
+          <div class="invoice-info-section">
+            <div class="invoice-info-grid">
+              <!-- Order Date -->
+              <div class="invoice-info-item">
+                <h3 class="info-label">Order Date</h3>
+                <p class="info-value">{{ formatDate(order.created_at) }}</p>
+              </div>
+
+              <!-- Shipping Method -->
+              <div class="invoice-info-item">
+                <h3 class="info-label">Shipping Method</h3>
+                <p class="info-value">{{ order.shipping_method }}</p>
+              </div>
+
+              <!-- Pickup Location (if applicable) -->
+              <div v-if="order.pickup_location" class="invoice-info-item">
+                <h3 class="info-label">Pickup Location</h3>
+                <p class="info-value">{{ order.pickup_location.name || 'N/A' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer & Shipping Address -->
+          <div class="address-section">
+            <div class="address-grid">
+              <!-- Customer Information -->
+              <div class="address-card">
+                <h2 class="address-title">Customer Information</h2>
+                <div class="address-details">
+                  <p class="address-name">{{ order.customer.name }}</p>
+                  <p class="address-line">{{ order.customer.phone }}</p>
+                  <p v-if="order.customer.email" class="address-line">{{ order.customer.email }}</p>
+                </div>
+              </div>
+
+              <!-- Shipping Address -->
+              <div class="address-card">
+                <h2 class="address-title">Shipping Address</h2>
+                <div class="address-details">
+                  <p class="address-name">{{ order.address.name }}</p>
+                  <p class="address-line">{{ order.address.line_1 }}</p>
+                  <p v-if="order.address.line_2" class="address-line">{{ order.address.line_2 }}</p>
+                  <p class="address-line">{{ order.address.city }}, {{ order.address.state }}</p>
+                  <p class="address-line">{{ order.address.country }} - {{ order.address.postal_code }}</p>
+                  <p class="address-line">Phone: {{ order.address.phone }}</p>
+                  <p v-if="order.address.email" class="address-line">Email: {{ order.address.email }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Items Table -->
+          <div class="items-section">
+            <h2 class="section-title">Order Items</h2>
+            <div class="items-table-container">
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th class="table-header">Product</th>
+                    <th class="table-header">Variant</th>
+                    <th class="table-header text-right">Quantity</th>
+                    <th class="table-header text-right">Price</th>
+                    <th class="table-header text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in order.items" :key="index" class="table-row">
+                    <td class="table-cell">
+                      <div class="product-cell">
+                        <NuxtImg 
+                          v-if="item.product.image_url"
+                          :src="item.product.image_url" 
+                          :alt="item.product.name"
+                          class="product-image"
+                          format="webp"
+                          quality="85"
+                          loading="lazy"
+                        />
+                        <div class="product-info">
+                          <p class="product-name">{{ item.product.name }}</p>
+                          <NuxtLink 
+                            :to="`/products/${item.product.slug}`"
+                            class="product-link">
+                            View Product
+                          </NuxtLink>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="table-cell">
+                      <p class="variant-name">{{ item.variant?.name || 'N/A' }}</p>
+                    </td>
+                    <td class="table-cell text-right">
+                      <p class="quantity-text">{{ item.quantity }}</p>
+                    </td>
+                    <td class="table-cell text-right">
+                      <p class="price-text">{{ formatPrice(item.price) }}</p>
+                    </td>
+                    <td class="table-cell text-right">
+                      <p class="total-text">{{ formatPrice(item.price * item.quantity) }}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Customer Notes -->
+          <div v-if="order.customer_notes" class="notes-section">
+            <h2 class="section-title">Customer Notes</h2>
+            <p class="notes-text">{{ order.customer_notes }}</p>
+          </div>
+
+          <!-- Invoice Summary -->
+          <div class="summary-section">
+            <div class="summary-card">
+              <h2 class="section-title">Order Summary</h2>
+              <div class="summary-row">
+                <span class="summary-label">Item Total:</span>
+                <span class="summary-value">{{ formatPrice(order.item_total) }}</span>
+              </div>
+              <div v-if="order.coupon_discount > 0" class="summary-row">
+                <span class="summary-label">Coupon Discount:</span>
+                <span class="summary-value discount">-{{ formatPrice(order.coupon_discount) }}</span>
+              </div>
+              <div v-if="order.vat > 0" class="summary-row">
+                <span class="summary-label">VAT:</span>
+                <span class="summary-value">{{ formatPrice(order.vat) }}</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Shipping:</span>
+                <span class="summary-value">{{ formatPrice(order.shipping) }}</span>
+              </div>
+              <div class="summary-row summary-row-total">
+                <span class="summary-label-total">Total:</span>
+                <span class="summary-value-total">{{ formatPrice(order.total) }}</span>
+              </div>
+              <div v-if="order.paid_amount > 0" class="summary-row">
+                <span class="summary-label">Paid Amount:</span>
+                <span class="summary-value paid">{{ formatPrice(order.paid_amount) }}</span>
+              </div>
+              <div v-if="order.due > 0" class="summary-row">
+                <span class="summary-label">Due:</span>
+                <span class="summary-value due">{{ formatPrice(order.due) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Print Button -->
+          <div class="actions-section">
+            <button @click="printInvoice" class="print-button">
+              <svg class="print-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print Invoice
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <AppFooter />
+  </main>
+</template>
+
+<script setup lang="ts">
+import { useHead, useRoute, useRouter } from 'nuxt/app'
+import { computed, onMounted, ref } from 'vue'
+import AppFooter from '~~/components/AppFooter.vue'
+import { useApi } from '~~/composables/useApi'
+import { useCurrency } from '~~/composables/useCurrency'
+import '../../profile/profile.css'
+
+// Define page meta
+definePageMeta({
+  layout: false
+})
+
+// Type definitions (same as orders page)
+interface OrderItem {
+  price: number
+  quantity: number
+  product: {
+    name: string
+    slug: string
+    image_url: string
+  }
+  variant: {
+    image_url: string
+    name: string
+  } | null
+  package: any | null
+}
+
+interface OrderAddress {
+  name: string
+  phone: string
+  email: string
+  line_1: string
+  line_2: string | null
+  city: string
+  state: string
+  country: string
+  postal_code: string
+}
+
+interface OrderCustomer {
+  name: string
+  phone: string
+  email: string
+}
+
+interface Order {
+  number: string
+  coupon_discount: number
+  vat: number
+  shipping: number
+  item_total: number
+  total: number
+  paid_amount: number
+  customer_notes: string
+  status: string
+  created_at: string
+  readable_status: string
+  due: number
+  address: OrderAddress
+  customer: OrderCustomer
+  shipping_method: string
+  pickup_location: any | null
+  items: OrderItem[]
+}
+
+interface OrderResponse {
+  success: boolean
+  message?: string
+  data?: Order
+}
+
+// Meta
+useHead({
+  title: 'Order Details - Rang Bangladesh',
+  meta: [
+    { name: 'description', content: 'View your order details and invoice.' }
+  ]
+})
+
+const route = useRoute()
+const router = useRouter()
+const { backendUrl } = useApi()
+const { formatPrice } = useCurrency()
+
+// Get order ID from route
+const orderId = computed(() => route.params.orderId as string)
+
+// Order data
+const order = ref<Order | null>(null)
+
+// UI state
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+
+// Get token from localStorage
+const getToken = (): string | null => {
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem('auth_token')
+}
+
+// Fetch order details
+const fetchOrderDetails = async () => {
+  const token = getToken()
+  
+  if (!token) {
+    await router.push('/login')
+    return
+  }
+
+  if (!orderId.value) {
+    error.value = 'Order ID is missing'
+    return
+  }
+
+  isLoading.value = true
+  error.value = null
+
+  try {
+    const response = await $fetch<OrderResponse>(`${backendUrl}/order/${orderId.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+
+    if (response.success && response.data) {
+      order.value = response.data
+    } else {
+      error.value = response.message || 'Failed to load order details.'
+    }
+  } catch (err: any) {
+    console.error('Error fetching order details:', err)
+    error.value = err.data?.message || err.message || 'Failed to load order details.'
+    
+    // If unauthorized, redirect to login
+    if (err.status === 401 || err.statusCode === 401) {
+      await router.push('/login')
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Format date
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return '-'
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  } catch {
+    return dateString
+  }
+}
+
+// Get status class for styling
+const getStatusClass = (status?: string): string => {
+  if (!status) return 'status-badge-gray'
+  
+  const statusLower = status.toLowerCase()
+  if (statusLower.includes('completed') || statusLower.includes('delivered') || statusLower.includes('paid')) {
+    return 'status-badge-green'
+  } else if (statusLower.includes('pending') || statusLower.includes('processing')) {
+    return 'status-badge-yellow'
+  } else if (statusLower.includes('cancelled') || statusLower.includes('failed') || statusLower.includes('payment_incomplete')) {
+    return 'status-badge-red'
+  } else if (statusLower.includes('shipped')) {
+    return 'status-badge-blue'
+  }
+  return 'status-badge-gray'
+}
+
+// Go back to orders page
+const goBack = () => {
+  router.push('/orders')
+}
+
+// Print invoice
+const printInvoice = () => {
+  window.print()
+}
+
+// Fetch order details on mount
+onMounted(() => {
+  fetchOrderDetails()
+})
+</script>
+
+<style scoped>
+.order-details-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.order-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.order-details-content {
+  width: 100%;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #ea580c;
+}
+
+.back-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Loading & Error States */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading-text {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.error-text {
+  color: #dc2626;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.retry-button {
+  padding: 0.5rem 1.5rem;
+  background: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.retry-button:hover {
+  background: #c2410c;
+}
+
+/* Invoice Container */
+.invoice-container {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Invoice Header */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.invoice-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.invoice-number {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-badge-green {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge-yellow {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge-red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badge-blue {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-badge-gray {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Invoice Info Section */
+.invoice-info-section {
+  margin-bottom: 2rem;
+}
+
+.invoice-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.invoice-info-item {
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem 0;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+/* Address Section */
+.address-section {
+  margin-bottom: 2rem;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.address-card {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.address-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.address-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.address-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.address-line {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Items Section */
+.items-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1.5rem 0;
+}
+
+.items-table-container {
+  overflow-x: auto;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table-header.text-right {
+  text-align: right;
+}
+
+.table-row {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-row:hover {
+  background: #f9fafb;
+}
+
+.table-cell {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table-cell.text-right {
+  text-align: right;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.product-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.product-link {
+  font-size: 0.75rem;
+  color: #ea580c;
+  text-decoration: none;
+}
+
+.product-link:hover {
+  text-decoration: underline;
+}
+
+.variant-name {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.quantity-text,
+.price-text,
+.total-text {
+  font-size: 0.875rem;
+  color: #111827;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.notes-text {
+  font-size: 0.875rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Summary Section */
+.summary-section {
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row-total {
+  border-top: 2px solid #111827;
+  border-bottom: 2px solid #111827;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.summary-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.summary-value.discount {
+  color: #dc2626;
+}
+
+.summary-value.paid {
+  color: #059669;
+}
+
+.summary-value.due {
+  color: #ea580c;
+  font-weight: 600;
+}
+
+.summary-label-total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.summary-value-total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Actions Section */
+.actions-section {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.print-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #ea580c;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.print-button:hover {
+  background: #c2410c;
+}
+
+.print-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Print Styles */
+@media print {
+  .order-details-page {
+    background: white;
+  }
+
+  .back-button,
+  .actions-section {
+    display: none;
+  }
+
+  .invoice-container {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .invoice-header {
+    border-bottom: 2px solid #000;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-details-container {
+    padding: 1rem;
+  }
+
+  .invoice-container {
+    padding: 1rem;
+  }
+
+  .invoice-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .items-table {
+    font-size: 0.75rem;
+  }
+
+  .product-cell {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .table-header,
+  .table-cell {
+    padding: 0.5rem;
+  }
+}
+</style>
+

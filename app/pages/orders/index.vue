@@ -295,8 +295,7 @@ const getStatusClass = (status?: string): string => {
 
 // View order details
 const viewOrderDetails = (order: Order) => {
-  // TODO: Implement order details view
-  console.log('View order details:', order)
+  router.push(`/orders/${order.number}`)
 }
 
 // Fetch orders on mount
