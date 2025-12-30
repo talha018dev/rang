@@ -85,25 +85,25 @@
                   </tr>
                 </thead>
                 <tbody class="!bg-white !divide-y !divide-gray-200">
-                  <tr v-for="order in orders" :key="order.id" class="hover:!bg-gray-50">
+                  <tr v-for="order in orders" :key="order.number" class="hover:!bg-gray-50">
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      #{{ order.id }}
+                      #{{ order.number }}
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
-                      {{ formatDate(order.created_at || order.date) }}
+                      {{ formatDate(order.created_at) }}
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap">
                       <span 
                         class="!px-2 !inline-flex !text-xs !leading-5 !font-semibold !rounded-full"
                         :class="getStatusClass(order.status)">
-                        {{ order.status || 'Pending' }}
+                        {{ order.readable_status || order.status || 'Pending' }}
                       </span>
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      {{ formatPrice(order.total || order.amount || 0) }}
+                      {{ formatPrice(order.total || 0) }}
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
-                      {{ order.items_count || order.items?.length || 0 }} item(s)
+                      {{ order.items?.length || 0 }} item(s)
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium">
                       <button 
@@ -134,17 +134,57 @@ import { useCurrency } from '~~/composables/useCurrency'
 import '../profile/profile.css'
 
 // Type definitions
+interface OrderItem {
+  price: number
+  quantity: number
+  product: {
+    name: string
+    slug: string
+    image_url: string
+  }
+  variant: {
+    image_url: string
+    name: string
+  } | null
+  package: any | null
+}
+
+interface OrderAddress {
+  name: string
+  phone: string
+  email: string
+  line_1: string
+  line_2: string | null
+  city: string
+  state: string
+  country: string
+  postal_code: string
+}
+
+interface OrderCustomer {
+  name: string
+  phone: string
+  email: string
+}
+
 interface Order {
-  id: number
-  order_number?: string
-  status?: string
-  total?: number
-  amount?: number
-  items_count?: number
-  items?: any[]
-  created_at?: string
-  date?: string
-  [key: string]: any
+  number: string
+  coupon_discount: number
+  vat: number
+  shipping: number
+  item_total: number
+  total: number
+  paid_amount: number
+  customer_notes: string
+  status: string
+  created_at: string
+  readable_status: string
+  due: number
+  address: OrderAddress
+  customer: OrderCustomer
+  shipping_method: string
+  pickup_location: any | null
+  items: OrderItem[]
 }
 
 interface OrdersResponse {
@@ -241,11 +281,11 @@ const getStatusClass = (status?: string): string => {
   if (!status) return '!bg-gray-100 !text-gray-800'
   
   const statusLower = status.toLowerCase()
-  if (statusLower.includes('completed') || statusLower.includes('delivered')) {
+  if (statusLower.includes('completed') || statusLower.includes('delivered') || statusLower.includes('paid')) {
     return '!bg-green-100 !text-green-800'
   } else if (statusLower.includes('pending') || statusLower.includes('processing')) {
     return '!bg-yellow-100 !text-yellow-800'
-  } else if (statusLower.includes('cancelled') || statusLower.includes('failed')) {
+  } else if (statusLower.includes('cancelled') || statusLower.includes('failed') || statusLower.includes('payment_incomplete')) {
     return '!bg-red-100 !text-red-800'
   } else if (statusLower.includes('shipped')) {
     return '!bg-blue-100 !text-blue-800'
