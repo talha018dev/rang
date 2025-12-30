@@ -1,9 +1,65 @@
 <template>
-  <!-- <section class="hero-section-alt"> -->
-  <section class="hero-banner-container">
+  <section class="hero-banner-container" @mouseenter="pauseRotation" @mouseleave="resumeRotation">
     <section class="hero-section">
-      <NuxtImg v-if="currentBannerUrl" :src="currentBannerUrl" alt="Hero Banner" class="hero-background" format="webp"
-        quality="90" loading="eager" preload />
+      <!-- Slider Container -->
+      <div class="hero-slider-wrapper">
+        <div 
+          class="hero-slider-track" 
+          :style="{ transform: `translateX(-${currentBannerIndex * 100}%)` }"
+        >
+          <div 
+            v-for="(banner, index) in banners" 
+            :key="index"
+            class="hero-slide"
+          >
+            <NuxtImg 
+              :src="getImageUrl(banner)" 
+              :alt="`Hero Banner ${index + 1}`" 
+              class="hero-background" 
+              format="webp"
+              quality="90" 
+              loading="eager" 
+              preload 
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Arrows (only show if multiple banners) -->
+      <div v-if="banners.length > 1" class="hero-slider-controls">
+        <button 
+          class="hero-slider-arrow hero-slider-arrow-prev" 
+          @click="goToPrevious"
+          aria-label="Previous slide"
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button 
+          class="hero-slider-arrow hero-slider-arrow-next" 
+          @click="goToNext"
+          aria-label="Next slide"
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Indicator Dots (only show if multiple banners) -->
+      <div v-if="banners.length > 1" class="hero-slider-indicators">
+        <button
+          v-for="(banner, index) in banners"
+          :key="index"
+          class="hero-slider-indicator"
+          :class="{ 'active': index === currentBannerIndex }"
+          @click="goToSlide(index)"
+          :aria-label="`Go to slide ${index + 1}`"
+        />
+      </div>
+
+      <!-- Hero Content Overlay -->
       <div class="hero-content">
         <div class="hero-overlay">
           <p class="hero-subtitle">{{ ctaData?.subtitle || 'New Collection' }}</p>
@@ -27,13 +83,12 @@
           </button>
         </div>
       </div>
-
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
 import type { HomepageCTA, HomepageResponse } from '../types/homepage';
 
@@ -60,25 +115,17 @@ const getImageUrl = (imagePath: string): string => {
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
 };
 
-// Current banner URL
-const currentBannerUrl = computed(() => {
-  if (banners.value.length > 0) {
-    const banner = banners.value[currentBannerIndex.value];
-    if (banner) {
-      return getImageUrl(banner);
-    }
-  }
-  // return '/landing-image.png'; // Fallback
-});
-
 // Auto-rotate banners every 10 seconds
 let rotationInterval: ReturnType<typeof setInterval> | null = null;
+const isPaused = ref(false);
 
 const startRotation = () => {
   if (banners.value.length <= 1) return; // No need to rotate if only one banner
 
   rotationInterval = setInterval(() => {
-    currentBannerIndex.value = (currentBannerIndex.value + 1) % banners.value.length;
+    if (!isPaused.value) {
+      currentBannerIndex.value = (currentBannerIndex.value + 1) % banners.value.length;
+    }
   }, 10000); // 10 seconds
 };
 
@@ -86,6 +133,40 @@ const stopRotation = () => {
   if (rotationInterval) {
     clearInterval(rotationInterval);
     rotationInterval = null;
+  }
+};
+
+const pauseRotation = () => {
+  isPaused.value = true;
+};
+
+const resumeRotation = () => {
+  isPaused.value = false;
+};
+
+// Navigation functions
+const goToNext = () => {
+  currentBannerIndex.value = (currentBannerIndex.value + 1) % banners.value.length;
+  // Reset rotation timer when manually navigating
+  stopRotation();
+  startRotation();
+};
+
+const goToPrevious = () => {
+  currentBannerIndex.value = currentBannerIndex.value === 0 
+    ? banners.value.length - 1 
+    : currentBannerIndex.value - 1;
+  // Reset rotation timer when manually navigating
+  stopRotation();
+  startRotation();
+};
+
+const goToSlide = (index: number) => {
+  if (index >= 0 && index < banners.value.length) {
+    currentBannerIndex.value = index;
+    // Reset rotation timer when manually navigating
+    stopRotation();
+    startRotation();
   }
 };
 
