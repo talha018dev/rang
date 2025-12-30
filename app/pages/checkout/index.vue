@@ -301,7 +301,7 @@
                   >
                     <option value="">Select Payment Option</option>
                     <option value="cash_on_delivery">Cash on Delivery</option>
-                    <option value="online">Online (via SSLCOMMERZ)</option>
+                    <option value="online">Debit/Credit Card, Bkash</option>
                   </select>
                 </div>
 
