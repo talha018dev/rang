@@ -581,6 +581,24 @@ const {
 
 const { formatPrice, currency, exchangeRate } = useCurrency()
 
+// Helper function to get auth token
+const getAuthToken = (): string | null => {
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem('auth_token')
+}
+
+// Helper function to get headers with auth token if available
+const getAuthHeaders = () => {
+  const headers: Record<string, string> = {
+    'X-Requested-With': 'XMLHttpRequest'
+  }
+  const token = getAuthToken()
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+  return headers
+}
+
 // Format item total price based on current currency
 const formatItemTotal = (item: any) => {
   if (currency.value === 'USD') {
@@ -630,9 +648,7 @@ const fetchShippingMethods = async (addressData?: any) => {
     
     const response = await $fetch<any>(`${backendUrl}/order/shipping-methods`, {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      headers: getAuthHeaders(),
       body: requestBody
     })
     console.log('Shipping Methods API Response:', response)
@@ -1242,9 +1258,7 @@ const validateCoupon = async () => {
     const { backendUrl } = useApi()
     const response = await $fetch<any>(`${backendUrl}/order/validate-coupon`, {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      headers: getAuthHeaders(),
       body: {
         coupon_code: couponCode.value.trim(),
         item_total: totalPrice.value
@@ -1459,9 +1473,7 @@ const handlePlaceOrder = async () => {
     // Make API call to create order
     const response = await $fetch<any>(`${backendUrl}/order`, {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      headers: getAuthHeaders(),
       body: orderData
     })
 
