@@ -174,67 +174,88 @@
 
                 <div class="form-group">
                   <label for="country" class="form-label">Country *</label>
-                  <select
-                    id="country"
-                    v-model="shippingInfo.country"
-                    class="form-input"
-                    required
-                    @change="handleCountryChange"
-                    @blur="handleAddressFieldBlur"
-                  >
-                    <option value="">Select Country</option>
-                    <option
-                      v-for="country in countries"
-                      :key="country"
-                      :value="country"
+                  <div class="select-wrapper">
+                    <select
+                      id="country"
+                      v-model="shippingInfo.country"
+                      class="form-input"
+                      required
+                      @change="handleCountryChange"
+                      @blur="handleAddressFieldBlur"
                     >
-                      {{ country }}
-                    </option>
-                  </select>
+                      <option value="">Select Country</option>
+                      <option
+                        v-for="country in countries"
+                        :key="country"
+                        :value="country"
+                      >
+                        {{ country }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
 
                 <div class="form-group">
                   <label for="stateDistrict" class="form-label">State/District *</label>
-                  <select
-                    id="stateDistrict"
-                    v-model="shippingInfo.stateDistrict"
-                    class="form-input"
-                    :disabled="!shippingInfo.country"
-                    :required="!!shippingInfo.country"
-                    :key="`state-${shippingInfo.country || 'none'}`"
-                    @change="handleStateChange"
-                    @blur="handleAddressFieldBlur"
-                  >
-                    <option value="">Select State/District</option>
-                    <option
-                      v-for="state in availableStates"
-                      :key="state"
-                      :value="state"
+                  <div class="select-wrapper">
+                    <select
+                      id="stateDistrict"
+                      v-model="shippingInfo.stateDistrict"
+                      class="form-input"
+                      :disabled="!shippingInfo.country"
+                      :required="!!shippingInfo.country"
+                      :key="`state-${shippingInfo.country || 'none'}`"
+                      @change="handleStateChange"
+                      @blur="handleAddressFieldBlur"
                     >
-                      {{ state }}
-                    </option>
-                  </select>
+                      <option value="">Select State/District</option>
+                      <option
+                        v-for="state in availableStates"
+                        :key="state"
+                        :value="state"
+                      >
+                        {{ state }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
 
                 <div class="form-group">
                   <label for="city" class="form-label">City *</label>
-                  <select
-                    id="city"
-                    v-model="shippingInfo.city"
-                    class="form-input"
-                    
-                    :key="`city-${shippingInfo.stateDistrict || 'none'}`"
-                    @blur="handleAddressFieldBlur"
-                  >
-                    <option value="">Select City</option>
-                    <option
-                      v-for="city in availableCities"
-                      :key="city"
-                      :value="city"
+                  <div class="select-wrapper">
+                    <select
+                      id="city"
+                      v-model="shippingInfo.city"
+                      class="form-input"
+                      
+                      :key="`city-${shippingInfo.stateDistrict || 'none'}`"
+                      @blur="handleAddressFieldBlur"
                     >
-                      {{ city }}
-                    </option>
-                  </select>
+                      <option value="">Select City</option>
+                      <option
+                        v-for="city in availableCities"
+                        :key="city"
+                        :value="city"
+                      >
+                        {{ city }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
 
                 <div class="form-group">
@@ -252,42 +273,56 @@
                 <!-- Delivery Options -->
                 <div class="form-group">
                   <label for="shippingMethod" class="form-label">Delivery Options *</label>
-                  <select
-                    id="shippingMethod"
-                    v-model="shippingMethod"
-                    class="form-input"
-                    required
-                    :disabled="isLoadingShippingMethods"
-                  >
-                    <option value="">Select Delivery Option</option>
-                    <option
-                      v-for="method in shippingMethods"
-                      :key="method.slug"
-                      :value="method.slug"
+                  <div class="select-wrapper">
+                    <select
+                      id="shippingMethod"
+                      v-model="shippingMethod"
+                      class="form-input"
+                      required
+                      :disabled="isLoadingShippingMethods"
                     >
-                      {{ method.slug === 'store_pickup' ? 'Outlet' : method.name }}
-                    </option>
-                  </select>
+                      <option value="">Select Delivery Option</option>
+                      <option
+                        v-for="method in shippingMethods"
+                        :key="method.slug"
+                        :value="method.slug"
+                      >
+                        {{ method.slug === 'store_pickup' ? 'Outlet' : method.name }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
 
                 <!-- Outlet Selection (shown when Outlet is selected) -->
                 <div v-if="shippingMethod === 'store_pickup'" class="form-group">
                   <label for="selectedOutlet" class="form-label">Select Outlet *</label>
-                  <select
-                    id="selectedOutlet"
-                    v-model="selectedOutlet"
-                    class="form-input"
-                    :required="shippingMethod === 'store_pickup'"
-                  >
-                    <option value="">Select Outlet</option>
-                    <option 
-                      v-for="location in locations" 
-                      :key="location.id || location.name" 
-                      :value="location.id"
+                  <div class="select-wrapper">
+                    <select
+                      id="selectedOutlet"
+                      v-model="selectedOutlet"
+                      class="form-input"
+                      :required="shippingMethod === 'store_pickup'"
                     >
-                      {{ location.name }}
-                    </option>
-                  </select>
+                      <option value="">Select Outlet</option>
+                      <option 
+                        v-for="location in locations" 
+                        :key="location.id || location.name" 
+                        :value="location.id"
+                      >
+                        {{ location.name }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                   <!-- Display selected outlet address -->
                   <div v-if="selectedOutlet && selectedOutletLocation" class="outlet-address">
                     <p class="outlet-address-label">Outlet Address:</p>
@@ -299,16 +334,23 @@
                 <!-- Payment Option -->
                 <div class="form-group">
                   <label for="paymentMethod" class="form-label">Payment Option *</label>
-                  <select
-                    id="paymentMethod"
-                    v-model="paymentMethod"
-                    class="form-input"
-                    required
-                  >
-                    <option value="">Select Payment Option</option>
-                    <option value="cash_on_delivery">Cash on Delivery</option>
-                    <option value="online">Debit/Credit Card, Bkash</option>
-                  </select>
+                  <div class="select-wrapper">
+                    <select
+                      id="paymentMethod"
+                      v-model="paymentMethod"
+                      class="form-input"
+                      required
+                    >
+                      <option value="">Select Payment Option</option>
+                      <option value="cash_on_delivery">Cash on Delivery</option>
+                      <option value="online">Debit/Credit Card, Bkash</option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
 
                 <!-- Gift Package Checkbox -->
