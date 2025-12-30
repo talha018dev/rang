@@ -273,7 +273,7 @@
                                 <span class="size-radio-label">{{ size }}</span>
                             </label>
                         </div>
-                        <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                        <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                     </div>
 
                     <!-- Color Selection -->
@@ -424,7 +424,7 @@
                             <span class="size-radio-label">{{ size }}</span>
                         </label>
                     </div>
-                    <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                    <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                 </div>
 
                 <!-- Color Selection -->
