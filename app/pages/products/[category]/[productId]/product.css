@@ -612,10 +612,16 @@
   min-width: 320px;
 }
 
-.buy-now-btn:hover {
+.buy-now-btn:hover:not(:disabled) {
   background: #c2410c;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+}
+
+.buy-now-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .add-to-basket-btn {
@@ -631,11 +637,17 @@
   min-width: 320px;
 }
 
-.add-to-basket-btn:hover {
+.add-to-basket-btn:hover:not(:disabled) {
   background: #333;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.add-to-basket-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media (max-width: 1200px) {

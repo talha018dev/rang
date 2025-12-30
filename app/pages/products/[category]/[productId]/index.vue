@@ -301,13 +301,13 @@
                         <button class="quantity-btn minus" @click="decreaseQuantity"
                             :disabled="quantity <= 1">-</button>
                         <span class="quantity-text">Quantity: {{ quantity }}</span>
-                        <button class="quantity-btn plus" @click="increaseQuantity">+</button>
+                        <button class="quantity-btn plus" @click="increaseQuantity" :disabled="quantity >= 20">+</button>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="buy-now-btn" @click="handleBuyNow">Buy Now</button>
-                        <button class="add-to-basket-btn" @click="handleAddToCart">Add to Basket</button>
+                        <button class="buy-now-btn" @click="handleBuyNow" :disabled="quantity >= 20">Buy Now</button>
+                        <button class="add-to-basket-btn" @click="handleAddToCart" :disabled="quantity >= 20">Add to Basket</button>
                     </div>
                 </div>
             </div>
@@ -451,13 +451,13 @@
                 <div class="quantity-selector">
                     <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
                     <span class="quantity-text">Quantity: {{ quantity }}</span>
-                    <button class="quantity-btn plus" @click="increaseQuantity">+</button>
+                    <button class="quantity-btn plus" @click="increaseQuantity" :disabled="quantity >= 20">+</button>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <button class="buy-now-btn" @click="handleBuyNow">Buy Now</button>
-                    <button class="add-to-basket-btn" @click="handleAddToCart">Add to Basket</button>
+                    <button class="buy-now-btn" @click="handleBuyNow" :disabled="quantity >= 20">Buy Now</button>
+                    <button class="add-to-basket-btn" @click="handleAddToCart" :disabled="quantity >= 20">Add to Basket</button>
                 </div>
             </div>
 
@@ -1311,7 +1311,9 @@ const filteredAndSortedReviews = computed(() => {
 
 // Methods
 const increaseQuantity = () => {
-    quantity.value++
+    if (quantity.value < 20) {
+        quantity.value++
+    }
 }
 
 const decreaseQuantity = () => {
