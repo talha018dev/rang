@@ -127,6 +127,12 @@
   transition: background-color 0.3s ease-in-out;
 }
 
+@media (max-width: 768px) {
+  .header {
+    backdrop-filter: none !important;
+  }
+}
+
 /* Ensure transparent header when not scrolled */
 .header:not(.header-scrolled) {
   background-color: transparent !important;
