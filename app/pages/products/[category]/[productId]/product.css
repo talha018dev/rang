@@ -477,8 +477,12 @@
   text-decoration: underline;
 }
 
-/* Size Dropdown for Mobile */
+/* Size Dropdown - Hidden on all devices (using button selection instead) */
 .size-dropdown {
+  display: none;
+}
+
+.size-dropdown-container {
   display: none;
 }
 
@@ -2249,49 +2253,22 @@
     line-height: 100%;
     letter-spacing: 0%;
   }
+  /* Keep button-style selection visible on mobile */
   .size-radio-group {
-    display: none;
-  }
-  .size-dropdown-container {
     display: flex;
-    align-items: flex-end;
-    gap: 10px;
+  }
+  
+  .size-dropdown-container {
+    display: none;
   }
 
   .size-dropdown {
-    text-align: center;
-    display: inline-block;
-    /* width: 100%; */
-    width: fit-content;
-    padding: 12px 20px;
-    border: 1px solid black;
-    background: white;
-    font-family: Poppins;
-    font-weight: 600;
-    font-size: 1em;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    font-family: Poppins;
-    font-weight: 600;
-    font-style: SemiBold;
-    font-size: 1.25em;
-    line-height: 100%;
-    letter-spacing: 0%;
+    display: none;
   }
+  
   .size-guide-link {
-    margin-bottom: 4px;
-  }
-
-  .size-dropdown:focus {
-    outline: none;
-    border-color: #e18719;
-    box-shadow: 0 0 0 2px rgba(225, 135, 25, 0.2);
-  }
-
-  .size-dropdown:hover {
-    border-color: #e18719;
+    margin-top: 10px;
+    display: block;
   }
   .quantity-selector {
     width: 100%;

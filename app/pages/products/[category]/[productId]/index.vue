@@ -273,16 +273,7 @@
                                 <span class="size-radio-label">{{ size }}</span>
                             </label>
                         </div>
-                        <div class="size-dropdown-container">
-                            <select v-model="selectedSize" class="size-dropdown">
-                                <option value="" disabled>Select
-                                </option>
-                                <option v-for="size in availableSizes" :key="size" :value="size">
-                                    {{ size }}
-                                </option>
-                            </select>
-                            <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
-                        </div>
+                        <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                     </div>
 
                     <!-- Color Selection -->
@@ -433,16 +424,7 @@
                             <span class="size-radio-label">{{ size }}</span>
                         </label>
                     </div>
-                    <div class="size-dropdown-container">
-                        <select v-model="selectedSize" class="size-dropdown">
-                            <option value="" disabled>Select
-                            </option>
-                            <option v-for="size in availableSizes" :key="size" :value="size">
-                                {{ size }}
-                            </option>
-                        </select>
-                        <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
-                    </div>
+                    <NuxtLink to="#" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                 </div>
 
                 <!-- Color Selection -->
