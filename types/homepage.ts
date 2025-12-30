@@ -162,3 +162,25 @@ export interface BrandResponse {
   queries: BrandQuery[]
 }
 
+// Settings API types
+export interface MenuItem {
+  id: number
+  title: string
+  link: string
+  order: number
+  icon: string | null
+  new_tab: number
+  children: MenuItem[]
+}
+
+export interface SettingsData {
+  menu?: MenuItem[]
+  [key: string]: any
+}
+
+export interface SettingsResponse {
+  success: boolean
+  message: string
+  data: SettingsData
+}
+

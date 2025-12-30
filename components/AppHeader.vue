@@ -15,142 +15,75 @@
             Home
           </NuxtLink>
           
-          <!-- Women Dropdown -->
-          <div class="nav-dropdown" @mouseenter="handleWomenMouseEnter" @mouseleave="handleWomenMouseLeave">
-            <NuxtLink to="/products/women" :class="getNavLinkClass(isWomenActive)" class="nav-link-with-dropdown">
-              Women
-              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </NuxtLink>
-            <div v-if="showWomenDropdown && womenCategory && womenCategory.children && womenCategory.children.length > 0" class="nav-dropdown-menu">
+          <!-- Dynamic Menu Items from Settings API -->
+          <template v-for="(item, index) in sortedMenuItems" :key="item.id">
+            <!-- Menu Item with Dropdown -->
+            <div v-if="item.children && item.children.length > 0" class="nav-dropdown" 
+                 @mouseenter="handleMenuMouseEnter(item, index)" 
+                 @mouseleave="handleMenuMouseLeave(item, index)">
               <NuxtLink 
-                v-for="child in womenCategory.children" 
-                :key="child.slug"
-                :to="`/products/${child.slug}`"
-                class="nav-dropdown-item"
-                @click="showWomenDropdown = false">
-                {{ child.name?.replace(/&amp;/g, '&') }}
-                <span class="nav-dropdown-count">({{ child.products_count }})</span>
+                v-if="item.link.startsWith('/') || item.link === '#'"
+                :to="item.link === '#' ? '#' : item.link" 
+                :class="getNavLinkClass(isMenuItemActive(item))" 
+                class="nav-link-with-dropdown">
+                {{ item.title }}
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
               </NuxtLink>
+              <a 
+                v-else
+                :href="item.link"
+                :target="item.new_tab === 1 ? '_blank' : '_self'"
+                :rel="item.new_tab === 1 ? 'noopener noreferrer' : ''"
+                :class="getNavLinkClass(false)" 
+                class="nav-link-with-dropdown">
+                {{ item.title }}
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </a>
+              <div v-if="showDropdowns[item.id.toString()] && item.children && item.children.length > 0" class="nav-dropdown-menu">
+                <template v-for="child in item.children.sort((a, b) => a.order - b.order)" :key="child.id">
+                  <NuxtLink 
+                    v-if="child.link.startsWith('/') || child.link === '#'"
+                    :to="child.link === '#' ? '#' : child.link"
+                    class="nav-dropdown-item"
+                    @click="showDropdowns[item.id.toString()] = false">
+                    {{ child.title?.replace(/&amp;/g, '&') }}
+                  </NuxtLink>
+                  <a 
+                    v-else
+                    :href="child.link"
+                    :target="child.new_tab === 1 ? '_blank' : '_self'"
+                    :rel="child.new_tab === 1 ? 'noopener noreferrer' : ''"
+                    class="nav-dropdown-item"
+                    @click="showDropdowns[item.id.toString()] = false">
+                    {{ child.title?.replace(/&amp;/g, '&') }}
+                  </a>
+                </template>
+              </div>
             </div>
-          </div>
-
-          <!-- Men Dropdown -->
-          <div class="nav-dropdown" @mouseenter="handleMenMouseEnter" @mouseleave="handleMenMouseLeave">
-            <NuxtLink to="/products/men" :class="getNavLinkClass(isMenActive)" class="nav-link-with-dropdown">
-              Men
-              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
+            <!-- Simple Menu Item (no dropdown) -->
+            <NuxtLink 
+              v-else-if="item.link.startsWith('/') || item.link === '#'"
+              :to="item.link === '#' ? '#' : item.link" 
+              :class="getNavLinkClass(isMenuItemActive(item))">
+              {{ item.title }}
             </NuxtLink>
-            <div v-if="showMenDropdown && menCategory && menCategory.children && menCategory.children.length > 0" class="nav-dropdown-menu">
-              <NuxtLink 
-                v-for="child in menCategory.children" 
-                :key="child.slug"
-                :to="`/products/${child.slug}`"
-                class="nav-dropdown-item"
-                @click="showMenDropdown = false">
-                {{ child.name?.replace(/&amp;/g, '&') }}
-                <span class="nav-dropdown-count">({{ child.products_count }})</span>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Kids Dropdown -->
-          <div class="nav-dropdown" @mouseenter="handleKidsMouseEnter" @mouseleave="handleKidsMouseLeave">
-            <NuxtLink to="/products/kids" :class="getNavLinkClass(isKidsActive)" class="nav-link-with-dropdown">
-              Kids
-              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </NuxtLink>
-            <div v-if="showKidsDropdown && kidsCategory && kidsCategory.children && kidsCategory.children.length > 0" class="nav-dropdown-menu">
-              <NuxtLink 
-                v-for="child in kidsCategory.children" 
-                :key="child.slug"
-                :to="`/products/${child.slug}`"
-                class="nav-dropdown-item"
-                @click="showKidsDropdown = false">
-                {{ child.name?.replace(/&amp;/g, '&') }}
-                <span class="nav-dropdown-count">({{ child.products_count }})</span>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Jewelry Dropdown -->
-          <div class="nav-dropdown" @mouseenter="handleJewelryMouseEnter" @mouseleave="handleJewelryMouseLeave">
-            <NuxtLink to="/products/jewelry" :class="getNavLinkClass(isJewelryActive)" class="nav-link-with-dropdown">
-              Jewelry
-              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </NuxtLink>
-            <div v-if="showJewelryDropdown && jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0" class="nav-dropdown-menu">
-              <NuxtLink 
-                v-for="child in jewelryCategory.children" 
-                :key="child.slug"
-                :to="`/products/${child.slug}`"
-                class="nav-dropdown-item"
-                @click="showJewelryDropdown = false">
-                {{ child.name?.replace(/&amp;/g, '&') }}
-                <span class="nav-dropdown-count">({{ child.products_count }})</span>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Collections Dropdown -->
-          <div class="nav-dropdown" @mouseenter="handleCollectionsMouseEnter" @mouseleave="handleCollectionsMouseLeave">
-            <NuxtLink to="/collections" :class="getNavLinkClass(isCollectionsActive)" class="nav-link-with-dropdown">
-              Collections
-              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </NuxtLink>
-            <div v-if="showCollectionsDropdown" class="nav-dropdown-menu">
-              <NuxtLink 
-                to="/collections/family"
-                class="nav-dropdown-item"
-                @click="showCollectionsDropdown = false">
-                Family Collection
-              </NuxtLink>
-              <NuxtLink 
-                to="/collections/matching"
-                class="nav-dropdown-item"
-                @click="showCollectionsDropdown = false">
-                Matching Collection
-              </NuxtLink>
-              <NuxtLink 
-                to="/collections/event"
-                class="nav-dropdown-item"
-                @click="showCollectionsDropdown = false">
-                Event Collection
-              </NuxtLink>
-              <NuxtLink 
-                to="/collections/others"
-                class="nav-dropdown-item"
-                @click="showCollectionsDropdown = false">
-                Others
-              </NuxtLink>
-            </div>
-          </div>
-
-          <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)">
-            Accessories
-          </NuxtLink>
-          <NuxtLink to="/products/chobir-bazar" :class="getNavLinkClass(isChobirBazarActive)">
-            Chobir Bazar
-          </NuxtLink>
+            <a 
+              v-else
+              :href="item.link"
+              :target="item.new_tab === 1 ? '_blank' : '_self'"
+              :rel="item.new_tab === 1 ? 'noopener noreferrer' : ''"
+              :class="getNavLinkClass(false)">
+              {{ item.title }}
+            </a>
+          </template>
         </nav>
 
         <!-- Desktop Header Actions -->
@@ -309,197 +242,80 @@
               Home
             </NuxtLink>
             
-            <!-- Women Mobile Dropdown -->
-            <div class="mobile-nav-dropdown">
-              <div class="mobile-nav-dropdown-header">
-                <NuxtLink 
-                  to="/products/women" 
-                  :class="getNavLinkClass(isWomenActive)" 
-                  class="mobile-nav-link"
-                  @click="closeDrawer">
-                  Women
-                </NuxtLink>
-                <button 
-                  v-if="womenCategory && womenCategory.children && womenCategory.children.length > 0"
-                  class="mobile-nav-dropdown-toggle"
-                  @click.stop="showMobileWomenDropdown = !showMobileWomenDropdown">
-                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileWomenDropdown }">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
+            <!-- Dynamic Mobile Menu Items from Settings API -->
+            <template v-for="(item, index) in sortedMenuItems" :key="item.id">
+              <!-- Mobile Menu Item with Dropdown -->
+              <div v-if="item.children && item.children.length > 0" class="mobile-nav-dropdown">
+                <div class="mobile-nav-dropdown-header">
+                  <NuxtLink 
+                    v-if="item.link.startsWith('/') || item.link === '#'"
+                    :to="item.link === '#' ? '#' : item.link" 
+                    :class="getNavLinkClass(isMenuItemActive(item))" 
+                    class="mobile-nav-link"
+                    @click="closeDrawer">
+                    {{ item.title }}
+                  </NuxtLink>
+                  <a 
+                    v-else
+                    :href="item.link"
+                    :target="item.new_tab === 1 ? '_blank' : '_self'"
+                    :rel="item.new_tab === 1 ? 'noopener noreferrer' : ''"
+                    :class="getNavLinkClass(false)" 
+                    class="mobile-nav-link"
+                    @click="closeDrawer">
+                    {{ item.title }}
+                  </a>
+                  <button 
+                    class="mobile-nav-dropdown-toggle"
+                    @click.stop="toggleMobileMenuDropdown(item, index)">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" 
+                         :class="{ 'rotate-180': showMobileDropdowns[item.id.toString()] }">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+                <div v-if="showMobileDropdowns[item.id.toString()] && item.children && item.children.length > 0" 
+                     class="mobile-nav-dropdown-menu">
+                  <template v-for="child in item.children.sort((a, b) => a.order - b.order)" :key="child.id">
+                    <NuxtLink 
+                      v-if="child.link.startsWith('/') || child.link === '#'"
+                      :to="child.link === '#' ? '#' : child.link"
+                      class="mobile-nav-dropdown-item"
+                      @click="closeDrawer">
+                      {{ child.title?.replace(/&amp;/g, '&') }}
+                    </NuxtLink>
+                    <a 
+                      v-else
+                      :href="child.link"
+                      :target="child.new_tab === 1 ? '_blank' : '_self'"
+                      :rel="child.new_tab === 1 ? 'noopener noreferrer' : ''"
+                      class="mobile-nav-dropdown-item"
+                      @click="closeDrawer">
+                      {{ child.title?.replace(/&amp;/g, '&') }}
+                    </a>
+                  </template>
+                </div>
               </div>
-              <div v-if="showMobileWomenDropdown && womenCategory && womenCategory.children && womenCategory.children.length > 0" class="mobile-nav-dropdown-menu">
-                <NuxtLink 
-                  v-for="child in womenCategory.children" 
-                  :key="child.slug"
-                  :to="`/products/${child.slug}`"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  {{ child.name?.replace(/&amp;/g, '&') }}
-                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
-                </NuxtLink>
-              </div>
-            </div>
-
-            <!-- Men Mobile Dropdown -->
-            <div class="mobile-nav-dropdown">
-              <div class="mobile-nav-dropdown-header">
-                <NuxtLink 
-                  to="/products/men" 
-                  :class="getNavLinkClass(isMenActive)" 
-                  class="mobile-nav-link"
-                  @click="closeDrawer">
-                  Men
-                </NuxtLink>
-                <button 
-                  v-if="menCategory && menCategory.children && menCategory.children.length > 0"
-                  class="mobile-nav-dropdown-toggle"
-                  @click.stop="showMobileMenDropdown = !showMobileMenDropdown">
-                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileMenDropdown }">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-              <div v-if="showMobileMenDropdown && menCategory && menCategory.children && menCategory.children.length > 0" class="mobile-nav-dropdown-menu">
-                <NuxtLink 
-                  v-for="child in menCategory.children" 
-                  :key="child.slug"
-                  :to="`/products/${child.slug}`"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  {{ child.name?.replace(/&amp;/g, '&') }}
-                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
-                </NuxtLink>
-              </div>
-            </div>
-
-            <!-- Kids Mobile Dropdown -->
-            <div class="mobile-nav-dropdown">
-              <div class="mobile-nav-dropdown-header">
-                <NuxtLink 
-                  to="/products/kids" 
-                  :class="getNavLinkClass(isKidsActive)" 
-                  class="mobile-nav-link"
-                  @click="closeDrawer">
-                  Kids
-                </NuxtLink>
-                <button 
-                  v-if="kidsCategory && kidsCategory.children && kidsCategory.children.length > 0"
-                  class="mobile-nav-dropdown-toggle"
-                  @click.stop="showMobileKidsDropdown = !showMobileKidsDropdown">
-                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileKidsDropdown }">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-              <div v-if="showMobileKidsDropdown && kidsCategory && kidsCategory.children && kidsCategory.children.length > 0" class="mobile-nav-dropdown-menu">
-                <NuxtLink 
-                  v-for="child in kidsCategory.children" 
-                  :key="child.slug"
-                  :to="`/products/${child.slug}`"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  {{ child.name?.replace(/&amp;/g, '&') }}
-                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
-                </NuxtLink>
-              </div>
-            </div>
-
-            <!-- Jewelry Mobile Dropdown -->
-            <div class="mobile-nav-dropdown">
-              <div class="mobile-nav-dropdown-header">
-                <NuxtLink 
-                  to="/products/jewelry" 
-                  :class="getNavLinkClass(isJewelryActive)" 
-                  class="mobile-nav-link"
-                  @click="closeDrawer">
-                  Jewelry
-                </NuxtLink>
-                <button 
-                  v-if="jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0"
-                  class="mobile-nav-dropdown-toggle"
-                  @click.stop="showMobileJewelryDropdown = !showMobileJewelryDropdown">
-                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileJewelryDropdown }">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-              <div v-if="showMobileJewelryDropdown && jewelryCategory && jewelryCategory.children && jewelryCategory.children.length > 0" class="mobile-nav-dropdown-menu">
-                <NuxtLink 
-                  v-for="child in jewelryCategory.children" 
-                  :key="child.slug"
-                  :to="`/products/${child.slug}`"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  {{ child.name?.replace(/&amp;/g, '&') }}
-                  <span class="nav-dropdown-count">({{ child.products_count }})</span>
-                </NuxtLink>
-              </div>
-            </div>
-
-            <!-- Collections Mobile Dropdown -->
-            <div class="mobile-nav-dropdown">
-              <div class="mobile-nav-dropdown-header">
-                <NuxtLink 
-                  to="/collections" 
-                  :class="getNavLinkClass(isCollectionsActive)" 
-                  class="mobile-nav-link"
-                  @click="closeDrawer">
-                  Collections
-                </NuxtLink>
-                <button 
-                  class="mobile-nav-dropdown-toggle"
-                  @click.stop="showMobileCollectionsDropdown = !showMobileCollectionsDropdown">
-                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" :class="{ 'rotate-180': showMobileCollectionsDropdown }">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-              <div v-if="showMobileCollectionsDropdown" class="mobile-nav-dropdown-menu">
-                <NuxtLink 
-                  to="/collections/family"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  Family Collection
-                </NuxtLink>
-                <NuxtLink 
-                  to="/collections/matching"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  Matching Collection
-                </NuxtLink>
-                <NuxtLink 
-                  to="/collections/event"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  Event Collection
-                </NuxtLink>
-                <NuxtLink 
-                  to="/collections/others"
-                  class="mobile-nav-dropdown-item"
-                  @click="closeDrawer">
-                  Others
-                </NuxtLink>
-              </div>
-            </div>
-
-            <NuxtLink to="/products/accessories" :class="getNavLinkClass(isAccessoriesActive)" @click="closeDrawer">
-              Accessories
-            </NuxtLink>
-
-            <NuxtLink to="/products/chobir-bazar" :class="getNavLinkClass(isChobirBazarActive)" @click="closeDrawer">
-              Chobir Bazar
-            </NuxtLink>
+              <!-- Simple Mobile Menu Item (no dropdown) -->
+              <NuxtLink 
+                v-else-if="item.link.startsWith('/') || item.link === '#'"
+                :to="item.link === '#' ? '#' : item.link" 
+                :class="getNavLinkClass(isMenuItemActive(item))" 
+                @click="closeDrawer">
+                {{ item.title }}
+              </NuxtLink>
+              <a 
+                v-else
+                :href="item.link"
+                :target="item.new_tab === 1 ? '_blank' : '_self'"
+                :rel="item.new_tab === 1 ? 'noopener noreferrer' : ''"
+                :class="getNavLinkClass(false)" 
+                @click="closeDrawer">
+                {{ item.title }}
+              </a>
+            </template>
           </div>
 
           <!-- Mobile Search Section -->
@@ -658,7 +474,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
-import type { Category, CategoryResponse, Product, ProductResponse } from '../types/homepage';
+import type { Category, CategoryResponse, MenuItem, Product, ProductResponse, SettingsResponse } from '../types/homepage';
 
 const route = useRoute()
 const router = useRouter()
@@ -796,12 +612,23 @@ onMounted(() => {
       showKidsDropdown.value = false
       showJewelryDropdown.value = false
       showCollectionsDropdown.value = false
+      // Close all dynamic dropdowns
+      Object.keys(showDropdowns.value).forEach(key => {
+        showDropdowns.value[key] = false
+      })
     }
   })
 })
 
 // Categories state
 const categories = ref<Category[]>([])
+const menuItems = ref<MenuItem[]>([])
+
+// Dropdown states - now dynamic based on menu items
+const showDropdowns = ref<Record<string, boolean>>({})
+const showMobileDropdowns = ref<Record<string, boolean>>({})
+
+// Legacy dropdown states (for backward compatibility if needed)
 const showWomenDropdown = ref(false)
 const showMenDropdown = ref(false)
 const showKidsDropdown = ref(false)
@@ -896,6 +723,72 @@ const fetchCategories = async () => {
   }
 }
 
+// Fetch settings and menu
+const fetchSettings = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<SettingsResponse>(`${backendUrl}/settings`)
+    console.log('Settings API Response:', response)
+    
+    if (response.success && response.data && response.data.menu) {
+      menuItems.value = response.data.menu || []
+      // Initialize dropdown states for each menu item
+      menuItems.value.forEach((item) => {
+        if (item.children && item.children.length > 0) {
+          const key = item.id.toString()
+          showDropdowns.value[key] = false
+          showMobileDropdowns.value[key] = false
+        }
+      })
+    }
+  } catch (error) {
+    console.error('Error fetching settings:', error)
+  }
+}
+
+// Computed property for sorted menu items (by order)
+const sortedMenuItems = computed(() => {
+  if (menuItems.value.length === 0) return []
+  return [...menuItems.value].sort((a, b) => a.order - b.order)
+})
+
+// Helper function to check if a menu item is active
+const isMenuItemActive = (item: MenuItem): boolean => {
+  const currentPath = route.path
+  // Skip check for external links (starting with http/https or #)
+  if (item.link.startsWith('http') || item.link === '#') {
+    return false
+  }
+  if (item.link === currentPath || currentPath.startsWith(item.link + '/')) {
+    return true
+  }
+  // Check if any child is active
+  if (item.children && item.children.length > 0) {
+    return item.children.some(child => isMenuItemActive(child))
+  }
+  return false
+}
+
+// Dropdown handlers for dynamic menu items
+const handleMenuMouseEnter = (item: MenuItem, index: number) => {
+  const key = item.id.toString()
+  if (item.children && item.children.length > 0) {
+    showDropdowns.value[key] = true
+  }
+}
+
+const handleMenuMouseLeave = (item: MenuItem, index: number) => {
+  const key = item.id.toString()
+  setTimeout(() => {
+    showDropdowns.value[key] = false
+  }, 150)
+}
+
+const toggleMobileMenuDropdown = (item: MenuItem, index: number) => {
+  const key = item.id.toString()
+  showMobileDropdowns.value[key] = !showMobileDropdowns.value[key]
+}
+
 // Reactive state for scroll position
 const isScrolled = ref(false)
 
@@ -918,6 +811,10 @@ const closeDrawer = () => {
   // Close all mobile category dropdowns
   showMobileWomenDropdown.value = false
   showMobileMenDropdown.value = false
+  // Close all dynamic mobile dropdowns
+  Object.keys(showMobileDropdowns.value).forEach(key => {
+    showMobileDropdowns.value[key] = false
+  })
 }
 
 // Handle logout
@@ -1032,8 +929,9 @@ onMounted(async () => {
   })
   // Initialize scroll state on mount
   handleScroll()
-  // Fetch categories
+  // Fetch categories and settings
   fetchCategories()
+  fetchSettings()
 })
 
 // Remove scroll event listener on unmount
