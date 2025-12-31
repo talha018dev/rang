@@ -324,7 +324,7 @@
                             <!-- Checkbox -->
                             <div class="item-checkbox">
                                 <input type="checkbox" :id="`matching-${index}`" v-model="item.checked"
-                                    class="checkbox-input" />
+                                    class="checkbox-input" disabled />
                                 <label :for="`matching-${index}`" class="checkbox-label"></label>
                             </div>
 
@@ -348,21 +348,8 @@
                                         </option>
                                     </select>
                                 </div>
-
-                                <p class="item-price">{{ formatPrice(item.price, item.price_usd) }}</p>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Matching Series Summary -->
-                    <div class="matching-series-summary">
-                        <div class="total-price">
-                            <span class="total-label">Total price :</span>
-                            <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
-                        </div>
-                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
-                            Add to cart
-                        </button>
                     </div>
                 </div>
                 <section v-if="isMobile">
@@ -374,7 +361,7 @@
                         <div class=" w-full flex items-center gap-2">
                             <div class="item-checkbox">
                                 <input type="checkbox" :id="`mobile-matching-${item.name}`" v-model="item.checked"
-                                    class="checkbox-input" />
+                                    class="checkbox-input" disabled />
                                 <label :for="`mobile-matching-${item.name}`" class="checkbox-label"></label>
                             </div>
 
@@ -396,22 +383,9 @@
                                         </option>
                                     </select>
                                 </div>
-
-                                <p class="item-price">{{ formatPrice(item.price, item.price_usd) }}</p>
                             </div>
                         </div>
                     </UCarousel>
-
-                    <!-- Matching Series Summary -->
-                    <div class="matching-series-summary">
-                        <div class="total-price">
-                            <span class="total-label">Total price :</span>
-                            <span class="total-amount">{{ matchingSeriesTotalPrice }}</span>
-                        </div>
-                        <button class="add-to-cart-btn" @click="addMatchingSeriesToCart">
-                            Add to cart
-                        </button>
-                    </div>
                 </section>
             </div>
             <div class="product-details-p-2-mobile" v-if="isMobile">
@@ -1014,7 +988,7 @@ watch(product, (newProduct) => {
 
     return {
       id: product.id,
-      checked: index === 0, // First item checked by default
+      checked: true, // All items checked by default and disabled
       image: product.image,
       name: product.name,
       size: defaultSize,
