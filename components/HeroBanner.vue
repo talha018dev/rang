@@ -59,11 +59,11 @@
       </div>
 
       <!-- Hero Content Overlay -->
-      <div class="hero-content">
+      <div v-if="showHeroOverlay" class="hero-content">
         <div class="hero-overlay">
-          <p class="hero-subtitle">{{ ctaData?.subtitle || 'New Collection' }}</p>
-          <div class="hero-title dm-serif">
-            {{ ctaData?.title  }}
+          <p v-if="ctaData?.subtitle" class="hero-subtitle">{{ ctaData.subtitle }}</p>
+          <div v-if="ctaData?.title" class="hero-title dm-serif">
+            {{ ctaData.title }}
           </div>
           <ShopNowCTA :text="ctaData?.button_text" :url="ctaData?.button_url" />
         </div>
@@ -93,6 +93,11 @@ const props = withDefaults(defineProps<Props>(), {
 const banners = computed(() => props.banners || []);
 const ctaData = computed(() => props.cta || null);
 const currentBannerIndex = ref(0);
+
+// Check if hero overlay should be shown
+const showHeroOverlay = computed(() => {
+  return ctaData.value?.title || ctaData.value?.subtitle;
+});
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
