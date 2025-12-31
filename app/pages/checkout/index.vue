@@ -685,6 +685,23 @@ const fetchLocations = async () => {
   }
 }
 
+// Fetch settings from API
+const fetchSettings = async () => {
+  isLoadingSettings.value = true
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/settings`)
+    
+    if (response.success && response.data) {
+      settingsData.value = response.data
+    }
+  } catch (error) {
+    console.error('Error fetching settings:', error)
+  } finally {
+    isLoadingSettings.value = false
+  }
+}
+
 // Fetch shipping methods from API with address data
 const fetchShippingMethods = async (addressData?: any) => {
   isLoadingShippingMethods.value = true
@@ -832,6 +849,9 @@ onMounted(async () => {
   
   // Fetch shipping methods on mount
   fetchShippingMethods()
+  
+  // Fetch settings on mount
+  fetchSettings()
   
   // Force checkbox styles to be applied after navigation
   await nextTick()
@@ -1082,6 +1102,10 @@ const orderNotes = ref('')
 const isPlacingOrder = ref(false)
 const isGiftPackage = ref(false)
 
+// Settings data
+const settingsData = ref<any>(null)
+const isLoadingSettings = ref(false)
+
 // Watch shipping method to reset outlet selection when changed
 watch(shippingMethod, (newValue) => {
   if (newValue !== 'store_pickup') {
@@ -1151,7 +1175,12 @@ const shippingCost = computed(() => {
 
 // Gift package charge in BDT (base currency)
 const giftPackageChargeBDT = computed(() => {
-  return isGiftPackage.value ? 50 : 0 // 50 BDT for gift package (can be adjusted)
+  if (!isGiftPackage.value) {
+    return 0
+  }
+  // Use gift_wrap_cost from settings API if available, otherwise default to 50
+  const giftWrapCost = settingsData.value?.gift_wrap_cost
+  return giftWrapCost ? parseFloat(giftWrapCost) : 50
 })
 
 // Gift package charge in current currency
