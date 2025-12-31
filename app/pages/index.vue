@@ -105,39 +105,58 @@
       <!-- <AllCategories /> -->
       <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
       <NewArrival :products="newArrivalProducts" />
-      <ExploreRang :items="homepageData?.dynamic_sections?.explore_rangbd || []" />
-      <ShopByCategory :items="homepageData?.dynamic_sections?.shop_by_category || []" />
-      <TimelessSixYards />
-      <ShopByBrand />
-      <ShopByTheme :items="homepageData?.dynamic_sections?.shop_by_theme || []" />
-      <SaleOffer 
-        :products="saleOfferProducts" 
-        :section-title="saleOfferSectionTitleForSaleOffer"
-        :deals-of-the-month-products="dealsOfTheMonthProducts"
-        :deals-of-the-month-title="saleOfferSectionTitle"
+      <LazyWrapper 
+        :loader="() => import('../../components/ExploreRang.vue')"
+        :component-props="{ items: homepageData?.dynamic_sections?.explore_rangbd || [] }"
       />
-      <WhyRang :items="homepageData?.dynamic_sections?.why_rangbd || []" />
-      <CustomerDiaries />
+      <LazyWrapper 
+        :loader="() => import('../../components/ShopByCategory.vue')"
+        :component-props="{ items: homepageData?.dynamic_sections?.shop_by_category || [] }"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/TimelessSixYards.vue')"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/ShopByBrand.vue')"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/ShopByTheme.vue')"
+        :component-props="{ items: homepageData?.dynamic_sections?.shop_by_theme || [] }"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/SaleOffer.vue')"
+        :component-props="{ 
+          products: saleOfferProducts,
+          sectionTitle: saleOfferSectionTitleForSaleOffer,
+          dealsOfTheMonthProducts: dealsOfTheMonthProducts,
+          dealsOfTheMonthTitle: saleOfferSectionTitle
+        }"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/WhyRang.vue')"
+        :component-props="{ items: homepageData?.dynamic_sections?.why_rangbd || [] }"
+      />
+      <LazyWrapper 
+        :loader="() => import('../../components/CustomerDiaries.vue')"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import CustomerDiaries from '../../components/CustomerDiaries.vue'
-import ExploreRang from '../../components/ExploreRang.vue'
-import HeroBanner from '../../components/HeroBanner.vue'
-import NewArrival from '../../components/NewArrival.vue'
-import OfferBanner from '../../components/OfferBanner.vue'
-import SaleOffer from '../../components/SaleOffer.vue'
-import ShopByBrand from '../../components/ShopByBrand.vue'
-import ShopByCategory from '../../components/ShopByCategory.vue'
-import ShopByTheme from '../../components/ShopByTheme.vue'
-import TimelessSixYards from '../../components/TimelessSixYards.vue'
-import WhyRang from '../../components/WhyRang.vue'
+import LazyWrapper from '../../components/LazyWrapper.vue'
 import { useApi } from '../../composables/useApi'
 import type { HomePageData2, HomePageProduct2, HomePageResponse2 } from '../../types/homepage'
 import './index.css'
+
+// Load above-the-fold components immediately
+import HeroBanner from '../../components/HeroBanner.vue'
+import NewArrival from '../../components/NewArrival.vue'
+import OfferBanner from '../../components/OfferBanner.vue'
+
+// Components loaded lazily via LazyWrapper - no need to define them here
+// They will be imported only when they come into viewport
 
 const items = [
   '/sale-carousel-1.png',
