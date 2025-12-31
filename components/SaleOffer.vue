@@ -25,7 +25,7 @@
                         <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; " :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
                             <div class="text-lg! sm:text-6xl! font-bold!">{{ discountText }}</div>
                            <div class="text-lg!">
-                                <ShopNowCTA text="Shop Now" />
+                                <ShopNowBlue />
                             </div>
                         </div>
                     </NuxtLink>
@@ -68,6 +68,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import type { HomePageProduct2 } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
 import ShopNowCTA from './ShopNowCTA.vue';
+import ShopNowBlue from '~~/components/ShopNowBlue.vue';
 
 interface Props {
   products?: HomePageProduct2[]
