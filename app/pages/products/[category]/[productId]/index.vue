@@ -1365,13 +1365,22 @@ const handleAddToCart = () => {
                         variant_id: comboProduct.variant_id
                     }
                 } else if (comboProduct.id) {
-                    // Full product object - extract product_id and get first variant
+                    // Full product object - find variant based on selected size from matchingSeriesItems
                     const productId = comboProduct.id
-                    const firstVariant = comboProduct.variants?.[0]
-                    if (firstVariant?.id) {
+                    // Find the matching item in matchingSeriesItems to get the selected size
+                    const matchingItem = matchingSeriesItems.value.find(item => item.id === productId)
+                    const selectedSize = matchingItem?.size
+                    
+                    // Find variant matching the selected size, or fallback to first variant
+                    const selectedVariant = selectedSize
+                        ? comboProduct.variants?.find((v: any) => v.attributes?.size === selectedSize)
+                        : null
+                    const variant = selectedVariant || comboProduct.variants?.[0]
+                    
+                    if (variant?.id) {
                         return {
                             product_id: productId,
-                            variant_id: firstVariant.id
+                            variant_id: variant.id
                         }
                     }
                 }
