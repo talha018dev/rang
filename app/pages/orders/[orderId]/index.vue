@@ -420,7 +420,324 @@ const goBack = () => {
 
 // Print invoice
 const printInvoice = () => {
-  window.print()
+  // Get the invoice container element
+  const invoiceElement = document.querySelector('.invoice-container')
+  if (!invoiceElement) {
+    console.error('Invoice container not found')
+    return
+  }
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank')
+  if (!printWindow) {
+    console.error('Failed to open print window')
+    return
+  }
+
+  // Clone the element to avoid modifying the original
+  const clonedElement = invoiceElement.cloneNode(true) as HTMLElement
+  
+  // Convert all images to absolute URLs
+  const images = clonedElement.querySelectorAll('img')
+  images.forEach((img) => {
+    const src = img.getAttribute('src')
+    if (src) {
+      // Convert relative URLs to absolute
+      if (src.startsWith('http://') || src.startsWith('https://')) {
+        img.src = src
+      } else if (src.startsWith('//')) {
+        img.src = window.location.protocol + src
+      } else if (src.startsWith('/')) {
+        img.src = window.location.origin + src
+      } else {
+        img.src = window.location.origin + '/' + src
+      }
+    }
+  })
+
+  // Remove NuxtLink components and convert to plain text or remove
+  const links = clonedElement.querySelectorAll('a')
+  links.forEach((link) => {
+    // Remove the link but keep the text content
+    const parent = link.parentNode
+    if (parent) {
+      const textNode = document.createTextNode(link.textContent || '')
+      parent.replaceChild(textNode, link)
+    }
+  })
+
+  // Get the invoice HTML with converted images
+  const invoiceHTML = clonedElement.innerHTML
+
+  // Create the print document
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Invoice - Order #${order.value?.number || ''}</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            color: #000;
+            background: white;
+          }
+          .invoice-container {
+            max-width: 100%;
+            margin: 0 auto;
+          }
+          .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #000;
+          }
+          .invoice-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+          }
+          .invoice-number {
+            font-size: 1rem;
+            color: #666;
+          }
+          .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+          }
+          .invoice-info-section {
+            margin-bottom: 2rem;
+          }
+          .invoice-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+          }
+          .invoice-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+          }
+          .info-label {
+            font-size: 0.875rem;
+            color: #666;
+            font-weight: 500;
+          }
+          .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+          }
+          .address-section {
+            margin-bottom: 2rem;
+          }
+          .address-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+          }
+          .address-card {
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+          }
+          .address-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+          }
+          .address-details p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+          }
+          .address-name {
+            font-weight: 600;
+            font-size: 1rem;
+          }
+          .items-section {
+            margin-bottom: 2rem;
+          }
+          .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+          }
+          .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+          }
+          .items-table th,
+          .items-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+          }
+          .items-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #374151;
+          }
+          .items-table .text-right {
+            text-align: right;
+          }
+          .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
+          .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+          }
+          .product-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+          }
+          .product-link {
+            color: #ea580c;
+            text-decoration: none;
+            font-size: 0.875rem;
+          }
+          .notes-section {
+            margin-bottom: 2rem;
+          }
+          .notes-text {
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            line-height: 1.6;
+          }
+          .summary-section {
+            margin-bottom: 2rem;
+          }
+          .summary-card {
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+          }
+          .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+          }
+          .summary-row:last-child {
+            border-bottom: none;
+          }
+          .summary-row-total {
+            border-top: 2px solid #000;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+          }
+          .summary-label {
+            font-size: 0.9375rem;
+            color: #374151;
+          }
+          .summary-label-total {
+            font-size: 1.125rem;
+            font-weight: 600;
+          }
+          .summary-value {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #374151;
+          }
+          .summary-value-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000;
+          }
+          .summary-value.discount {
+            color: #dc2626;
+          }
+          .summary-value.paid {
+            color: #16a34a;
+          }
+          .summary-value.due {
+            color: #ea580c;
+          }
+          @media print {
+            body {
+              padding: 0;
+            }
+            .invoice-container {
+              box-shadow: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="invoice-container">
+          ${invoiceHTML}
+        </div>
+        <` + 'script' + `>
+          function waitForImages() {
+            const images = document.querySelectorAll('img');
+            let loadedCount = 0;
+            const totalImages = images.length;
+            
+            if (totalImages === 0) {
+              window.print();
+              window.onafterprint = function() {
+                window.close();
+              };
+              return;
+            }
+            
+            images.forEach(function(img) {
+              if (img.complete) {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                  window.print();
+                  window.onafterprint = function() {
+                    window.close();
+                  };
+                }
+              } else {
+                img.onload = function() {
+                  loadedCount++;
+                  if (loadedCount === totalImages) {
+                    window.print();
+                    window.onafterprint = function() {
+                      window.close();
+                    };
+                  }
+                };
+                img.onerror = function() {
+                  loadedCount++;
+                  if (loadedCount === totalImages) {
+                    window.print();
+                    window.onafterprint = function() {
+                      window.close();
+                    };
+                  }
+                };
+              }
+            });
+          }
+          
+          window.onload = function() {
+            waitForImages();
+          };
+        </` + 'script' + `>
+      </body>
+    </html>
+  `)
+
+  printWindow.document.close()
 }
 
 // Check for payment failed query parameter
