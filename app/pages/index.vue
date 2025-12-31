@@ -119,7 +119,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useApi } from '../../composables/useApi'
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
 import HeroBanner from '../../components/HeroBanner.vue'
@@ -131,7 +130,8 @@ import ShopByCategory from '../../components/ShopByCategory.vue'
 import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
 import WhyRang from '../../components/WhyRang.vue'
-import type { HomepageData, HomePageData2, HomePageProduct2, HomepageResponse, HomePageResponse2, Product } from '../../types/homepage'
+import { useApi } from '../../composables/useApi'
+import type { HomePageData2, HomePageProduct2, HomePageResponse2 } from '../../types/homepage'
 import './index.css'
 
 const items = [
@@ -184,6 +184,8 @@ onMounted(async () => {
       homepageData.value = response.data
       console.log('Banners:', response.data.banners)
       console.log('Sections:', response.data.sections)
+      console.log('Dynamic Sections:', response.data.dynamic_sections)
+      console.log('Shop by Category:', response.data.dynamic_sections?.shop_by_category)
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
