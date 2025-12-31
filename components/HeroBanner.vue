@@ -89,16 +89,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
-import { useApi } from '../composables/useApi';
-import type { HomePageCta2, HomePageResponse2 } from '../types/homepage';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import type { HomePageCta2 } from '../types/homepage';
 
-// Banners from API
-const banners = ref<string[]>([]);
+interface Props {
+  banners?: string[];
+  cta?: HomePageCta2 | null;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  banners: () => [],
+  cta: null
+});
+
+// Use props values
+const banners = computed(() => props.banners || []);
+const ctaData = computed(() => props.cta || null);
 const currentBannerIndex = ref(0);
-
-// CTA data from API
-const ctaData = ref<HomePageCta2 | null>(null);
 
 // Helper function to check if URL is external
 const isExternalUrl = (url: string): boolean => {
@@ -120,6 +127,13 @@ const getImageUrl = (imagePath: string): string => {
 let rotationInterval: ReturnType<typeof setInterval> | null = null;
 const isPaused = ref(false);
 
+const stopRotation = () => {
+  if (rotationInterval) {
+    clearInterval(rotationInterval);
+    rotationInterval = null;
+  }
+};
+
 const startRotation = () => {
   if (banners.value.length <= 1) return; // No need to rotate if only one banner
 
@@ -130,12 +144,15 @@ const startRotation = () => {
   }, 10000); // 10 seconds
 };
 
-const stopRotation = () => {
-  if (rotationInterval) {
-    clearInterval(rotationInterval);
-    rotationInterval = null;
+// Watch for banners changes to start rotation
+watch(banners, (newBanners) => {
+  if (newBanners && newBanners.length > 1) {
+    stopRotation();
+    startRotation();
+  } else {
+    stopRotation();
   }
-};
+}, { immediate: true });
 
 const pauseRotation = () => {
   isPaused.value = true;
@@ -171,27 +188,10 @@ const goToSlide = (index: number) => {
   }
 };
 
-// Fetch banners and CTA from API
-onMounted(async () => {
-  try {
-    const { backendUrl } = useApi()
-    const response = await $fetch<HomePageResponse2>(`${backendUrl}/homepage`);
-    if (response.success && response.data) {
-      // Set banners
-      if (response.data.banners) {
-        banners.value = response.data.banners;
-        // Start rotation if multiple banners
-        if (banners.value.length > 1) {
-          startRotation();
-        }
-      }
-      // Set CTA data
-      if (response.data.cta) {
-        ctaData.value = response.data.cta;
-      }
-    }
-  } catch (err) {
-    console.error('Error fetching homepage data:', err);
+// Start rotation when component is mounted if banners are available
+onMounted(() => {
+  if (banners.value.length > 1) {
+    startRotation();
   }
 });
 
