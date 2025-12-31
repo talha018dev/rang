@@ -110,7 +110,12 @@
       <TimelessSixYards />
       <ShopByBrand />
       <ShopByTheme :items="homepageData?.dynamic_sections?.shop_by_theme || []" />
-      <SaleOffer :products="dealsOfTheMonthProducts" :section-title="saleOfferSectionTitle" />
+      <SaleOffer 
+        :products="saleOfferProducts" 
+        :section-title="saleOfferSectionTitleForSaleOffer"
+        :deals-of-the-month-products="dealsOfTheMonthProducts"
+        :deals-of-the-month-title="saleOfferSectionTitle"
+      />
       <WhyRang />
       <CustomerDiaries />
     </div>
@@ -190,6 +195,17 @@ const saleOfferSectionTitle = computed(() => {
   )
   
   return dealsSection?.title || ''
+})
+
+// Get Sale Offer section title for the SaleOffer component
+const saleOfferSectionTitleForSaleOffer = computed(() => {
+  if (!homepageData.value?.sections) return ''
+  
+  const saleOfferSection = homepageData.value.sections.find(
+    section => section.title === 'Sale Offer'
+  )
+  
+  return saleOfferSection?.title || ''
 })
 
 // Fetch homepage data from API
