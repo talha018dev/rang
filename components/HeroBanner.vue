@@ -67,17 +67,17 @@
           </div>
           <NuxtLink v-if="ctaData?.button_url && !isExternalUrl(ctaData.button_url)" :to="ctaData.button_url" class="hero-button">
             <div class="hero-button-text">
-              {{ ctaData?.button_text || 'Shop Now' }}
+              {{ ctaData?.marquee_text || ctaData?.button_text }}
             </div>
           </NuxtLink>
           <a v-else-if="ctaData?.button_url && isExternalUrl(ctaData.button_url)" :href="ctaData.button_url" class="hero-button" target="_blank" rel="noopener noreferrer">
             <div class="hero-button-text">
-              {{ ctaData?.button_text || 'Shop Now' }}
+              {{ ctaData?.marquee_text || ctaData?.button_text }}
             </div>
           </a>
           <button v-else class="hero-button">
             <div class="hero-button-text">
-              {{ ctaData?.button_text || 'Shop Now' }}
+              {{ ctaData?.marquee_text || ctaData?.button_text }}
             </div>
           </button>
         </div>
@@ -91,14 +91,14 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useApi } from '../composables/useApi';
-import type { HomepageCTA, HomepageResponse } from '../types/homepage';
+import type { HomePageCta2, HomePageResponse2 } from '../types/homepage';
 
 // Banners from API
 const banners = ref<string[]>([]);
 const currentBannerIndex = ref(0);
 
 // CTA data from API
-const ctaData = ref<HomepageCTA | null>(null);
+const ctaData = ref<HomePageCta2 | null>(null);
 
 // Helper function to check if URL is external
 const isExternalUrl = (url: string): boolean => {
@@ -175,7 +175,7 @@ const goToSlide = (index: number) => {
 onMounted(async () => {
   try {
     const { backendUrl } = useApi()
-    const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`);
+    const response = await $fetch<HomePageResponse2>(`${backendUrl}/homepage`);
     if (response.success && response.data) {
       // Set banners
       if (response.data.banners) {

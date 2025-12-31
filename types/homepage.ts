@@ -347,6 +347,8 @@ export interface HomePageCta2 {
   subtitle: string
   button_text: string
   button_url: string
+  marquee_text: string
+  marquee_url: string
 }
 
 export interface HomePageDynamicSections2 {
