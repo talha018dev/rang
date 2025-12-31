@@ -979,14 +979,17 @@ const matchingSeriesItems = ref<Array<{
   product: Product
 }>>([])
 
-// Update matching series items when related products change
-watch(relatedProducts, (newRelatedProducts) => {
-  if (!newRelatedProducts || newRelatedProducts.length === 0) {
+// Update matching series items when product combo_products change
+watch(product, (newProduct) => {
+  // Extract combo_products from the product
+  const comboProducts = (newProduct as any)?.combo_products || []
+  
+  if (!comboProducts || comboProducts.length === 0) {
     matchingSeriesItems.value = []
     return
   }
 
-  matchingSeriesItems.value = newRelatedProducts.map((product, index) => {
+  matchingSeriesItems.value = comboProducts.map((product: Product, index: number) => {
     // Get first available size from variants
     const firstVariant = product.variants?.[0]
     const defaultSize = firstVariant?.attributes?.size || 'M'
