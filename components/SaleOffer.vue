@@ -13,11 +13,11 @@
                     <NuxtLink :to="`/products/${saleOfferProducts[0]?.category?.slug}/${saleOfferProducts[0]?.slug}`">
                         <NuxtImg :src="saleOfferProducts[0]?.image" :alt="saleOfferProducts[0]?.name" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
                         <div class="absolute! text-white! top-4! left-4!">
-                            <div class="text-lg! sm:text-6xl! font-bold!">Ultimate</div>
-                            <div class="text-lg! sm:text-6xl!">Sale</div>
+                            <div class="text-lg! sm:text-6xl! font-bold!">{{ categoryWords[0] }}</div>
+                            <div class="text-lg! sm:text-6xl!">{{ categoryWords[1] }}</div>
                         </div>
                         <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; ">
-                            <div class="text-lg! sm:text-6xl! font-bold!">50% OFF</div>
+                            <div class="text-lg! sm:text-6xl! font-bold!">{{ discountText }}</div>
                            <div class="text-lg!">
                                 <ShopNowCTA text="Shop Now" />
                             </div>
@@ -91,6 +91,41 @@ const dealsProducts = computed(() => {
     return []
   }
   return props.dealsOfTheMonthProducts.filter(product => product && product.id)
+})
+
+// Get category name from first product
+const categoryName = computed(() => {
+  if (saleOfferProducts.value.length === 0 || !saleOfferProducts.value[0]?.category?.name) {
+    return ''
+  }
+  return saleOfferProducts.value[0].category.name
+})
+
+// Extract percentage from category name (e.g., "Sale Offer 70%" -> "70%")
+const categoryPercentage = computed(() => {
+  if (!categoryName.value) return null
+  const percentageMatch = categoryName.value.match(/(\d+%)/i)
+  return percentageMatch ? percentageMatch[1] : null
+})
+
+// Get category name without percentage
+const categoryNameWithoutPercentage = computed(() => {
+  if (!categoryName.value) return ''
+  return categoryName.value.replace(/\s*\d+%\s*/gi, '').trim()
+})
+
+// Split category name into two words
+const categoryWords = computed(() => {
+  if (!categoryNameWithoutPercentage.value) return ['Ultimate', 'Sale']
+  const words = categoryNameWithoutPercentage.value.split(/\s+/).filter(w => w.length > 0)
+  if (words.length === 0) return ['Ultimate', 'Sale']
+  if (words.length === 1) return [words[0], '']
+  return [words[0], words.slice(1).join(' ')]
+})
+
+// Get discount text (percentage from category or default "50% OFF")
+const discountText = computed(() => {
+  return categoryPercentage.value ? `${categoryPercentage.value} OFF` : '50% OFF'
 })
 </script>
 
