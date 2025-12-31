@@ -11,12 +11,18 @@
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
                     <NuxtLink :to="`/products/${saleOfferProducts[0]?.category?.slug}/${saleOfferProducts[0]?.slug}`">
-                        <NuxtImg :src="saleOfferProducts[0]?.image" :alt="saleOfferProducts[0]?.name" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
-                        <div class="absolute! text-white! top-4! left-4!">
+                        <img 
+                            :src="saleOfferProducts[0]?.image" 
+                            :alt="saleOfferProducts[0]?.name" 
+                            class="sale-offer-image category-image-rounded" 
+                            @load="onImageLoad"
+                            ref="productImage"
+                        />
+                        <div class="absolute! top-4! left-4! sale-offer-text-overlay" :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
                             <div class="text-lg! sm:text-6xl! font-bold!">{{ categoryWords[0] }}</div>
                             <div class="text-lg! sm:text-6xl!">{{ categoryWords[1] }}</div>
                         </div>
-                        <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; ">
+                        <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; " :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
                             <div class="text-lg! sm:text-6xl! font-bold!">{{ discountText }}</div>
                            <div class="text-lg!">
                                 <ShopNowCTA text="Shop Now" />
@@ -58,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import type { HomePageProduct2 } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
 import ShopNowCTA from './ShopNowCTA.vue';
@@ -127,6 +133,85 @@ const categoryWords = computed(() => {
 const discountText = computed(() => {
   return categoryPercentage.value ? `${categoryPercentage.value} OFF` : '50% OFF'
 })
+
+// Image brightness detection
+const isDarkBackground = ref(false)
+const imageBrightness = ref<number>(128) // Store actual brightness value (0-255)
+const productImage = ref<HTMLImageElement | null>(null)
+
+// Function to calculate image brightness
+const calculateImageBrightness = (image: HTMLImageElement): Promise<number> => {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    
+    if (!ctx) {
+      resolve(128) // Default to medium brightness
+      return
+    }
+    
+    canvas.width = Math.min(image.width, 100) // Sample smaller area for performance
+    canvas.height = Math.min(image.height, 100)
+    
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+    
+    try {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const data = imageData.data
+      let brightness = 0
+      
+      // Calculate average brightness
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i] || 0
+        const g = data[i + 1] || 0
+        const b = data[i + 2] || 0
+        // Calculate luminance using relative luminance formula
+        brightness += (0.299 * r + 0.587 * g + 0.114 * b)
+      }
+      
+      brightness = brightness / (data.length / 4)
+      resolve(brightness)
+    } catch (error) {
+      console.error('Error calculating image brightness:', error)
+      resolve(128) // Default to medium brightness on error
+    }
+  })
+}
+
+// Handle image load
+const onImageLoad = async (event: Event) => {
+  const img = event.target as HTMLImageElement
+  if (img) {
+    const brightness = await calculateImageBrightness(img)
+    imageBrightness.value = brightness
+    isDarkBackground.value = brightness < 128
+  }
+}
+
+// Watch for product changes and recalculate
+watch(() => saleOfferProducts.value[0]?.image, async (newImage) => {
+  if (newImage && productImage.value) {
+    await nextTick()
+    if (productImage.value.complete) {
+      const brightness = await calculateImageBrightness(productImage.value)
+      imageBrightness.value = brightness
+      isDarkBackground.value = brightness < 128
+    }
+  }
+})
+
+// Recalculate when product changes
+onMounted(async () => {
+  await nextTick()
+  if (productImage.value && productImage.value.complete) {
+    const brightness = await calculateImageBrightness(productImage.value)
+    imageBrightness.value = brightness
+    isDarkBackground.value = brightness < 128
+  }
+})
+
+// Computed for very dark backgrounds (like black) - brightness < 50
+const isVeryDarkBackground = computed(() => imageBrightness.value < 50)
 </script>
 
 <style scoped>
