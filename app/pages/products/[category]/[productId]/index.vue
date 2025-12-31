@@ -540,10 +540,9 @@
         </div>
 
         <!-- Customer Reviews Section -->
-        <div class="reviews-section">
+        <!-- <div class="reviews-section">
             <h2 class="reviews-title">Customer Reviews</h2>
 
-            <!-- Overall Rating Summary -->
             <div class="reviews-summary">
 
                 <div>
@@ -571,10 +570,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- Star Distribution -->
 
 
-                <!-- Attribute Ratings -->
                 <div class="attribute-ratings">
                     <div class="attribute-item">
                         <span class="attribute-label">Quality: Excellent</span>
@@ -627,7 +624,6 @@
                 </div>
             </div>
 
-            <!-- Search and Sort -->
             <div class="reviews-controls">
                 <div class="search-box">
                     <input type="text" v-model="searchQuery" placeholder="Try searching for a keyword"
@@ -654,7 +650,6 @@
                 </div>
             </div>
 
-            <!-- Individual Reviews -->
             <div class="reviews-list">
                 <div v-for="review in filteredAndSortedReviews" :key="review.id" class="review-item">
                     <div class="review-header">
@@ -732,7 +727,7 @@
 
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Related Products Section -->
         <div class="related-products-section" v-if="!isMobile && relatedProducts.length > 0">
