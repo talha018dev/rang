@@ -1,5 +1,5 @@
 <template>
-    <main class="theme-container">
+    <main v-if="themeImages.length > 0" class="theme-container">
         <section class="theme-header">
             <div class="theme-title">
                 <div><span class="theme-title-light">Shop by</span> <span class="theme-title-bold">Theme</span></div>
@@ -53,35 +53,38 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import ShopNowBlue from './ShopNowBlue.vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import type { HomePageShopByTheme2 } from '../types/homepage';
+import ShopNowBlue from './ShopNowBlue.vue';
 
-const themeImages = [
-    {
-        src: '/theme/theme-1.png',
-        alt: 'Theme Rang',
-        title: 'Wedding',
-        link: '/products/wedding'
-    },
-    {
-        src: '/theme/theme-2.png',
-        alt: 'Theme Rang',
-        title: 'EID',
-        link: '/products/eid'
-    },
-    {
-        src: '/theme/theme-1.png',
-        alt: 'Theme Rang',
-        title: 'Gaye Holud',
-        link: '/products/gaye-holud'
-    },
-    {
-        src: '/victory-day/victory-day-1.webp',
-        alt: 'Theme Rang',
-        title: 'Victory Day',
-        link: '/products/victory-day'
-    }
-]
+interface Props {
+  items?: HomePageShopByTheme2[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  items: () => []
+})
+
+// Transform API data to component format
+const themeImages = computed(() => {
+  return (props.items || []).map(item => ({
+    src: getImageUrl(item?.image?.preview_url || item?.image?.original_url || ''),
+    alt: item?.title || 'Theme Rang',
+    title: item?.title || '',
+    link: item?.url || '#'
+  }))
+})
+
+// Helper function to get full image URL
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return ''
+  // If image path already includes http/https, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  // Otherwise, prepend the API base URL
+  return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
 
 // Carousel state
 const currentSlide = ref(0)
@@ -99,7 +102,7 @@ const isTouch = ref(false)
 // Calculate max slide based on showing 2.25 images
 const maxSlide = computed(() => {
     if (!isMobile.value) return 0
-    return Math.max(0, themeImages.length - 2.25)
+    return Math.max(0, themeImages.value.length - 2.25)
 })
 
 // Carousel methods
