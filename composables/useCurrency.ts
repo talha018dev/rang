@@ -33,7 +33,12 @@ export const useCurrency = () => {
   })
 
   // Convert price based on currency
-  const formatPrice = (price: number, priceUsd?: number): string => {
+  const formatPrice = (price: number | null | undefined, priceUsd?: number | null): string => {
+    // Handle null/undefined prices
+    if (price === null || price === undefined || isNaN(price)) {
+      price = 0
+    }
+    
     if (currency.value === 'USD') {
       // Use price_usd from API if available and valid, otherwise convert using exchange rate
       let usdPrice: number
@@ -49,6 +54,10 @@ export const useCurrency = () => {
         usdPrice = 0
       }
       return `$${usdPrice.toFixed(2)}`
+    }
+    // Check for invalid values before formatting
+    if (!isFinite(price) || isNaN(price)) {
+      price = 0
     }
     return `Tk ${price.toLocaleString()}`
   }

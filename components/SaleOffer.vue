@@ -6,7 +6,7 @@
             </div>
         </section>
 
-        <SaleOfferCountdown :products="saleOfferProducts" />
+        <SaleOfferCountdown :products="saleOfferProducts" :section-title="sectionTitle" />
         <section class="sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
@@ -41,10 +41,12 @@ import ShopNowCTA from './ShopNowCTA.vue';
 
 interface Props {
   products?: HomePageProduct2[]
+  sectionTitle?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  products: () => []
+  products: () => [],
+  sectionTitle: ''
 })
 
 // Computed property to ensure products are valid
