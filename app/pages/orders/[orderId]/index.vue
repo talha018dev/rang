@@ -233,7 +233,7 @@
 
 <script setup lang="ts">
 import { useHead, useRoute, useRouter } from 'nuxt/app'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCurrency } from '~~/composables/useCurrency'
@@ -363,6 +363,9 @@ const fetchOrderDetails = async () => {
 
     if (response.success && response.data) {
       order.value = response.data
+      // Check for print query after order is loaded
+      await nextTick()
+      checkPrintQuery()
     } else {
       error.value = response.message || 'Failed to load order details.'
     }
@@ -750,6 +753,28 @@ const checkPaymentFailed = () => {
   }
 }
 
+// Check for print query parameter and trigger print
+const checkPrintQuery = async () => {
+  const shouldPrint = route.query.print
+  if (shouldPrint === 'true' && order.value && !isLoading.value) {
+    // Wait for DOM to be ready
+    await nextTick()
+    // Small delay to ensure all images are rendered
+    setTimeout(() => {
+      printInvoice()
+      // Remove query parameter from URL without reload
+      router.replace({ query: { ...route.query, print: undefined } })
+    }, 500)
+  }
+}
+
+// Watch for order to be loaded and check print query
+watch([order, isLoading], () => {
+  if (order.value && !isLoading.value) {
+    checkPrintQuery()
+  }
+})
+
 // Retry payment
 const retryPayment = async () => {
   if (!order.value) return
@@ -799,6 +824,10 @@ const dismissAlert = () => {
 onMounted(() => {
   fetchOrderDetails()
   checkPaymentFailed()
+  // Check print query after order loads
+  if (order.value && !isLoading.value) {
+    checkPrintQuery()
+  }
 })
 </script>
 
