@@ -65,21 +65,7 @@
           <div class="hero-title dm-serif">
             {{ ctaData?.title  }}
           </div>
-          <NuxtLink v-if="ctaData?.button_url && !isExternalUrl(ctaData.button_url)" :to="ctaData.button_url" class="hero-button">
-            <div class="hero-button-text">
-              {{ctaData?.button_text }}
-            </div>
-          </NuxtLink>
-          <a v-else-if="ctaData?.button_url && isExternalUrl(ctaData.button_url)" :href="ctaData.button_url" class="hero-button" target="_blank" rel="noopener noreferrer">
-            <div class="hero-button-text">
-              {{ ctaData?.button_text }}
-            </div>
-          </a>
-          <button v-else class="hero-button">
-            <div class="hero-button-text">
-              {{ctaData?.button_text }}
-            </div>
-          </button>
+          <ShopNowCTA :text="ctaData?.button_text" :url="ctaData?.button_url" />
         </div>
       </div>
     </section>
@@ -91,6 +77,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import type { HomePageCta2 } from '../types/homepage';
+import ShopNowCTA from './ShopNowCTA.vue';
 
 interface Props {
   banners?: string[];
@@ -106,11 +93,6 @@ const props = withDefaults(defineProps<Props>(), {
 const banners = computed(() => props.banners || []);
 const ctaData = computed(() => props.cta || null);
 const currentBannerIndex = ref(0);
-
-// Helper function to check if URL is external
-const isExternalUrl = (url: string): boolean => {
-  return url.startsWith('http://') || url.startsWith('https://');
-};
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
