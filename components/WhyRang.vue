@@ -11,27 +11,48 @@
         </section>
         <div class="why-rang-grid">
             <div class="grid-item grid-item-1">
-                <div class="card-image">
-                    <NuxtImg style="object-position: right;" src="/why-rang-1.png" alt="Festive celebration with people in traditional attire" format="webp" quality="85" loading="lazy" />
-                    <!-- <div class="card-overlay">
-                        <h3>Because it's Festive</h3>
-                    </div> -->
+                <div class="card-image aspect-[2.22]!">
+                    <video 
+                        v-if="getVideoUrl(props.items?.[0])"
+                        :src="getVideoUrl(props.items?.[0]) || undefined" 
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                        class="why-rang-video"
+                    >
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
             <div class="grid-item grid-item-2">
-                <div class="card-image">
-                    <NuxtImg style="object-position: left;" src="/why-rang-2.png" alt="Colorful traditional celebration" format="webp" quality="85" loading="lazy" />
-                    <!-- <div class="card-overlay">
-                        <h3>Because it's Colorful</h3>
-                    </div> -->
+                <div class="card-image aspect-[2.22]!">
+                    <video 
+                        v-if="getVideoUrl(props.items?.[1])"
+                        :src="getVideoUrl(props.items?.[1]) || undefined" 
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                        class="why-rang-video"
+                    >
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
             <div class="grid-item grid-item-3">
-                <div class="card-image">
-                    <NuxtImg style="object-position: bottom;" src="/why-rang-3.png" alt="Bangladeshi cultural celebration" format="webp" quality="85" loading="lazy" />
-                    <!-- <div class="card-overlay">
-                        <h3>Because it's Bangladesh</h3>
-                    </div> -->
+                <div class="card-image aspect-[0.77]!">
+                    <video 
+                        v-if="getVideoUrl(props.items?.[2])"
+                        :src="getVideoUrl(props.items?.[2]) || undefined" 
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                        class="why-rang-video"
+                    >
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
         </div>
@@ -40,7 +61,23 @@
 </template>
 
 <script setup lang="ts">
-import ShopNowCTA from './ShopNowCTA.vue'
+import type { HomePageWhyRangbd2 } from '../types/homepage';
+import ShopNowCTA from './ShopNowCTA.vue';
+
+interface Props {
+  items?: HomePageWhyRangbd2[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  items: () => []
+})
+
+// Get video URL from the image object
+const getVideoUrl = (item?: HomePageWhyRangbd2): string | null => {
+  if (!item?.image) return null
+  // Use original_url or preview_url, both should work for video
+  return item.image.original_url || item.image.preview_url || null
+}
 </script>
 
 <style scoped>

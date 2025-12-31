@@ -355,6 +355,7 @@ export interface HomePageDynamicSections2 {
   explore_rangbd: HomePageExploreRangbd2[]
   shop_by_category: HomePageShopByCategory2[]
   shop_by_theme: HomePageShopByTheme2[]
+  why_rangbd: HomePageWhyRangbd2[]
 }
 
 export interface HomePageExploreRangbd2 {
@@ -390,6 +391,19 @@ export interface HomePageShopByTheme2 {
 }
 
 export interface Image3 {
+  id: string
+  original_url: string
+  preview_url: string
+  thumbnail_url: string
+}
+
+export interface HomePageWhyRangbd2 {
+  title: string
+  url: any
+  image: Image
+}
+
+export interface Image {
   id: string
   original_url: string
   preview_url: string

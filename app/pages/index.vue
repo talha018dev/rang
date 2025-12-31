@@ -116,7 +116,7 @@
         :deals-of-the-month-products="dealsOfTheMonthProducts"
         :deals-of-the-month-title="saleOfferSectionTitle"
       />
-      <WhyRang />
+      <WhyRang :items="homepageData?.dynamic_sections?.why_rangbd || []" />
       <CustomerDiaries />
     </div>
   </div>
