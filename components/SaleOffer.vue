@@ -24,8 +24,13 @@
                         </div>
                         <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; " :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
                             <div class="text-lg! sm:text-6xl! font-bold!">{{ discountText }}</div>
-                           <div class="text-lg!">
-                                <ShopNowBlue />
+                            <div class="absolute" style="bottom: 27px; right: 40px;">
+                                <NuxtLink :to="`/products?brand=`">
+                                <button class="shop-now-white-button flex! items-center! gap-2! hover:text-[#ea580c]!">
+                                    <span class="button-text ">See All</span>
+                                    <Icon name="heroicons:arrow-right" class="button-icon" />
+                                </button>
+                                </NuxtLink>
                             </div>
                         </div>
                     </NuxtLink>
@@ -34,29 +39,6 @@
                     <NuxtLink v-for="(product, index) in saleOfferProducts.slice(1, 5)" :key="product.id" :to="`/products/${product?.category?.slug}/${product?.slug}`">
                         <NuxtImg :src="product?.image" :alt="product?.name" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
                     </NuxtLink>
-                </div>
-            </div>
-        </section>
-        <section v-else class="sale-brands-section-secondary">
-            <div class="sale-brands-grid-secondary">
-                <div class="image-div category-grid-main-men">
-                    <NuxtImg src="/sale-offer/ultimate-sale-2.webp" alt="Category Rang" class="sale-offer-image category-image-rounded" format="webp" quality="85" loading="lazy" />
-                    <div class="absolute! text-white! top-4! left-4!">
-                        <div class="text-lg! sm:text-6xl! font-bold!">Ultimate</div>
-                        <div class="text-lg! sm:text-6xl!">Sale</div>
-                    </div>
-                    <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; ">
-                        <div class="text-lg! sm:text-6xl! font-bold!">50% OFF</div>
-                       <div class="text-lg!">
-                            <ShopNowCTA text="Shop Now" />
-                        </div>
-                    </div>
-                </div>
-                <div class="sale-brands-grid-tertiary">
-                    <NuxtImg src="/sale-offer/sale-offer-2.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
-                    <NuxtImg src="/sale-offer/sale-offer-3.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
-                    <NuxtImg src="/sale-offer/sale-offer-4.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
-                    <NuxtImg src="/sale-offer/sale-offer-5.png" alt="Brand Rang" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
                 </div>
             </div>
         </section>
