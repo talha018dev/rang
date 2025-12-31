@@ -167,6 +167,9 @@
   text-align: center;
   color: white;
   margin-bottom: 1rem;
+  background-color: rgba(247, 148, 28, 0.26);
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .shop-now-blue-button-div {
   text-align: center;

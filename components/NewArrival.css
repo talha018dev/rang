@@ -68,6 +68,9 @@
   letter-spacing: 0%;
   text-align: center;
   color: white;
+  background-color: rgba(247, 148, 28, 0.26) ;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 /* Custom carousel styling - matching SaleOfferCountdown */

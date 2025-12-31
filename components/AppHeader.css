@@ -139,9 +139,9 @@
 }
 
 /* Add background color for home page when not scrolled */
-.header-home:not(.header-scrolled) {
+/* .header-home:not(.header-scrolled) {
   background-color: rgba(247, 148, 28, 0.26) !important;
-}
+} */
 
 .header-scrolled {
   background-color: rgba(255, 255, 255, 0.95) !important;
