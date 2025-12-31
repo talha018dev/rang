@@ -22,7 +22,9 @@
                         loading="lazy" 
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ categoryItems[0]?.title }}</div>
-                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
+                        <ShopNowCTA text="Shop Now" :url="categoryItems[0]?.url" />
+                    </div>
                 </NuxtLink>
                 <NuxtLink 
                     :to="categoryItems[1]?.url || '#'" 
@@ -37,7 +39,9 @@
                         loading="lazy" 
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ categoryItems[1]?.title }}</div>
-                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
+                        <ShopNowCTA text="Shop Now" :url="categoryItems[1]?.url" />
+                    </div>
                 </NuxtLink>
             </div>
             <!-- Single item fallback (if only 1 item) -->
@@ -55,7 +59,9 @@
                         loading="lazy" 
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ categoryItems[0]?.title }}</div>
-                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
+                        <ShopNowCTA text="Shop Now" :url="categoryItems[0]?.url" />
+                    </div>
                 </NuxtLink>
             </div>
             <!-- Second Row: Remaining items (3rd item onwards) -->
@@ -76,7 +82,9 @@
                         loading="lazy" 
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ item?.title }}</div>
-                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20 cursor-pointer text-white hover:text-[#ea580c]">Shop Now</div>
+                    <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
+                        <ShopNowCTA text="Shop Now" :url="categoryItems[1]?.url" />
+                    </div>
                 </NuxtLink>
             </div>
         </section>
@@ -86,6 +94,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { HomePageShopByCategory2 } from '../types/homepage';
+import ShopNowCTA from './ShopNowCTA.vue';
 
 interface Props {
   items?: HomePageShopByCategory2[]

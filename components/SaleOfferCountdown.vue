@@ -75,7 +75,7 @@
                 <!-- Bottom Section with Shop Now Button -->
                  <section class="countdown-bottom-section">
                     <div class="countdown-bottom">
-                    <ShopNowBlue />
+                    <ShopNowCTA text="Shop Now" />
                 </div>
                 
                 <div class="carousel-navigation">
@@ -160,7 +160,7 @@ import { useCart } from '../composables/useCart'
 import { useCurrency } from '../composables/useCurrency'
 import type { HomePageProduct2 } from '../types/homepage'
 import SaleOfferCountdownMobile from './SaleOfferCountdownMobile.vue'
-import ShopNowBlue from './ShopNowBlue.vue'
+import ShopNowCTA from './ShopNowCTA.vue'
 
 interface Props {
   products?: HomePageProduct2[]

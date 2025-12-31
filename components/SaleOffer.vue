@@ -18,7 +18,7 @@
                     <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; ">
                         <div class="text-lg! sm:text-6xl! font-bold!">50% OFF</div>
                        <div class="text-lg!">
-                            <ShopNowWhite />
+                            <ShopNowCTA text="Shop Now" />
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 import { computed } from 'vue';
 import type { HomePageProduct2 } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
-import ShopNowWhite from './ShopNowWhite.vue';
+import ShopNowCTA from './ShopNowCTA.vue';
 
 interface Props {
   products?: HomePageProduct2[]
