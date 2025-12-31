@@ -1,32 +1,35 @@
 <template>
-  <div class="offer-banner">
-    <!-- Sliding content container -->
-    <div 
-      class="offer-content"
-      :style="{ animationDuration: `${animationDuration}s` }"
-    >
-      <!-- First set of content -->
-      <div class="offer-item">
-        50% OFF • Get Yours Now !!! •
-      </div>
-      
-      <!-- Duplicate content for seamless loop -->
-      <div class="offer-item">
-        50% OFF • Get Yours Now !!! •
-      </div>
-      
-      <!-- Third set for smooth transition -->
-      <div class="offer-item">
-        50% OFF • Get Yours Now !!! •
-      </div>
-      <div class="offer-item">
-        50% OFF • Get Yours Now !!! •
-      </div>
-      <div class="offer-item">
-        50% OFF • Get Yours Now !!! •
+  <NuxtLink :to="marquee_url" class="offer-banner-link">
+
+    <div class="offer-banner">
+      <!-- Sliding content container -->
+      <div 
+        class="offer-content"
+        :style="{ animationDuration: `${animationDuration}s` }"
+      >
+        <!-- First set of content -->
+        <div class="offer-item">
+          {{ marquee_text }}
+        </div>
+        
+        <!-- Duplicate content for seamless loop -->
+        <div class="offer-item">
+          {{ marquee_text }}
+        </div>
+        
+        <!-- Third set for smooth transition -->
+        <div class="offer-item">
+          {{ marquee_text }}
+        </div>
+        <div class="offer-item">
+          {{ marquee_text }}
+        </div>
+        <div class="offer-item">
+          {{ marquee_text }}
+        </div>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">
@@ -37,6 +40,8 @@ interface Props {
   message?: string
   offerCode?: string
   discount?: string
+  marquee_text?: string
+  marquee_url?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {

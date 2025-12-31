@@ -63,21 +63,21 @@
         <div class="hero-overlay">
           <p class="hero-subtitle">{{ ctaData?.subtitle || 'New Collection' }}</p>
           <div class="hero-title dm-serif">
-            {{ ctaData?.title || 'Durga Puja - 2025' }}
+            {{ ctaData?.title  }}
           </div>
           <NuxtLink v-if="ctaData?.button_url && !isExternalUrl(ctaData.button_url)" :to="ctaData.button_url" class="hero-button">
             <div class="hero-button-text">
-              {{ ctaData?.marquee_text || ctaData?.button_text }}
+              {{ctaData?.button_text }}
             </div>
           </NuxtLink>
           <a v-else-if="ctaData?.button_url && isExternalUrl(ctaData.button_url)" :href="ctaData.button_url" class="hero-button" target="_blank" rel="noopener noreferrer">
             <div class="hero-button-text">
-              {{ ctaData?.marquee_text || ctaData?.button_text }}
+              {{ ctaData?.button_text }}
             </div>
           </a>
           <button v-else class="hero-button">
             <div class="hero-button-text">
-              {{ ctaData?.marquee_text || ctaData?.button_text }}
+              {{ctaData?.button_text }}
             </div>
           </button>
         </div>

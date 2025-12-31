@@ -101,7 +101,7 @@
     <!-- Actual Content -->
     <div v-else class="home-page-content">
       <HeroBanner />
-      <OfferBanner />
+      <OfferBanner :marquee_text="homepageData?.cta?.marquee_text" :marquee_url="homepageData?.cta?.marquee_url" />
       <!-- <AllCategories /> -->
       <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
       <NewArrival :products="newArrivalProducts" />
