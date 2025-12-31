@@ -62,35 +62,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useApi } from '../composables/useApi'
+import type { HomepageResponse, Product } from '../types/homepage'
 import ShopNowBlue from './ShopNowBlue.vue'
 
-const timelessImages = [
-    {
-        src: '/timeless/benarashi.webp',
-        alt: 'Timeless Rang',
-        title: 'Banarasi Saree',
-        link: '/products/banarasi-saree'
-    },
-    {
-        src: '/timeless/jamdani.webp',
-        alt: 'Timeless Rang',
-        title: 'Jamdani Saree',
-        link: '/products/jamdani-saree'
-    },
-    {
-        src: '/timeless/silk.webp',
-        alt: 'Timeless Rang',
-        title: 'Silk Saree',
-        link: '/products/silk-saree'
-    },
-    {
-        src: '/timeless/cotton.webp',
-        alt: 'Timeless Rang',
-        title: 'Cotton Saree',
-        link: '/products/cotton-saree'
-    }
-]
+interface TimelessImage {
+    src: string
+    alt: string
+    title: string
+    link: string
+}
+
+const timelessImages = ref<TimelessImage[]>([])
 
 // Carousel state
 const currentSlide = ref(0)
@@ -108,7 +92,7 @@ const isTouch = ref(false)
 // Calculate max slide based on showing 2.25 images
 const maxSlide = computed(() => {
     if (!isMobile.value) return 0
-    return Math.max(0, timelessImages.length - 2.25)
+    return Math.max(0, timelessImages.value.length - 2.25)
 })
 
 // Carousel methods
@@ -211,9 +195,39 @@ const handleResize = () => {
     }
 }
 
+// Fetch Timeless Six Yards products from API
+const fetchTimelessProducts = async () => {
+    try {
+        const { backendUrl } = useApi()
+        const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`)
+        
+        if (response.success && response.data?.sections) {
+            // Find the "Timeless Six Yards" section
+            const timelessSection = response.data.sections.find(
+                section => section.title === 'Timeless Six Yards'
+            )
+            
+            if (timelessSection?.products) {
+                // Map products to timelessImages format
+                timelessImages.value = timelessSection.products.map((product: Product) => ({
+                    src: product.image,
+                    alt: product.name,
+                    title: product.name,
+                    link: `/products/${product.category.slug}/${product.slug}`
+                }))
+            }
+        }
+    } catch (err) {
+        console.error('Error fetching Timeless Six Yards data:', err)
+        // Fallback to empty array or default images if needed
+        timelessImages.value = []
+    }
+}
+
 onMounted(() => {
     handleResize()
     window.addEventListener('resize', handleResize)
+    fetchTimelessProducts()
 })
 
 onUnmounted(() => {
