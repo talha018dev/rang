@@ -158,12 +158,12 @@
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 import { useCart } from '../composables/useCart'
 import { useCurrency } from '../composables/useCurrency'
-import type { Product } from '../types/homepage'
+import type { HomePageProduct2 } from '../types/homepage'
 import SaleOfferCountdownMobile from './SaleOfferCountdownMobile.vue'
 import ShopNowBlue from './ShopNowBlue.vue'
 
 interface Props {
-  products?: Product[]
+  products?: HomePageProduct2[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -199,7 +199,7 @@ const goToPrevious = () => {
 }
 
 // Computed property to transform API products into carousel items
-const carouselItems = computed<Product[]>(() => {
+const carouselItems = computed<HomePageProduct2[]>(() => {
   if (!props.products || !Array.isArray(props.products) || props.products.length === 0) {
     // Return empty array if no products - carousel will handle empty state
     console.log('No products found for carousel')
@@ -232,7 +232,7 @@ const getImageUrl = (imagePath: string): string => {
 const { addToCart } = useCart()
 const { formatPrice } = useCurrency()
 
-const handleAddToCart = (product: Product) => {
+const handleAddToCart = (product: HomePageProduct2) => {
   const firstVariant = product.variants?.[0]
   const size = firstVariant?.attributes?.size
   const color = firstVariant?.attributes?.color

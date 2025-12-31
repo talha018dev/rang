@@ -35,13 +35,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Product } from '../types/homepage';
+import type { HomePageProduct2 } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
-import ShopNowBlue from './ShopNowBlue.vue';
 import ShopNowWhite from './ShopNowWhite.vue';
 
 interface Props {
-  products?: Product[]
+  products?: HomePageProduct2[]
 }
 
 const props = withDefaults(defineProps<Props>(), {

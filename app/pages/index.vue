@@ -105,11 +105,11 @@
       <!-- <AllCategories /> -->
       <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
       <NewArrival :products="newArrivalProducts" />
-      <ExploreRang />
-      <ShopByCategory />
+      <ExploreRang :items="homepageData?.dynamic_sections?.explore_rangbd || []" />
+      <ShopByCategory :items="homepageData?.dynamic_sections?.shop_by_category || []" />
       <TimelessSixYards />
       <ShopByBrand />
-      <ShopByTheme />
+      <ShopByTheme :items="homepageData?.dynamic_sections?.shop_by_theme || []" />
       <SaleOffer :products="saleOfferProducts" />
       <WhyRang />
       <CustomerDiaries />
@@ -131,7 +131,7 @@ import ShopByCategory from '../../components/ShopByCategory.vue'
 import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
 import WhyRang from '../../components/WhyRang.vue'
-import type { HomepageData, HomepageResponse, Product } from '../../types/homepage'
+import type { HomepageData, HomePageData2, HomePageProduct2, HomepageResponse, HomePageResponse2, Product } from '../../types/homepage'
 import './index.css'
 
 const items = [
@@ -144,12 +144,12 @@ const items = [
 ]
 
 // Reactive state for homepage data
-const homepageData = ref<HomepageData | null>(null)
+const homepageData = ref<HomePageData2 | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
 // Find New Arrival section products
-const newArrivalProducts = computed<Product[]>(() => {
+const newArrivalProducts = computed<HomePageProduct2[]>(() => {
   if (!homepageData.value?.sections) return []
   
   const newArrivalSection = homepageData.value.sections.find(
@@ -160,7 +160,7 @@ const newArrivalProducts = computed<Product[]>(() => {
 })
 
 // Find Sale Offer section products
-const saleOfferProducts = computed<Product[]>(() => {
+const saleOfferProducts = computed<HomePageProduct2[]>(() => {
   if (!homepageData.value?.sections) return []
   
   const saleOfferSection = homepageData.value.sections.find(
@@ -177,7 +177,7 @@ onMounted(async () => {
   
   try {
     const { backendUrl } = useApi()
-    const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`)
+    const response = await $fetch<HomePageResponse2>(`${backendUrl}/homepage`)
     console.log('Homepage API Response:', response)
     
     if (response.success && response.data) {

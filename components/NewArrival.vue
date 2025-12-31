@@ -52,11 +52,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { Product } from '../types/homepage';
+import type { HomePageProduct2, Product } from '../types/homepage';
 import ShopNowBlue from './ShopNowBlue.vue';
 
 interface Props {
-  products?: Product[]
+  products?: HomePageProduct2[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
