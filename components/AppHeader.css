@@ -6,13 +6,13 @@
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
-  font-size: 1.2em;
+  font-size: 1.1em;
   line-height: 100%;
   letter-spacing: 0%;
   color: white;
   z-index: 100;
   position: absolute;
-  top: 24px;
+  top: 15px;
   right: 10px;
   transform: translateY(-50%);
   transition: color 0.15s ease-in-out, font-size 0.3s ease-in-out;
@@ -23,6 +23,7 @@
 .header-home:not(.header-scrolled) .heading-text {
   font-size: 1.4em;
   /* top: 48px; */
+  top: 26px;
 }
 
 /* Make heading black on all pages except home page */
@@ -183,14 +184,14 @@
   object-fit: contain;
   object-position: bottom;
 
-  position: relative;
-  top: 2px;
+  /* position: relative;
+  top: 2px; */
 }
 
 /* Make logo bigger on home page when not scrolled */
 .header-home:not(.header-scrolled) .logo-image {
   height: 100px;
-  top:6px;
+  /* top:6px; */
 }
 
 .nav {

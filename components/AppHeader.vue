@@ -5,15 +5,15 @@
         <h1 class="heading-text">RANG BANGLADESH</h1>
       </div>
       <div class="header-content">
-        <div class="">
+        <div class="w-[100px]!">
           <NuxtLink to="/">
-            <NuxtImg src="/rang-logo-2026.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
+            <NuxtImg src="/rang-logo-2026-v2.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
           </NuxtLink>
         </div>
         <nav class="nav items-end!">
-          <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
+          <!-- <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
             Home
-          </NuxtLink>
+          </NuxtLink> -->
           
           <!-- Dynamic Menu Items from Settings API -->
           <template v-for="(item, index) in sortedMenuItems" :key="item.id">
@@ -238,16 +238,16 @@
         <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
             <NuxtLink to="/" @click="closeDrawer">
-              <NuxtImg src="/rang-logo-2026.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo" format="webp" quality="90" loading="eager" />
+              <NuxtImg src="/rang-logo-2026-v2.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo h-[90px]!" format="webp" quality="90" loading="eager" />
             </NuxtLink>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
           </div>
 
           <!-- Mobile Navigation Links -->
           <div class="mobile-nav-links">
-            <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)" @click="closeDrawer">
+            <!-- <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)" @click="closeDrawer">
               Home
-            </NuxtLink>
+            </NuxtLink> -->
             
             <!-- Dynamic Mobile Menu Items from Settings API -->
             <template v-for="(item, index) in sortedMenuItems" :key="item.id">

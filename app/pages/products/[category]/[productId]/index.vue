@@ -3,7 +3,7 @@
         <AppHeader />
 
         <!-- Breadcrumb Navigation -->
-        <div class="breadcrumb-bg">
+        <!-- <div class="breadcrumb-bg">
             <div class="breadcrumb">
                 <NuxtLink to="/">Homepage</NuxtLink>
                 <span>/</span>
@@ -11,7 +11,7 @@
                 <span>/</span>
                 <span>{{ product?.name || 'Product' }}</span>
             </div>
-        </div>
+        </div> -->
 
         <!-- Loading State Skeleton -->
         <div v-if="isLoading" class="product-container loading-skeleton">
