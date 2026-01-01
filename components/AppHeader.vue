@@ -10,7 +10,7 @@
             <NuxtImg src="/rang-logo-2026-v2.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
           </NuxtLink>
         </div>
-        <nav class="nav items-end!">
+        <nav class="nav items-end! ml-3!">
           <!-- <NuxtLink to="/" :class="getNavLinkHomeClass(isHomeActive)">
             Home
           </NuxtLink> -->
