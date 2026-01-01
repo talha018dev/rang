@@ -21,7 +21,7 @@
 
 /* Make heading text bigger on home page when not scrolled */
 .header-home:not(.header-scrolled) .heading-text {
-  font-size: 1.6em;
+  font-size: 1.4em;
   /* top: 48px; */
 }
 
@@ -37,7 +37,7 @@
 
 /* Add hover effect like other elements */
 .heading-text:hover {
-  color: #ea580c;
+  /* color: #ea580c; */
 }
 
 .header-drawer {
@@ -182,11 +182,15 @@
   transition: height 0.3s ease-in-out;
   object-fit: contain;
   object-position: bottom;
+
+  position: relative;
+  top: 2px;
 }
 
 /* Make logo bigger on home page when not scrolled */
 .header-home:not(.header-scrolled) .logo-image {
   height: 100px;
+  top:6px;
 }
 
 .nav {

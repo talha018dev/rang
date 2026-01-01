@@ -5,9 +5,9 @@
         <h1 class="heading-text">RANG BANGLADESH</h1>
       </div>
       <div class="header-content">
-        <div class="min-w-[200px]">
+        <div class="">
           <NuxtLink to="/">
-            <NuxtImg src="/rang-logo.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
+            <NuxtImg src="/rang-logo-2026.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
           </NuxtLink>
         </div>
         <nav class="nav items-end!">
@@ -238,7 +238,7 @@
         <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
             <NuxtLink to="/" @click="closeDrawer">
-              <NuxtImg src="/rang-logo.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo" format="webp" quality="90" loading="eager" />
+              <NuxtImg src="/rang-logo-2026.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo" format="webp" quality="90" loading="eager" />
             </NuxtLink>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
           </div>
