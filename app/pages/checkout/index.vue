@@ -627,7 +627,7 @@ const {
   clearCart
 } = useCart()
 
-const { formatPrice, currency, exchangeRate } = useCurrency()
+const { formatPrice, currency, currencyCode, exchangeRate } = useCurrency()
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
@@ -709,7 +709,10 @@ const fetchShippingMethods = async (addressData?: any) => {
     const { backendUrl } = useApi()
     
     // Prepare request body with address data if provided
-    const requestBody = addressData || {}
+    const requestBody = {
+      ...(addressData || {}),
+      currency: currencyCode.value
+    }
     
     const response = await $fetch<any>(`${backendUrl}/order/shipping-methods`, {
       method: 'POST',
@@ -1534,6 +1537,7 @@ const handlePlaceOrder = async () => {
       is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
       combo_offer_discount: hasComboProducts.value ? comboOfferDiscountBDT.value : 0,
+      currency: currencyCode.value,
       address: {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
