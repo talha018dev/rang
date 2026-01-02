@@ -6,10 +6,10 @@
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
-  font-size: 1.1em;
+  font-size: 1.2em;
   line-height: 100%;
   letter-spacing: 0%;
-  color: white;
+  color: black;
   z-index: 100;
   position: absolute;
   top: 15px;
@@ -21,7 +21,7 @@
 
 /* Make heading text bigger on home page when not scrolled */
 .header-home:not(.header-scrolled) .heading-text {
-  font-size: 1.4em;
+  font-size: 1.1em;
   /* top: 48px; */
   top: 26px;
 }
