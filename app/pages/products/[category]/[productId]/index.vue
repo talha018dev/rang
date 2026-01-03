@@ -273,6 +273,34 @@
                         </div>
                     </div>
 
+                    <!-- Tags and Campaigns -->
+                    <div v-if="((product as any)?.tags && (product as any).tags.length > 0) || ((product as any)?.campaigns && (product as any).campaigns.length > 0)" class="product-tags-campaigns">
+                        <!-- Tags -->
+                        <div v-if="(product as any)?.tags && (product as any).tags.length > 0" class="tags-section">
+                            <span class="tags-label">Tags: </span>
+                            <NuxtLink 
+                                v-for="tag in (product as any).tags" 
+                                :key="tag" 
+                                :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
+                                class="tag-link"
+                            >
+                                {{ tag }}
+                            </NuxtLink>
+                        </div>
+                        <!-- Campaigns -->
+                        <div v-if="(product as any)?.campaigns && (product as any).campaigns.length > 0" class="campaigns-section">
+                            <span class="campaigns-label">Campaigns: </span>
+                            <NuxtLink 
+                                v-for="campaign in (product as any).campaigns" 
+                                :key="campaign" 
+                                :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
+                                class="campaign-link"
+                            >
+                                {{ campaign }}
+                            </NuxtLink>
+                        </div>
+                    </div>
+
                     <!-- Size Selection -->
                     <div v-if="availableSizes.length > 0" class="size-selection">
                         <label class="selection-label">Size</label>
@@ -406,6 +434,34 @@
                         <div class="description-item">
                             <div class="description-text" v-html="product.description"></div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Tags and Campaigns -->
+                <div v-if="((product as any)?.tags && (product as any).tags.length > 0) || ((product as any)?.campaigns && (product as any).campaigns.length > 0)" class="product-tags-campaigns">
+                    <!-- Tags -->
+                    <div v-if="(product as any)?.tags && (product as any).tags.length > 0" class="tags-section">
+                        <span class="tags-label">Tags: </span>
+                        <NuxtLink 
+                            v-for="tag in (product as any).tags" 
+                            :key="tag" 
+                            :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
+                            class="tag-link"
+                        >
+                            {{ tag }}
+                        </NuxtLink>
+                    </div>
+                    <!-- Campaigns -->
+                    <div v-if="(product as any)?.campaigns && (product as any).campaigns.length > 0" class="campaigns-section">
+                        <span class="campaigns-label">Campaigns: </span>
+                        <NuxtLink 
+                            v-for="campaign in (product as any).campaigns" 
+                            :key="campaign" 
+                            :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
+                            class="campaign-link"
+                        >
+                            {{ campaign }}
+                        </NuxtLink>
                     </div>
                 </div>
 

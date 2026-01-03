@@ -236,6 +236,10 @@ import './products.css'
 const route = useRoute()
 const categorySlug = computed(() => route.params.category as string)
 
+// Get query params for tag and campaign
+const selectedTag = computed(() => (route.query.tag as string) || '')
+const selectedCampaign = computed(() => (route.query.campaign as string) || '')
+
 console.log('qqqqqqqqqq',categorySlug.value);
 
 // Check if current category is women or a child of women
@@ -443,6 +447,16 @@ const fetchProducts = async () => {
       apiUrl += `&combo=${selectedCombo.value}`
     }
     
+    // Add tag parameter if present in query
+    if (selectedTag.value) {
+      apiUrl += `&tag=${encodeURIComponent(selectedTag.value)}`
+    }
+    
+    // Add campaign parameter if present in query
+    if (selectedCampaign.value) {
+      apiUrl += `&campaign=${encodeURIComponent(selectedCampaign.value)}`
+    }
+    
     const response = await $fetch<ProductResponse>(apiUrl)
     console.log('Products API Response:', response)
 
@@ -481,6 +495,12 @@ onMounted(() => {
 // Watch for category slug changes
 watch(categorySlug, () => {
   currentPage.value = 1 // Reset to first page when category changes
+  fetchProducts()
+})
+
+// Watch for query param changes (tag and campaign)
+watch([selectedTag, selectedCampaign], () => {
+  currentPage.value = 1 // Reset to first page when filter changes
   fetchProducts()
 })
 
