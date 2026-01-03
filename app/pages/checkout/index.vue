@@ -1265,6 +1265,7 @@ watch(shippingInfo, () => {
 }, { deep: true })
 
 // Shipping cost in BDT (base currency)
+// Since API data is always the same, we can use default values if API data isn't loaded yet
 const shippingCostBDT = computed(() => {
   if (!shippingMethod.value) {
     return 0
@@ -1272,7 +1273,7 @@ const shippingCostBDT = computed(() => {
   
   // Handle store_pickup and international_shipping (both are 0)
   if (shippingMethod.value === 'store_pickup' || shippingMethod.value === 'international_shipping') {
-    return shippingMethods.value[shippingMethod.value] || 0
+    return shippingMethods.value[shippingMethod.value] ?? 0
   }
   
   // Handle home_delivery
@@ -1280,21 +1281,44 @@ const shippingCostBDT = computed(() => {
     const partner = String(deliveryPartner.value)
     const homeDelivery = shippingMethods.value.home_delivery
     
-    if (!homeDelivery) {
-      return 0
+    // Default values (matching the API response structure)
+    const defaultHomeDelivery = {
+      pathao: 100,
+      sa_paribahan: {
+        inside_dhaka: 60,
+        outside_dhaka: 80
+      },
+      sundarban: {
+        inside_dhaka: 50,
+        outside_dhaka: 70
+      }
     }
+    
+    // Use API data if available, otherwise use defaults
+    const deliveryData = homeDelivery || defaultHomeDelivery
     
     // Pathao is a flat rate
     if (partner === 'pathao') {
-      return typeof homeDelivery.pathao === 'number' ? homeDelivery.pathao : 0
+      const cost = typeof deliveryData.pathao === 'number' ? deliveryData.pathao : defaultHomeDelivery.pathao
+      return cost
     }
     
     // For SA Paribahan and Sundarban, get cost based on location
-    if ((partner === 'sa_paribahan' || partner === 'sundarban') && deliveryLocation.value) {
-      const partnerData = homeDelivery[partner]
+    if (partner === 'sa_paribahan' || partner === 'sundarban') {
+      if (!deliveryLocation.value) {
+        // If location not selected yet, return 0
+        return 0
+      }
+      
+      const partnerData = deliveryData[partner] as Record<string, number> | undefined
+      const defaultPartnerData = defaultHomeDelivery[partner] as Record<string, number>
+      
       if (partnerData && typeof partnerData === 'object') {
         const location = String(deliveryLocation.value)
-        return partnerData[location] || 0
+        return partnerData[location] ?? (defaultPartnerData?.[location] ?? 0)
+      } else if (defaultPartnerData) {
+        const location = String(deliveryLocation.value)
+        return defaultPartnerData[location] ?? 0
       }
     }
     
