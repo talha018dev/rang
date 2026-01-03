@@ -627,7 +627,7 @@ const {
   clearCart
 } = useCart()
 
-const { formatPrice, currency, currencyCode, exchangeRate } = useCurrency()
+const { formatPrice, currency, currencyCode, exchangeRate, setCurrency } = useCurrency()
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
@@ -804,6 +804,32 @@ const getBrowserLocation = async () => {
         // Populate country if available and not already set
         if (address.country && !shippingInfo.value.country) {
           shippingInfo.value.country = address.country
+        }
+
+        // Auto-set currency based on detected country (always, unless user manually selected)
+        const hasManualCurrencySelection = typeof window !== 'undefined' && localStorage.getItem('currency_manually_set') === 'true'
+        
+        // Always detect and set currency based on location, unless user has manually selected
+        if (!hasManualCurrencySelection && address.country) {
+          // List of countries that typically use USD
+          const usdCountries = [
+            'United States', 'United States of America', 'USA', 'US',
+            'Canada', 'Puerto Rico', 'US Virgin Islands', 'Guam', 
+            'American Samoa', 'Marshall Islands', 'Micronesia', 'Palau'
+          ]
+          
+          const isUSDCountry = usdCountries.some(usdCountry => 
+            address.country?.toUpperCase() === usdCountry.toUpperCase()
+          )
+          
+          if (isUSDCountry) {
+            setCurrency('USD', false) // false = auto-detected, not manual
+            console.log('Currency automatically set to USD based on location:', address.country)
+          } else {
+            // Default to BDT for non-USD countries
+            setCurrency('BDT', false) // false = auto-detected, not manual
+            console.log('Currency automatically set to BDT based on location:', address.country)
+          }
         }
 
         // Populate state/district if available and not already set

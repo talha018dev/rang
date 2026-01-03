@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export type Currency = 'BDT' | 'USD'
 
@@ -6,7 +6,7 @@ const currency = ref<Currency>('BDT')
 const exchangeRate = ref<number>(110) // 1 USD = 110 BDT (example rate, can be updated)
 
 // Load currency from localStorage on initialization
-if (process.client) {
+if (typeof window !== 'undefined') {
   const savedCurrency = localStorage.getItem('currency') as Currency | null
   if (savedCurrency && (savedCurrency === 'BDT' || savedCurrency === 'USD')) {
     currency.value = savedCurrency
@@ -15,10 +15,14 @@ if (process.client) {
 
 export const useCurrency = () => {
   // Set currency
-  const setCurrency = (newCurrency: Currency) => {
+  const setCurrency = (newCurrency: Currency, isManual = false) => {
     currency.value = newCurrency
-    if (process.client) {
+    if (typeof window !== 'undefined') {
       localStorage.setItem('currency', newCurrency)
+      // Track if user manually selected currency (prevents auto-detection from overriding)
+      if (isManual) {
+        localStorage.setItem('currency_manually_set', 'true')
+      }
     }
   }
 

@@ -872,7 +872,7 @@ const toggleCurrencyDropdown = () => {
 }
 
 const selectCurrency = (newCurrency: 'BDT' | 'USD') => {
-  setCurrency(newCurrency)
+  setCurrency(newCurrency, true) // true indicates manual selection
   showCurrencyDropdown.value = false
 }
 
@@ -882,7 +882,7 @@ const toggleMobileCurrencyDropdown = () => {
 }
 
 const selectMobileCurrency = (newCurrency: 'BDT' | 'USD') => {
-  setCurrency(newCurrency)
+  setCurrency(newCurrency, true) // true indicates manual selection
   showMobileCurrencyDropdown.value = false
 }
 
