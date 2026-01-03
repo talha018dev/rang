@@ -273,61 +273,61 @@
                         </div>
                     </div>
 
-                    <!-- Tags and Campaigns -->
-                    <div v-if="hasTags || hasCampaigns" class="product-tags-campaigns">
-                        <!-- Tags -->
-                        <div v-if="hasTags" class="tags-section">
-                            <span class="tags-label">Tags: </span>
-                            <template v-if="Array.isArray((product as any)?.tags)">
-                                <!-- Tags as array -->
-                                <NuxtLink 
-                                    v-for="tag in (product as any).tags" 
-                                    :key="tag" 
-                                    :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
-                                    class="tag-link"
-                                >
-                                    {{ tag }}
-                                </NuxtLink>
-                            </template>
-                            <template v-else>
-                                <!-- Tags as object -->
-                                <NuxtLink 
-                                    v-for="(displayName, tagKey) in (product as any)?.tags" 
-                                    :key="tagKey" 
-                                    :to="`/tags/${encodeURIComponent(tagKey)}`"
-                                    class="tag-link"
-                                >
-                                    {{ displayName }}
-                                </NuxtLink>
-                            </template>
-                        </div>
-                        <!-- Campaigns -->
-                        <div v-if="hasCampaigns" class="campaigns-section">
-                            <span class="campaigns-label">Campaigns: </span>
-                            <template v-if="Array.isArray((product as any)?.campaigns)">
-                                <!-- Campaigns as array -->
-                                <NuxtLink 
-                                    v-for="campaign in (product as any).campaigns" 
-                                    :key="campaign" 
-                                    :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
-                                    class="campaign-link"
-                                >
-                                    {{ campaign }}
-                                </NuxtLink>
-                            </template>
-                            <template v-else>
-                                <!-- Campaigns as object -->
-                                <NuxtLink 
-                                    v-for="(displayName, campaignKey) in (product as any)?.campaigns" 
-                                    :key="campaignKey" 
-                                    :to="`/products/${category}?campaign=${encodeURIComponent(campaignKey)}`"
-                                    class="campaign-link"
-                                >
-                                    {{ displayName }}
-                                </NuxtLink>
-                            </template>
-                        </div>
+                <!-- Tags and Campaigns -->
+                <div v-if="hasTags || hasCampaigns" class="product-tags-campaigns">
+                    <!-- Tags -->
+                    <div v-if="hasTags" class="tags-section">
+                        <span class="tags-label">Tags: </span>
+                        <template v-if="Array.isArray((product as any)?.tags)">
+                            <!-- Tags as array -->
+                            <NuxtLink 
+                                v-for="tag in (product as any).tags" 
+                                :key="tag" 
+                                :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
+                                class="tag-link"
+                            >
+                                {{ tag }}
+                            </NuxtLink>
+                        </template>
+                        <template v-else>
+                            <!-- Tags as object -->
+                            <NuxtLink 
+                                v-for="(displayName, tagKey) in (product as any)?.tags" 
+                                :key="tagKey" 
+                                :to="`/tags/${encodeURIComponent(tagKey)}`"
+                                class="tag-link"
+                            >
+                                {{ displayName }}
+                            </NuxtLink>
+                        </template>
                     </div>
+                    <!-- Campaigns -->
+                    <div v-if="hasCampaigns" class="campaigns-section">
+                        <span class="campaigns-label">Campaigns: </span>
+                        <template v-if="Array.isArray((product as any)?.campaigns)">
+                            <!-- Campaigns as array -->
+                            <NuxtLink 
+                                v-for="campaign in (product as any).campaigns" 
+                                :key="campaign" 
+                                :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
+                                class="campaign-link"
+                            >
+                                {{ campaign }}
+                            </NuxtLink>
+                        </template>
+                        <template v-else>
+                            <!-- Campaigns as object -->
+                            <NuxtLink 
+                                v-for="(displayName, campaignKey) in (product as any)?.campaigns" 
+                                :key="campaignKey" 
+                                :to="`/campaigns/${encodeURIComponent(campaignKey)}`"
+                                class="campaign-link"
+                            >
+                                {{ displayName }}
+                            </NuxtLink>
+                        </template>
+                    </div>
+                </div>
 
                     <!-- Size Selection -->
                     <div v-if="availableSizes.length > 0" class="size-selection">
@@ -512,7 +512,7 @@
                             <NuxtLink 
                                 v-for="(displayName, campaignKey) in (product as any)?.campaigns" 
                                 :key="campaignKey" 
-                                :to="`/products/${category}?campaign=${encodeURIComponent(campaignKey)}`"
+                                :to="`/campaigns/${encodeURIComponent(campaignKey)}`"
                                 class="campaign-link"
                             >
                                 {{ displayName }}
