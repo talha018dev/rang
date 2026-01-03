@@ -19,8 +19,7 @@
                             ref="productImage"
                         />
                         <div class="absolute! top-4! left-4! sale-offer-text-overlay" :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
-                            <div class="text-lg! sm:text-6xl! font-bold!">{{ categoryWords[0] }}</div>
-                            <div class="text-lg! sm:text-6xl!">{{ categoryWords[1] }}</div>
+                            <div class="text-lg! sm:text-6xl! font-bold!">{{ sectionTitle || '' }}</div>
                         </div>
                         <div class="sale-offer-number-container w-full bottom-4! pl-4!" style="justify-content: space-between; " :class="{ 'text-dark': !isDarkBackground, 'text-light': isDarkBackground, 'text-very-dark': isVeryDarkBackground }">
                             <div class="text-lg! sm:text-6xl! font-bold!">{{ discountText }}</div>
@@ -49,8 +48,6 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import type { HomePageProduct2 } from '../types/homepage';
 import SaleOfferCountdown from './SaleOfferCountdown.vue';
-import ShopNowCTA from './ShopNowCTA.vue';
-import ShopNowBlue from '~~/components/ShopNowBlue.vue';
 
 interface Props {
   products?: HomePageProduct2[]
@@ -114,7 +111,7 @@ const categoryWords = computed(() => {
 
 // Get discount text (percentage from category or default "50% OFF")
 const discountText = computed(() => {
-  return categoryPercentage.value ? `${categoryPercentage.value} OFF` : '50% OFF'
+  return categoryPercentage.value ? `${categoryPercentage.value} OFF` : ''
 })
 
 // Image brightness detection
