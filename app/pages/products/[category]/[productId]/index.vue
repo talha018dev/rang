@@ -263,6 +263,16 @@
 
                 <!-- Product Details Section (Desktop) -->
                 <div class="product-details-p-2" v-if="!isMobile">
+                    <!-- Product Description -->
+                    <div class="product-description" v-if="product?.description">
+                        <h2 class="info-section-title">Product Description</h2>
+                        <div class="description-content">
+                            <div class="description-item">
+                                <div class="description-text" v-html="product.description"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Size Selection -->
                     <div v-if="availableSizes.length > 0" class="size-selection">
                         <label class="selection-label">Size</label>
@@ -389,6 +399,16 @@
                 </section>
             </div>
             <div class="product-details-p-2-mobile" v-if="isMobile">
+                <!-- Product Description -->
+                <div class="product-description" v-if="product?.description">
+                    <h2 class="info-section-title">Product Description</h2>
+                    <div class="description-content">
+                        <div class="description-item">
+                            <div class="description-text" v-html="product.description"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="size-selection" v-if="availableSizes.length > 0">
                     <label class="selection-label">Size</label>
                     <div class="size-radio-group">
@@ -499,42 +519,6 @@
                     <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
                         Add to cart
                     </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product Information Section -->
-        <div class="product-info-section">
-            <div class="product-info-container">
-                <!-- Left Column - Product Description -->
-                <div class="product-description">
-                    <h2 class="info-section-title">Product Description</h2>
-
-                    <div class="description-content" v-if="product?.description">
-                        <div class="description-item">
-                            <div class="description-text" v-html="product.description"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column - Product Specification -->
-                <div class="product-specification">
-                    <h2 class="info-section-title">Product Specification</h2>
-
-                    <div class="specification-content">
-                        <ul class="specification-list">
-                            <li><span class="spec-label">Product Code</span> - 21491001</li>
-                            <li><span class="spec-label">Iron</span> - Cool iron, Iron Inside Out</li>
-                            <li><span class="spec-label">Washing Instructions</span> - Machine washable</li>
-                            <li><span class="spec-label">Country of Origin</span> - India</li>
-                            <li><span class="spec-label">Neckline</span> - Collar</li>
-                            <li><span class="spec-label">Brand</span> - John Lewis ANYDAY</li>
-                            <li><span class="spec-label">Fastening</span> - Button</li>
-                            <li><span class="spec-label">Drying Instructions</span> - Do not tumble dry</li>
-                            <li><span class="spec-label">Pattern Details</span> - Plain</li>
-                            <li><span class="spec-label">Composition</span> - 100% cotton</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>

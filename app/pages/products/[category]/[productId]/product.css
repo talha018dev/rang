@@ -726,7 +726,7 @@
 .matching-series-section {
   max-width: 1600px;
   width: 90%;
-  margin: 60px auto 0;
+  margin: 20px auto 0;
 }
 .matching-series-section .section-title {
   font-family: Poppins;
@@ -1181,7 +1181,7 @@
   font-size: 1.5em;
   font-weight: 600;
   color: #e18719;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-align: left;
 }
 
@@ -1189,6 +1189,7 @@
 .product-description {
   display: flex;
   flex-direction: column;
+  margin-bottom: 12px;
 }
 .product-description .info-section-title,
 .product-specification .info-section-title {
