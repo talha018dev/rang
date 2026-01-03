@@ -37,8 +37,8 @@ export interface Product {
   images: Record<string, string>
   category: ProductCategory
   variants: ProductVariant[]
-  tags?: string[]
-  campaigns?: string[]
+  tags?: string[] | Record<string, string>
+  campaigns?: string[] | Record<string, string>
 }
 
 export interface HomepageSection {
