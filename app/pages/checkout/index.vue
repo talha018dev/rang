@@ -298,6 +298,29 @@
                   </div>
                 </div>
 
+                <!-- Delivery Partner Selection (shown when Home Delivery is selected) -->
+                <div v-if="shippingMethod === 'home_delivery'" class="form-group">
+                  <label for="deliveryPartner" class="form-label">Delivery Partner *</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="deliveryPartner"
+                      v-model="deliveryPartner"
+                      class="form-input"
+                      required
+                    >
+                      <option value="">Select Delivery Partner</option>
+                      <option value="Pathao">Pathao</option>
+                      <option value="SA Paribahan">SA Paribahan</option>
+                      <option value="Sundarban Paribahan">Sundarban Paribahan</option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+
                 <!-- Outlet Selection (shown when Outlet is selected) -->
                 <div v-if="shippingMethod === 'store_pickup'" class="form-group">
                   <label for="selectedOutlet" class="form-label">Select Outlet *</label>
@@ -1114,6 +1137,7 @@ const billingInfo = ref({
 const billingSameAsShipping = ref(true)
 const shippingMethod = ref('')
 const selectedOutlet = ref<number | string>('')
+const deliveryPartner = ref('')
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
 const shippingMethods = ref<any[]>([])
@@ -1135,10 +1159,13 @@ const isGiftPackage = ref(false)
 const settingsData = ref<any>(null)
 const isLoadingSettings = ref(false)
 
-// Watch shipping method to reset outlet selection when changed
+// Watch shipping method to reset outlet selection and delivery partner when changed
 watch(shippingMethod, (newValue) => {
   if (newValue !== 'store_pickup') {
     selectedOutlet.value = ''
+  }
+  if (newValue !== 'home_delivery') {
+    deliveryPartner.value = ''
   }
 })
 
@@ -1440,6 +1467,12 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Validate delivery partner selection if home delivery is selected
+  if (shippingMethod.value === 'home_delivery' && !deliveryPartner.value) {
+    alert('Please select a delivery partner.')
+    return
+  }
+
   // Validate payment method
   if (!paymentMethod.value) {
     alert('Please select a payment option.')
@@ -1581,6 +1614,11 @@ const handlePlaceOrder = async () => {
     // Add outlet information if outlet is selected
     if (shippingMethod.value === 'store_pickup' && selectedOutlet.value) {
       orderData.pickup_location_id = selectedOutlet.value
+    }
+
+    // Add delivery partner information if home delivery is selected
+    if (shippingMethod.value === 'home_delivery' && deliveryPartner.value) {
+      orderData.delivery_partner = deliveryPartner.value
     }
 
     console.log('Order Data:', orderData)
