@@ -280,15 +280,12 @@
                       class="form-input"
                       required
                       :disabled="isLoadingShippingMethods"
+                      @change="deliveryPartner = ''"
                     >
                       <option value="">Select Delivery Option</option>
-                      <option
-                        v-for="method in shippingMethods"
-                        :key="method.slug"
-                        :value="method.slug"
-                      >
-                        {{ method.slug === 'store_pickup' ? 'Outlet' : method.name }}
-                      </option>
+                      <option value="home_delivery">Home Delivery</option>
+                      <option value="international_shipping">International Shipping</option>
+                      <option value="store_pickup">Outlet</option>
                     </select>
                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
@@ -307,11 +304,38 @@
                       v-model="deliveryPartner"
                       class="form-input"
                       required
+                      @change="deliveryLocation = ''"
                     >
                       <option value="">Select Delivery Partner</option>
-                      <option value="Pathao">Pathao</option>
-                      <option value="SA Paribahan">SA Paribahan</option>
-                      <option value="Sundarban Paribahan">Sundarban Paribahan</option>
+                      <option 
+                        v-for="option in deliveryPartnerOptions" 
+                        :key="option.value" 
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Delivery Location Selection (shown for SA Paribahan and Sundarban) -->
+                <div v-if="shippingMethod === 'home_delivery' && requiresLocationSelection" class="form-group">
+                  <label for="deliveryLocation" class="form-label">Delivery Location *</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="deliveryLocation"
+                      v-model="deliveryLocation"
+                      class="form-input"
+                      required
+                    >
+                      <option value="">Select Location</option>
+                      <option value="inside_dhaka">Inside Dhaka</option>
+                      <option value="outside_dhaka">Outside Dhaka</option>
                     </select>
                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
@@ -743,20 +767,34 @@ const fetchShippingMethods = async (addressData?: any) => {
       body: requestBody
     })
     console.log('Shipping Methods API Response:', response)
+    console.log('Shipping Methods API Response Data:', response.data)
     
-    if (response.success && response.data && Array.isArray(response.data)) {
+    if (response.success && response.data) {
       // Store the currently selected shipping method slug before updating
       const currentSelectedSlug = shippingMethod.value
       
-      // Update shipping methods
+      // Update shipping methods (now an object structure)
       shippingMethods.value = response.data
+      console.log('Updated shippingMethods.value:', shippingMethods.value)
+      console.log('Type of shippingMethods.value:', typeof shippingMethods.value)
+      console.log('Is it an object?', shippingMethods.value && typeof shippingMethods.value === 'object')
+      console.log('Keys in shippingMethods.value:', Object.keys(shippingMethods.value))
+      console.log('home_delivery in shippingMethods:', shippingMethods.value.home_delivery)
+      console.log('Type of home_delivery:', typeof shippingMethods.value.home_delivery)
+      if (shippingMethods.value.home_delivery) {
+        console.log('Keys in home_delivery:', Object.keys(shippingMethods.value.home_delivery))
+        console.log('pathao:', shippingMethods.value.home_delivery.pathao)
+        console.log('sa_paribahan:', shippingMethods.value.home_delivery.sa_paribahan)
+        console.log('sundarban:', shippingMethods.value.home_delivery.sundarban)
+      }
       
       // If the previously selected method still exists, keep it selected
       // Otherwise, reset to empty
       if (currentSelectedSlug) {
-        const methodStillExists = response.data.some((method: any) => method.slug === currentSelectedSlug)
+        const methodStillExists = response.data[currentSelectedSlug] !== undefined
         if (!methodStillExists) {
           shippingMethod.value = ''
+          deliveryPartner.value = ''
         }
       }
     }
@@ -1137,10 +1175,11 @@ const billingInfo = ref({
 const billingSameAsShipping = ref(true)
 const shippingMethod = ref('')
 const selectedOutlet = ref<number | string>('')
-const deliveryPartner = ref('')
+const deliveryPartner = ref('') // Format: "pathao", "sa_paribahan", or "sundarban"
+const deliveryLocation = ref('') // Format: "inside_dhaka" or "outside_dhaka" (for SA Paribahan and Sundarban)
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
-const shippingMethods = ref<any[]>([])
+const shippingMethods = ref<any>({}) // Changed to object to store the new API response structure
 const isLoadingShippingMethods = ref(false)
 
 // Computed property to get the selected outlet location
@@ -1166,7 +1205,34 @@ watch(shippingMethod, (newValue) => {
   }
   if (newValue !== 'home_delivery') {
     deliveryPartner.value = ''
+    deliveryLocation.value = ''
   }
+})
+
+// Computed property to generate delivery partner options
+// Since API data is always the same, we always show the 3 delivery partners
+const deliveryPartnerOptions = computed(() => {
+  // Always return the 3 delivery partners regardless of API data
+  // The API data will be used for cost calculation
+  return [
+    {
+      value: 'pathao',
+      label: 'Pathao'
+    },
+    {
+      value: 'sa_paribahan',
+      label: 'SA Paribahan'
+    },
+    {
+      value: 'sundarban',
+      label: 'Sundarban Paribahan'
+    }
+  ]
+})
+
+// Computed property to check if location selection is required
+const requiresLocationSelection = computed(() => {
+  return deliveryPartner.value === 'sa_paribahan' || deliveryPartner.value === 'sundarban'
 })
 
 // Coupon functionality
@@ -1204,17 +1270,35 @@ const shippingCostBDT = computed(() => {
     return 0
   }
   
-  // Find the selected shipping method from API data
-  const selectedMethod = shippingMethods.value.find(method => method.slug === shippingMethod.value)
-  if (selectedMethod) {
-    return selectedMethod.cost || 0
+  // Handle store_pickup and international_shipping (both are 0)
+  if (shippingMethod.value === 'store_pickup' || shippingMethod.value === 'international_shipping') {
+    return shippingMethods.value[shippingMethod.value] || 0
   }
   
-  // Fallback to default values if API data not loaded yet
-  if (shippingMethod.value === 'store_pickup') {
-    return 0 // Free for outlet pickup
-  } else if (shippingMethod.value === 'home_delivery') {
-    return 100 // Default home delivery cost (can be adjusted)
+  // Handle home_delivery
+  if (shippingMethod.value === 'home_delivery' && deliveryPartner.value) {
+    const partner = String(deliveryPartner.value)
+    const homeDelivery = shippingMethods.value.home_delivery
+    
+    if (!homeDelivery) {
+      return 0
+    }
+    
+    // Pathao is a flat rate
+    if (partner === 'pathao') {
+      return typeof homeDelivery.pathao === 'number' ? homeDelivery.pathao : 0
+    }
+    
+    // For SA Paribahan and Sundarban, get cost based on location
+    if ((partner === 'sa_paribahan' || partner === 'sundarban') && deliveryLocation.value) {
+      const partnerData = homeDelivery[partner]
+      if (partnerData && typeof partnerData === 'object') {
+        const location = String(deliveryLocation.value)
+        return partnerData[location] || 0
+      }
+    }
+    
+    return 0
   }
   
   return 0
@@ -1473,6 +1557,13 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Validate delivery location if required (for SA Paribahan and Sundarban)
+  if (shippingMethod.value === 'home_delivery' && requiresLocationSelection.value && !deliveryLocation.value) {
+    alert('Please select a delivery location.')
+    return
+  }
+
+
   // Validate payment method
   if (!paymentMethod.value) {
     alert('Please select a payment option.')
@@ -1591,7 +1682,11 @@ const handlePlaceOrder = async () => {
     const orderData: any = {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value || null,
-      shipping_method: shippingMethod.value,
+      shipping_method: shippingMethod.value === 'home_delivery' && deliveryPartner.value 
+        ? (deliveryLocation.value 
+          ? `home_delivery.${deliveryPartner.value}.${deliveryLocation.value}` 
+          : `home_delivery.${deliveryPartner.value}`)
+        : shippingMethod.value,
       payment_method: paymentMethod.value,
       is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
@@ -1616,10 +1711,6 @@ const handlePlaceOrder = async () => {
       orderData.pickup_location_id = selectedOutlet.value
     }
 
-    // Add delivery partner information if home delivery is selected
-    if (shippingMethod.value === 'home_delivery' && deliveryPartner.value) {
-      orderData.delivery_partner = deliveryPartner.value
-    }
 
     console.log('Order Data:', orderData)
     
