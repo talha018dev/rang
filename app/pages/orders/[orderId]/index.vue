@@ -659,15 +659,7 @@ const printInvoice = () => {
       <div class="invoice-footer">
         <div class="claim-policy">
           <h4 class="claim-policy-title">== Claim Policy ==</h4>
-          <ul class="claim-policy-list">
-            <li>All claims must be made within 7 days of delivery.</li>
-            <li>Items must be in original condition with tags attached.</li>
-            <li>Exchange is available for size/color issues within 14 days.</li>
-            <li>Returns are accepted for defective or damaged items only.</li>
-            <li>Customized or personalized items are non-refundable.</li>
-            <li>Shipping charges are non-refundable unless item is defective.</li>
-            <li>Please contact customer service for any claims or returns.</li>
-          </ul>
+          <p class="claim-policy-text">All claims must be made within 7 days of delivery. Items must be in original condition with tags attached. Exchange is available for size/color issues within 14 days. Returns are accepted for defective or damaged items only. Customized or personalized items are non-refundable. Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p>
         </div>
         <div class="invoice-thankyou">
           <p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p>
@@ -937,32 +929,35 @@ const printInvoice = () => {
           }
           .claim-policy {
             margin-bottom: 0.75rem;
+            width: 100%;
           }
           .claim-policy-title {
             font-size: 0.7rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            text-align: center;
           }
-          .claim-policy-list {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-          }
-          .claim-policy-list li {
-            margin-bottom: 0.25rem;
-            line-height: 1.4;
+          .claim-policy-text {
+            width: 100%;
             font-size: 0.65rem;
+            line-height: 1.5;
+            margin: 0;
+            text-align: center;
+            text-wrap: balance;
           }
           .invoice-thankyou {
             margin-bottom: 0.5rem;
+            text-align: center;
           }
           .thankyou-message {
             font-weight: 600;
             font-size: 0.7rem;
+            text-align: center;
           }
           .invoice-contact {
             font-size: 0.65rem;
             line-height: 1.5;
+            text-align: center;
           }
           .contact-info {
             margin-bottom: 0.15rem;
