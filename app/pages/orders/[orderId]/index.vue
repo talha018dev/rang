@@ -506,6 +506,8 @@ const printInvoice = () => {
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #000;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .invoice-title {
             font-size: 2rem;
@@ -524,6 +526,8 @@ const printInvoice = () => {
           }
           .invoice-info-section {
             margin-bottom: 2rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .invoice-info-grid {
             display: grid;
@@ -546,6 +550,8 @@ const printInvoice = () => {
           }
           .address-section {
             margin-bottom: 2rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .address-grid {
             display: grid;
@@ -556,6 +562,8 @@ const printInvoice = () => {
             padding: 1.5rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .address-title {
             font-size: 1.25rem;
@@ -572,6 +580,8 @@ const printInvoice = () => {
           }
           .items-section {
             margin-bottom: 2rem;
+            page-break-before: always;
+            break-before: page;
           }
           .section-title {
             font-size: 1.5rem;
@@ -582,6 +592,18 @@ const printInvoice = () => {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+          .items-table thead {
+            display: table-header-group;
+          }
+          .items-table tbody {
+            display: table-row-group;
+          }
+          .items-table tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .items-table th,
           .items-table td {
@@ -602,6 +624,8 @@ const printInvoice = () => {
             display: flex;
             align-items: center;
             gap: 1rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .product-image {
             width: 60px;
@@ -620,6 +644,8 @@ const printInvoice = () => {
           }
           .notes-section {
             margin-bottom: 2rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .notes-text {
             padding: 1rem;
@@ -629,18 +655,24 @@ const printInvoice = () => {
           }
           .summary-section {
             margin-bottom: 2rem;
+            page-break-before: always;
+            break-before: page;
           }
           .summary-card {
             padding: 1.5rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
             background-color: #f9fafb;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .summary-row {
             display: flex;
             justify-content: space-between;
             padding: 0.75rem 0;
             border-bottom: 1px solid #e5e7eb;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
           .summary-row:last-child {
             border-bottom: none;
@@ -695,6 +727,26 @@ const printInvoice = () => {
             }
             .back-button {
               display: none;
+            }
+            .items-section {
+              page-break-before: always !important;
+              break-before: page !important;
+            }
+            .summary-section {
+              page-break-before: always !important;
+              break-before: page !important;
+            }
+            .items-table,
+            .items-table tr,
+            .summary-card,
+            .summary-row,
+            .address-section,
+            .address-card,
+            .invoice-header,
+            .invoice-info-section,
+            .notes-section {
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
             }
           }
         </style>
