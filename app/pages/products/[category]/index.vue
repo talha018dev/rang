@@ -296,7 +296,7 @@ const heroImage = computed(() => {
   }
   
   // Fallback to default image
-  return '/men/men-hero-image.jpg'
+  return ''
 })
 
 // Meta

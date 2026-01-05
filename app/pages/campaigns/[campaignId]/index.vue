@@ -242,7 +242,7 @@ const campaignTitle = computed(() => {
 
 // Hero image - use default
 const heroImage = computed(() => {
-  return '/men/men-hero-image.jpg'
+  return ''
 })
 
 // Meta
