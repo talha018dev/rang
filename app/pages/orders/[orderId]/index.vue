@@ -161,7 +161,7 @@
                         <div class="product-info">
                           <p class="product-name">{{ item.product.name }}</p>
                           <NuxtLink 
-                            :to="`/products/${item.product.slug}`"
+                            :to="`/products/${item.product.category?.slug || 'all'}/${item.product.slug}`"
                             class="product-link">
                             View Product
                           </NuxtLink>
@@ -264,6 +264,9 @@ interface OrderItem {
     name: string
     slug: string
     image_url: string
+    category?: {
+      slug: string
+    } | null
   }
   variant: {
     image_url: string
