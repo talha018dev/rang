@@ -713,7 +713,7 @@ const printInvoice = () => {
             flex: 0 0 auto;
           }
           .invoice-logo-image {
-            height: 60px;
+            height: 90px;
             width: auto;
             object-fit: contain;
           }
