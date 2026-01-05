@@ -2052,25 +2052,89 @@
 }
 
 .product-image-container {
-  width: 100%;
-  height: auto;
-  overflow: hidden; /* Hide the zoomed parts by default */
   position: relative;
+  width: 100%;
+  aspect-ratio: 0.82;
+  overflow: hidden;
 }
 
-.product-image {
+/* Product image styles - applies to all related product images */
+.product-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.4s ease;
-  transform: scale(2.1); /* Zoomed in by default */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transform: scale(1);
   transform-origin: center center;
   aspect-ratio: 0.82;
 }
 
-.related-product-card:hover .product-image {
-  transform: scale(1);
+/* Default image (index 0) - visible by default */
+.product-img-default {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Hover image (index 1) - hidden by default, positioned to the right */
+.product-img-hover {
+  opacity: 0;
+  transform: translateX(100%) scale(1);
+}
+
+/* On hover: default image slides left, hover image slides in from right */
+.related-product-card:hover .product-img-default {
+  transform: translateX(-100%) scale(1);
+  opacity: 0;
+}
+
+.related-product-card:hover .product-img-hover {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Hover delayed image (index 2) - hidden by default, positioned to the right */
+.product-img-hover-delayed {
+  opacity: 0;
+  transform: translateX(100%) scale(1);
+  z-index: 2;
+}
+
+/* After 1 second of hover, transition from 2nd to 3rd image (only if 3rd image exists) */
+.related-product-card:hover .product-img-hover-delayed {
+  animation: slideInDelayedRelated 0.5s ease-in-out 1s forwards;
+}
+
+/* When 3rd image exists and appears, hide the 2nd image */
+.product-image-container:has(.product-img-hover-delayed) .related-product-card:hover .product-img-hover,
+.related-product-card:hover .product-image-container:has(.product-img-hover-delayed) .product-img-hover {
+  animation: slideOutDelayedRelated 0.5s ease-in-out 1s forwards;
+}
+
+@keyframes slideInDelayedRelated {
+  0% {
+    transform: translateX(100%) scale(1);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutDelayedRelated {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%) scale(1);
+    opacity: 0;
+  }
 }
 
 .product-info {

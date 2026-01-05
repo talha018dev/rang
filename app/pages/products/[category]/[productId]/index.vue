@@ -866,8 +866,31 @@
             <div class="related-products-grid" v-if="relatedProducts.length > 0">
                 <NuxtLink v-for="relatedProduct in relatedProducts" :key="relatedProduct.id" :to="`/products/${relatedProduct.category?.slug || category}/${relatedProduct.slug}`" class="related-product-card">
                     <div class="product-image-container">
-                        <NuxtImg :src="getImageUrl(relatedProduct.image)" :alt="relatedProduct.name" class="product-image" loading="lazy"
-                            format="webp" quality="85" />
+                        <NuxtImg 
+                            :src="getImageUrl(getProductImage(relatedProduct, 0))" 
+                            :alt="relatedProduct.name" 
+                            class="product-img product-img-default"
+                            loading="lazy"
+                            format="webp" 
+                            quality="85" 
+                        />
+                        <NuxtImg 
+                            :src="getImageUrl(getProductImage(relatedProduct, 1))" 
+                            :alt="relatedProduct.name" 
+                            class="product-img product-img-hover"
+                            loading="lazy"
+                            format="webp" 
+                            quality="85" 
+                        />
+                        <NuxtImg 
+                            v-if="getProductImage(relatedProduct, 2) !== ''"
+                            :src="getImageUrl(getProductImage(relatedProduct, 2) || '')" 
+                            :alt="relatedProduct.name" 
+                            class="product-img product-img-hover-delayed"
+                            loading="lazy"
+                            format="webp" 
+                            quality="85" 
+                        />
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">{{ relatedProduct.name }}</h3>
@@ -937,6 +960,62 @@ const getImageUrl = (imagePath: string): string => {
   }
   // Otherwise, prepend the API base URL
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
+
+// Get all product images (main image, images object, variant images)
+const getAllProductImages = (product: Product): string[] => {
+  const images: string[] = []
+  
+  // Add main image
+  if (product.image) {
+    images.push(product.image)
+  }
+  
+  // Add images from images object
+  if (product.images && typeof product.images === 'object') {
+    Object.values(product.images).forEach(img => {
+      if (img && !images.includes(img)) {
+        images.push(img)
+      }
+    })
+  }
+  
+  // Add variant images
+  if (product.variants) {
+    product.variants.forEach(variant => {
+      if (variant.image && !images.includes(variant.image)) {
+        images.push(variant.image)
+      }
+    })
+  }
+  
+  return images
+}
+
+// Get product image based on image index
+// index 0: 1st image (default), index 1: 2nd image (hover), index 2: 3rd image (hover delayed)
+const getProductImage = (product: Product, imageIndex: number): string => {
+  const allImages = getAllProductImages(product)
+  
+  // If no images, return product.image as fallback or empty string
+  if (allImages.length === 0) return product.image || ''
+  
+  // If only 1 image, return it for all states
+  if (allImages.length === 1) return allImages[0] || product.image || ''
+  
+  // Return image at specified index, or fallback to available images
+  if (imageIndex === 0) {
+    // Default: 1st image (index 0)
+    return allImages[0] || product.image || ''
+  } else if (imageIndex === 1) {
+    // Hover: 2nd image (index 1) if available, otherwise use first image
+    return allImages.length >= 2 && allImages[1] ? allImages[1] : (allImages[0] || product.image || '')
+  } else if (imageIndex === 2) {
+    // Hover delayed: 3rd image (index 2) if available, otherwise return empty string (don't show)
+    return allImages.length >= 3 && allImages[2] ? allImages[2] : ''
+  }
+  
+  return product.image || ''
 }
 
 // Reactive data
