@@ -115,6 +115,7 @@
       />
       <LazyWrapper 
         :loader="() => import('../../components/TimelessSixYards.vue')"
+        :component-props="{ products: timelessSixYardsProducts }"
       />
       <LazyWrapper 
         :loader="() => import('../../components/ShopByBrand.vue')"
@@ -225,6 +226,25 @@ const saleOfferSectionTitleForSaleOffer = computed(() => {
   )
   
   return saleOfferSection?.title || ''
+})
+
+// Find Timeless Six Yards section products
+const timelessSixYardsProducts = computed(() => {
+  if (!homepageData.value?.sections) return []
+  
+  const timelessSection = homepageData.value.sections.find(
+    section => section.title === 'Timeless Six Yards'
+  )
+  
+  if (!timelessSection?.products) return []
+  
+  // Map products to TimelessImage format
+  return timelessSection.products.map((product: HomePageProduct2) => ({
+    src: product.image,
+    alt: product.name,
+    title: product.name,
+    link: `/products/${product.category?.slug || 'all'}/${product.slug}`
+  }))
 })
 
 // Fetch homepage data from API

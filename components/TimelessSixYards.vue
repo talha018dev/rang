@@ -63,8 +63,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useApi } from '../composables/useApi'
-import type { HomepageResponse, Product } from '../types/homepage'
 import ShopNowBlue from './ShopNowBlue.vue'
 
 interface TimelessImage {
@@ -74,7 +72,15 @@ interface TimelessImage {
     link: string
 }
 
-const timelessImages = ref<TimelessImage[]>([])
+interface Props {
+    products?: TimelessImage[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    products: () => []
+})
+
+const timelessImages = computed(() => props.products || [])
 
 // Carousel state
 const currentSlide = ref(0)
@@ -195,39 +201,9 @@ const handleResize = () => {
     }
 }
 
-// Fetch Timeless Six Yards products from API
-const fetchTimelessProducts = async () => {
-    try {
-        const { backendUrl } = useApi()
-        const response = await $fetch<HomepageResponse>(`${backendUrl}/homepage`)
-        
-        if (response.success && response.data?.sections) {
-            // Find the "Timeless Six Yards" section
-            const timelessSection = response.data.sections.find(
-                section => section.title === 'Timeless Six Yards'
-            )
-            
-            if (timelessSection?.products) {
-                // Map products to timelessImages format
-                timelessImages.value = timelessSection.products.map((product: Product) => ({
-                    src: product.image,
-                    alt: product.name,
-                    title: product.name,
-                    link: `/products/${product.category.slug}/${product.slug}`
-                }))
-            }
-        }
-    } catch (err) {
-        console.error('Error fetching Timeless Six Yards data:', err)
-        // Fallback to empty array or default images if needed
-        timelessImages.value = []
-    }
-}
-
 onMounted(() => {
     handleResize()
     window.addEventListener('resize', handleResize)
-    fetchTimelessProducts()
 })
 
 onUnmounted(() => {
