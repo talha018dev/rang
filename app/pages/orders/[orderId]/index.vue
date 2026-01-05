@@ -638,6 +638,12 @@ const printInvoice = () => {
             <span class="summary-label">Items Subtotal:</span>
             <span class="summary-value">${formatPrice(orderData.item_total)}</span>
           </div>
+          ${orderData.coupon_discount > 0 ? `
+          <div class="summary-row">
+            <span class="summary-label">Discount:</span>
+            <span class="summary-value summary-value-discount">-${formatPrice(orderData.coupon_discount)}</span>
+          </div>
+          ` : ''}
           <div class="summary-row">
             <span class="summary-label">Shipping (ex. tax):</span>
             <span class="summary-value">${formatPrice(orderData.shipping)}</span>
@@ -917,6 +923,9 @@ const printInvoice = () => {
             font-size: 0.9rem;
             font-weight: 700;
             color: #000;
+          }
+          .summary-value-discount {
+            color: #dc2626;
           }
           /* Footer */
           .invoice-footer {
