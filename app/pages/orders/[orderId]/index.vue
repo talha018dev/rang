@@ -337,11 +337,6 @@ const getToken = (): string | null => {
 // Fetch order details
 const fetchOrderDetails = async () => {
   const token = getToken()
-  
-  if (!token) {
-    await router.push('/login')
-    return
-  }
 
   if (!orderId.value) {
     error.value = 'Order ID is missing'
@@ -352,13 +347,19 @@ const fetchOrderDetails = async () => {
   error.value = null
 
   try {
+    // Build headers - include Authorization only if token exists
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const response = await $fetch<OrderResponse>(`${backendUrl}/order/${orderId.value}`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
+      headers
     })
 
     if (response.success && response.data) {
@@ -373,10 +374,8 @@ const fetchOrderDetails = async () => {
     console.error('Error fetching order details:', err)
     error.value = err.data?.message || err.message || 'Failed to load order details.'
     
-    // If unauthorized, redirect to login
-    if (err.status === 401 || err.statusCode === 401) {
-      await router.push('/login')
-    }
+    // Don't redirect to login - just show error message
+    // The page is now public, so users can view orders without authentication
   } finally {
     isLoading.value = false
   }
