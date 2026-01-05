@@ -56,13 +56,25 @@
         <div v-else-if="order" class="invoice-container">
           <!-- Invoice Header -->
           <div class="invoice-header">
-            <div class="invoice-header-left">
-              <h1 class="invoice-title">Order Invoice</h1>
-              <p class="invoice-number">Order #{{ order.number }}</p>
+            <div class="invoice-logo">
+              <NuxtImg 
+                src="/rang-logo-2026-v2.png" 
+                alt="Rang Bangladesh Logo" 
+                class="invoice-logo-image"
+                format="webp"
+                quality="90"
+                loading="eager"
+              />
             </div>
-            <div class="invoice-header-right">
-              <div class="status-badge" :class="getStatusClass(order.status)">
-                {{ order.readable_status || order.status }}
+            <div class="invoice-header-content">
+              <div class="invoice-header-left">
+                <h1 class="invoice-title">Order Invoice</h1>
+                <p class="invoice-number">Order #{{ order.number }}</p>
+              </div>
+              <div class="invoice-header-right">
+                <div class="status-badge" :class="getStatusClass(order.status)">
+                  {{ order.readable_status || order.status }}
+                </div>
               </div>
             </div>
           </div>
@@ -501,13 +513,28 @@ const printInvoice = () => {
           }
           .invoice-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 1.5rem;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #000;
             page-break-inside: avoid;
             break-inside: avoid;
+          }
+          .invoice-logo {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+          }
+          .invoice-logo-image {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+          }
+          .invoice-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
           }
           .invoice-title {
             font-size: 2rem;
@@ -1072,11 +1099,29 @@ onMounted(() => {
 /* Invoice Header */
 .invoice-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 2px solid #e5e7eb;
+}
+
+.invoice-logo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.invoice-logo-image {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+.invoice-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .invoice-title {
@@ -1455,6 +1500,15 @@ onMounted(() => {
   }
 
   .invoice-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .invoice-logo-image {
+    height: 60px;
+  }
+
+  .invoice-header-content {
     flex-direction: column;
     gap: 1rem;
   }
