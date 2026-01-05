@@ -26,8 +26,11 @@
             :alt="brand.name" 
             class="brand-image image-fade" 
             format="webp" 
-            quality="85"
+            quality="80"
             loading="lazy"
+            sizes="(max-width: 768px) 20vw, (max-width: 1024px) 15vw, 12vw"
+            width="200"
+            height="200"
             @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
           />
         </div>
@@ -59,8 +62,11 @@
                     :alt="products[0]?.name || ''"
                     class="sale-offer-image category-image-rounded image-fade" 
                     format="webp" 
-                    quality="85" 
+                    quality="80" 
                     loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    width="600"
+                    height="732"
                     @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
                   />
                 </div>
@@ -96,8 +102,11 @@
                 :alt="product.name" 
                 class="sale-brand-image-cover image-fade" 
                 format="webp"
-                quality="85" 
+                quality="80" 
                 loading="lazy"
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
+                width="300"
+                height="366"
                 @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
               />
             </div>

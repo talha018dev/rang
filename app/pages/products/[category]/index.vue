@@ -8,8 +8,19 @@
       <section class="hero-banner">
         <div class="hero-content">
           <div class="hero-text">{{ categoryTitle }}</div>
-          <NuxtImg :src="heroImage" :alt="`${categoryTitle} fashion`" class="hero-img" loading="eager" format="webp"
-            quality="90" />
+          <NuxtImg 
+            :src="heroImage" 
+            :alt="`${categoryTitle} fashion`" 
+            class="hero-img" 
+            loading="eager" 
+            format="webp"
+            quality="85"
+            preload
+            priority
+            sizes="100vw"
+            width="1920"
+            height="400"
+          />
         </div>
       </section>
 
@@ -109,7 +120,7 @@
             <p>No products found matching your filters.</p>
           </div>
           <div v-else class="products-grid">
-            <div v-for="product in filteredProducts" :key="product.id" class="product-card-wrapper">
+            <div v-for="(product, index) in filteredProducts" :key="product.id" class="product-card-wrapper">
               <NuxtLink :to="`/products/${categorySlug}/${product.slug}`" class="product-card">
                 <div class="product-image-item">
                   <div class="product-image-container">
@@ -117,9 +128,12 @@
                       :src="getImageUrl(getProductImage(product, 0))" 
                       :alt="product.name" 
                       class="product-img product-img-default"
-                      loading="lazy"
+                      :loading="index < 4 ? 'eager' : 'lazy'"
                       format="webp" 
-                      quality="85" 
+                      quality="80"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      width="400"
+                      height="488"
                     />
                     <NuxtImg 
                       :src="getImageUrl(getProductImage(product, 1))" 
@@ -127,7 +141,10 @@
                       class="product-img product-img-hover"
                       loading="lazy"
                       format="webp" 
-                      quality="85" 
+                      quality="80"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      width="400"
+                      height="488"
                     />
                     <NuxtImg 
                       v-if="getProductImage(product, 2) !== ''"
@@ -136,7 +153,10 @@
                       class="product-img product-img-hover-delayed"
                       loading="lazy"
                       format="webp" 
-                      quality="85" 
+                      quality="80"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      width="400"
+                      height="488"
                     />
                   </div>
                   <!-- Wishlist Icon (only for logged-in users) -->

@@ -35,7 +35,11 @@
                 class="carousel-image"
                 loading="lazy" 
                 format="webp" 
-                quality="85" />
+                quality="80"
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                width="400"
+                height="488"
+              />
             </div>
             <div class="carousel-content-overlay p-0 md:p-1">
               <h3 class="new-arrival-name-light text-xs! md:text-base! text-center!">{{ item.name }}</h3>

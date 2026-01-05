@@ -18,8 +18,11 @@
                         :alt="exploreItems[0]?.title || 'Explore Rang'" 
                         class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
-                        quality="85" 
-                        loading="lazy" 
+                        quality="80" 
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 800px"
+                        width="800"
+                        height="462"
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[0]?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
@@ -35,8 +38,11 @@
                         :alt="exploreItems[1]?.title || 'Explore Rang'" 
                         class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
-                        quality="85" 
-                        loading="lazy" 
+                        quality="80" 
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 40vw, 500px"
+                        width="500"
+                        height="500"
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[1]?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">

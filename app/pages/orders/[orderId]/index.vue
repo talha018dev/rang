@@ -155,8 +155,11 @@
                           :alt="item.product.name"
                           class="product-image"
                           format="webp"
-                          quality="85"
+                          quality="80"
                           loading="lazy"
+                          sizes="80px"
+                          width="80"
+                          height="98"
                         />
                         <div class="product-info">
                           <p class="product-name">{{ item.product.name }}</p>

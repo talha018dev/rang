@@ -16,9 +16,13 @@
               :alt="`Hero Banner ${index + 1}`" 
               class="hero-background" 
               format="webp"
-              quality="90" 
+              quality="85" 
               loading="eager" 
-              preload 
+              preload
+              :sizes="index === 0 ? '100vw' : undefined"
+              :priority="index === 0"
+              width="1920"
+              height="800"
             />
           </div>
         </div>

@@ -4,7 +4,19 @@
         <!-- Countdown Card (Left Side) -->
         <div v-if="!isMobile" class="countdown-card">
             <!-- Background Image -->
-            <NuxtImg src="/landing-image.png" alt="Deals of the Month" class="countdown-background" format="webp" quality="85" loading="eager" />
+            <NuxtImg 
+                src="/landing-image.png" 
+                alt="Deals of the Month" 
+                class="countdown-background" 
+                format="webp" 
+                quality="80" 
+                loading="eager"
+                preload
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                width="1200"
+                height="800"
+            />
             
             <!-- Content Overlay -->
             <div class="countdown-content">
@@ -126,7 +138,10 @@
                                 class="carousel-image"
                                 loading="lazy"
                                 format="webp"
-                                quality="85"
+                                quality="80"
+                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
+                                width="300"
+                                height="366"
                             />
                         </div>
                         <div class="carousel-content">

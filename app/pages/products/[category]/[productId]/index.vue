@@ -95,8 +95,17 @@
                 <div class="thumbnail-images">
                     <div v-for="(image, index) in productImages" :key="index" class="thumbnail"
                         :class="{ active: selectedImageIndex === index }" @click="selectedImageIndex = index">
-                        <NuxtImg :src="getImageUrl(image)" :alt="`${product.name} view ${index + 1}`" class="thumbnail-img"
-                            loading="lazy" format="webp" quality="85" />
+                        <NuxtImg 
+                            :src="getImageUrl(image)" 
+                            :alt="`${product.name} view ${index + 1}`" 
+                            class="thumbnail-img"
+                            loading="lazy" 
+                            format="webp" 
+                            quality="75"
+                            sizes="80px"
+                            width="80"
+                            height="98"
+                        />
 
                         <!-- Show More Overlay for last thumbnail (only when there are more than 4 images) -->
                         <div v-if="hasMoreImages && index === productImages.length - 1 && !showMoreImages" 
@@ -132,8 +141,20 @@
 
                 <!-- Main Product Image -->
                 <div class="main-image-wrapper">
-                    <NuxtImg v-if="productImages[selectedImageIndex]" :src="getImageUrl(productImages[selectedImageIndex] || '')" :alt="product.name" class="main-image"
-                        loading="eager" format="webp" quality="90" />
+                    <NuxtImg 
+                        v-if="productImages[selectedImageIndex]" 
+                        :src="getImageUrl(productImages[selectedImageIndex] || '')" 
+                        :alt="product.name" 
+                        class="main-image"
+                        loading="eager" 
+                        format="webp" 
+                        quality="85"
+                        preload
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                        width="1200"
+                        height="1463"
+                    />
                 </div>
             </div>
 
@@ -872,7 +893,10 @@
                             class="product-img product-img-default"
                             loading="lazy"
                             format="webp" 
-                            quality="85" 
+                            quality="80"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            width="400"
+                            height="488"
                         />
                         <NuxtImg 
                             :src="getImageUrl(getProductImage(relatedProduct, 1))" 
@@ -880,7 +904,10 @@
                             class="product-img product-img-hover"
                             loading="lazy"
                             format="webp" 
-                            quality="85" 
+                            quality="80"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            width="400"
+                            height="488"
                         />
                         <NuxtImg 
                             v-if="getProductImage(relatedProduct, 2) !== ''"
@@ -889,7 +916,10 @@
                             class="product-img product-img-hover-delayed"
                             loading="lazy"
                             format="webp" 
-                            quality="85" 
+                            quality="80"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            width="400"
+                            height="488"
                         />
                     </div>
                     <div class="product-info">

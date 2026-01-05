@@ -4,7 +4,18 @@
       <!-- Mobile Logo (shown only on mobile) -->
       <div class="mobile-logo-container">
         <NuxtLink to="/">
-          <NuxtImg src="/rang-logo-2026-v2.png" alt="logo" class='mobile-logo-image' format="webp" quality="90" loading="eager" />
+          <NuxtImg 
+            src="/rang-logo-2026-v2.png" 
+            alt="logo" 
+            class='mobile-logo-image' 
+            format="webp" 
+            quality="85" 
+            loading="eager"
+            preload
+            priority
+            width="120"
+            height="40"
+          />
         </NuxtLink>
       </div>
       <div>
@@ -13,7 +24,18 @@
       <div class="header-content">
         <div class="w-[100px]!">
           <NuxtLink to="/">
-            <NuxtImg src="/rang-logo-2026-v2.png" alt="logo" class='logo-image' format="webp" quality="90" loading="eager" />
+            <NuxtImg 
+              src="/rang-logo-2026-v2.png" 
+              alt="logo" 
+              class='logo-image' 
+              format="webp" 
+              quality="85" 
+              loading="eager"
+              preload
+              priority
+              width="150"
+              height="50"
+            />
           </NuxtLink>
         </div>
         <nav class="nav items-end! ml-3!">
@@ -244,7 +266,16 @@
         <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
             <NuxtLink to="/" @click="closeDrawer">
-              <NuxtImg src="/rang-logo-2026-v2.png" alt="Rang Bangladesh Logo" class="mobile-nav-logo h-[90px]!" format="webp" quality="90" loading="eager" />
+              <NuxtImg 
+                src="/rang-logo-2026-v2.png" 
+                alt="Rang Bangladesh Logo" 
+                class="mobile-nav-logo h-[90px]!" 
+                format="webp" 
+                quality="85" 
+                loading="eager"
+                width="200"
+                height="90"
+              />
             </NuxtLink>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
           </div>

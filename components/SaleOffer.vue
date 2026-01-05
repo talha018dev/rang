@@ -11,10 +11,16 @@
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
                     <NuxtLink :to="`/products/${saleOfferProducts[0]?.category?.slug}/${saleOfferProducts[0]?.slug}`">
-                        <img 
+                        <NuxtImg 
                             :src="saleOfferProducts[0]?.image" 
                             :alt="saleOfferProducts[0]?.name" 
                             class="sale-offer-image category-image-rounded" 
+                            format="webp"
+                            quality="80"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 800px"
+                            width="800"
+                            height="732"
                             @load="onImageLoad"
                             ref="productImage"
                         />
@@ -36,7 +42,17 @@
                 </div>
                 <div class="sale-brands-grid-tertiary">
                     <NuxtLink v-for="(product, index) in saleOfferProducts.slice(1, 5)" :key="product.id" :to="`/products/${product?.category?.slug}/${product?.slug}`">
-                        <NuxtImg :src="product?.image" :alt="product?.name" class="sale-brand-image-cover" format="webp" quality="85" loading="lazy" />
+                        <NuxtImg 
+                            :src="product?.image" 
+                            :alt="product?.name" 
+                            class="sale-brand-image-cover" 
+                            format="webp" 
+                            quality="80" 
+                            loading="lazy"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
+                            width="300"
+                            height="366"
+                        />
                     </NuxtLink>
                 </div>
             </div>

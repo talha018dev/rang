@@ -10,7 +10,17 @@
             <div class="theme-grid">
                 <div v-for="(theme, index) in themeImages" :key="index" class="theme-image-container">
                     <NuxtLink :to="theme.link">
-                        <NuxtImg :src="theme.src" :alt="theme.alt" class="theme-image" format="webp" quality="85" loading="lazy" />
+                        <NuxtImg 
+                            :src="theme.src" 
+                            :alt="theme.alt" 
+                            class="theme-image" 
+                            format="webp" 
+                            quality="80" 
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            width="600"
+                            height="600"
+                        />
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                             <h3 class="theme-name-light">{{ theme.title }}</h3>
@@ -34,7 +44,17 @@
                         <div v-for="(theme, index) in themeImages" :key="index" class="carousel-slide">
                             <div class="theme-image-container">
                                 <NuxtLink :to="theme.link">
-                                    <NuxtImg :src="theme.src" :alt="theme.alt" class="theme-image carousel-image" format="webp" quality="85" loading="lazy" />
+                                    <NuxtImg 
+                                        :src="theme.src" 
+                                        :alt="theme.alt" 
+                                        class="theme-image carousel-image" 
+                                        format="webp" 
+                                        quality="80" 
+                                        loading="lazy"
+                                        sizes="100vw"
+                                        width="800"
+                                        height="800"
+                                    />
                                     <div
                                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
                                         <h3 class="theme-name-light">{{ theme.title }}</h3>
