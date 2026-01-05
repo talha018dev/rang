@@ -440,6 +440,12 @@ const printInvoice = () => {
   // Clone the element to avoid modifying the original
   const clonedElement = invoiceElement.cloneNode(true) as HTMLElement
   
+  // Remove the actions section (print button) from the cloned element
+  const actionsSection = clonedElement.querySelector('.actions-section')
+  if (actionsSection) {
+    actionsSection.remove()
+  }
+  
   // Convert all images to absolute URLs
   const images = clonedElement.querySelectorAll('img')
   images.forEach((img) => {
@@ -672,12 +678,24 @@ const printInvoice = () => {
           .summary-value.due {
             color: #ea580c;
           }
+          .actions-section {
+            display: none;
+          }
+          .back-button {
+            display: none;
+          }
           @media print {
             body {
               padding: 0;
             }
             .invoice-container {
               box-shadow: none;
+            }
+            .actions-section {
+              display: none;
+            }
+            .back-button {
+              display: none;
             }
           }
         </style>
