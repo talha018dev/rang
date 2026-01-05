@@ -135,7 +135,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="(item, index) in order.items" :key="index" class="table-row">
-                    <td class="table-cell">
+                    <td class="table-cell table-cell-product" data-label="Product">
                       <div class="product-cell">
                         <NuxtImg 
                           v-if="item.product.image_url"
@@ -156,16 +156,16 @@
                         </div>
                       </div>
                     </td>
-                    <td class="table-cell">
+                    <td class="table-cell" data-label="Variant">
                       <p class="variant-name">{{ item.variant?.name || 'N/A' }}</p>
                     </td>
-                    <td class="table-cell text-right">
+                    <td class="table-cell text-right" data-label="Quantity">
                       <p class="quantity-text">{{ item.quantity }}</p>
                     </td>
-                    <td class="table-cell text-right">
+                    <td class="table-cell text-right" data-label="Price">
                       <p class="price-text">{{ formatPrice(item.price) }}</p>
                     </td>
-                    <td class="table-cell text-right">
+                    <td class="table-cell text-right" data-label="Total">
                       <p class="total-text">{{ formatPrice(item.price * item.quantity) }}</p>
                     </td>
                   </tr>
@@ -1394,18 +1394,100 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 
-  .items-table {
+  /* Convert table to card layout on mobile */
+  .items-table-container {
+    overflow-x: visible;
+  }
+
+  .items-table thead {
+    display: none;
+  }
+
+  .items-table,
+  .items-table tbody,
+  .items-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .table-row {
+    display: block;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .table-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border: none;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left !important;
+  }
+
+  .table-cell:last-child {
+    border-bottom: none;
+  }
+
+  .table-cell::before {
+    content: attr(data-label);
+    font-weight: 600;
     font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .table-cell.text-right {
+    justify-content: space-between;
+  }
+
+  .table-cell-product {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .table-cell-product::before {
+    margin-bottom: 0.5rem;
   }
 
   .product-cell {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
   }
 
-  .table-header,
-  .table-cell {
-    padding: 0.5rem;
+  .product-image {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .product-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .product-name {
+    font-size: 0.875rem;
+    word-wrap: break-word;
+  }
+
+  .variant-name,
+  .quantity-text,
+  .price-text,
+  .total-text {
+    font-size: 0.875rem;
+    font-weight: 500;
   }
 
   .payment-failed-alert {
