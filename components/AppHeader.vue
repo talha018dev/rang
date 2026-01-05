@@ -1,6 +1,12 @@
 <template>
   <header class="header" :class="{ 'header-scrolled': isScrolled, 'header-home': isHomeActive }" ref="headerEl">
     <div class="header-container">
+      <!-- Mobile Logo (shown only on mobile) -->
+      <div class="mobile-logo-container">
+        <NuxtLink to="/">
+          <NuxtImg src="/rang-logo-2026-v2.png" alt="logo" class='mobile-logo-image' format="webp" quality="90" loading="eager" />
+        </NuxtLink>
+      </div>
       <div>
         <h1 class="heading-text">RANG BANGLADESH</h1>
       </div>

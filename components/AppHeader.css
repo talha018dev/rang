@@ -798,17 +798,47 @@
   transition: color 0.15s ease-in-out;
 }
 
+/* Mobile Logo Container - Hidden on desktop */
+.mobile-logo-container {
+  display: none;
+}
+
+.mobile-logo-image {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  transition: height 0.3s ease-in-out;
+
+}
+
 @media (max-width: 600px) {
+  /* Show mobile logo on mobile */
+  .mobile-logo-container {
+    display: block;
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+  }
+
+  .mobile-logo-image {
+    height: 40px;
+  }
+
   .mobile-menu-button {
     padding-left: 0;
   }
   .heading-text {
-    right: 0;
-    font-size: 1em;
+    right: 10px;
+    font-size: 0.7em;
+    left: auto;
+    top: 50%;
   }
   /* Make heading text smaller on home page when not scrolled below 600px */
   .header-home:not(.header-scrolled) .heading-text {
-    font-size: 1.2em;
+    font-size: 0.8em;
+    top: 50%;
   }
 }
 
