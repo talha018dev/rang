@@ -493,46 +493,11 @@
             </div>
         </div>
 
-        <!-- Matching Series Section -->
-        <div v-if="matchingSeriesItems.length > 0" class="matching-series-section-container">
+        <!-- Matching Series Section (Mobile - shown first) -->
+        <div v-if="matchingSeriesItems.length > 0 && isMobile" class="matching-series-section-container">
             <div class="matching-series-section">
                 <h2 class="section-title">Explore Our Matching Series:</h2>
-
-                <div class="matching-series-container" v-if="!isMobile">
-                    <div class="matching-series-products">
-                        <div v-for="(item, index) in displayedMatchingSeriesItems" :key="index" class="matching-series-item">
-                            <!-- Checkbox -->
-                            <div class="item-checkbox">
-                                <input type="checkbox" :id="`matching-${index}`" v-model="item.checked"
-                                    class="checkbox-input" disabled />
-                                <label :for="`matching-${index}`" class="checkbox-label"></label>
-                            </div>
-
-                            <!-- Product Image -->
-                            <div class="item-image w-full! h-full!">
-                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
-                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
-                                        format="webp" quality="85" />
-                                </NuxtLink>
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="item-details">
-                                <p class="item-name">{{ item.name }}</p>
-
-                                <!-- Size Selector -->
-                                <div class="size-selector">
-                                    <select v-model="item.size" class="size-select" @change="updateMatchingSeriesSize(index, $event)">
-                                        <option v-for="size in getAvailableSizesForProduct(item.product)" :key="size" :value="size">
-                                            {{ size }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <section v-if="isMobile">
+                <section>
                     <UCarousel ref="matchingSeriesCarousel" v-slot="{ item, index }" :items="matchingSeriesItems"
                         :slides-per-view="2" :space-between="15" :ui="{
                             item: 'matching-series-item',
@@ -568,8 +533,94 @@
                     </UCarousel>
                 </section>
             </div>
+        </div>
 
-            <!-- Frequently Bought Together Section -->
+        <!-- Frequently Bought Together Section (Mobile - shown second) -->
+        <div v-if="frequentlyBoughtItems.length > 0 && isMobile" class="frequently-bought-section">
+            <h2 class="section-title">Frequently bought together</h2>
+
+            <div class="frequently-bought-container">
+                <!-- Mobile Carousel Layout -->
+                <UCarousel ref="frequentlyBoughtCarousel" v-slot="{ item }" :items="frequentlyBoughtItems"
+                    :slides-per-view="2" :space-between="15" :ui="{
+                        item: 'frequently-bought-item',
+                        container: 'frequently-bought-products mobile-layout',
+                    }" class="frequently-bought-carousel mobile-layout">
+                    <div class="frequently-bought-item">
+                        <div class="item-image">
+                            <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                    format="webp" quality="85" />
+                            </NuxtLink>
+                            <div class="item-checkbox">
+                                <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected"
+                                    class="checkbox-input" />
+                                <label :for="`mobile-item-${item.id}`" class="checkbox-label"></label>
+                            </div>
+                        </div>
+
+                        <div class="item-details">
+                            <p class="item-description line-clamp-2 min-h-[40px]">{{ item.description }}</p>
+                            <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
+                        </div>
+                    </div>
+                </UCarousel>
+            </div>
+
+            <!-- Summary Section - Below the products -->
+            <div class="frequently-bought-summary">
+                <div class="total-price">
+                    <span class="total-label">Total price :</span>
+                    <span class="total-amount">{{ totalPrice }}</span>
+                </div>
+                <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
+                    Add to cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Matching Series Section (Desktop) -->
+        <div v-if="matchingSeriesItems.length > 0 && !isMobile" class="matching-series-section-container">
+            <div class="matching-series-section">
+                <h2 class="section-title">Explore Our Matching Series:</h2>
+
+                <div class="matching-series-container">
+                    <div class="matching-series-products">
+                        <div v-for="(item, index) in displayedMatchingSeriesItems" :key="index" class="matching-series-item">
+                            <!-- Checkbox -->
+                            <div class="item-checkbox">
+                                <input type="checkbox" :id="`matching-${index}`" v-model="item.checked"
+                                    class="checkbox-input" disabled />
+                                <label :for="`matching-${index}`" class="checkbox-label"></label>
+                            </div>
+
+                            <!-- Product Image -->
+                            <div class="item-image w-full! h-full!">
+                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                        format="webp" quality="85" />
+                                </NuxtLink>
+                            </div>
+
+                            <!-- Product Details -->
+                            <div class="item-details">
+                                <p class="item-name">{{ item.name }}</p>
+
+                                <!-- Size Selector -->
+                                <div class="size-selector">
+                                    <select v-model="item.size" class="size-select" @change="updateMatchingSeriesSize(index, $event)">
+                                        <option v-for="size in getAvailableSizesForProduct(item.product)" :key="size" :value="size">
+                                            {{ size }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frequently Bought Together Section (Desktop) -->
             <div v-if="frequentlyBoughtItems.length > 0" class="frequently-bought-section">
                 <h2 class="section-title">Frequently bought together</h2>
 
@@ -596,32 +647,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Mobile Carousel Layout -->
-                    <UCarousel ref="frequentlyBoughtCarousel" v-slot="{ item }" :items="frequentlyBoughtItems"
-                        :slides-per-view="2" :space-between="15" :ui="{
-                            item: 'frequently-bought-item',
-                            container: 'frequently-bought-products mobile-layout',
-                        }" class="frequently-bought-carousel mobile-layout">
-                        <div class="frequently-bought-item">
-                            <div class="item-image">
-                                <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
-                                    <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
-                                        format="webp" quality="85" />
-                                </NuxtLink>
-                                <div class="item-checkbox">
-                                    <input type="checkbox" :id="`mobile-item-${item.id}`" v-model="item.selected"
-                                        class="checkbox-input" />
-                                    <label :for="`mobile-item-${item.id}`" class="checkbox-label"></label>
-                                </div>
-                            </div>
-
-                            <div class="item-details">
-                                <p class="item-description line-clamp-2 min-h-[40px]">{{ item.description }}</p>
-                                <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
-                            </div>
-                        </div>
-                    </UCarousel>
                 </div>
 
                 <!-- Summary Section - Below the products -->
