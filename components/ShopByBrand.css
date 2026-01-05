@@ -38,8 +38,25 @@
     grid-template-columns: repeat(5, 1fr);
   }
   
+  /* Make all brand images the same size on medium screens */
   .brand-image {
-    /* height: 7rem; */
+    height: 5rem !important;
+    width: auto;
+    max-width: 100%;
+  }
+  
+  /* Override hover state on medium screens to keep same size */
+  .brand-grid-main .brand-item:hover .brand-image {
+    height: 5rem !important;
+  }
+  
+  /* Make selected logo slightly bigger on medium screens */
+  .brand-grid-main .brand-item-selected .brand-image {
+    height: 5.5rem !important;
+  }
+  
+  .brand-grid-main .brand-item-selected:hover .brand-image {
+    height: 5.5rem !important;
   }
 }
 
@@ -58,8 +75,25 @@
     grid-template-columns: repeat(5, 1fr);
   }
   
+  /* Make all brand images the same size on mobile */
   .brand-image {
-    /* height: 5rem; */
+    height: 4rem !important;
+    width: auto;
+    max-width: 100%;
+  }
+  
+  /* Override hover state on mobile to keep same size */
+  .brand-grid-main .brand-item:hover .brand-image {
+    height: 4rem !important;
+  }
+  
+  /* Make selected logo slightly bigger on mobile */
+  .brand-grid-main .brand-item-selected .brand-image {
+    height: 4.5rem !important;
+  }
+  
+  .brand-grid-main .brand-item-selected:hover .brand-image {
+    height: 4.5rem !important;
   }
 }
 
