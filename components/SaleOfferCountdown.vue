@@ -108,12 +108,12 @@
                 v-slot="{ item }" 
                 :items="carouselItems" 
                 class="carousel-nuxt"
-                :slides-per-view="3"
+                :slides-per-view="isMobile ? 2 : 3"
                 :space-between="16"
                 :prev="{ onClick: goToPrevious }"
                 :next="{ onClick: goToNext }"
                 :ui="{
-                    item: 'carousel-slide basis-1/3 w-24',
+                    item: isMobile ? 'carousel-slide basis-1/2 w-24' : 'carousel-slide basis-1/3 w-24',
                     container: 'carousel-container gap-4 !mt-1 !ml-4 !mr-4'
                 }"
             >
@@ -155,7 +155,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue'
 import { useCart } from '../composables/useCart'
 import { useCurrency } from '../composables/useCurrency'
 import type { HomePageProduct2 } from '../types/homepage'
@@ -302,6 +302,14 @@ const handleResize = () => {
     isMobile.value = window.innerWidth < 600
 }
 
+// Watch for mobile changes and update carousel
+watch(isMobile, async () => {
+    await nextTick()
+    if (carousel.value?.emblaApi) {
+        carousel.value.emblaApi.reInit()
+    }
+})
+
 // Start countdown timer and add keyboard listeners
 onMounted(() => {
     calculateTimeRemaining()
@@ -323,6 +331,9 @@ onUnmounted(() => {
     
     // Remove keyboard event listener
     document.removeEventListener('keydown', handleKeydown)
+    
+    // Remove resize event listener
+    window.removeEventListener('resize', handleResize)
 })
 </script>
 
