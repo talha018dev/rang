@@ -207,13 +207,13 @@
                 <span class="summary-label">Coupon Discount:</span>
                 <span class="summary-value discount">-{{ formatPrice(order.coupon_discount) }}</span>
               </div>
-              <div v-if="order.vat > 0" class="summary-row">
-                <span class="summary-label">VAT:</span>
-                <span class="summary-value">{{ formatPrice(order.vat) }}</span>
-              </div>
               <div class="summary-row">
                 <span class="summary-label">Shipping:</span>
                 <span class="summary-value">{{ formatPrice(order.shipping) }}</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">VAT:</span>
+                <span class="summary-value">{{ formatPrice(order.vat) }}</span>
               </div>
               <div class="summary-row summary-row-total">
                 <span class="summary-label-total">Total:</span>
@@ -654,12 +654,10 @@ const printInvoice = () => {
             <span class="summary-label">Shipping (ex. tax):</span>
             <span class="summary-value">${formatPrice(orderData.shipping)}</span>
           </div>
-          ${orderData.vat > 0 ? `
           <div class="summary-row">
             <span class="summary-label">VAT:</span>
             <span class="summary-value">${formatPrice(orderData.vat)}</span>
           </div>
-          ` : ''}
           <div class="summary-row summary-row-total">
             <span class="summary-label-total">Order Total:</span>
             <span class="summary-value-total">${formatPrice(orderData.total)}</span>
