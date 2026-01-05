@@ -36,6 +36,7 @@
 @media (max-width: 768px) {
   .brand-grid-main {
     grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
   }
   
   /* Make all brand images the same size on medium screens */
@@ -50,13 +51,13 @@
     height: 5rem !important;
   }
   
-  /* Make selected logo slightly bigger on medium screens */
+  /* Make selected logo bigger on medium screens */
   .brand-grid-main .brand-item-selected .brand-image {
-    height: 5.5rem !important;
+    height: 6rem !important;
   }
   
   .brand-grid-main .brand-item-selected:hover .brand-image {
-    height: 5.5rem !important;
+    height: 6rem !important;
   }
 }
 
@@ -73,6 +74,7 @@
   
   .brand-grid-main {
     grid-template-columns: repeat(5, 1fr);
+    gap: 10px !important;
   }
   
   /* Make all brand images the same size on mobile */
@@ -87,13 +89,13 @@
     height: 4rem !important;
   }
   
-  /* Make selected logo slightly bigger on mobile */
+  /* Make selected logo bigger on mobile */
   .brand-grid-main .brand-item-selected .brand-image {
-    height: 4.5rem !important;
+    height: 5.5rem !important;
   }
   
   .brand-grid-main .brand-item-selected:hover .brand-image {
-    height: 4.5rem !important;
+    height: 5.5rem !important;
   }
 }
 
