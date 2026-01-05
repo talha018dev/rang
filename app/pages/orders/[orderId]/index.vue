@@ -456,7 +456,11 @@ const printInvoice = () => {
   if (actionsSection) {
     actionsSection.remove()
   }
-  
+
+  // Get order data for restructuring
+  const orderData = order.value
+  if (!orderData) return
+
   // Convert all images to absolute URLs
   const images = clonedElement.querySelectorAll('img')
   images.forEach((img) => {
@@ -486,8 +490,198 @@ const printInvoice = () => {
     }
   })
 
-  // Get the invoice HTML with converted images
-  const invoiceHTML = clonedElement.innerHTML
+  // Format date short
+  const formatDateShort = (dateString?: string): string => {
+    if (!dateString) return '-'
+    try {
+      const date = new Date(dateString)
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = date.toLocaleDateString('en-US', { month: 'short' })
+      const year = date.getFullYear()
+      return `${day} ${month}, ${year}`
+    } catch {
+      return dateString
+    }
+  }
+
+  // Get payment method
+  const getPaymentMethod = (): string => {
+    if (orderData.paid_amount > 0 && orderData.paid_amount >= orderData.total) {
+      return 'Paid'
+    }
+    return 'Cash on delivery'
+  }
+
+  // Get logo image URL
+  const logoImg = clonedElement.querySelector('.invoice-logo-image') as HTMLImageElement
+  const logoUrl = logoImg ? logoImg.src : ''
+
+  // Build restructured HTML for print
+  const printHTML = `
+    <div class="invoice-container">
+      <!-- Top Header: Logo, QR Code, Company Info -->
+      <div class="invoice-top-header">
+        <div class="invoice-logo">
+          <img src="${logoUrl}" alt="Rang Bangladesh Logo" class="invoice-logo-image" />
+        </div>
+        <div class="invoice-qr-code">
+          <div class="qr-placeholder">QR Code</div>
+        </div>
+        <div class="invoice-company-info">
+          <p class="company-address">রঙ বাংলাদেশ, 91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+          <p class="company-bin">BIN: 005358452-0204</p>
+          <p class="company-mushak">Mushak: 6.3</p>
+        </div>
+      </div>
+
+      <!-- Billing and Invoice Details -->
+      <div class="invoice-details-section">
+        <div class="billing-section">
+          <h3 class="section-label">Billing</h3>
+          <div class="billing-details">
+            <p class="billing-name">${orderData.address?.name || orderData.customer?.name || ''}</p>
+            <p class="billing-address">${orderData.address?.line_1 || ''}</p>
+            ${orderData.address?.line_2 ? `<p class="billing-address">${orderData.address.line_2}</p>` : ''}
+            <p class="billing-address">${orderData.address?.city || ''}, ${orderData.address?.state || ''}, ${orderData.address?.postal_code || ''}</p>
+            <p class="billing-address">${orderData.address?.country || ''}</p>
+            <p class="billing-phone">Phone: ${orderData.address?.phone || orderData.customer?.phone || ''}</p>
+            ${(orderData.address?.email || orderData.customer?.email) ? `<p class="billing-email">Email: ${orderData.address?.email || orderData.customer?.email}</p>` : ''}
+          </div>
+        </div>
+        <div class="invoice-details-right">
+          <div class="invoice-detail-row">
+            <span class="invoice-detail-label">Invoice Number:</span>
+            <span class="invoice-detail-value invoice-number-bold">#${orderData.number}</span>
+          </div>
+          <div class="invoice-detail-row">
+            <span class="invoice-detail-label">Order Number:</span>
+            <span class="invoice-detail-value">${orderData.number}</span>
+          </div>
+          <div class="invoice-detail-row">
+            <span class="invoice-detail-label">Order Date:</span>
+            <span class="invoice-detail-value">${formatDateShort(orderData.created_at)}</span>
+          </div>
+          <div class="invoice-detail-row">
+            <span class="invoice-detail-label">Payment Method:</span>
+            <span class="invoice-detail-value">${getPaymentMethod()}</span>
+          </div>
+          <div class="invoice-detail-row">
+            <span class="invoice-detail-label">Shipping Method:</span>
+            <span class="invoice-detail-value">${orderData.shipping_method || 'Home Delivery'}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="items-section">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th class="table-header">Item</th>
+              <th class="table-header text-right">Cost</th>
+              <th class="table-header text-center">Qty</th>
+              <th class="table-header text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orderData.items?.map((item: any) => {
+              const itemImage = item.product?.image_url || ''
+              const itemImageUrl = itemImage.startsWith('http') ? itemImage : (itemImage.startsWith('/') ? window.location.origin + itemImage : window.location.origin + '/' + itemImage)
+              const variantName = item.variant?.name || 'N/A'
+              // Extract variant details
+              const getVariantColor = (name: string) => {
+                const match = name.match(/(?:color|colour):\s*([^,]+)/i) || name.match(/(red|blue|green|yellow|violet|purple|black|white|pink|orange|brown|gray|grey)/i)
+                return match && match[1] ? match[1].trim() : name.split(',')[0] || 'N/A'
+              }
+              const getVariantFabric = (name: string) => {
+                const match = name.match(/(?:fabric|material):\s*([^,]+)/i) || name.match(/(cotton|silk|polyester|linen|wool|chiffon|georgette)/i)
+                return match && match[1] ? match[1].trim() : 'Cotton'
+              }
+              const getVariantSize = (name: string) => {
+                const match = name.match(/(?:size):\s*([^,]+)/i) || name.match(/\b(XXS|XS|S|M|L|XL|XXL|\d{2,3})\b/i)
+                return match && match[1] ? match[1].trim() : 'N/A'
+              }
+              return `
+                <tr class="table-row">
+                  <td class="table-cell table-cell-item">
+                    <div class="item-details">
+                      <img src="${itemImageUrl}" alt="${item.product?.name || ''}" class="item-image" />
+                      <div class="item-info">
+                        <p class="item-name">${item.product?.name || ''}</p>
+                        <p class="item-sku">SKU: ${variantName}</p>
+                        <p class="item-variant">Color: ${getVariantColor(variantName)}</p>
+                        <p class="item-variant">Fabric: ${getVariantFabric(variantName)}</p>
+                        <p class="item-variant">Size: ${getVariantSize(variantName)}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="table-cell text-right">
+                    <p class="cost-text">${formatPrice(item.price)}</p>
+                  </td>
+                  <td class="table-cell text-center">
+                    <p class="quantity-text">x ${item.quantity}</p>
+                  </td>
+                  <td class="table-cell text-right">
+                    <p class="total-text">${formatPrice(item.price * item.quantity)}</p>
+                  </td>
+                </tr>
+              `
+            }).join('') || ''}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Summary Section -->
+      <div class="summary-section">
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span class="summary-label">Items Subtotal:</span>
+            <span class="summary-value">${formatPrice(orderData.item_total)}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Shipping (ex. tax):</span>
+            <span class="summary-value">${formatPrice(orderData.shipping)}</span>
+          </div>
+          ${orderData.vat > 0 ? `
+          <div class="summary-row">
+            <span class="summary-label">VAT:</span>
+            <span class="summary-value">${formatPrice(orderData.vat)}</span>
+          </div>
+          ` : ''}
+          <div class="summary-row summary-row-total">
+            <span class="summary-label-total">Order Total:</span>
+            <span class="summary-value-total">${formatPrice(orderData.total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer: Claim Policy and Contact -->
+      <div class="invoice-footer">
+        <div class="claim-policy">
+          <h4 class="claim-policy-title">== Claim Policy ==</h4>
+          <ul class="claim-policy-list">
+            <li>All claims must be made within 7 days of delivery.</li>
+            <li>Items must be in original condition with tags attached.</li>
+            <li>Exchange is available for size/color issues within 14 days.</li>
+            <li>Returns are accepted for defective or damaged items only.</li>
+            <li>Customized or personalized items are non-refundable.</li>
+            <li>Shipping charges are non-refundable unless item is defective.</li>
+            <li>Please contact customer service for any claims or returns.</li>
+          </ul>
+        </div>
+        <div class="invoice-thankyou">
+          <p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p>
+        </div>
+        <div class="invoice-contact">
+          <p class="contact-info">Website: www.rang-bd.com</p>
+          <p class="contact-info">Helpline: +880 1777744344, +880 1799998877</p>
+          <p class="contact-info">Email: contactrang@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  `
+
+  const invoiceHTML = printHTML
 
   // Create the print document
   printWindow.document.write(`
@@ -503,122 +697,120 @@ const printInvoice = () => {
           }
           body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            padding: 20px;
+            padding: 15px;
             color: #000;
             background: white;
+            font-size: 11px;
           }
           .invoice-container {
             max-width: 100%;
             margin: 0 auto;
           }
-          .invoice-header {
+          /* Top Header: Logo, QR Code, Company Info */
+          .invoice-top-header {
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 2px solid #000;
             page-break-inside: avoid;
             break-inside: avoid;
           }
           .invoice-logo {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            flex: 0 0 auto;
           }
           .invoice-logo-image {
-            height: 80px;
+            height: 60px;
             width: auto;
             object-fit: contain;
           }
-          .invoice-header-content {
+          .invoice-qr-code {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .qr-placeholder {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ccc;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            color: #666;
+          }
+          .invoice-company-info {
+            flex: 0 0 auto;
+            text-align: right;
+            font-size: 0.7rem;
+            line-height: 1.4;
+          }
+          .company-address {
+            margin-bottom: 0.25rem;
+          }
+          .company-bin, .company-mushak {
+            margin-bottom: 0.15rem;
+          }
+          /* Billing and Invoice Details */
+          .invoice-details-section {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-          }
-          .invoice-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-          }
-          .invoice-number {
-            font-size: 1rem;
-            color: #666;
-          }
-          .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-          }
-          .invoice-info-section {
-            margin-bottom: 2rem;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .invoice-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-          }
-          .invoice-info-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-          }
-          .info-label {
-            font-size: 0.875rem;
-            color: #666;
-            font-weight: 500;
-          }
-          .info-value {
-            font-size: 1rem;
-            font-weight: 600;
-          }
-          .address-section {
-            margin-bottom: 2rem;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .address-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-          }
-          .address-card {
-            padding: 1.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
+            margin-bottom: 1rem;
             page-break-inside: avoid;
             break-inside: avoid;
           }
-          .address-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+          .billing-section {
+            flex: 1;
           }
-          .address-details p {
+          .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            font-size: 0.9375rem;
+            color: #374151;
           }
-          .address-name {
+          .billing-details p {
+            font-size: 0.7rem;
+            line-height: 1.4;
+            margin-bottom: 0.2rem;
+          }
+          .billing-name {
             font-weight: 600;
-            font-size: 1rem;
           }
+          .invoice-details-right {
+            flex: 1;
+            text-align: right;
+          }
+          .invoice-detail-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+            font-size: 0.7rem;
+          }
+          .invoice-detail-label {
+            font-weight: 500;
+            color: #666;
+          }
+          .invoice-detail-value {
+            font-weight: 600;
+            color: #000;
+          }
+          .invoice-number-bold {
+            font-weight: 700;
+            font-size: 0.75rem;
+          }
+          /* Items Table */
           .items-section {
-            margin-bottom: 2rem;
-            page-break-before: always;
-            break-before: page;
-          }
-          .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
             margin-bottom: 1rem;
           }
           .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             page-break-inside: avoid;
             break-inside: avoid;
           }
@@ -632,109 +824,148 @@ const printInvoice = () => {
             page-break-inside: avoid;
             break-inside: avoid;
           }
-          .items-table th,
-          .items-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-          }
           .items-table th {
-            background-color: #f9fafb;
+            background-color: #4b5563;
+            color: white;
             font-weight: 600;
-            font-size: 0.875rem;
-            color: #374151;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            text-align: left;
           }
-          .items-table .text-right {
+          .items-table th.text-right {
             text-align: right;
           }
-          .product-cell {
+          .items-table th.text-center {
+            text-align: center;
+          }
+          .items-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.7rem;
+            vertical-align: top;
+          }
+          .items-table td.text-right {
+            text-align: right;
+          }
+          .items-table td.text-center {
+            text-align: center;
+          }
+          .item-details {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            align-items: flex-start;
+            gap: 0.5rem;
           }
-          .product-image {
-            width: 60px;
-            height: 60px;
+          .item-image {
+            width: 45px;
+            height: 45px;
             object-fit: cover;
-            border-radius: 0.5rem;
+            border-radius: 0.25rem;
+            flex-shrink: 0;
           }
-          .product-name {
+          .item-info {
+            flex: 1;
+          }
+          .item-name {
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 0.2rem;
+          }
+          .item-sku,
+          .item-variant {
+            font-size: 0.65rem;
+            color: #666;
+            margin-bottom: 0.1rem;
+            line-height: 1.3;
+          }
+          .cost-text,
+          .quantity-text,
+          .total-text {
+            font-size: 0.7rem;
             font-weight: 500;
-            margin-bottom: 0.25rem;
           }
-          .product-link {
-            color: #ea580c;
-            text-decoration: none;
-            font-size: 0.875rem;
-          }
-          .notes-section {
-            margin-bottom: 2rem;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .notes-text {
-            padding: 1rem;
-            background-color: #f9fafb;
-            border-radius: 0.5rem;
-            line-height: 1.6;
-          }
+          /* Summary Section */
           .summary-section {
-            margin-bottom: 2rem;
-            page-break-before: always;
-            break-before: page;
+            margin-bottom: 1rem;
           }
-          .summary-card {
-            padding: 1.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            background-color: #f9fafb;
-            page-break-inside: avoid;
-            break-inside: avoid;
+          .summary-rows {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.25rem;
           }
           .summary-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .summary-row:last-child {
-            border-bottom: none;
+            gap: 2rem;
+            width: 100%;
+            max-width: 300px;
+            padding: 0.3rem 0;
+            font-size: 0.7rem;
           }
           .summary-row-total {
-            border-top: 2px solid #000;
-            margin-top: 0.5rem;
-            padding-top: 1rem;
+            border-top: 1px solid #000;
+            padding-top: 0.5rem;
+            margin-top: 0.25rem;
           }
           .summary-label {
-            font-size: 0.9375rem;
+            font-size: 0.7rem;
             color: #374151;
           }
           .summary-label-total {
-            font-size: 1.125rem;
+            font-size: 0.8rem;
             font-weight: 600;
           }
           .summary-value {
-            font-size: 0.9375rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: #374151;
           }
           .summary-value-total {
-            font-size: 1.5rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #000;
           }
-          .summary-value.discount {
-            color: #dc2626;
+          /* Footer */
+          .invoice-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.65rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
-          .summary-value.paid {
-            color: #16a34a;
+          .claim-policy {
+            margin-bottom: 0.75rem;
           }
-          .summary-value.due {
-            color: #ea580c;
+          .claim-policy-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+          }
+          .claim-policy-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+          }
+          .claim-policy-list li {
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+            font-size: 0.65rem;
+          }
+          .invoice-thankyou {
+            margin-bottom: 0.5rem;
+          }
+          .thankyou-message {
+            font-weight: 600;
+            font-size: 0.7rem;
+          }
+          .invoice-contact {
+            font-size: 0.65rem;
+            line-height: 1.5;
+          }
+          .contact-info {
+            margin-bottom: 0.15rem;
           }
           .actions-section {
             display: none;
@@ -744,7 +975,7 @@ const printInvoice = () => {
           }
           @media print {
             body {
-              padding: 0;
+              padding: 10px;
             }
             .invoice-container {
               box-shadow: none;
@@ -755,25 +986,14 @@ const printInvoice = () => {
             .back-button {
               display: none;
             }
-            .items-section {
-              page-break-before: always !important;
-              break-before: page !important;
-            }
-            .summary-section {
-              page-break-before: always !important;
-              break-before: page !important;
-            }
-            .items-table,
-            .items-table tr,
-            .summary-card,
-            .summary-row,
-            .address-section,
-            .address-card,
-            .invoice-header,
-            .invoice-info-section,
-            .notes-section {
-              page-break-inside: avoid !important;
-              break-inside: avoid !important;
+            /* Remove all page breaks for compact layout */
+            * {
+              page-break-before: auto !important;
+              page-break-after: auto !important;
+              page-break-inside: auto !important;
+              break-before: auto !important;
+              break-after: auto !important;
+              break-inside: auto !important;
             }
           }
         </style>
