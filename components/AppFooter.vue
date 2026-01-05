@@ -1,6 +1,6 @@
 <template>
   <!-- Desktop Footer -->
-  <footer v-if="!isMobile" class="app-footer">
+  <footer class="app-footer">
     <div class="footer-main">
       <section class="best-deals-section">
         <div class="best-deals-container">

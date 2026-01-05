@@ -1,13 +1,13 @@
 <template>
-  <section class="why-rang-section">
+  <section class="why-rang-section pb-5!">
     <div class="why-rang-container">
         <section class="sale-header">
             <div class="sale-title">
                 <div><span class="sale-title-light">Why</span> <span class="sale-title-bold">Rang Bangladesh?</span></div>
             </div>
-            <div class="see-all-button mobile-only">
+            <!-- <div class="see-all-button mobile-only">
                 <ShopNowCTA text="See All" />
-            </div>
+            </div> -->
         </section>
         <div class="why-rang-grid">
             <div class="grid-item grid-item-1">
