@@ -11,7 +11,7 @@
         </section>
         <div class="why-rang-grid">
             <div class="grid-item grid-item-1">
-                <div class="card-image aspect-[2.22]!">
+                <div class="card-video aspect-[2.22]!">
                     <video 
                         v-if="getVideoUrl(props.items?.[0])"
                         :src="getVideoUrl(props.items?.[0]) || undefined" 
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="grid-item grid-item-2">
-                <div class="card-image aspect-[2.22]!">
+                <div class="card-video aspect-[2.22]!">
                     <video 
                         v-if="getVideoUrl(props.items?.[1])"
                         :src="getVideoUrl(props.items?.[1]) || undefined" 
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="grid-item grid-item-3">
-                <div class="card-image aspect-[0.77]!">
+                <div class="card-video aspect-[0.77]!">
                     <video 
                         v-if="getVideoUrl(props.items?.[2])"
                         :src="getVideoUrl(props.items?.[2]) || undefined" 

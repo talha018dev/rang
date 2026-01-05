@@ -159,10 +159,10 @@
 }
 
 @media (max-width: 600px) {
-  /* .sale-brands-grid-secondary {
-    grid-template-columns: 1fr;
+  .sale-brands-grid-secondary {
+    grid-template-columns: repeat(1, 1fr);
   }
-  .sale-brands-grid-secondary img {
+  /* .sale-brands-grid-secondary img {
     height: 300px;
     object-position: top;
   }
