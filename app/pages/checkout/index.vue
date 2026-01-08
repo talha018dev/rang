@@ -609,10 +609,6 @@
                   <span class="total-label">Discount</span>
                   <span class="total-value discount-value">-{{ formatPrice(couponData.discount || 0) }}</span>
                 </div>
-                <div v-if="hasComboProducts && comboOfferDiscountBDT > 0" class="total-row">
-                  <span class="total-label">Combo offer discount</span>
-                  <span class="total-value discount-value">-{{ comboOfferDiscountDisplay }}</span>
-                </div>
                 <div class="total-row">
                   <span class="total-label">Shipping</span>
                   <span class="total-value">{{ shippingCostDisplay }}</span>
@@ -1382,64 +1378,6 @@ const giftPackageChargeDisplay = computed(() => {
   return `Tk ${giftPackageChargeBDT.value.toLocaleString()}`
 })
 
-// Check if cart has combo products
-const hasComboProducts = computed(() => {
-  return cartItems.value.some(item => {
-    const hasProductsArray = (item as any).products && Array.isArray((item as any).products) && (item as any).products.length > 0
-    return hasProductsArray
-  })
-})
-
-// Combo offer discount in BDT (base currency)
-// Calculate discount as 10% of combo product prices (can be adjusted)
-const comboOfferDiscountBDT = computed(() => {
-  if (!hasComboProducts.value) {
-    return 0
-  }
-  
-  let totalComboPrice = 0
-  cartItems.value.forEach(item => {
-    const hasProductsArray = (item as any).products && Array.isArray((item as any).products) && (item as any).products.length > 0
-    if (hasProductsArray) {
-      // Calculate discount based on combo product price
-      const itemPrice = item.price || 0
-      const itemQuantity = item.quantity || 1
-      totalComboPrice += itemPrice * itemQuantity
-    }
-  })
-  
-  // Apply 10% discount on combo products (can be adjusted)
-  const discountPercentage = 10
-  return Math.round((totalComboPrice * discountPercentage) / 100)
-})
-
-// Combo offer discount in current currency
-const comboOfferDiscount = computed(() => {
-  if (!hasComboProducts.value || comboOfferDiscountBDT.value === 0) {
-    return 0
-  }
-  if (currency.value === 'USD') {
-    // Convert BDT discount to USD
-    return comboOfferDiscountBDT.value / exchangeRate.value
-  }
-  return comboOfferDiscountBDT.value
-})
-
-// Combo offer discount display
-const comboOfferDiscountDisplay = computed(() => {
-  if (!hasComboProducts.value || comboOfferDiscountBDT.value === 0) {
-    return ''
-  }
-  if (currency.value === 'USD') {
-    const usdDiscount = comboOfferDiscount.value
-    if (!isFinite(usdDiscount) || isNaN(usdDiscount)) {
-      return '$0.00'
-    }
-    return `$${usdDiscount.toFixed(2)}`
-  }
-  return `Tk ${comboOfferDiscountBDT.value.toLocaleString()}`
-})
-
 const shippingCostDisplay = computed(() => {
   if (!shippingMethod.value) {
     return 'Select delivery option'
@@ -1471,8 +1409,7 @@ const grandTotal = computed(() => {
   
   const shipping = shippingCost.value
   const giftPackage = giftPackageCharge.value
-  const comboDiscount = comboOfferDiscount.value
-  const total = baseTotal - discountInCurrentCurrency - comboDiscount + shipping + giftPackage
+  const total = baseTotal - discountInCurrentCurrency + shipping + giftPackage
   
   // Check for invalid values
   if (!isFinite(total) || isNaN(total)) {
@@ -1483,20 +1420,30 @@ const grandTotal = computed(() => {
 })
 
 const grandTotalDisplay = computed(() => {
-  if (!shippingMethod.value) {
-    // Show total (including VAT) when no shipping method is selected
-    return totalPriceDisplay.value
+  // Calculate total with discounts and gift package, but without shipping if not selected
+  const baseTotal = totalPrice.value // This already includes VAT
+  const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
+  
+  // Convert discount to current currency if needed
+  let discountInCurrentCurrency = discount
+  if (currency.value === 'USD' && discount > 0) {
+    discountInCurrentCurrency = discount / exchangeRate.value
   }
   
-  // Format grandTotal directly (it's already in the correct currency)
+  const shipping = shippingMethod.value ? shippingCost.value : 0
+  const giftPackage = giftPackageCharge.value
+  const total = baseTotal - discountInCurrentCurrency + shipping + giftPackage
+  
+  // Check for invalid values
+  if (!isFinite(total) || isNaN(total)) {
+    return currency.value === 'USD' ? '$0.00' : 'Tk 0'
+  }
+  
+  // Format the total
   if (currency.value === 'USD') {
-    const totalUsd = grandTotal.value
-    if (!isFinite(totalUsd) || isNaN(totalUsd)) {
-      return '$0.00'
-    }
-    return `$${totalUsd.toFixed(2)}`
+    return `$${total.toFixed(2)}`
   } else {
-    return `Tk ${grandTotal.value.toLocaleString()}`
+    return `Tk ${total.toLocaleString()}`
   }
 })
 
@@ -1723,7 +1670,6 @@ const handlePlaceOrder = async () => {
       payment_method: paymentMethod.value,
       is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
-      combo_offer_discount: hasComboProducts.value ? comboOfferDiscountBDT.value : 0,
       currency: currencyCode.value,
       address: {
         name: shippingInfo.value.fullName,
