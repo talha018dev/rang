@@ -62,6 +62,7 @@
                 alt="Rang Bangladesh Logo" 
                 class="invoice-logo-image"
                 loading="eager"
+                provider='vercel'
                 width="200"
                 height="90"
               />
