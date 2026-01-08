@@ -8,11 +8,10 @@
             src="/rang-logo-2026-v2.png" 
             alt="logo" 
             class='mobile-logo-image' 
-            format="webp" 
-            quality="85" 
             loading="eager"
             preload
             priority
+            provider="static"
             width="120"
             height="40"
           />
@@ -28,11 +27,10 @@
               src="/rang-logo-2026-v2.png" 
               alt="logo" 
               class='logo-image' 
-              format="webp" 
-              quality="85" 
               loading="eager"
               preload
               priority
+              provider="static"
               width="150"
               height="50"
             />
@@ -270,9 +268,8 @@
                 src="/rang-logo-2026-v2.png" 
                 alt="Rang Bangladesh Logo" 
                 class="mobile-nav-logo h-[90px]!" 
-                format="webp" 
-                quality="85" 
                 loading="eager"
+                provider="static"
                 width="200"
                 height="90"
               />

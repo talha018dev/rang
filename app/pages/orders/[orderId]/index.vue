@@ -61,9 +61,10 @@
                 src="/rang-logo-2026-v2.png" 
                 alt="Rang Bangladesh Logo" 
                 class="invoice-logo-image"
-                format="webp"
-                quality="90"
                 loading="eager"
+                provider="static"
+                width="200"
+                height="90"
               />
             </div>
             <div class="invoice-header-content">
