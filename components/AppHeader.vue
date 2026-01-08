@@ -11,7 +11,6 @@
             loading="eager"
             preload
             priority
-            provider="static"
             width="120"
             height="40"
           />
@@ -30,7 +29,6 @@
               loading="eager"
               preload
               priority
-              provider="static"
               width="150"
               height="50"
             />
@@ -269,7 +267,6 @@
                 alt="Rang Bangladesh Logo" 
                 class="mobile-nav-logo h-[90px]!" 
                 loading="eager"
-                provider="static"
                 width="200"
                 height="90"
               />

@@ -62,7 +62,6 @@
                 alt="Rang Bangladesh Logo" 
                 class="invoice-logo-image"
                 loading="eager"
-                provider="static"
                 width="200"
                 height="90"
               />
