@@ -11,6 +11,7 @@
             loading="eager"
             preload
             priority
+            provider='vercel'
             width="120"
             height="40"
           />
@@ -29,6 +30,7 @@
               loading="eager"
               preload
               priority
+              provider='vercel'
               width="150"
             />
           </NuxtLink>
@@ -266,6 +268,7 @@
                 alt="Rang Bangladesh Logo" 
                 class="mobile-nav-logo h-[90px]!" 
                 loading="eager"
+                provider='vercel'
                 width="200"
                 height="90"
               />
