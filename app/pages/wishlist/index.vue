@@ -233,7 +233,8 @@ const handleAddToCart = (product: WishlistItem) => {
     color: color,
     sku: product.sku,
     product_id: product.id,
-    variant_id: firstVariant?.id
+    variant_id: firstVariant?.id,
+    vat: (product as any).vat || (product as any).category?.vat || null
   }
 
   addToCart(cartItem)

@@ -15,6 +15,7 @@ export interface CartItem {
   sku?: string
   product_id?: number
   variant_id?: number
+  vat?: string | number // VAT percentage (e.g., "10" or 10)
 }
 
 const cartItems = ref<CartItem[]>([])
@@ -142,7 +143,8 @@ export const useCart = () => {
 
   const { formatPrice, currency, exchangeRate } = useCurrency()
   
-  const totalPrice = computed(() => {
+  // Calculate subtotal (price without VAT)
+  const subtotal = computed(() => {
     if (currency.value === 'USD') {
       // Sum USD prices if available, otherwise convert BDT prices
       return cartItems.value.reduce((total, item) => {
@@ -155,6 +157,41 @@ export const useCart = () => {
       return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
     }
   })
+
+  // Calculate total VAT amount (rounded)
+  const totalVat = computed(() => {
+    if (currency.value === 'USD') {
+      const vatAmount = cartItems.value.reduce((total, item) => {
+        const vatPercent = item.vat ? parseFloat(String(item.vat)) : 0
+        if (vatPercent === 0) return total
+        
+        const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0 
+          ? item.price_usd 
+          : (item.price / exchangeRate.value)
+        const itemSubtotal = itemPriceUsd * item.quantity
+        const itemVat = (itemSubtotal * vatPercent) / 100
+        return total + itemVat
+      }, 0)
+      // Round to 2 decimal places for USD
+      return Math.round(vatAmount * 100) / 100
+    } else {
+      const vatAmount = cartItems.value.reduce((total, item) => {
+        const vatPercent = item.vat ? parseFloat(String(item.vat)) : 0
+        if (vatPercent === 0) return total
+        
+        const itemSubtotal = item.price * item.quantity
+        const itemVat = (itemSubtotal * vatPercent) / 100
+        return total + itemVat
+      }, 0)
+      // Round to nearest integer for BDT (Taka)
+      return Math.round(vatAmount)
+    }
+  })
+  
+  // Total price including VAT
+  const totalPrice = computed(() => {
+    return subtotal.value + totalVat.value
+  })
   
   const totalPriceDisplay = computed(() => {
     if (currency.value === 'USD') {
@@ -165,6 +202,30 @@ export const useCart = () => {
       return `$${totalUsd.toFixed(2)}`
     } else {
       return `Tk ${totalPrice.value.toLocaleString()}`
+    }
+  })
+
+  const subtotalDisplay = computed(() => {
+    if (currency.value === 'USD') {
+      const subtotalUsd = subtotal.value
+      if (!isFinite(subtotalUsd) || isNaN(subtotalUsd)) {
+        return '$0.00'
+      }
+      return `$${subtotalUsd.toFixed(2)}`
+    } else {
+      return `Tk ${subtotal.value.toLocaleString()}`
+    }
+  })
+
+  const totalVatDisplay = computed(() => {
+    if (currency.value === 'USD') {
+      const vatUsd = totalVat.value
+      if (!isFinite(vatUsd) || isNaN(vatUsd)) {
+        return '$0.00'
+      }
+      return `$${vatUsd.toFixed(2)}`
+    } else {
+      return `Tk ${totalVat.value.toLocaleString()}`
     }
   })
 
@@ -205,6 +266,10 @@ export const useCart = () => {
     clearCart,
     reloadCart,
     totalItems,
+    subtotal,
+    subtotalDisplay,
+    totalVat,
+    totalVatDisplay,
     totalPrice,
     totalPriceDisplay,
     isEmpty

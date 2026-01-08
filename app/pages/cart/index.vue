@@ -104,7 +104,11 @@
               <div class="summary-details">
                 <div class="summary-row">
                   <span class="summary-label">Subtotal</span>
-                  <span class="summary-value">{{ totalPriceDisplay }}</span>
+                  <span class="summary-value">{{ subtotalDisplay }}</span>
+                </div>
+                <div v-if="totalVat > 0" class="summary-row">
+                  <span class="summary-label">VAT</span>
+                  <span class="summary-value">{{ totalVatDisplay }}</span>
                 </div>
                 <div class="summary-row">
                   <span class="summary-label">Shipping</span>
@@ -155,6 +159,10 @@ const {
   updateQuantity,
   reloadCart,
   totalItems,
+  subtotal,
+  subtotalDisplay,
+  totalVat,
+  totalVatDisplay,
   totalPriceDisplay,
   isEmpty: isEmptyComputed
 } = useCart()

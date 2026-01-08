@@ -305,7 +305,8 @@ const addMatchingSeriesToCart = () => {
       price_usd: item.price_usd,
       priceDisplay: formatPrice(item.price, item.price_usd),
       image: item.image,
-      size: item.size
+      size: item.size,
+      vat: (item as any).vat || (item as any).category?.vat || null
     })
   })
   

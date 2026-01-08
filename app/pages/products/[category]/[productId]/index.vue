@@ -1604,7 +1604,8 @@ const handleAddToCart = () => {
             color: selectedVariant?.attributes?.color || availableColors.value[selectedColorIndex.value]?.name,
             sku: selectedVariant?.sku || product.value.sku,
             product_id: product.value.id,
-            variant_id: selectedVariant?.id
+            variant_id: selectedVariant?.id,
+            vat: (product.value as any).vat || (product.value as any).category?.vat || null
         }
 
         // Add combo product properties if it's a combo - new format
@@ -1741,7 +1742,8 @@ const addFrequentlyBoughtToCart = () => {
           size: variantSize,
           sku: firstVariant?.sku || item.product?.sku || '',
           product_id: item.id,
-          variant_id: firstVariant?.id
+          variant_id: firstVariant?.id,
+          vat: (item.product as any)?.vat || ((item.product as any)?.category as any)?.vat || null
       })
     })
 
@@ -1805,7 +1807,8 @@ const addMatchingSeriesToCart = () => {
           size: item.size,
           sku: selectedVariant?.sku || item.product?.sku || '',
           product_id: item.id,
-          variant_id: selectedVariant?.id
+          variant_id: selectedVariant?.id,
+          vat: (item.product as any)?.vat || ((item.product as any)?.category as any)?.vat || null
       })
     })
 

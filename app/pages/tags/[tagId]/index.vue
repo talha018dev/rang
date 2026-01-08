@@ -560,7 +560,8 @@ const handleQuickAddToCart = (product: Product) => {
     color: color,
     sku: product.sku,
     product_id: product.id,
-    variant_id: firstVariant?.id
+    variant_id: firstVariant?.id,
+    vat: (product as any).vat || (product as any).category?.vat || null
   }
 
   // Add combo product properties if it's a combo - new format

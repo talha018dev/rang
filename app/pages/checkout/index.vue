@@ -599,7 +599,11 @@
               <div class="order-totals">
                 <div class="total-row">
                   <span class="total-label">Subtotal</span>
-                  <span class="total-value">{{ totalPriceDisplay }}</span>
+                  <span class="total-value">{{ subtotalDisplay }}</span>
+                </div>
+                <div v-if="totalVat > 0" class="total-row">
+                  <span class="total-label">VAT</span>
+                  <span class="total-value">{{ totalVatDisplay }}</span>
                 </div>
                 <div v-if="couponValidated && couponData" class="total-row">
                   <span class="total-label">Discount</span>
@@ -668,6 +672,10 @@ useHead({
 
 const {
   cartItems,
+  subtotal,
+  subtotalDisplay,
+  totalVat,
+  totalVatDisplay,
   totalPrice,
   totalPriceDisplay,
   isEmpty,
@@ -1450,8 +1458,9 @@ const shippingCostDisplay = computed(() => {
 })
 
 // Calculate grand total with coupon discount
+// Note: totalPrice already includes VAT, so we use it directly
 const grandTotal = computed(() => {
-  const subtotal = totalPrice.value
+  const baseTotal = totalPrice.value // This already includes VAT
   const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
   
   // Convert discount to current currency if needed
@@ -1463,7 +1472,7 @@ const grandTotal = computed(() => {
   const shipping = shippingCost.value
   const giftPackage = giftPackageCharge.value
   const comboDiscount = comboOfferDiscount.value
-  const total = subtotal - discountInCurrentCurrency - comboDiscount + shipping + giftPackage
+  const total = baseTotal - discountInCurrentCurrency - comboDiscount + shipping + giftPackage
   
   // Check for invalid values
   if (!isFinite(total) || isNaN(total)) {
@@ -1475,7 +1484,7 @@ const grandTotal = computed(() => {
 
 const grandTotalDisplay = computed(() => {
   if (!shippingMethod.value) {
-    // Show subtotal only when no shipping method is selected
+    // Show total (including VAT) when no shipping method is selected
     return totalPriceDisplay.value
   }
   
@@ -1510,7 +1519,7 @@ const validateCoupon = async () => {
       headers: getAuthHeaders(),
       body: {
         coupon_code: couponCode.value.trim(),
-        item_total: totalPrice.value
+        item_total: subtotal.value // Use subtotal (without VAT) for coupon validation
       }
     })
 
