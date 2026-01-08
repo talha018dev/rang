@@ -11,9 +11,6 @@
             loading="eager"
             preload
             priority
-            provider='vercel'
-            width="120"
-            height="40"
           />
         </NuxtLink>
       </div>
@@ -30,8 +27,6 @@
               loading="eager"
               preload
               priority
-              provider='vercel'
-              width="150"
             />
           </NuxtLink>
         </div>
@@ -268,9 +263,6 @@
                 alt="Rang Bangladesh Logo" 
                 class="mobile-nav-logo h-[90px]!" 
                 loading="eager"
-                provider='vercel'
-                width="200"
-                height="90"
               />
             </NuxtLink>
             <UButton color="primary" variant="ghost" icon="i-heroicons-x-mark" @click="closeDrawer" />
