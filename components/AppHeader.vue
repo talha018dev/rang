@@ -30,7 +30,6 @@
               preload
               priority
               width="150"
-              height="50"
             />
           </NuxtLink>
         </div>
