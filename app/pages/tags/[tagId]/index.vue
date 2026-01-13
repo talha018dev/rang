@@ -461,6 +461,7 @@ onMounted(() => {
   fetchBrands()
   fetchCategories()
   fetchProducts()
+  fetchTagImage()
   initializeWishlist()
 })
 
