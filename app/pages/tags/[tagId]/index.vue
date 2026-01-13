@@ -219,7 +219,7 @@ import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
 import { useWishlist } from '~~/composables/useWishlist'
-import type { Brand, BrandResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
+import type { Brand, BrandResponse, CategoryResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import '../../products/[category]/products.css'
 
 // Get route params
@@ -289,6 +289,7 @@ const pagination = ref<PaginationData | null>(null)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
+const categories = ref<Category[]>([])
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -369,6 +370,20 @@ const fetchBrands = async () => {
     }
   } catch (err) {
     console.error('Error fetching brands:', err)
+  }
+}
+
+const fetchCategories = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/category`)
+    console.log('Categories API Response:', response)
+
+    if (response.success && response.data) {
+      categories.value = response.data
+    }
+  } catch (err) {
+    console.error('Error fetching categories:', err)
   }
 }
 
