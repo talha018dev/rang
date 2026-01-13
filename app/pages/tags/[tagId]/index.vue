@@ -258,12 +258,16 @@ const findCategoryBySlug = (categories: Category[], slug: string): Category | nu
 // Hero image - use default
 const heroImage = computed(() => {
   // Try to find the category from the API response
-  if (categories.value.length > 0 && tagId.value) {
-    const category = findCategoryBySlug(categories.value, tagId.value)
-    if (category && (category as any).cover && (category as any).cover.preview_url) {
-      // Use the cover image from API if available
-      return getImageUrl((category as any).cover.preview_url)
-    }
+  // if (categories.value.length > 0 && tagId.value) {
+  //   const category = findCategoryBySlug(categories.value, tagId.value)
+  //   if (category && (category as any).cover && (category as any).cover.preview_url) {
+  //     // Use the cover image from API if available
+  //     return getImageUrl((category as any).cover.preview_url)
+  //   }
+  // }
+
+  if(tagCoverImage.value){
+    return getImageUrl(tagCoverImage).cover.preview_url
   }
   
   // Fallback to default image
@@ -291,6 +295,7 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
 const categories = ref<Category[]>([])
+const tagCoverImage = ref()
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -382,6 +387,20 @@ const fetchCategories = async () => {
 
     if (response.success && response.data) {
       categories.value = response.data
+    }
+  } catch (err) {
+    console.error('Error fetching categories:', err)
+  }
+}
+
+const fetchTagImage = async () => {
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/tag/${tagId}`)
+    console.log('Categories API Response:', response)
+
+    if (response.success && response.data) {
+      tagCoverImage.value = response.data
     }
   } catch (err) {
     console.error('Error fetching categories:', err)
