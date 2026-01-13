@@ -225,7 +225,6 @@ import '../../products/[category]/products.css'
 // Get route params
 const route = useRoute()
 const tagId = computed(() => route.params.tagId as string)
-const categorySlug = computed(() => route.params.category as string)
 
 // Format tag ID to title
 const tagTitle = computed(() => {
@@ -257,8 +256,8 @@ const findCategoryBySlug = (categories: Category[], slug: string): Category | nu
 // Hero image - use default
 const heroImage = computed(() => {
   // Try to find the category from the API response
-  if (categories.value.length > 0 && categorySlug.value) {
-    const category = findCategoryBySlug(categories.value, categorySlug.value)
+  if (categories.value.length > 0 && tagSlug.value) {
+    const category = findCategoryBySlug(categories.value, tagSlug.value)
     if (category && (category as any).cover && (category as any).cover.preview_url) {
       // Use the cover image from API if available
       return getImageUrl((category as any).cover.preview_url)
