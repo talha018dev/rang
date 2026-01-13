@@ -396,7 +396,7 @@ const fetchCategories = async () => {
 const fetchTagImage = async () => {
   try {
     const { backendUrl } = useApi()
-    const response = await $fetch<CategoryResponse>(`${backendUrl}/tag/${tagId}`)
+    const response = await $fetch<CategoryResponse>(`${backendUrl}/tag/${tagId.value}`)
     console.log('Categories API Response:', response)
 
     if (response.success && response.data) {
