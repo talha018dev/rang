@@ -440,6 +440,7 @@ const fetchProducts = async () => {
 // Initial fetch on mount
 onMounted(() => {
   fetchBrands()
+  fetchCategories()
   fetchProducts()
   initializeWishlist()
 })
