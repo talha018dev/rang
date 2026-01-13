@@ -258,8 +258,8 @@ const findCategoryBySlug = (categories: Category[], slug: string): Category | nu
 // Hero image - use default
 const heroImage = computed(() => {
   // Try to find the category from the API response
-  if (categories.value.length > 0 && tagSlug.value) {
-    const category = findCategoryBySlug(categories.value, tagSlug.value)
+  if (categories.value.length > 0 && tagId.value) {
+    const category = findCategoryBySlug(categories.value, tagId.value)
     if (category && (category as any).cover && (category as any).cover.preview_url) {
       // Use the cover image from API if available
       return getImageUrl((category as any).cover.preview_url)
