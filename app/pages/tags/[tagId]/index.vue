@@ -225,6 +225,7 @@ import '../../products/[category]/products.css'
 // Get route params
 const route = useRoute()
 const tagId = computed(() => route.params.tagId as string)
+const categorySlug = computed(() => route.params.category as string)
 
 // Format tag ID to title
 const tagTitle = computed(() => {
@@ -240,9 +241,32 @@ const tagTitle = computed(() => {
     .toUpperCase()
 })
 
+const findCategoryBySlug = (categories: Category[], slug: string): Category | null => {
+  for (const category of categories) {
+    if (category.slug === slug) {
+      return category
+    }
+    if (category.children && category.children.length > 0) {
+      const found = findCategoryBySlug(category.children, slug)
+      if (found) return found
+    }
+  }
+  return null
+}
+
 // Hero image - use default
 const heroImage = computed(() => {
-  return '/men/men-hero-image.jpg'
+  // Try to find the category from the API response
+  if (categories.value.length > 0 && categorySlug.value) {
+    const category = findCategoryBySlug(categories.value, categorySlug.value)
+    if (category && (category as any).cover && (category as any).cover.preview_url) {
+      // Use the cover image from API if available
+      return getImageUrl((category as any).cover.preview_url)
+    }
+  }
+  
+  // Fallback to default image
+  return ''
 })
 
 // Meta
