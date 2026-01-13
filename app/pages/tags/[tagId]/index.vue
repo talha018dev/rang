@@ -242,6 +242,8 @@ const tagTitle = computed(() => {
 
 const findCategoryBySlug = (categories: Category[], slug: string): Category | null => {
   for (const category of categories) {
+
+    console.log("qqqqqqqqqqqq", category, slug)
     if (category.slug === slug) {
       return category
     }
