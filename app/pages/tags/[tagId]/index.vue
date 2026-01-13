@@ -267,7 +267,7 @@ const heroImage = computed(() => {
   // }
 
   if(tagCoverImage.value){
-    return getImageUrl(tagCoverImage).cover.preview_url
+    return (tagCoverImage).cover.preview_url
   }
   
   // Fallback to default image
