@@ -208,10 +208,10 @@
 
                     <!-- Pricing -->
                     <div class="pricing">
-                        <span class="current-price">{{ formatPrice(product.price, product.price_usd) }}</span>
-                        <span v-if="product.compare_price > product.price" class="original-price">{{ formatPrice(product.compare_price, product.compare_price_usd) }}</span>
-                        <span v-if="product.compare_price > product.price" class="discount">
-                            -{{ Math.round(((product.compare_price - product.price) / product.compare_price) * 100) }}%
+                        <span class="current-price">{{ formatPrice(selectedVariantPrice, selectedVariantPriceUsd) }}</span>
+                        <span v-if="selectedVariantComparePrice > selectedVariantPrice" class="original-price">{{ formatPrice(selectedVariantComparePrice, selectedVariantComparePriceUsd) }}</span>
+                        <span v-if="selectedVariantComparePrice > selectedVariantPrice" class="discount">
+                            -{{ Math.round(((selectedVariantComparePrice - selectedVariantPrice) / selectedVariantComparePrice) * 100) }}%
                         </span>
                     </div>
 
@@ -1457,6 +1457,69 @@ const availableColors = computed(() => {
   return Array.from(colorMap.values())
 })
 
+// Computed property to find the selected variant based on size and color
+const selectedVariant = computed(() => {
+  if (!product.value?.variants || product.value.variants.length === 0) {
+    return null
+  }
+  
+  // Find variant matching selected size and color
+  const selectedColor = availableColors.value[selectedColorIndex.value]?.name
+  const variant = product.value.variants.find(v => {
+    const sizeMatch = v.attributes?.size === selectedSize.value
+    const colorMatch = selectedColor ? v.attributes?.color === selectedColor : true
+    return sizeMatch && colorMatch
+  })
+  
+  // If no exact match, try to find by size only
+  return variant || product.value.variants.find(v => v.attributes?.size === selectedSize.value) || null
+})
+
+// Computed properties for selected variant price
+const selectedVariantPrice = computed(() => {
+  if (selectedVariant.value) {
+    return selectedVariant.value.price
+  }
+  return product.value?.price || 0
+})
+
+const selectedVariantPriceUsd = computed(() => {
+  if (!product.value) return undefined
+  
+  if (selectedVariant.value?.price_usd !== undefined && selectedVariant.value.price_usd > 0) {
+    return selectedVariant.value.price_usd
+  }
+  
+  // Calculate USD price based on the ratio between variant price and product price
+  if (product.value.price_usd && product.value.price > 0 && selectedVariant.value) {
+    return (selectedVariant.value.price / product.value.price) * product.value.price_usd
+  }
+  
+  return product.value.price_usd
+})
+
+const selectedVariantComparePrice = computed(() => {
+  if (selectedVariant.value?.compare_price !== undefined && selectedVariant.value.compare_price !== null) {
+    return selectedVariant.value.compare_price
+  }
+  return product.value?.compare_price || 0
+})
+
+const selectedVariantComparePriceUsd = computed(() => {
+  if (!product.value) return undefined
+  
+  if (selectedVariant.value?.compare_price_usd !== undefined && selectedVariant.value.compare_price_usd !== null) {
+    return selectedVariant.value.compare_price_usd
+  }
+  
+  // Calculate USD compare price based on the ratio if variant compare price differs from product compare price
+  if (product.value.compare_price_usd && product.value.compare_price && product.value.compare_price > 0 && selectedVariant.value?.compare_price) {
+    return (selectedVariant.value.compare_price / product.value.compare_price) * product.value.compare_price_usd
+  }
+  
+  return product.value.compare_price_usd
+})
+
 // Computed properties
 const totalPrice = computed(() => {
     const { currency, exchangeRate } = useCurrency()
@@ -1585,7 +1648,16 @@ const handleAddToCart = () => {
     ) : null
 
     const variantPrice = selectedVariant?.price || product.value.price
-    const variantPriceUsd = selectedVariant?.price_usd || product.value.price_usd
+    // Calculate USD price based on ratio if variant price differs from product price
+    let variantPriceUsd: number | undefined = undefined
+    if (selectedVariant?.price_usd !== undefined && selectedVariant.price_usd > 0) {
+      variantPriceUsd = selectedVariant.price_usd
+    } else if (product.value.price_usd && product.value.price > 0) {
+      // Calculate USD price based on the ratio between variant price and product price
+      variantPriceUsd = (variantPrice / product.value.price) * product.value.price_usd
+    } else {
+      variantPriceUsd = product.value.price_usd
+    }
     const variantImage = selectedVariant?.image || product.value.image
 
     // Check if product is a combo product
