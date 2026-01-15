@@ -79,7 +79,7 @@
           </div>
 
           <div class="absolute" style="bottom: 40px; right: 40px;" v-if="products.length > 0 || isLoadingProducts">
-            <NuxtLink :to="`/products?brand=${selectedBrand}`">
+            <NuxtLink :to="`/products/all?brand=${selectedBrand}`">
               <button class="shop-now-white-button">
                 <span class="button-text">See All</span>
                 <Icon name="heroicons:arrow-right" class="button-icon" />
@@ -139,9 +139,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { useRoute } from 'nuxt/app'
+import { onMounted, ref, watch } from 'vue'
 import { useApi } from '../composables/useApi'
 import type { Brand, BrandResponse, Product, ProductResponse } from '../types/homepage'
+
+// Get route to access query parameters
+const route = useRoute()
 
 // Reactive state
 const brands = ref<Brand[]>([])
@@ -195,11 +199,31 @@ const fetchBrands = async () => {
 
     if (response.success && response.data) {
       brands.value = response.data
-      // Set first brand as selected by default and fetch its products
-      if (brands.value.length > 0 && brands.value[0]) {
-        selectedBrand.value = brands.value[0].slug
-        // Fetch products for the first brand
-        await fetchProductsByBrand(brands.value[0].slug)
+      
+      // Check if brand filter is available in URL query parameters
+      const brandFromUrl = route.query.brand as string | undefined
+      
+      if (brandFromUrl) {
+        // Check if the brand from URL exists in the brands list
+        const brandExists = brands.value.some(brand => brand.slug === brandFromUrl)
+        if (brandExists) {
+          selectedBrand.value = brandFromUrl
+          // Fetch products for the brand from URL
+          await fetchProductsByBrand(brandFromUrl)
+        } else {
+          // Brand from URL doesn't exist, fallback to first brand
+          if (brands.value.length > 0 && brands.value[0]) {
+            selectedBrand.value = brands.value[0].slug
+            await fetchProductsByBrand(brands.value[0].slug)
+          }
+        }
+      } else {
+        // No brand in URL, set first brand as selected by default and fetch its products
+        if (brands.value.length > 0 && brands.value[0]) {
+          selectedBrand.value = brands.value[0].slug
+          // Fetch products for the first brand
+          await fetchProductsByBrand(brands.value[0].slug)
+        }
       }
     } else {
       error.value = 'Failed to load brands'
@@ -224,6 +248,18 @@ const selectBrand = async (brandSlug: string) => {
 // Fetch brands on mount
 onMounted(() => {
   fetchBrands()
+})
+
+// Watch for route query changes (when brand filter changes in URL)
+watch(() => route.query.brand, async (newBrand) => {
+  if (newBrand && typeof newBrand === 'string') {
+    // Check if the brand exists in the brands list
+    const brandExists = brands.value.some(brand => brand.slug === newBrand)
+    if (brandExists && selectedBrand.value !== newBrand) {
+      selectedBrand.value = newBrand
+      await fetchProductsByBrand(newBrand)
+    }
+  }
 })
 </script>
 

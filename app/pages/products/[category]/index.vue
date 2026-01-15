@@ -242,7 +242,7 @@
 
 <script setup lang="ts">
 // All Vue composables and components are auto-imported in Nuxt 4
-import { useHead, useRoute } from 'nuxt/app'
+import { useHead, useRoute, useRouter } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
@@ -252,13 +252,23 @@ import { useWishlist } from '~~/composables/useWishlist'
 import type { Brand, BrandResponse, Category, CategoryResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import './products.css'
 
-// Get route params
+// Get route and router
 const route = useRoute()
+const router = useRouter()
 const categorySlug = computed(() => route.params.category as string)
 
 // Get query params for tag and campaign
 const selectedTag = computed(() => (route.query.tag as string) || '')
 const selectedCampaign = computed(() => (route.query.campaign as string) || '')
+const brandFromUrl = computed(() => (route.query.brand as string) || '')
+const sizeFromUrl = computed(() => (route.query.size as string) || '')
+const priceFromUrl = computed(() => (route.query.price as string) || '')
+const comboFromUrl = computed(() => (route.query.combo as string) || '')
+const sortFromUrl = computed(() => (route.query.sort as string) || 'latest')
+const pageFromUrl = computed(() => {
+  const page = route.query.page as string
+  return page ? parseInt(page, 10) : 1
+})
 
 console.log('qqqqqqqqqq',categorySlug.value);
 
@@ -316,7 +326,7 @@ const heroImage = computed(() => {
   }
   
   // Fallback to default image
-  return ''
+  return '/men/men-hero-image.jpg'
 })
 
 // Meta
@@ -327,13 +337,13 @@ useHead({
   ]
 })
 
-// Reactive data
-const selectedSize = ref('')
-const selectedPrice = ref('')
-const selectedBrand = ref('')
-const selectedCombo = ref('')
-const selectedSort = ref('latest') // Default sort is latest
-const currentPage = ref(1)
+// Reactive data - initialize from URL query parameters
+const selectedSize = ref(sizeFromUrl.value)
+const selectedPrice = ref(priceFromUrl.value)
+const selectedBrand = ref(brandFromUrl.value)
+const selectedCombo = ref(comboFromUrl.value)
+const selectedSort = ref(sortFromUrl.value || 'latest')
+const currentPage = ref(pageFromUrl.value)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
 const isLoading = ref(true)
@@ -518,16 +528,43 @@ watch(categorySlug, () => {
   fetchProducts()
 })
 
-// Watch for query param changes (tag and campaign)
-watch([selectedTag, selectedCampaign], () => {
-  currentPage.value = 1 // Reset to first page when filter changes
+// Watch for query param changes from URL (tag, campaign, brand, size, price, combo, sort, page)
+watch([selectedTag, selectedCampaign, brandFromUrl, sizeFromUrl, priceFromUrl, comboFromUrl, sortFromUrl, pageFromUrl], () => {
+  isUpdatingFromUrl.value = true
+  
+  // Update filters from URL
+  if (brandFromUrl.value !== selectedBrand.value) {
+    selectedBrand.value = brandFromUrl.value
+  }
+  if (sizeFromUrl.value !== selectedSize.value) {
+    selectedSize.value = sizeFromUrl.value
+  }
+  if (priceFromUrl.value !== selectedPrice.value) {
+    selectedPrice.value = priceFromUrl.value
+  }
+  if (comboFromUrl.value !== selectedCombo.value) {
+    selectedCombo.value = comboFromUrl.value
+  }
+  if (sortFromUrl.value && sortFromUrl.value !== selectedSort.value) {
+    selectedSort.value = sortFromUrl.value || 'latest'
+  }
+  if (pageFromUrl.value !== currentPage.value) {
+    currentPage.value = pageFromUrl.value
+  }
+  
+  isUpdatingFromUrl.value = false
   fetchProducts()
 })
 
-// Watch for sort changes
-watch(selectedSort, () => {
-  currentPage.value = 1 // Reset to first page when sort changes
-  fetchProducts()
+// Watch for page changes and update URL
+watch(currentPage, (newPage, oldPage) => {
+  // Only fetch if page actually changed (not initial) and not updating from URL
+  if (oldPage !== undefined && newPage !== oldPage && !isUpdatingFromUrl.value) {
+    updateUrlQuery()
+    fetchProducts()
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 })
 
 // Watch for page changes
@@ -629,9 +666,54 @@ const filteredProducts = computed(() => {
   })
 })
 
-// Watch for filter changes to reset to page 1
-watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
+// Function to update URL query parameters
+const updateUrlQuery = () => {
+  const query: Record<string, string> = {}
+  
+  // Preserve existing query params (tag, campaign)
+  if (selectedTag.value) {
+    query.tag = selectedTag.value
+  }
+  if (selectedCampaign.value) {
+    query.campaign = selectedCampaign.value
+  }
+  
+  // Add filter query params
+  if (selectedBrand.value) {
+    query.brand = selectedBrand.value
+  }
+  if (selectedSize.value) {
+    query.size = selectedSize.value
+  }
+  if (selectedPrice.value) {
+    query.price = selectedPrice.value
+  }
+  if (selectedCombo.value !== '') {
+    query.combo = selectedCombo.value
+  }
+  if (selectedSort.value && selectedSort.value !== 'latest') {
+    query.sort = selectedSort.value
+  }
+  if (currentPage.value > 1) {
+    query.page = currentPage.value.toString()
+  }
+  
+  // Update URL without reloading the page
+  router.replace({
+    path: route.path,
+    query
+  })
+}
+
+// Flag to prevent infinite loops when updating from URL
+const isUpdatingFromUrl = ref(false)
+
+// Watch for filter changes to reset to page 1 and update URL
+watch([selectedSize, selectedPrice, selectedBrand, selectedCombo, selectedSort], () => {
+  if (isUpdatingFromUrl.value) return // Skip if we're updating from URL
+  
   currentPage.value = 1
+  updateUrlQuery()
   fetchProducts()
 })
 
