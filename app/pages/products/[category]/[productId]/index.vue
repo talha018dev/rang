@@ -1463,16 +1463,34 @@ const selectedVariant = computed(() => {
     return null
   }
   
+  // If no size is selected, return null
+  if (!selectedSize.value) {
+    return null
+  }
+  
   // Find variant matching selected size and color
   const selectedColor = availableColors.value[selectedColorIndex.value]?.name
-  const variant = product.value.variants.find(v => {
-    const sizeMatch = v.attributes?.size === selectedSize.value
-    const colorMatch = selectedColor ? v.attributes?.color === selectedColor : true
-    return sizeMatch && colorMatch
-  })
   
-  // If no exact match, try to find by size only
-  return variant || product.value.variants.find(v => v.attributes?.size === selectedSize.value) || null
+  // First, try to find exact match (size + color)
+  if (selectedColor) {
+    const exactMatch = product.value.variants.find(v => {
+      const sizeMatch = v.attributes?.size === selectedSize.value
+      const colorMatch = v.attributes?.color === selectedColor
+      return sizeMatch && colorMatch
+    })
+    if (exactMatch) {
+      return exactMatch
+    }
+  }
+  
+  // If no exact match, find by size only (prioritize first variant with matching size)
+  const sizeMatch = product.value.variants.find(v => v.attributes?.size === selectedSize.value)
+  if (sizeMatch) {
+    return sizeMatch
+  }
+  
+  // Fallback: return first variant if no match found
+  return product.value.variants[0] || null
 })
 
 // Computed properties for selected variant price
@@ -1502,7 +1520,14 @@ const selectedVariantComparePrice = computed(() => {
   if (selectedVariant.value?.compare_price !== undefined && selectedVariant.value.compare_price !== null) {
     return selectedVariant.value.compare_price
   }
-  return product.value?.compare_price || 0
+  // If variant doesn't have compare_price, use product compare_price
+  // But only if it's greater than the variant price (to show discount correctly)
+  const variantPrice = selectedVariant.value?.price || product.value?.price || 0
+  const productComparePrice = product.value?.compare_price || 0
+  if (productComparePrice > variantPrice) {
+    return productComparePrice
+  }
+  return 0
 })
 
 const selectedVariantComparePriceUsd = computed(() => {
