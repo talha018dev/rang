@@ -230,33 +230,33 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="city" class="form-label">City *</label>
-                  <div class="select-wrapper">
-                    <select
-                      id="city"
-                      v-model="shippingInfo.city"
-                      class="form-input"
-                      
-                      :key="`city-${shippingInfo.stateDistrict || 'none'}`"
-                      @blur="handleAddressFieldBlur"
-                    >
-                      <option value="">Select City</option>
-                      <option
-                        v-for="city in availableCities"
-                        :key="city"
-                        :value="city"
-                      >
-                        {{ city }}
-                      </option>
-                    </select>
-                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                </div>
+                 <div class="form-group">
+                   <label for="city" class="form-label">City *</label>
+                   <div class="select-wrapper">
+                     <select
+                       id="city"
+                       v-model="shippingInfo.city"
+                       class="form-input"
+                       :disabled="isLoadingCities || !shippingInfo.stateDistrict"
+                       :key="`city-${shippingInfo.stateDistrict || 'none'}`"
+                       @blur="handleAddressFieldBlur"
+                     >
+                       <option value="">{{ isLoadingCities ? 'Loading cities...' : 'Select City' }}</option>
+                       <option
+                         v-for="city in availableCities"
+                         :key="city"
+                         :value="city"
+                       >
+                         {{ city }}
+                       </option>
+                     </select>
+                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                       <path fill-rule="evenodd"
+                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                         clip-rule="evenodd" />
+                     </svg>
+                   </div>
+                 </div>
 
                 <div class="form-group">
                   <label for="postalCode" class="form-label">Postal Code</label>
@@ -774,11 +774,21 @@ const fetchShippingMethods = async (addressData?: any) => {
     console.log('Shipping Methods API Response Data:', response.data)
     
     if (response.success && response.data) {
+      // Store city_id and zone_id from API response if provided
+      if (response.data.city_id !== undefined) {
+        shippingInfo.value.city_id = response.data.city_id
+      }
+      if (response.data.zone_id !== undefined) {
+        shippingInfo.value.zone_id = response.data.zone_id
+      }
+      
       // Store the currently selected shipping method slug before updating
       const currentSelectedSlug = shippingMethod.value
       
       // Update shipping methods (now an object structure)
-      shippingMethods.value = response.data
+      // If response.data contains shipping_methods, use that; otherwise use the whole data
+      const shippingMethodsData = response.data.shipping_methods || response.data
+      shippingMethods.value = shippingMethodsData
       console.log('Updated shippingMethods.value:', shippingMethods.value)
       console.log('Type of shippingMethods.value:', typeof shippingMethods.value)
       console.log('Is it an object?', shippingMethods.value && typeof shippingMethods.value === 'object')
@@ -818,7 +828,7 @@ const handleAddressFieldBlur = async () => {
 // Function to fetch shipping methods with current address data
 const fetchShippingMethodsWithAddress = async () => {
   // Collect all address data
-  const addressData = {
+  const addressData: any = {
     name: shippingInfo.value.fullName || '',
     phone: shippingInfo.value.phone || '',
     email: shippingInfo.value.email || '',
@@ -828,6 +838,14 @@ const fetchShippingMethodsWithAddress = async () => {
     state: shippingInfo.value.stateDistrict || '',
     country: shippingInfo.value.country || '',
     postal_code: shippingInfo.value.postalCode || ''
+  }
+  
+  // Add city_id and zone_id if available
+  if (shippingInfo.value.city_id) {
+    addressData.city_id = shippingInfo.value.city_id
+  }
+  if (shippingInfo.value.zone_id) {
+    addressData.zone_id = shippingInfo.value.zone_id
   }
   
   // Only call API if we have at least some address data
@@ -940,6 +958,9 @@ onMounted(async () => {
   
   // Fetch locations on mount
   fetchLocations()
+  
+  // Fetch all cities once on mount (cached, no need to fetch again)
+  fetchCities()
   
   // Fetch shipping methods on mount
   fetchShippingMethods()
@@ -1106,7 +1127,9 @@ const shippingInfo = ref({
   city: '',
   postalCode: '',
   country: 'Bangladesh', // Default to Bangladesh
-  stateDistrict: '' // Default to empty to show "Select State/District" placeholder
+  stateDistrict: '', // Default to empty to show "Select State/District" placeholder
+  city_id: null as number | null,
+  zone_id: null as number | null
 })
 
 // Computed property for available states/districts based on country
@@ -1117,9 +1140,69 @@ const availableStates = computed(() => {
   return [] // For other countries, return empty array (can be extended later)
 })
 
+// Store all cities from API (cached)
+const allCities = ref<any[]>([])
+
+// Fetch all cities from API once
+const fetchCities = async () => {
+  // If cities are already loaded, don't fetch again
+  if (allCities.value.length > 0) {
+    return
+  }
+
+  isLoadingCities.value = true
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/area/cities`, {
+      method: 'GET',
+      headers: getAuthHeaders()
+    })
+    
+    console.log('Cities API Response:', response)
+    
+    if (response.success && response.data && Array.isArray(response.data)) {
+      allCities.value = response.data
+    } else {
+      allCities.value = []
+    }
+  } catch (error) {
+    console.error('Error fetching cities:', error)
+    allCities.value = []
+  } finally {
+    isLoadingCities.value = false
+  }
+}
+
+// Filter cities by state/district (client-side)
+const filterCitiesByState = (stateDistrict: string) => {
+  if (!stateDistrict || stateDistrict === '' || allCities.value.length === 0) {
+    cities.value = []
+    return
+  }
+
+  cities.value = allCities.value.filter((city: any) => {
+    // Check if city has state/district property that matches
+    const cityState = city.state || city.state_district || city.district || ''
+    return cityState.toLowerCase() === stateDistrict.toLowerCase() || 
+           cityState === stateDistrict
+  })
+}
+
 // Computed property for available cities based on country and state
 const availableCities = computed(() => {
   if (shippingInfo.value.country === 'Bangladesh' && shippingInfo.value.stateDistrict) {
+    // Use API cities if available, otherwise fallback to hardcoded list
+    if (cities.value.length > 0) {
+      // Return city names from API response
+      // Handle both string arrays and object arrays
+      return cities.value.map((city: any) => {
+        if (typeof city === 'string') {
+          return city
+        }
+        return city.name || city.city || city.title || ''
+      }).filter((name: string) => name !== '')
+    }
+    // Fallback to hardcoded cities if API hasn't loaded yet
     return bangladeshCities[shippingInfo.value.stateDistrict] || []
   }
   return [] // For other countries or no state selected, return empty array
@@ -1136,6 +1219,12 @@ const handleCountryChange = () => {
 const handleStateChange = () => {
   // Reset city when state changes
   shippingInfo.value.city = ''
+  // Filter cities for the selected state/district (client-side)
+  if (shippingInfo.value.stateDistrict) {
+    filterCitiesByState(shippingInfo.value.stateDistrict)
+  } else {
+    cities.value = []
+  }
 }
 
 // Watch for country changes to ensure state is reset and placeholder shows
@@ -1159,14 +1248,43 @@ watch(() => shippingInfo.value.country, (newCountry) => {
 watch(() => shippingInfo.value.stateDistrict, (newState) => {
   if (!newState || newState === '') {
     shippingInfo.value.city = ''
+    shippingInfo.value.city_id = null
+    shippingInfo.value.zone_id = null
+    cities.value = []
   } else {
+    // Filter cities for the new state/district (client-side, no API call)
+    filterCitiesByState(newState)
     // Ensure city is reset when state changes only if it's not empty and doesn't match
     // Don't clear if it's already empty (to preserve the placeholder)
     if (shippingInfo.value.city && 
         shippingInfo.value.city !== '' && 
         !availableCities.value.includes(shippingInfo.value.city)) {
       shippingInfo.value.city = ''
+      shippingInfo.value.city_id = null
+      shippingInfo.value.zone_id = null
     }
+  }
+})
+
+// Watch for city changes to store city_id and zone_id
+watch(() => shippingInfo.value.city, (newCity) => {
+  if (newCity && cities.value.length > 0) {
+    // Find the city object that matches the selected city name
+    const cityObj = cities.value.find((city: any) => {
+      const cityName = typeof city === 'string' ? city : (city.name || city.city || city.title || '')
+      return cityName === newCity
+    })
+    
+    if (cityObj && typeof cityObj === 'object') {
+      shippingInfo.value.city_id = cityObj.id || cityObj.city_id || null
+      shippingInfo.value.zone_id = cityObj.zone_id || null
+    } else {
+      shippingInfo.value.city_id = null
+      shippingInfo.value.zone_id = null
+    }
+  } else {
+    shippingInfo.value.city_id = null
+    shippingInfo.value.zone_id = null
   }
 })
 
@@ -1185,6 +1303,8 @@ const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
 const shippingMethods = ref<any>({}) // Changed to object to store the new API response structure
 const isLoadingShippingMethods = ref(false)
+const cities = ref<any[]>([]) // Store cities from API
+const isLoadingCities = ref(false)
 
 // Computed property to get the selected outlet location
 const selectedOutletLocation = computed(() => {
@@ -1683,6 +1803,14 @@ const handlePlaceOrder = async () => {
         postal_code: shippingInfo.value.postalCode || ''
       },
       products: productsData
+    }
+    
+    // Add city_id and zone_id if available
+    if (shippingInfo.value.city_id) {
+      orderData.city_id = shippingInfo.value.city_id
+    }
+    if (shippingInfo.value.zone_id) {
+      orderData.zone_id = shippingInfo.value.zone_id
     }
 
     // Add outlet information if outlet is selected
