@@ -239,6 +239,7 @@
                        class="form-input"
                        :disabled="isLoadingCities || !shippingInfo.stateDistrict"
                        :key="`city-${shippingInfo.stateDistrict || 'none'}`"
+                       @change="handleCityChange"
                        @blur="handleAddressFieldBlur"
                      >
                        <option value="">{{ isLoadingCities ? 'Loading cities...' : 'Select City' }}</option>
@@ -248,6 +249,35 @@
                          :value="city"
                        >
                          {{ city }}
+                       </option>
+                     </select>
+                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
+                       <path fill-rule="evenodd"
+                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                         clip-rule="evenodd" />
+                     </svg>
+                   </div>
+                 </div>
+
+                 <!-- Zone Selection -->
+                 <div class="form-group">
+                   <label for="zone" class="form-label">Zone</label>
+                   <div class="select-wrapper">
+                     <select
+                       id="zone"
+                       v-model="shippingInfo.zone"
+                       class="form-input"
+                       :disabled="isLoadingZones || !shippingInfo.city || !shippingInfo.city_id"
+                       :key="`zone-${shippingInfo.city_id || shippingInfo.city || 'none'}`"
+                       @blur="handleAddressFieldBlur"
+                     >
+                       <option value="">{{ isLoadingZones ? 'Loading zones...' : (zones.length === 0 && shippingInfo.city_id ? 'No zones available' : 'Select Zone') }}</option>
+                       <option
+                         v-for="zone in zones"
+                         :key="zone.zone_id || zone.id || zone"
+                         :value="zone.zone_id || zone.id || zone"
+                       >
+                         {{ typeof zone === 'string' ? zone : (zone.zone_name || zone.name || zone.zone || zone.title || '') }}
                        </option>
                      </select>
                      <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
@@ -1125,6 +1155,7 @@ const shippingInfo = ref({
   phone: '',
   address: '',
   city: '',
+  zone: '',
   postalCode: '',
   country: 'Bangladesh', // Default to Bangladesh
   stateDistrict: '', // Default to empty to show "Select State/District" placeholder
@@ -1162,6 +1193,11 @@ const fetchCities = async () => {
     
     if (response.success && response.data && Array.isArray(response.data)) {
       allCities.value = response.data
+      console.log('Cities loaded from API:', allCities.value.length, 'cities')
+      if (allCities.value.length > 0) {
+        console.log('Sample city object structure:', allCities.value[0])
+        console.log('Sample city object keys:', Object.keys(allCities.value[0]))
+      }
     } else {
       allCities.value = []
     }
@@ -1180,12 +1216,17 @@ const filterCitiesByState = (stateDistrict: string) => {
     return
   }
 
-  cities.value = allCities.value.filter((city: any) => {
-    // Check if city has state/district property that matches
-    const cityState = city.state || city.state_district || city.district || ''
-    return cityState.toLowerCase() === stateDistrict.toLowerCase() || 
-           cityState === stateDistrict
-  })
+  // Note: The API response doesn't include state/district info in cities
+  // So we'll show all cities for now, or you may need to filter differently
+  // For now, we'll use all cities since the API doesn't provide state/district mapping
+  cities.value = allCities.value
+  
+  // If the API later includes state/district, uncomment this:
+  // cities.value = allCities.value.filter((city: any) => {
+  //   const cityState = city.state || city.state_district || city.district || ''
+  //   return cityState.toLowerCase() === stateDistrict.toLowerCase() || 
+  //          cityState === stateDistrict
+  // })
 }
 
 // Computed property for available cities based on country and state
@@ -1199,8 +1240,9 @@ const availableCities = computed(() => {
         if (typeof city === 'string') {
           return city
         }
-        return city.name || city.city || city.title || ''
-      }).filter((name: string) => name !== '')
+        // API uses city_name field
+        return city.city_name || city.name || city.city || city.title || ''
+      }).filter((name: string) => name !== '' && name.trim() !== '')
     }
     // Fallback to hardcoded cities if API hasn't loaded yet
     return bangladeshCities[shippingInfo.value.stateDistrict] || []
@@ -1210,15 +1252,23 @@ const availableCities = computed(() => {
 
 // Handler for country change
 const handleCountryChange = () => {
-  // Reset state and city when country changes
+  // Reset state, city, and zone when country changes
   shippingInfo.value.stateDistrict = ''
   shippingInfo.value.city = ''
+  shippingInfo.value.zone = ''
+  shippingInfo.value.city_id = null
+  shippingInfo.value.zone_id = null
+  zones.value = []
 }
 
 // Handler for state change
 const handleStateChange = () => {
-  // Reset city when state changes
+  // Reset city and zone when state changes
   shippingInfo.value.city = ''
+  shippingInfo.value.zone = ''
+  shippingInfo.value.city_id = null
+  shippingInfo.value.zone_id = null
+  zones.value = []
   // Filter cities for the selected state/district (client-side)
   if (shippingInfo.value.stateDistrict) {
     filterCitiesByState(shippingInfo.value.stateDistrict)
@@ -1227,11 +1277,77 @@ const handleStateChange = () => {
   }
 }
 
+// Handler for city change - ensures city_id is set immediately and zones are fetched
+const handleCityChange = () => {
+  const selectedCity = shippingInfo.value.city
+  console.log('handleCityChange called with city:', selectedCity)
+  
+  // Reset zone when city changes
+  shippingInfo.value.zone = ''
+  shippingInfo.value.zone_id = null
+  zones.value = []
+  
+  if (selectedCity && selectedCity !== '') {
+    // Find the city object that matches the selected city name
+    // API uses city_name field
+    let cityObj = cities.value.find((city: any) => {
+      if (typeof city === 'string') {
+        return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
+      }
+      const cityName = city.city_name || city.name || city.city || city.title || ''
+      return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
+    })
+    
+    // If not found in filtered cities, search in all cities
+    if (!cityObj && allCities.value.length > 0) {
+      cityObj = allCities.value.find((city: any) => {
+        if (typeof city === 'string') {
+          return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
+        }
+        const cityName = city.city_name || city.name || city.city || city.title || ''
+        return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
+      })
+    }
+    
+    if (cityObj && typeof cityObj === 'object') {
+      // API uses city_id field
+      const cityId = cityObj.city_id || cityObj.id || cityObj.cityId || cityObj.ID || null
+      console.log('City selected - city_id:', cityId, 'city object:', cityObj)
+      shippingInfo.value.city_id = cityId
+      // Always fetch zones when city is selected and city_id is available
+      if (cityId) {
+        console.log('Calling fetchZones with city_id:', cityId)
+        fetchZones(cityId)
+      } else {
+        console.error('City ID is null or undefined. City object:', cityObj)
+        shippingInfo.value.zone = ''
+        shippingInfo.value.zone_id = null
+        zones.value = []
+      }
+    } else {
+      console.warn('City object not found for selected city:', selectedCity)
+      shippingInfo.value.city_id = null
+      shippingInfo.value.zone = ''
+      shippingInfo.value.zone_id = null
+      zones.value = []
+    }
+  } else {
+    shippingInfo.value.city_id = null
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+    zones.value = []
+  }
+}
+
 // Watch for country changes to ensure state is reset and placeholder shows
 watch(() => shippingInfo.value.country, (newCountry) => {
   if (!newCountry || newCountry === '') {
     shippingInfo.value.stateDistrict = ''
     shippingInfo.value.city = ''
+    shippingInfo.value.zone = ''
+    shippingInfo.value.city_id = null
+    shippingInfo.value.zone_id = null
+    zones.value = []
   } else {
     // Ensure state is reset when country changes only if it's not empty and doesn't match
     // Don't clear if it's already empty (to preserve the placeholder)
@@ -1240,6 +1356,10 @@ watch(() => shippingInfo.value.country, (newCountry) => {
         !availableStates.value.includes(shippingInfo.value.stateDistrict)) {
       shippingInfo.value.stateDistrict = ''
       shippingInfo.value.city = ''
+      shippingInfo.value.zone = ''
+      shippingInfo.value.city_id = null
+      shippingInfo.value.zone_id = null
+      zones.value = []
     }
   }
 })
@@ -1248,9 +1368,11 @@ watch(() => shippingInfo.value.country, (newCountry) => {
 watch(() => shippingInfo.value.stateDistrict, (newState) => {
   if (!newState || newState === '') {
     shippingInfo.value.city = ''
+    shippingInfo.value.zone = ''
     shippingInfo.value.city_id = null
     shippingInfo.value.zone_id = null
     cities.value = []
+    zones.value = []
   } else {
     // Filter cities for the new state/district (client-side, no API call)
     filterCitiesByState(newState)
@@ -1260,30 +1382,162 @@ watch(() => shippingInfo.value.stateDistrict, (newState) => {
         shippingInfo.value.city !== '' && 
         !availableCities.value.includes(shippingInfo.value.city)) {
       shippingInfo.value.city = ''
+      shippingInfo.value.zone = ''
       shippingInfo.value.city_id = null
       shippingInfo.value.zone_id = null
+      zones.value = []
     }
   }
 })
 
-// Watch for city changes to store city_id and zone_id
-watch(() => shippingInfo.value.city, (newCity) => {
-  if (newCity && cities.value.length > 0) {
-    // Find the city object that matches the selected city name
-    const cityObj = cities.value.find((city: any) => {
-      const cityName = typeof city === 'string' ? city : (city.name || city.city || city.title || '')
-      return cityName === newCity
+// Fetch zones from API based on city_id
+const fetchZones = async (cityId: number | null) => {
+  console.log('fetchZones called with cityId:', cityId, 'type:', typeof cityId)
+  
+  if (!cityId) {
+    console.warn('fetchZones: cityId is null or undefined, returning early')
+    zones.value = []
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+    return
+  }
+
+  isLoadingZones.value = true
+  try {
+    const { backendUrl } = useApi()
+    const apiUrl = `${backendUrl}/area/zones?city=${cityId}`
+    console.log('Fetching zones from API:', apiUrl)
+    
+    const response = await $fetch<any>(apiUrl, {
+      method: 'GET',
+      headers: getAuthHeaders()
     })
     
-    if (cityObj && typeof cityObj === 'object') {
-      shippingInfo.value.city_id = cityObj.id || cityObj.city_id || null
-      shippingInfo.value.zone_id = cityObj.zone_id || null
+    console.log('Zones API Response:', response)
+    
+    if (response.success && response.data && Array.isArray(response.data)) {
+      zones.value = response.data
+      console.log('Zones loaded:', zones.value.length, 'zones')
     } else {
+      console.warn('Zones API response format unexpected:', response)
+      zones.value = []
+    }
+  } catch (error) {
+    console.error('Error fetching zones:', error)
+    zones.value = []
+  } finally {
+    isLoadingZones.value = false
+  }
+}
+
+// Watch for city changes to store city_id and fetch zones
+watch(() => shippingInfo.value.city, (newCity, oldCity) => {
+  console.log('City watch triggered - newCity:', newCity, 'oldCity:', oldCity)
+  
+  // Reset zone when city changes
+  if (newCity !== oldCity) {
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+    zones.value = []
+  }
+  
+  if (newCity && newCity !== '') {
+    // First try to find in filtered cities
+    // API uses city_name field
+    let cityObj = cities.value.find((city: any) => {
+      if (typeof city === 'string') {
+        return city === newCity || city.toLowerCase() === newCity.toLowerCase()
+      }
+      const cityName = city.city_name || city.name || city.city || city.title || ''
+      return cityName === newCity || cityName.trim().toLowerCase() === newCity.trim().toLowerCase()
+    })
+    
+    // If not found in filtered cities, search in all cities
+    if (!cityObj && allCities.value.length > 0) {
+      cityObj = allCities.value.find((city: any) => {
+        if (typeof city === 'string') {
+          return city === newCity || city.toLowerCase() === newCity.toLowerCase()
+        }
+        const cityName = city.city_name || city.name || city.city || city.title || ''
+        return cityName === newCity || cityName.trim().toLowerCase() === newCity.trim().toLowerCase()
+      })
+    }
+    
+    if (cityObj && typeof cityObj === 'object') {
+      // API uses city_id field (primary), fallback to other field names
+      const cityId = cityObj.city_id || cityObj.id || cityObj.cityId || cityObj.ID || null
+      console.log('Found city object:', cityObj, 'city_id:', cityId, 'city object keys:', Object.keys(cityObj))
+      shippingInfo.value.city_id = cityId
+      // Always fetch zones when city is selected and city_id is available
+      if (cityId) {
+        console.log('Calling fetchZones with city_id:', cityId)
+        fetchZones(cityId)
+      } else {
+        console.warn('City ID is null or undefined, cannot fetch zones. City object:', cityObj)
+        shippingInfo.value.zone = ''
+        shippingInfo.value.zone_id = null
+        zones.value = []
+      }
+    } else {
+      console.warn('City object not found for:', newCity)
+      console.warn('Searched in cities.value (length:', cities.value.length, ') and allCities.value (length:', allCities.value.length, ')')
       shippingInfo.value.city_id = null
+      shippingInfo.value.zone = ''
       shippingInfo.value.zone_id = null
+      zones.value = []
     }
   } else {
     shippingInfo.value.city_id = null
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+    zones.value = []
+  }
+}, { immediate: false })
+
+// Watch for city_id changes to fetch zones (backup to ensure zones are fetched)
+watch(() => shippingInfo.value.city_id, (newCityId, oldCityId) => {
+  console.log('city_id watch triggered - newCityId:', newCityId, 'oldCityId:', oldCityId)
+  
+  if (newCityId && newCityId !== oldCityId) {
+    console.log('city_id changed, calling fetchZones with:', newCityId)
+    fetchZones(newCityId)
+  } else if (!newCityId) {
+    // Reset zones when city_id is cleared
+    zones.value = []
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+  }
+})
+
+// Watch for zone changes to store zone_id
+watch(() => shippingInfo.value.zone, (newZone) => {
+  console.log('Zone watch triggered - newZone:', newZone, 'zones:', zones.value)
+  
+  if (newZone && zones.value.length > 0) {
+    // Find the zone object that matches the selected zone
+    // API uses zone_id field
+    const zoneObj = zones.value.find((zone: any) => {
+      if (typeof zone === 'string') {
+        return zone === newZone || zone.toString() === newZone.toString()
+      }
+      const zoneId = zone.zone_id || zone.id || zone.zoneId || zone.ID
+      return zoneId === newZone || zoneId?.toString() === newZone.toString()
+    })
+    
+    if (zoneObj && typeof zoneObj === 'object') {
+      // API uses zone_id field (primary)
+      const zoneId = zoneObj.zone_id || zoneObj.id || zoneObj.zoneId || zoneObj.ID || null
+      console.log('Found zone object:', zoneObj, 'zone_id:', zoneId)
+      shippingInfo.value.zone_id = zoneId
+    } else if (typeof newZone === 'number' || !isNaN(Number(newZone))) {
+      // If zone is already an ID, use it directly
+      shippingInfo.value.zone_id = typeof newZone === 'number' ? newZone : Number(newZone)
+      console.log('Using zone value directly as zone_id:', shippingInfo.value.zone_id)
+    } else {
+      console.warn('Zone object not found for selected zone:', newZone)
+      shippingInfo.value.zone_id = null
+    }
+  } else {
     shippingInfo.value.zone_id = null
   }
 })
@@ -1305,6 +1559,8 @@ const shippingMethods = ref<any>({}) // Changed to object to store the new API r
 const isLoadingShippingMethods = ref(false)
 const cities = ref<any[]>([]) // Store cities from API
 const isLoadingCities = ref(false)
+const zones = ref<any[]>([]) // Store zones from API
+const isLoadingZones = ref(false)
 
 // Computed property to get the selected outlet location
 const selectedOutletLocation = computed(() => {
@@ -1861,4 +2117,5 @@ const handlePlaceOrder = async () => {
   }
 }
 </script>
+
 
