@@ -14,11 +14,26 @@
         <p>Error loading locations: {{ error }}</p>
       </div>
 
-      <section v-else-if="locations && locations.length > 0" class="locations-section">
+      <section v-else-if="locations && locations.length > 0" class="districts-section">
+        <h2 class="districts-title">Browse by District</h2>
+        <div class="districts-buttons">
+          <button
+            v-for="district in districts"
+            :key="district"
+            @click="scrollToDistrict(district)"
+            class="district-button"
+          >
+            {{ district }}
+          </button>
+        </div>
+      </section>
+
+      <section v-if="locations && locations.length > 0" class="locations-section">
         <div class="locations-grid">
           <div
             v-for="location in locations"
             :key="location.name"
+            :id="getLocationId(location)"
             class="location-card"
           >
             <div v-if="location.image" class="location-image-wrapper">
@@ -95,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useApi } from '~~/composables/useApi'
 import type { Location, LocationResponse } from '~~/types/locations'
 import './store-location-rang.css'
@@ -104,6 +119,72 @@ import './store-location-rang.css'
 const locations = ref<Location[] | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+
+// Extract districts from locations
+const districts = computed(() => {
+  if (!locations.value || locations.value.length === 0) return []
+  
+  const districtSet = new Set<string>()
+  locations.value.forEach(location => {
+    // Extract district from location name (assuming format like "Rang - District Name" or just "District Name")
+    // You can adjust this logic based on your actual data format
+    const district = extractDistrict(location.name, location.address)
+    if (district) {
+      districtSet.add(district)
+    }
+  })
+  
+  return Array.from(districtSet).sort()
+})
+
+// Extract district from name or address
+const extractDistrict = (name: string, address: string): string => {
+  // Try to extract from name first (common patterns: "Rang - District", "District Branch", etc.)
+  const nameParts = name.split(/[-–—]/).map(part => part.trim())
+  if (nameParts.length > 1) {
+    const lastPart = nameParts[nameParts.length - 1]
+    if (lastPart) {
+      return lastPart
+    }
+  }
+  
+  // Try to extract from address (look for common district patterns)
+  const addressLower = address.toLowerCase()
+  const commonDistricts = ['dhaka', 'chittagong', 'sylhet', 'rajshahi', 'khulna', 'barisal', 'rangpur', 'mymensingh']
+  for (const district of commonDistricts) {
+    if (addressLower.includes(district)) {
+      return district.charAt(0).toUpperCase() + district.slice(1)
+    }
+  }
+  
+  // If no pattern matches, use the location name as district
+  return name
+}
+
+// Generate a unique ID for each location card
+const getLocationId = (location: Location): string => {
+  const district = extractDistrict(location.name, location.address)
+  return `location-${district.toLowerCase().replace(/\s+/g, '-')}-${location.name.toLowerCase().replace(/\s+/g, '-')}`
+}
+
+// Scroll to a specific district
+const scrollToDistrict = (district: string) => {
+  if (!locations.value) return
+  
+  // Find the first location in this district
+  const location = locations.value.find(loc => {
+    const locDistrict = extractDistrict(loc.name, loc.address)
+    return locDistrict === district
+  })
+  
+  if (location) {
+    const locationId = getLocationId(location)
+    const element = document.getElementById(locationId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+}
 
 // Get image URL
 const getImageUrl = (imagePath: string) => {

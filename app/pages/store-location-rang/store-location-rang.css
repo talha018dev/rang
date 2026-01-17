@@ -32,6 +32,55 @@
   margin: 0;
 }
 
+.districts-section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.districts-title {
+  font-family: Poppins, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.districts-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.district-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #fff;
+  color: #ea580c;
+  border: 2px solid #ea580c;
+  border-radius: 0.5rem;
+  font-family: Poppins, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.district-button:hover {
+  background-color: #ea580c;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+}
+
+.district-button:active {
+  transform: translateY(0);
+}
+
 .locations-section {
   margin-top: 2rem;
 }
@@ -244,6 +293,25 @@
     font-size: 1rem;
   }
 
+  .districts-section {
+    margin: 2rem 0;
+    padding: 1.5rem 1rem;
+  }
+
+  .districts-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .districts-buttons {
+    gap: 0.75rem;
+  }
+
+  .district-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
   .locations-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -273,6 +341,23 @@
 @media (max-width: 480px) {
   .store-location-title {
     font-size: 1.75rem;
+  }
+
+  .districts-section {
+    padding: 1rem 0.75rem;
+  }
+
+  .districts-title {
+    font-size: 1.125rem;
+  }
+
+  .districts-buttons {
+    gap: 0.5rem;
+  }
+
+  .district-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
   }
 
   .location-image-wrapper {
