@@ -67,7 +67,7 @@
             <div class="invoice-header-content">
               <div class="invoice-header-left">
                 <h1 class="invoice-title">Order Invoice</h1>
-                <p class="invoice-number">Order #{{ order.number }}</p>
+                <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p>
               </div>
               <div class="invoice-header-right">
                 <div class="status-badge" :class="getStatusClass(order.status)">
@@ -428,6 +428,25 @@ const formatDate = (dateString?: string): string => {
   }
 }
 
+// Format invoice number - extract the numeric part after the dash and remove leading zeros
+// Example: "R24260117-006" -> "6"
+const formatInvoiceNumber = (orderNumber?: string): string => {
+  if (!orderNumber) return ''
+  
+  // Split by dash and get the last part
+  const parts = orderNumber.split('-')
+  if (parts.length > 1) {
+    const invoicePart = parts[parts.length - 1]
+    if (!invoicePart) return orderNumber
+    // Remove leading zeros and convert to number, then back to string
+    const invoiceNumber = parseInt(invoicePart, 10)
+    return isNaN(invoiceNumber) ? invoicePart : invoiceNumber.toString()
+  }
+  
+  // If no dash, return as is
+  return orderNumber
+}
+
 // Format shipping method to human-readable text
 const formatShippingMethod = (method?: string): string => {
   if (!method) return 'N/A'
@@ -570,6 +589,24 @@ const printInvoice = () => {
     return 'Cash on delivery'
   }
 
+  // Format invoice number for print (same logic as formatInvoiceNumber)
+  const formatInvoiceNumberForPrint = (orderNumber?: string): string => {
+    if (!orderNumber) return ''
+    
+    // Split by dash and get the last part
+    const parts = orderNumber.split('-')
+    if (parts.length > 1) {
+      const invoicePart = parts[parts.length - 1]
+      if (!invoicePart) return orderNumber
+      // Remove leading zeros and convert to number, then back to string
+      const invoiceNumber = parseInt(invoicePart, 10)
+      return isNaN(invoiceNumber) ? invoicePart : invoiceNumber.toString()
+    }
+    
+    // If no dash, return as is
+    return orderNumber
+  }
+
   // Format shipping method to human-readable text (for print)
   const formatShippingMethodForPrint = (method?: string): string => {
     if (!method) return 'Home Delivery'
@@ -632,6 +669,21 @@ const printInvoice = () => {
         </div>
       </div>
 
+      <!-- Invoice Header: Title and Order Number -->
+      <div class="invoice-header">
+        <div class="invoice-header-content">
+          <div class="invoice-header-left">
+            <h1 class="invoice-title">Order Invoice</h1>
+            <p class="invoice-number">Order #${formatInvoiceNumberForPrint(orderData.number)}</p>
+          </div>
+          <div class="invoice-header-right">
+            <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
+              ${orderData.readable_status || orderData.status || ''}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Billing and Invoice Details -->
       <div class="invoice-details-section">
         <div class="billing-section">
@@ -649,7 +701,7 @@ const printInvoice = () => {
         <div class="invoice-details-right">
           <div class="invoice-detail-row">
             <span class="invoice-detail-label">Invoice Number:</span>
-            <span class="invoice-detail-value invoice-number-bold">#${orderData.number}</span>
+            <span class="invoice-detail-value invoice-number-bold">#${formatInvoiceNumberForPrint(orderData.number)}</span>
           </div>
           <div class="invoice-detail-row">
             <span class="invoice-detail-label">Order Number:</span>
@@ -782,7 +834,7 @@ const printInvoice = () => {
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Invoice - Order #${order.value?.number || ''}</title>
+        <title>Invoice - Order #${formatInvoiceNumberForPrint(order.value?.number || '')}</title>
         <style>
           * {
             margin: 0;
@@ -847,6 +899,64 @@ const printInvoice = () => {
           }
           .company-bin, .company-mushak {
             margin-bottom: 0.15rem;
+          }
+          /* Invoice Header: Title and Order Number */
+          .invoice-header {
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #000;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+          .invoice-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .invoice-header-left {
+            flex: 1;
+          }
+          .invoice-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #000;
+          }
+          .invoice-number {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+          }
+          .invoice-header-right {
+            flex: 0 0 auto;
+          }
+          .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: capitalize;
+          }
+          .status-badge.pending,
+          .status-badge.processing {
+            background-color: #fef3c7;
+            color: #92400e;
+          }
+          .status-badge.confirmed,
+          .status-badge.shipped {
+            background-color: #dbeafe;
+            color: #1e40af;
+          }
+          .status-badge.delivered,
+          .status-badge.completed {
+            background-color: #d1fae5;
+            color: #065f46;
+          }
+          .status-badge.cancelled,
+          .status-badge.refunded {
+            background-color: #fee2e2;
+            color: #991b1b;
           }
           /* Billing and Invoice Details */
           .invoice-details-section {

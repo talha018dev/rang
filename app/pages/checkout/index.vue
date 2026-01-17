@@ -754,7 +754,7 @@ const fetchLocations = async () => {
   isLoadingLocations.value = true
   try {
     const { backendUrl } = useApi()
-    const response = await $fetch<any>('https://api.rangbd.com/api/locations')
+    const response = await $fetch<any>(`${backendUrl}/locations`)
     console.log('Locations API Response:', response)
     
     if (response.success && response.data && Array.isArray(response.data)) {
