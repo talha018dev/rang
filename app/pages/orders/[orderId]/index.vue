@@ -89,7 +89,7 @@
               <!-- Shipping Method -->
               <div class="invoice-info-item">
                 <h3 class="info-label">Shipping Method</h3>
-                <p class="info-value">{{ order.shipping_method }}</p>
+                <p class="info-value">{{ order.shipping_method || 'N/A' }}</p>
               </div>
 
               <!-- Pickup Location (if applicable) -->
@@ -107,9 +107,9 @@
               <div class="address-card">
                 <h2 class="address-title">Customer Information</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.customer.name }}</p>
-                  <p class="address-line">{{ order.customer.phone }}</p>
-                  <p v-if="order.customer.email" class="address-line">{{ order.customer.email }}</p>
+                  <p class="address-name">{{ order.customer?.name || 'N/A' }}</p>
+                  <p class="address-line">{{ order.customer?.phone || 'N/A' }}</p>
+                  <p v-if="order.customer?.email" class="address-line">{{ order.customer.email }}</p>
                 </div>
               </div>
 
@@ -117,13 +117,13 @@
               <div class="address-card">
                 <h2 class="address-title">Shipping Address</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.address.name }}</p>
-                  <p class="address-line">{{ order.address.line_1 }}</p>
-                  <p v-if="order.address.line_2" class="address-line">{{ order.address.line_2 }}</p>
-                  <p class="address-line">{{ order.address.city }}, {{ order.address.state }}</p>
-                  <p class="address-line">{{ order.address.country }} - {{ order.address.postal_code }}</p>
-                  <p class="address-line">Phone: {{ order.address.phone }}</p>
-                  <p v-if="order.address.email" class="address-line">Email: {{ order.address.email }}</p>
+                  <p class="address-name">{{ order.address?.name || 'N/A' }}</p>
+                  <p class="address-line">{{ order.address?.line_1 || 'N/A' }}</p>
+                  <p v-if="order.address?.line_2" class="address-line">{{ order.address.line_2 }}</p>
+                  <p class="address-line">{{ order.address?.city || 'N/A' }}, {{ order.address?.state || 'N/A' }}</p>
+                  <p class="address-line">{{ order.address?.country || 'N/A' }} - {{ order.address?.postal_code || 'N/A' }}</p>
+                  <p class="address-line">Phone: {{ order.address?.phone || 'N/A' }}</p>
+                  <p v-if="order.address?.email" class="address-line">Email: {{ order.address.email }}</p>
                 </div>
               </div>
             </div>
@@ -144,13 +144,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item, index) in order.items" :key="index" class="table-row">
+                  <tr v-for="(item, index) in (order.items || [])" :key="index" class="table-row">
                     <td class="table-cell table-cell-product" data-label="Product">
                       <div class="product-cell">
                         <NuxtImg 
-                          v-if="item.product.image_url"
+                          v-if="item.product?.image_url"
                           :src="item.product.image_url" 
-                          :alt="item.product.name"
+                          :alt="item.product?.name || 'Product'"
                           class="product-image"
                           format="webp"
                           quality="80"
@@ -160,8 +160,9 @@
                           height="98"
                         />
                         <div class="product-info">
-                          <p class="product-name">{{ item.product.name }}</p>
+                          <p class="product-name">{{ item.product?.name || 'N/A' }}</p>
                           <NuxtLink 
+                            v-if="item.product?.slug"
                             :to="`/products/${item.product.category?.slug || 'all'}/${item.product.slug}`"
                             class="product-link">
                             View Product
@@ -333,8 +334,16 @@ const router = useRouter()
 const { backendUrl } = useApi()
 const { formatPrice } = useCurrency()
 
-// Get order ID from route
-const orderId = computed(() => route.params.orderId as string)
+// Get order ID from route - handle both string and array cases
+// Nuxt may split parameters with dashes into arrays (e.g., "R24260117-003" becomes ["R24260117", "003"])
+const orderId = computed(() => {
+  const param = route.params.orderId
+  if (Array.isArray(param)) {
+    // Join with dash since order IDs like "R24260117-003" might be split
+    return param.join('-')
+  }
+  return (param as string) || ''
+})
 
 // Order data
 const order = ref<Order | null>(null)
@@ -356,6 +365,7 @@ const fetchOrderDetails = async () => {
 
   if (!orderId.value) {
     error.value = 'Order ID is missing'
+    isLoading.value = false
     return
   }
 
@@ -363,6 +373,8 @@ const fetchOrderDetails = async () => {
   error.value = null
 
   try {
+    console.log('aaaaaaaaaaa');
+    
     // Build headers - include Authorization only if token exists
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -387,12 +399,14 @@ const fetchOrderDetails = async () => {
       error.value = response.message || 'Failed to load order details.'
     }
   } catch (err: any) {
+    console.log('bbbbbbbbbbbbbb');
     console.error('Error fetching order details:', err)
     error.value = err.data?.message || err.message || 'Failed to load order details.'
     
     // Don't redirect to login - just show error message
     // The page is now public, so users can view orders without authentication
   } finally {
+    console.log('ccccccccccccccccc');
     isLoading.value = false
   }
 }
