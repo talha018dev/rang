@@ -261,12 +261,13 @@
 
                  <!-- Zone Selection -->
                  <div class="form-group">
-                   <label for="zone" class="form-label">Zone</label>
+                   <label for="zone" class="form-label">Zone *</label>
                    <div class="select-wrapper">
                      <select
                        id="zone"
                        v-model="shippingInfo.zone"
                        class="form-input"
+                       :required="!!shippingInfo.city_id"
                        :disabled="isLoadingZones || !shippingInfo.city || !shippingInfo.city_id"
                        :key="`zone-${shippingInfo.city_id || shippingInfo.city || 'none'}`"
                        @blur="handleAddressFieldBlur"
@@ -1893,6 +1894,12 @@ const handlePlaceOrder = async () => {
       !shippingInfo.value.country || 
       shippingInfo.value.country.trim() === '') {
     alert('Please fill in all required fields: Full Name, Phone Number, Address, City, and Country.')
+    return
+  }
+
+  // Validate zone selection if city is selected
+  if (shippingInfo.value.city_id && !shippingInfo.value.zone) {
+    alert('Please select a zone.')
     return
   }
 
