@@ -89,7 +89,7 @@
               <!-- Shipping Method -->
               <div class="invoice-info-item">
                 <h3 class="info-label">Shipping Method</h3>
-                <p class="info-value">{{ order.shipping_method || 'N/A' }}</p>
+                <p class="info-value">{{ formatShippingMethod(order.shipping_method) }}</p>
               </div>
 
               <!-- Pickup Location (if applicable) -->
@@ -107,7 +107,7 @@
               <div class="address-card">
                 <h2 class="address-title">Customer Information</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.customer?.name || 'N/A' }}</p>
+                  <p class="address-name">{{ order.customer?.name || 'Name: N/A' }}</p>
                   <p class="address-line">{{ order.customer?.phone || 'N/A' }}</p>
                   <p v-if="order.customer?.email" class="address-line">{{ order.customer.email }}</p>
                 </div>
@@ -428,6 +428,46 @@ const formatDate = (dateString?: string): string => {
   }
 }
 
+// Format shipping method to human-readable text
+const formatShippingMethod = (method?: string): string => {
+  if (!method) return 'N/A'
+  
+  // Split by dots to handle formats like "home_delivery.pathao" or "home_delivery.pathao.location"
+  const parts = method.split('.')
+  
+  // Format the main method (first part)
+  const formatMethodName = (name: string): string => {
+    return name
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+  
+  // Format partner/delivery service names (capitalize first letter)
+  const formatPartnerName = (name: string): string => {
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  }
+  
+  if (parts.length === 1 && parts[0]) {
+    // Simple format like "store_pickup" or "home_delivery"
+    return formatMethodName(parts[0])
+  } else if (parts.length >= 2 && parts[0] && parts[1]) {
+    // Format like "home_delivery.pathao" -> "Home Delivery - Pathao"
+    const mainMethod = formatMethodName(parts[0])
+    const partner = formatPartnerName(parts[1])
+    
+    if (parts.length > 2 && parts[2]) {
+      // If there's a location, include it: "home_delivery.pathao.location" -> "Home Delivery - Pathao (Location)"
+      const location = formatPartnerName(parts[2])
+      return `${mainMethod} - ${partner} (${location})`
+    }
+    
+    return `${mainMethod} - ${partner}`
+  }
+  
+  return method
+}
+
 // Get status class for styling
 const getStatusClass = (status?: string): string => {
   if (!status) return 'status-badge-gray'
@@ -530,6 +570,46 @@ const printInvoice = () => {
     return 'Cash on delivery'
   }
 
+  // Format shipping method to human-readable text (for print)
+  const formatShippingMethodForPrint = (method?: string): string => {
+    if (!method) return 'Home Delivery'
+    
+    // Split by dots to handle formats like "home_delivery.pathao" or "home_delivery.pathao.location"
+    const parts = method.split('.')
+    
+    // Format the main method (first part)
+    const formatMethodName = (name: string): string => {
+      return name
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    }
+    
+    // Format partner/delivery service names (capitalize first letter)
+    const formatPartnerName = (name: string): string => {
+      return name.charAt(0).toUpperCase() + name.slice(1)
+    }
+    
+    if (parts.length === 1 && parts[0]) {
+      // Simple format like "store_pickup" or "home_delivery"
+      return formatMethodName(parts[0])
+    } else if (parts.length >= 2 && parts[0] && parts[1]) {
+      // Format like "home_delivery.pathao" -> "Home Delivery - Pathao"
+      const mainMethod = formatMethodName(parts[0])
+      const partner = formatPartnerName(parts[1])
+      
+      if (parts.length > 2 && parts[2]) {
+        // If there's a location, include it: "home_delivery.pathao.location" -> "Home Delivery - Pathao (Location)"
+        const location = formatPartnerName(parts[2])
+        return `${mainMethod} - ${partner} (${location})`
+      }
+      
+      return `${mainMethod} - ${partner}`
+    }
+    
+    return method
+  }
+
   // Get logo image URL
   const logoImg = clonedElement.querySelector('.invoice-logo-image') as HTMLImageElement
   const logoUrl = logoImg ? logoImg.src : ''
@@ -585,7 +665,7 @@ const printInvoice = () => {
           </div>
           <div class="invoice-detail-row">
             <span class="invoice-detail-label">Shipping Method:</span>
-            <span class="invoice-detail-value">${orderData.shipping_method || 'Home Delivery'}</span>
+            <span class="invoice-detail-value">${formatShippingMethodForPrint(orderData.shipping_method)}</span>
           </div>
         </div>
       </div>
