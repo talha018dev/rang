@@ -462,8 +462,16 @@ const formatShippingMethod = (method?: string): string => {
       .join(' ')
   }
   
-  // Format partner/delivery service names (capitalize first letter)
+  // Format partner/delivery service names (handle underscores and capitalize)
   const formatPartnerName = (name: string): string => {
+    // If the name contains underscores, format it like method names
+    if (name.includes('_')) {
+      return name
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    }
+    // Otherwise, just capitalize the first letter
     return name.charAt(0).toUpperCase() + name.slice(1)
   }
   
@@ -622,11 +630,19 @@ const printInvoice = () => {
         .join(' ')
     }
     
-    // Format partner/delivery service names (capitalize first letter)
+    // Format partner/delivery service names (handle underscores and capitalize)
     const formatPartnerName = (name: string): string => {
+      // If the name contains underscores, format it like method names
+      if (name.includes('_')) {
+        return name
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ')
+      }
+      // Otherwise, just capitalize the first letter
       return name.charAt(0).toUpperCase() + name.slice(1)
     }
-    
+
     if (parts.length === 1 && parts[0]) {
       // Simple format like "store_pickup" or "home_delivery"
       return formatMethodName(parts[0])
