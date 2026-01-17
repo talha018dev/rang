@@ -108,7 +108,7 @@
                 <h2 class="address-title">Customer Information</h2>
                 <div class="address-details">
                   <p class="address-name">{{ order.customer?.name || 'Name: N/A' }}</p>
-                  <p class="address-line">{{ order.customer?.phone || 'N/A' }}</p>
+                  <p class="address-line">{{ order.customer?.phone || 'Phone:N/A' }}</p>
                   <p v-if="order.customer?.email" class="address-line">{{ order.customer.email }}</p>
                 </div>
               </div>
