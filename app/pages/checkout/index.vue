@@ -790,16 +790,13 @@ const fetchShippingMethods = async (addressData?: any) => {
   try {
     const { backendUrl } = useApi()
     
-    // Prepare request body with address data if provided
-    const requestBody = {
-      ...(addressData || {}),
-      currency: currencyCode.value
-    }
-    
     const response = await $fetch<any>(`${backendUrl}/order/shipping-methods`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: requestBody
+      body: {
+        address: addressData,
+        currency: currencyCode.value
+      }
     })
     console.log('Shipping Methods API Response:', response)
     console.log('Shipping Methods API Response Data:', response.data)
