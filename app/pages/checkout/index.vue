@@ -801,21 +801,39 @@ const fetchShippingMethods = async (addressData?: any) => {
     console.log('Shipping Methods API Response:', response)
     console.log('Shipping Methods API Response Data:', response.data)
     
-    if (response.success && response.data) {
-      // Store city_id and zone_id from API response if provided
-      if (response.data.city_id !== undefined) {
-        shippingInfo.value.city_id = response.data.city_id
+    // Handle both response structures: { success: true, data: {...} } or direct object
+    let shippingMethodsData = null
+    let responseData = null
+    
+    // Check if response has success property (standard API response)
+    if (response && typeof response === 'object' && 'success' in response) {
+      if (response.success && response.data) {
+        responseData = response.data
+        // If response.data contains shipping_methods, use that; otherwise use the whole data
+        shippingMethodsData = response.data.shipping_methods || response.data
       }
-      if (response.data.zone_id !== undefined) {
-        shippingInfo.value.zone_id = response.data.zone_id
+    } else if (response && typeof response === 'object') {
+      // Handle case where response is directly the shipping methods object
+      // Check if it has shipping methods structure (has store_pickup, home_delivery, etc.)
+      if ('store_pickup' in response || 'home_delivery' in response || 'international_shipping' in response) {
+        responseData = response
+        shippingMethodsData = response.shipping_methods || response
+      }
+    }
+    
+    if (shippingMethodsData) {
+      // Store city_id and zone_id from API response if provided
+      if (responseData && responseData.city_id !== undefined) {
+        shippingInfo.value.city_id = responseData.city_id
+      }
+      if (responseData && responseData.zone_id !== undefined) {
+        shippingInfo.value.zone_id = responseData.zone_id
       }
       
       // Store the currently selected shipping method slug before updating
       const currentSelectedSlug = shippingMethod.value
       
       // Update shipping methods (now an object structure)
-      // If response.data contains shipping_methods, use that; otherwise use the whole data
-      const shippingMethodsData = response.data.shipping_methods || response.data
       shippingMethods.value = shippingMethodsData
       console.log('Updated shippingMethods.value:', shippingMethods.value)
       console.log('Type of shippingMethods.value:', typeof shippingMethods.value)
@@ -833,7 +851,7 @@ const fetchShippingMethods = async (addressData?: any) => {
       // If the previously selected method still exists, keep it selected
       // Otherwise, reset to empty
       if (currentSelectedSlug) {
-        const methodStillExists = response.data[currentSelectedSlug] !== undefined
+        const methodStillExists = shippingMethodsData[currentSelectedSlug] !== undefined
         if (!methodStillExists) {
           shippingMethod.value = ''
           deliveryPartner.value = ''
@@ -854,7 +872,7 @@ const handleAddressFieldBlur = async () => {
 }
 
 // Function to fetch shipping methods with current address data
-const fetchShippingMethodsWithAddress = async () => {
+const fetchShippingMethodsWithAddress = async (forceCall: boolean = false) => {
   // Collect all address data
   const addressData: any = {
     name: shippingInfo.value.fullName || '',
@@ -876,8 +894,8 @@ const fetchShippingMethodsWithAddress = async () => {
     addressData.zone_id = shippingInfo.value.zone_id
   }
   
-  // Only call API if we have at least some address data
-  if (addressData.country || addressData.city || addressData.state || addressData.line_1) {
+  // Call API if forced (e.g., when shipping method or delivery partner changes) or if we have address data
+  if (forceCall || addressData.country || addressData.city || addressData.state || addressData.line_1) {
     await fetchShippingMethods(addressData)
   }
 }
@@ -1585,6 +1603,11 @@ watch(shippingMethod, (newValue) => {
     deliveryPartner.value = ''
     deliveryLocation.value = ''
   }
+  
+  // Call shipping methods API when delivery option changes or is set for the first time
+  if (newValue) {
+    fetchShippingMethodsWithAddress(true)
+  }
 })
 
 // Computed property to generate delivery partner options
@@ -1611,6 +1634,14 @@ const deliveryPartnerOptions = computed(() => {
 // Computed property to check if location selection is required
 const requiresLocationSelection = computed(() => {
   return deliveryPartner.value === 'sa_paribahan' || deliveryPartner.value === 'sundarban'
+})
+
+// Watch delivery partner to call shipping methods API when changed
+watch(deliveryPartner, (newValue) => {
+  // Call shipping methods API when delivery partner is set or changed
+  if (newValue && shippingMethod.value === 'home_delivery') {
+    fetchShippingMethodsWithAddress(true)
+  }
 })
 
 // Coupon functionality
@@ -1643,15 +1674,17 @@ watch(shippingInfo, () => {
 }, { deep: true })
 
 // Shipping cost in BDT (base currency)
-// Since API data is always the same, we can use default values if API data isn't loaded yet
+// Returns null if amount is not found in API response (don't show "Free")
 const shippingCostBDT = computed(() => {
   if (!shippingMethod.value) {
-    return 0
+    return null
   }
   
-  // Handle store_pickup and international_shipping (both are 0)
+  // Handle store_pickup and international_shipping
   if (shippingMethod.value === 'store_pickup' || shippingMethod.value === 'international_shipping') {
-    return shippingMethods.value[shippingMethod.value] ?? 0
+    const cost = shippingMethods.value[shippingMethod.value]
+    // Return the value if it exists (including 0), otherwise null
+    return cost !== undefined && cost !== null ? cost : null
   }
   
   // Handle home_delivery
@@ -1659,55 +1692,60 @@ const shippingCostBDT = computed(() => {
     const partner = String(deliveryPartner.value)
     const homeDelivery = shippingMethods.value.home_delivery
     
-    // Default values (matching the API response structure)
-    const defaultHomeDelivery = {
-      pathao: 100,
-      sa_paribahan: {
-        inside_dhaka: 60,
-        outside_dhaka: 80
-      },
-      sundarban: {
-        inside_dhaka: 50,
-        outside_dhaka: 70
-      }
-    }
+    console.log('shippingCostBDT computed - home_delivery:', {
+      partner,
+      homeDelivery,
+      shippingMethods: shippingMethods.value,
+      hasHomeDelivery: !!homeDelivery,
+      homeDeliveryType: typeof homeDelivery
+    })
     
-    // Use API data if available, otherwise use defaults
-    const deliveryData = homeDelivery || defaultHomeDelivery
+    // If home_delivery data doesn't exist in API response, return null
+    if (!homeDelivery || typeof homeDelivery !== 'object') {
+      console.log('shippingCostBDT: home_delivery data not found or invalid')
+      return null
+    }
     
     // Pathao is a flat rate
     if (partner === 'pathao') {
-      const cost = typeof deliveryData.pathao === 'number' ? deliveryData.pathao : defaultHomeDelivery.pathao
-      return cost
+      const cost = homeDelivery.pathao
+      console.log('shippingCostBDT: pathao cost:', cost, 'type:', typeof cost)
+      // Return the value if it exists (including 0), otherwise null
+      return cost !== undefined && cost !== null ? cost : null
     }
     
     // For SA Paribahan and Sundarban, get cost based on location
     if (partner === 'sa_paribahan' || partner === 'sundarban') {
       if (!deliveryLocation.value) {
-        // If location not selected yet, return 0
-        return 0
+        // If location not selected yet, return null
+        return null
       }
       
-      const partnerData = deliveryData[partner] as Record<string, number> | undefined
-      const defaultPartnerData = defaultHomeDelivery[partner] as Record<string, number>
+      const partnerData = homeDelivery[partner]
       
-      if (partnerData && typeof partnerData === 'object') {
-        const location = String(deliveryLocation.value)
-        return partnerData[location] ?? (defaultPartnerData?.[location] ?? 0)
-      } else if (defaultPartnerData) {
-        const location = String(deliveryLocation.value)
-        return defaultPartnerData[location] ?? 0
+      // If partner data doesn't exist, return null
+      if (!partnerData || typeof partnerData !== 'object') {
+        return null
       }
+      
+      const location = String(deliveryLocation.value)
+      const cost = partnerData[location]
+      
+      // Return the value if it exists (including 0), otherwise null
+      return cost !== undefined && cost !== null ? cost : null
     }
     
-    return 0
+    return null
   }
   
-  return 0
+  return null
 })
 
 // Shipping cost in current currency
 const shippingCost = computed(() => {
+  if (shippingCostBDT.value === null || shippingCostBDT.value === undefined) {
+    return null
+  }
   if (currency.value === 'USD') {
     // Convert BDT shipping cost to USD
     return shippingCostBDT.value / exchangeRate.value
@@ -1753,16 +1791,41 @@ const giftPackageChargeDisplay = computed(() => {
 })
 
 const shippingCostDisplay = computed(() => {
+  console.log('shippingCostDisplay computed:', {
+    shippingMethod: shippingMethod.value,
+    deliveryPartner: deliveryPartner.value,
+    shippingCostBDT: shippingCostBDT.value,
+    shippingMethods: shippingMethods.value,
+    currency: currency.value
+  })
+  
   if (!shippingMethod.value) {
     return 'Select delivery option'
   }
+  
+  // If amount is not found in API response, don't show "Free"
+  if (shippingCostBDT.value === null || shippingCostBDT.value === undefined) {
+    // For home_delivery, show different messages based on what's missing
+    if (shippingMethod.value === 'home_delivery') {
+      if (!deliveryPartner.value) {
+        return 'Select delivery partner'
+      }
+      if (requiresLocationSelection.value && !deliveryLocation.value) {
+        return 'Select delivery location'
+      }
+    }
+    return 'Select delivery option'
+  }
+  
+  // Only show "Free" if amount is explicitly 0 in API response
   if (shippingCostBDT.value === 0) {
     return 'Free'
   }
+  
   if (currency.value === 'USD') {
     const usdShipping = shippingCost.value
-    if (!isFinite(usdShipping) || isNaN(usdShipping)) {
-      return '$0.00'
+    if (usdShipping === null || usdShipping === undefined || !isFinite(usdShipping) || isNaN(usdShipping)) {
+      return 'Select delivery option'
     }
     return `$${usdShipping.toFixed(2)}`
   }
@@ -1781,7 +1844,7 @@ const grandTotal = computed(() => {
     discountInCurrentCurrency = discount / exchangeRate.value
   }
   
-  const shipping = shippingCost.value
+  const shipping = shippingCost.value !== null && shippingCost.value !== undefined ? shippingCost.value : 0
   const giftPackage = giftPackageCharge.value
   const total = baseTotal - discountInCurrentCurrency + shipping + giftPackage
   
@@ -1804,7 +1867,7 @@ const grandTotalDisplay = computed(() => {
     discountInCurrentCurrency = discount / exchangeRate.value
   }
   
-  const shipping = shippingMethod.value ? shippingCost.value : 0
+  const shipping = shippingMethod.value && shippingCost.value !== null && shippingCost.value !== undefined ? shippingCost.value : 0
   const giftPackage = giftPackageCharge.value
   const total = baseTotal - discountInCurrentCurrency + shipping + giftPackage
   
