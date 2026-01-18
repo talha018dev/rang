@@ -2,16 +2,19 @@ import { computed, ref } from 'vue'
 
 export type Currency = 'BDT' | 'USD'
 
-const currency = ref<Currency>('BDT')
-const exchangeRate = ref<number>(110) // 1 USD = 110 BDT (example rate, can be updated)
-
-// Load currency from localStorage on initialization
-if (typeof window !== 'undefined') {
-  const savedCurrency = localStorage.getItem('currency') as Currency | null
-  if (savedCurrency && (savedCurrency === 'BDT' || savedCurrency === 'USD')) {
-    currency.value = savedCurrency
+// Initialize currency from localStorage if available, otherwise default to BDT
+const getInitialCurrency = (): Currency => {
+  if (typeof window !== 'undefined') {
+    const savedCurrency = localStorage.getItem('currency') as Currency | null
+    if (savedCurrency && (savedCurrency === 'BDT' || savedCurrency === 'USD')) {
+      return savedCurrency
+    }
   }
+  return 'BDT'
 }
+
+const currency = ref<Currency>(getInitialCurrency())
+const exchangeRate = ref<number>(110) // 1 USD = 110 BDT (example rate, can be updated)
 
 export const useCurrency = () => {
   // Set currency

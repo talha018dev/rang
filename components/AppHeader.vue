@@ -968,6 +968,18 @@ onMounted(async () => {
   // Fetch categories and settings
   fetchCategories()
   fetchSettings()
+  
+  // Ensure currency is properly loaded from localStorage on mount
+  // This ensures the header icon updates correctly after page refresh
+  if (typeof window !== 'undefined') {
+    const savedCurrency = localStorage.getItem('currency') as 'BDT' | 'USD' | null
+    if (savedCurrency && (savedCurrency === 'BDT' || savedCurrency === 'USD')) {
+      // Only set if different to trigger reactivity
+      if (currency.value !== savedCurrency) {
+        setCurrency(savedCurrency, true)
+      }
+    }
+  }
 })
 
 // Remove scroll event listener on unmount
