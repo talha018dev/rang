@@ -202,59 +202,74 @@
 
                  <div class="form-group">
                    <label for="city" class="form-label">City *</label>
-                   <div class="select-wrapper">
-                     <select
+                   <div class="searchable-select-wrapper">
+                     <input
                        id="city"
-                       v-model="shippingInfo.city"
-                       class="form-input"
+                       v-model="citySearchTerm"
+                       type="text"
+                       class="form-input searchable-input"
+                       :placeholder="isLoadingCities ? 'Loading cities...' : (shippingInfo.city || 'Search or select city...')"
                        :disabled="isLoadingCities"
-                       @change="handleCityChange"
-                       @blur="handleAddressFieldBlur"
-                     >
-                       <option value="">{{ isLoadingCities ? 'Loading cities...' : 'Select City' }}</option>
-                       <option
-                         v-for="city in availableCities"
-                         :key="city"
-                         :value="city"
-                       >
-                         {{ city }}
-                       </option>
-                     </select>
+                       @focus="showCityDropdown = true"
+                       @input="showCityDropdown = true"
+                       @blur="handleCityBlur"
+                     />
                      <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                        <path fill-rule="evenodd"
                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                          clip-rule="evenodd" />
                      </svg>
+                     <div v-if="showCityDropdown && filteredCities.length > 0" class="searchable-dropdown">
+                       <div
+                         v-for="city in filteredCities"
+                         :key="city"
+                         class="searchable-option"
+                         @mousedown.prevent="selectCity(city)"
+                       >
+                         {{ city }}
+                       </div>
+                     </div>
+                     <div v-if="showCityDropdown && filteredCities.length === 0 && citySearchTerm" class="searchable-dropdown">
+                       <div class="searchable-option no-results">No cities found</div>
+                     </div>
                    </div>
                  </div>
 
                  <!-- Zone Selection -->
                  <div class="form-group">
                    <label for="zone" class="form-label">Zone *</label>
-                   <div class="select-wrapper">
-                     <select
+                   <div class="searchable-select-wrapper">
+                     <input
                        id="zone"
-                       v-model="shippingInfo.zone"
-                       class="form-input"
+                       v-model="zoneSearchTerm"
+                       type="text"
+                       class="form-input searchable-input"
+                       :placeholder="isLoadingZones ? 'Loading zones...' : (zones.length === 0 && shippingInfo.city_id ? 'No zones available' : (getZoneDisplayName() || 'Search or select zone...'))"
                        :required="!!shippingInfo.city_id"
                        :disabled="isLoadingZones || !shippingInfo.city || !shippingInfo.city_id"
                        :key="`zone-${shippingInfo.city_id || shippingInfo.city || 'none'}`"
-                       @blur="handleAddressFieldBlur"
-                     >
-                       <option value="">{{ isLoadingZones ? 'Loading zones...' : (zones.length === 0 && shippingInfo.city_id ? 'No zones available' : 'Select Zone') }}</option>
-                       <option
-                         v-for="zone in zones"
-                         :key="zone.zone_id || zone.id || zone"
-                         :value="zone.zone_id || zone.id || zone"
-                       >
-                         {{ typeof zone === 'string' ? zone : (zone.zone_name || zone.name || zone.zone || zone.title || '') }}
-                       </option>
-                     </select>
+                       @focus="showZoneDropdown = true"
+                       @input="showZoneDropdown = true"
+                       @blur="handleZoneBlur"
+                     />
                      <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                        <path fill-rule="evenodd"
                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                          clip-rule="evenodd" />
                      </svg>
+                     <div v-if="showZoneDropdown && filteredZones.length > 0" class="searchable-dropdown">
+                       <div
+                         v-for="zone in filteredZones"
+                         :key="zone.zone_id || zone.id || zone"
+                         class="searchable-option"
+                         @mousedown.prevent="selectZone(zone)"
+                       >
+                         {{ typeof zone === 'string' ? zone : (zone.zone_name || zone.name || zone.zone || zone.title || '') }}
+                       </div>
+                     </div>
+                     <div v-if="showZoneDropdown && filteredZones.length === 0 && zoneSearchTerm" class="searchable-dropdown">
+                       <div class="searchable-option no-results">No zones found</div>
+                     </div>
                    </div>
                  </div>
 
@@ -1200,6 +1215,50 @@ const availableCities = computed(() => {
   return [] // For other countries, return empty array
 })
 
+// Computed property for filtered cities based on search term
+const filteredCities = computed(() => {
+  if (!citySearchTerm.value) {
+    return availableCities.value
+  }
+  const searchLower = citySearchTerm.value.toLowerCase()
+  return availableCities.value.filter((city: string) =>
+    city.toLowerCase().includes(searchLower)
+  )
+})
+
+// Computed property for filtered zones based on search term
+const filteredZones = computed(() => {
+  if (!zoneSearchTerm.value) {
+    return zones.value
+  }
+  const searchLower = zoneSearchTerm.value.toLowerCase()
+  return zones.value.filter((zone: any) => {
+    const zoneName = typeof zone === 'string' 
+      ? zone 
+      : (zone.zone_name || zone.name || zone.zone || zone.title || '')
+    return zoneName.toLowerCase().includes(searchLower)
+  })
+})
+
+// Helper function to get zone display name
+const getZoneDisplayName = () => {
+  if (!shippingInfo.value.zone || zones.value.length === 0) {
+    return ''
+  }
+  const zoneObj = zones.value.find((zone: any) => {
+    const zoneId = typeof zone === 'string' 
+      ? zone 
+      : (zone.zone_id || zone.id || zone.zoneId || zone.ID)
+    return zoneId === shippingInfo.value.zone || zoneId?.toString() === shippingInfo.value.zone.toString()
+  })
+  if (zoneObj) {
+    return typeof zoneObj === 'string' 
+      ? zoneObj 
+      : (zoneObj.zone_name || zoneObj.name || zoneObj.zone || zoneObj.title || '')
+  }
+  return ''
+}
+
 // Handler for country change
 const handleCountryChange = () => {
   // Reset city and zone when country changes
@@ -1208,8 +1267,58 @@ const handleCountryChange = () => {
   shippingInfo.value.city_id = null
   shippingInfo.value.zone_id = null
   zones.value = []
+  citySearchTerm.value = ''
+  zoneSearchTerm.value = ''
 }
 
+
+// Handler for city selection from searchable dropdown
+const selectCity = (cityName: string) => {
+  shippingInfo.value.city = cityName
+  citySearchTerm.value = cityName
+  showCityDropdown.value = false
+  handleCityChange()
+}
+
+// Handler for zone selection from searchable dropdown
+const selectZone = (zone: any) => {
+  const zoneId = typeof zone === 'string' 
+    ? zone 
+    : (zone.zone_id || zone.id || zone.zoneId || zone.ID)
+  shippingInfo.value.zone = zoneId
+  const zoneName = typeof zone === 'string' 
+    ? zone 
+    : (zone.zone_name || zone.name || zone.zone || zone.title || '')
+  zoneSearchTerm.value = zoneName
+  showZoneDropdown.value = false
+  
+  // Update zone_id
+  if (zone && typeof zone === 'object') {
+    shippingInfo.value.zone_id = zoneId
+  } else if (typeof zoneId === 'number' || !isNaN(Number(zoneId))) {
+    shippingInfo.value.zone_id = typeof zoneId === 'number' ? zoneId : Number(zoneId)
+  }
+}
+
+// Handler for city input blur
+const handleCityBlur = () => {
+  if (typeof window !== 'undefined') {
+    window.setTimeout(() => {
+      showCityDropdown.value = false
+      handleAddressFieldBlur()
+    }, 200)
+  }
+}
+
+// Handler for zone input blur
+const handleZoneBlur = () => {
+  if (typeof window !== 'undefined') {
+    window.setTimeout(() => {
+      showZoneDropdown.value = false
+      handleAddressFieldBlur()
+    }, 200)
+  }
+}
 
 // Handler for city change - ensures city_id is set immediately and zones are fetched
 const handleCityChange = () => {
@@ -1220,6 +1329,7 @@ const handleCityChange = () => {
   shippingInfo.value.zone = ''
   shippingInfo.value.zone_id = null
   zones.value = []
+  zoneSearchTerm.value = ''
   
   if (selectedCity && selectedCity !== '') {
     // Find the city object that matches the selected city name
@@ -1404,9 +1514,36 @@ watch(() => shippingInfo.value.city_id, (newCityId, oldCityId) => {
   }
 })
 
-// Watch for zone changes to store zone_id
+// Watch for city changes to sync search term
+watch(() => shippingInfo.value.city, (newCity) => {
+  if (newCity) {
+    citySearchTerm.value = newCity
+  } else {
+    citySearchTerm.value = ''
+  }
+})
+
+// Watch for zone changes to store zone_id and sync search term
 watch(() => shippingInfo.value.zone, (newZone) => {
   console.log('Zone watch triggered - newZone:', newZone, 'zones:', zones.value)
+  
+  // Sync zone search term with selected zone
+  if (newZone && zones.value.length > 0) {
+    const zoneObj = zones.value.find((zone: any) => {
+      const zoneId = typeof zone === 'string' 
+        ? zone 
+        : (zone.zone_id || zone.id || zone.zoneId || zone.ID)
+      return zoneId === newZone || zoneId?.toString() === newZone.toString()
+    })
+    if (zoneObj) {
+      const zoneName = typeof zoneObj === 'string' 
+        ? zoneObj 
+        : (zoneObj.zone_name || zoneObj.name || zoneObj.zone || zoneObj.title || '')
+      zoneSearchTerm.value = zoneName
+    }
+  } else {
+    zoneSearchTerm.value = ''
+  }
   
   if (newZone && zones.value.length > 0) {
     // Find the zone object that matches the selected zone
@@ -1456,6 +1593,12 @@ const cities = ref<any[]>([]) // Store cities from API
 const isLoadingCities = ref(false)
 const zones = ref<any[]>([]) // Store zones from API
 const isLoadingZones = ref(false)
+
+// Searchable select state
+const citySearchTerm = ref('')
+const showCityDropdown = ref(false)
+const zoneSearchTerm = ref('')
+const showZoneDropdown = ref(false)
 
 // Computed property to get the selected outlet location
 const selectedOutletLocation = computed(() => {

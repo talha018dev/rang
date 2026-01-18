@@ -157,6 +157,7 @@
 
 .select-caret {
   position: absolute;
+  top: 12px;
   right: 12px;
   width: 20px;
   height: 20px;
@@ -821,5 +822,59 @@ select:disabled option[value=""] {
   color: #6b7280;
   opacity: 1;
   display: block !important;
+}
+
+/* Searchable Select Styles */
+.searchable-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchable-input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.searchable-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.searchable-option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #1f2937;
+  font-size: 0.875rem;
+}
+
+.searchable-option:hover {
+  background-color: #f3f4f6;
+}
+
+.searchable-option.no-results {
+  color: #6b7280;
+  cursor: default;
+  font-style: italic;
+}
+
+.searchable-option.no-results:hover {
+  background-color: transparent;
+}
+
+/* Ensure searchable dropdown appears above other elements */
+.searchable-select-wrapper .select-caret {
+  pointer-events: none;
+  z-index: 1;
 }
 
