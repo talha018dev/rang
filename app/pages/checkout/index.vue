@@ -2067,10 +2067,10 @@ const handlePlaceOrder = async () => {
     
     // Add city_id and zone_id if available
     if (shippingInfo.value.city_id) {
-      orderData.city_id = shippingInfo.value.city_id
+      orderData.address.city_id = shippingInfo.value.city_id
     }
     if (shippingInfo.value.zone_id) {
-      orderData.zone_id = shippingInfo.value.zone_id
+      orderData.address.zone_id = shippingInfo.value.zone_id
     }
 
     // Add outlet information if outlet is selected
