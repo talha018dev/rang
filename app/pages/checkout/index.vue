@@ -406,6 +406,7 @@
                       <option value="">Select Payment Option</option>
                       <option value="cash_on_delivery">Cash on Delivery</option>
                       <option value="online">Debit/Credit Card, Bkash</option>
+                      <option v-if="supportsPayPal" value="paypal">PayPal</option>
                     </select>
                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
@@ -1656,6 +1657,20 @@ const deliveryPartnerOptions = computed(() => {
 // Computed property to check if location selection is required
 const requiresLocationSelection = computed(() => {
   return deliveryPartner.value === 'sa_paribahan' || deliveryPartner.value === 'sundarban'
+})
+
+// Computed property to check if current location supports PayPal
+// PayPal is available for international locations (non-Bangladesh countries)
+const supportsPayPal = computed(() => {
+  const country = shippingInfo.value.country
+  if (!country || country.trim() === '') {
+    return false
+  }
+  // PayPal is supported for all countries except Bangladesh (where local payment methods are preferred)
+  // Also support PayPal when currency is USD (international customers)
+  const isBangladesh = country.toLowerCase() === 'bangladesh'
+  const isUSDCurrency = currency.value === 'USD'
+  return !isBangladesh || isUSDCurrency
 })
 
 // Watch delivery partner to call shipping methods API when changed
