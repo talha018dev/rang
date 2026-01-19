@@ -205,7 +205,7 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const { backendUrl } = useApi()
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
 
 // Orders data
 const orders = ref<Order[]>([])
@@ -277,24 +277,39 @@ const formatDate = (dateString?: string): string => {
   }
 }
 
-// Format price based on order currency
-const formatOrderPrice = (price: number, currency?: string): string => {
+// Format price based on order currency and user's selected currency
+const formatOrderPrice = (price: number, orderCurrency?: string): string => {
   if (!price && price !== 0) return '-'
   
-  const orderCurrency = currency || 'BDT'
+  const orderCurr = orderCurrency || 'BDT'
+  const selectedCurr = currency.value
   
-  if (orderCurrency === 'USD') {
+  // Convert price based on selected currency
+  let displayPrice = price
+  
+  // If order is in USD but user selected BDT, convert to BDT
+  if (orderCurr === 'USD' && selectedCurr === 'BDT') {
+    displayPrice = price * exchangeRate.value
+  }
+  // If order is in BDT but user selected USD, convert to USD
+  else if (orderCurr === 'BDT' && selectedCurr === 'USD') {
+    displayPrice = price / exchangeRate.value
+  }
+  // If currencies match, use price as is
+  
+  // Format based on selected currency
+  if (selectedCurr === 'USD') {
     // Format as USD
-    if (!isFinite(price) || isNaN(price)) {
+    if (!isFinite(displayPrice) || isNaN(displayPrice)) {
       return '$0.00'
     }
-    return `$${price.toFixed(2)}`
+    return `$${displayPrice.toFixed(2)}`
   } else {
     // Format as BDT (Taka)
-    if (!isFinite(price) || isNaN(price)) {
+    if (!isFinite(displayPrice) || isNaN(displayPrice)) {
       return 'Tk 0'
     }
-    return `Tk ${price.toLocaleString()}`
+    return `Tk ${displayPrice.toLocaleString()}`
   }
 }
 
