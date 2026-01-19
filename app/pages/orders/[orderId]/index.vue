@@ -177,10 +177,10 @@
                       <p class="quantity-text">{{ item.quantity }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Price">
-                      <p class="price-text">{{ formatPrice(item.price) }}</p>
+                      <p class="price-text">{{ formatOrderPrice(item.price) }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Total">
-                      <p class="total-text">{{ formatPrice(item.price * item.quantity) }}</p>
+                      <p class="total-text">{{ formatOrderPrice(item.price * item.quantity) }}</p>
                     </td>
                   </tr>
                 </tbody>
@@ -200,31 +200,31 @@
               <h2 class="section-title">Order Summary</h2>
               <div class="summary-row">
                 <span class="summary-label">Item Total:</span>
-                <span class="summary-value">{{ formatPrice(order.item_total) }}</span>
+                <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
               </div>
               <div v-if="order.coupon_discount > 0" class="summary-row">
                 <span class="summary-label">Coupon Discount:</span>
-                <span class="summary-value discount">-{{ formatPrice(order.coupon_discount) }}</span>
+                <span class="summary-value discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
               </div>
               <div class="summary-row">
                 <span class="summary-label">Shipping:</span>
-                <span class="summary-value">{{ formatPrice(order.shipping) }}</span>
+                <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
               </div>
               <div class="summary-row">
                 <span class="summary-label">VAT:</span>
-                <span class="summary-value">{{ formatPrice(order.vat) }}</span>
+                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
               </div>
               <div class="summary-row summary-row-total">
                 <span class="summary-label-total">Total:</span>
-                <span class="summary-value-total">{{ formatPrice(order.total) }}</span>
+                <span class="summary-value-total">{{ formatOrderPrice(order.total) }}</span>
               </div>
               <div v-if="order.paid_amount > 0" class="summary-row">
                 <span class="summary-label">Paid Amount:</span>
-                <span class="summary-value paid">{{ formatPrice(order.paid_amount) }}</span>
+                <span class="summary-value paid">{{ formatOrderPrice(order.paid_amount) }}</span>
               </div>
               <div v-if="order.due > 0" class="summary-row">
                 <span class="summary-label">Due:</span>
-                <span class="summary-value due">{{ formatPrice(order.due) }}</span>
+                <span class="summary-value due">{{ formatOrderPrice(order.due) }}</span>
               </div>
             </div>
           </div>
@@ -334,6 +334,27 @@ const route = useRoute()
 const router = useRouter()
 const { backendUrl } = useApi()
 const { formatPrice } = useCurrency()
+
+// Format price based on order currency
+const formatOrderPrice = (price: number): string => {
+  if (!price && price !== 0) return '-'
+  
+  const orderCurrency = order.value?.currency || 'BDT'
+  
+  if (orderCurrency === 'USD') {
+    // Format as USD
+    if (!isFinite(price) || isNaN(price)) {
+      return '$0.00'
+    }
+    return `$${price.toFixed(2)}`
+  } else {
+    // Format as BDT (Taka)
+    if (!isFinite(price) || isNaN(price)) {
+      return 'Tk 0'
+    }
+    return `Tk ${price.toLocaleString()}`
+  }
+}
 
 // Get order ID from route - handle both string and array cases
 // Nuxt may split parameters with dashes into arrays (e.g., "R24260117-003" becomes ["R24260117", "003"])
@@ -546,6 +567,27 @@ const printInvoice = () => {
   // Get order data for restructuring
   const orderData = order.value
   if (!orderData) return
+  
+  // Helper function to format price based on order currency
+  const formatPriceForPrint = (price: number): string => {
+    if (!price && price !== 0) return '-'
+    
+    const orderCurrency = orderData.currency || 'BDT'
+    
+    if (orderCurrency === 'USD') {
+      // Format as USD
+      if (!isFinite(price) || isNaN(price)) {
+        return '$0.00'
+      }
+      return `$${price.toFixed(2)}`
+    } else {
+      // Format as BDT (Taka)
+      if (!isFinite(price) || isNaN(price)) {
+        return 'Tk 0'
+      }
+      return `Tk ${price.toLocaleString()}`
+    }
+  }
 
   // Convert all images to absolute URLs
   const images = clonedElement.querySelectorAll('img')
@@ -783,13 +825,13 @@ const printInvoice = () => {
                     </div>
                   </td>
                   <td class="table-cell text-right">
-                    <p class="cost-text">${formatPrice(item.price)}</p>
+                    <p class="cost-text">${formatPriceForPrint(item.price)}</p>
                   </td>
                   <td class="table-cell text-center">
                     <p class="quantity-text">x ${item.quantity}</p>
                   </td>
                   <td class="table-cell text-right">
-                    <p class="total-text">${formatPrice(item.price * item.quantity)}</p>
+                    <p class="total-text">${formatPriceForPrint(item.price * item.quantity)}</p>
                   </td>
                 </tr>
               `
@@ -803,25 +845,25 @@ const printInvoice = () => {
         <div class="summary-rows">
           <div class="summary-row">
             <span class="summary-label">Items Subtotal:</span>
-            <span class="summary-value">${formatPrice(orderData.item_total)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
           </div>
           ${orderData.coupon_discount > 0 ? `
           <div class="summary-row">
             <span class="summary-label">Discount:</span>
-            <span class="summary-value summary-value-discount">-${formatPrice(orderData.coupon_discount)}</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
           </div>
           ` : ''}
           <div class="summary-row">
             <span class="summary-label">Shipping (ex. tax):</span>
-            <span class="summary-value">${formatPrice(orderData.shipping)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
           </div>
           <div class="summary-row">
             <span class="summary-label">VAT:</span>
-            <span class="summary-value">${formatPrice(orderData.vat)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
           </div>
           <div class="summary-row summary-row-total">
             <span class="summary-label-total">Order Total:</span>
-            <span class="summary-value-total">${formatPrice(orderData.total)}</span>
+            <span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span>
           </div>
         </div>
       </div>
