@@ -100,7 +100,7 @@
                       </span>
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      {{ formatPrice(order.total || 0) }}
+                      {{ formatOrderPrice(order.total || 0, order.currency) }}
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
                       {{ order.items?.length || 0 }} item(s)
@@ -179,6 +179,7 @@ interface Order {
   status: string
   created_at: string
   readable_status: string
+  currency: string
   due: number
   address: OrderAddress
   customer: OrderCustomer
@@ -273,6 +274,27 @@ const formatDate = (dateString?: string): string => {
     })
   } catch {
     return dateString
+  }
+}
+
+// Format price based on order currency
+const formatOrderPrice = (price: number, currency?: string): string => {
+  if (!price && price !== 0) return '-'
+  
+  const orderCurrency = currency || 'BDT'
+  
+  if (orderCurrency === 'USD') {
+    // Format as USD
+    if (!isFinite(price) || isNaN(price)) {
+      return '$0.00'
+    }
+    return `$${price.toFixed(2)}`
+  } else {
+    // Format as BDT (Taka)
+    if (!isFinite(price) || isNaN(price)) {
+      return 'Tk 0'
+    }
+    return `Tk ${price.toLocaleString()}`
   }
 }
 

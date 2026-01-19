@@ -307,6 +307,7 @@ interface Order {
   status: string
   created_at: string
   readable_status: string
+  currency: string
   due: number
   address: OrderAddress
   customer: OrderCustomer
