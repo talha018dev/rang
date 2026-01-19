@@ -202,7 +202,8 @@
 
                  <div class="form-group">
                    <label for="city" class="form-label">City *</label>
-                   <div class="searchable-select-wrapper">
+                   <!-- Searchable dropdown for Bangladesh -->
+                   <div v-if="isBangladesh" class="searchable-select-wrapper">
                      <input
                        id="city"
                        v-model="citySearchTerm"
@@ -233,10 +234,21 @@
                        <div class="searchable-option no-results">No cities found</div>
                      </div>
                    </div>
+                   <!-- Regular input for other countries -->
+                   <input
+                     v-else
+                     id="city"
+                     v-model="shippingInfo.city"
+                     type="text"
+                     class="form-input"
+                     required
+                     placeholder="Enter your city"
+                     @blur="handleAddressFieldBlur"
+                   />
                  </div>
 
-                 <!-- Zone Selection -->
-                 <div class="form-group">
+                 <!-- Zone Selection (only for Bangladesh) -->
+                 <div v-if="isBangladesh" class="form-group">
                    <label for="zone" class="form-label">Zone *</label>
                    <div class="searchable-select-wrapper">
                      <input
@@ -1216,6 +1228,11 @@ const availableCities = computed(() => {
   return [] // For other countries, return empty array
 })
 
+// Computed property to check if Bangladesh is selected
+const isBangladesh = computed(() => {
+  return shippingInfo.value.country === 'Bangladesh'
+})
+
 // Computed property for filtered cities based on search term
 const filteredCities = computed(() => {
   if (!citySearchTerm.value) {
@@ -1321,8 +1338,13 @@ const handleZoneBlur = () => {
   }
 }
 
-// Handler for city change - ensures city_id is set immediately and zones are fetched
+// Handler for city change - ensures city_id is set immediately and zones are fetched (only for Bangladesh)
 const handleCityChange = () => {
+  // Only process for Bangladesh
+  if (shippingInfo.value.country !== 'Bangladesh') {
+    return
+  }
+  
   const selectedCity = shippingInfo.value.city
   console.log('handleCityChange called with city:', selectedCity)
   
@@ -1436,9 +1458,19 @@ const fetchZones = async (cityId: number | null) => {
   }
 }
 
-// Watch for city changes to store city_id and fetch zones
+// Watch for city changes to store city_id and fetch zones (only for Bangladesh)
 watch(() => shippingInfo.value.city, (newCity, oldCity) => {
   console.log('City watch triggered - newCity:', newCity, 'oldCity:', oldCity)
+  
+  // Only process city changes for Bangladesh
+  if (shippingInfo.value.country !== 'Bangladesh') {
+    // For non-Bangladesh countries, clear city_id and zone_id
+    shippingInfo.value.city_id = null
+    shippingInfo.value.zone = ''
+    shippingInfo.value.zone_id = null
+    zones.value = []
+    return
+  }
   
   // Reset zone when city changes
   if (newCity !== oldCity) {
@@ -2002,8 +2034,8 @@ const handlePlaceOrder = async () => {
     return
   }
 
-  // Validate zone selection if city is selected
-  if (shippingInfo.value.city_id && !shippingInfo.value.zone) {
+  // Validate zone selection if Bangladesh is selected and city_id exists
+  if (shippingInfo.value.country === 'Bangladesh' && shippingInfo.value.city_id && !shippingInfo.value.zone) {
     alert('Please select a zone.')
     return
   }
@@ -2206,7 +2238,12 @@ const handlePlaceOrder = async () => {
       const orderNumber = (response as any)?.data?.number
       
       // Determine gateway based on payment method
-      const gateway = paymentMethod.value === 'cash_on_delivery' ? 'cod' : 'ssl'
+      let gateway = 'ssl' // Default to SSL for online payments
+      if (paymentMethod.value === 'cash_on_delivery') {
+        gateway = 'cod'
+      } else if (paymentMethod.value === 'paypal') {
+        gateway = 'paypal'
+      }
 
       // Navigate to order confirmation page with order number and gateway
       navigateTo({
