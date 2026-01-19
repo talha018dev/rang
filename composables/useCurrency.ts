@@ -1,4 +1,5 @@
 import { computed, ref } from 'vue'
+import { useApi } from './useApi'
 
 export type Currency = 'BDT' | 'USD'
 
@@ -14,9 +15,38 @@ const getInitialCurrency = (): Currency => {
 }
 
 const currency = ref<Currency>(getInitialCurrency())
-const exchangeRate = ref<number>(110) // 1 USD = 110 BDT (example rate, can be updated)
+const exchangeRate = ref<number>(125) // Default rate, will be updated from settings API
+let exchangeRateInitialized = false
+
+// Initialize exchange rate from settings API
+const initializeExchangeRate = async () => {
+  if (exchangeRateInitialized || typeof window === 'undefined') {
+    return
+  }
+  
+  exchangeRateInitialized = true
+  
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<any>(`${backendUrl}/settings`)
+    
+    if (response.success && response.data?.general?.currency_rate_usd) {
+      const rate = parseFloat(response.data.general.currency_rate_usd)
+      if (!isNaN(rate) && rate > 0) {
+        exchangeRate.value = rate
+        console.log('Exchange rate initialized from settings:', rate)
+      }
+    }
+  } catch (error) {
+    console.error('Error initializing exchange rate from settings:', error)
+    // Keep default value of 125 if API call fails
+  }
+}
 
 export const useCurrency = () => {
+  // Initialize exchange rate from settings API on first use
+  initializeExchangeRate()
+  
   // Set currency
   const setCurrency = (newCurrency: Currency, isManual = false) => {
     currency.value = newCurrency

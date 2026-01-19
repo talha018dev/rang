@@ -404,7 +404,7 @@
                       required
                     >
                       <option value="">Select Payment Option</option>
-                      <option value="cash_on_delivery">Cash on Delivery</option>
+                      <option v-if="shippingMethod !== 'international_shipping'" value="cash_on_delivery">Cash on Delivery</option>
                       <option value="online">Debit/Credit Card, Bkash</option>
                       <option v-if="supportsPayPal" value="paypal">PayPal</option>
                     </select>
@@ -1625,6 +1625,14 @@ watch(shippingMethod, (newValue) => {
   if (newValue !== 'home_delivery') {
     deliveryPartner.value = ''
     deliveryLocation.value = ''
+  }
+  
+  // Auto-select PayPal when international shipping is selected
+  if (newValue === 'international_shipping') {
+    // Check if PayPal is supported before auto-selecting
+    if (supportsPayPal.value) {
+      paymentMethod.value = 'paypal'
+    }
   }
   
   // Call shipping methods API when delivery option changes or is set for the first time
