@@ -497,6 +497,7 @@
 .search-input-menu :deep(input) {
   padding: 1rem;
   padding-left: 2.5rem;
+  color: black !important;
 }
 .search-input-menu :deep(span) {
   padding-left: 1rem;

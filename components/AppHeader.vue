@@ -118,7 +118,7 @@
           <!-- Search Menu Dropdown -->
           <div v-if="showSearchMenu" class="search-menu-dropdown">
             <div class="search-container">
-              <UInput v-model="searchText" placeholder="Search products..." class="search-input-menu text-black!"
+              <UInput v-model="searchText" placeholder="Search products..." class="search-input-menu"
                 icon="i-heroicons-magnifying-glass" @input="handleSearch" @focus="showSearchResults = true" autofocus />
               <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)"
                 class="search-results-dropdown">
