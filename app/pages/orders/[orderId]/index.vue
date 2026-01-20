@@ -56,13 +56,22 @@
         <div v-else-if="order" class="invoice-container">
           <!-- Invoice Header -->
           <div class="invoice-header">
-            <div class="invoice-logo">
-              <NuxtImg 
-                src="/rang-logo-2026-v2.png" 
-                alt="Rang Bangladesh Logo" 
-                class="invoice-logo-image"
-                loading="eager"
-              />
+            <div class="invoice-header-top">
+              <div class="invoice-logo">
+                <NuxtImg 
+                  src="/rang-logo-2026-v2.png" 
+                  alt="Rang Bangladesh Logo" 
+                  class="invoice-logo-image"
+                  loading="eager"
+                />
+              </div>
+              <div v-if="qrCodeDataUrl" class="invoice-qr-code">
+                <img 
+                  :src="qrCodeDataUrl" 
+                  alt="Order QR Code" 
+                  class="qr-code-image"
+                />
+              </div>
             </div>
             <div class="invoice-header-content">
               <div class="invoice-header-left">
@@ -247,6 +256,7 @@
 
 <script setup lang="ts">
 import { useHead, useRoute, useRouter } from 'nuxt/app'
+import QRCode from 'qrcode'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
@@ -389,6 +399,7 @@ const order = ref<Order | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 const showPaymentFailedAlert = ref(false)
+const qrCodeDataUrl = ref<string>('')
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -429,6 +440,8 @@ const fetchOrderDetails = async () => {
 
     if (response.success && response.data) {
       order.value = response.data
+      // Generate QR code for the order
+      await generateQRCode()
       // Check for print query after order is loaded
       await nextTick()
       checkPrintQuery()
@@ -739,6 +752,9 @@ const printInvoice = () => {
   // Get logo image URL
   const logoImg = clonedElement.querySelector('.invoice-logo-image') as HTMLImageElement
   const logoUrl = logoImg ? logoImg.src : ''
+  
+  // Get QR code data URL
+  const qrCodeUrl = qrCodeDataUrl.value || ''
 
   // Build restructured HTML for print
   const printHTML = `
@@ -749,7 +765,7 @@ const printInvoice = () => {
           <img src="${logoUrl}" alt="Rang Bangladesh Logo" class="invoice-logo-image" />
         </div>
         <div class="invoice-qr-code">
-          <div class="qr-placeholder">QR Code</div>
+          ${qrCodeUrl ? `<img src="${qrCodeUrl}" alt="Order QR Code" class="qr-code-image-print" />` : '<div class="qr-placeholder">QR Code</div>'}
         </div>
         <div class="invoice-company-info">
           <p class="company-address">রঙ বাংলাদেশ, 91 West Masdair, Narayanganj, 1400 Bangladesh</p>
@@ -965,6 +981,14 @@ const printInvoice = () => {
             display: flex;
             align-items: center;
             justify-content: center;
+          }
+          .qr-code-image-print {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border: 1px solid #ccc;
+            padding: 0.25rem;
+            background: white;
           }
           .qr-placeholder {
             width: 80px;
@@ -1435,6 +1459,26 @@ const dismissAlert = () => {
   showPaymentFailedAlert.value = false
 }
 
+// Generate QR code for the order
+const generateQRCode = async () => {
+  if (!order.value) return
+  
+  try {
+    const qrUrl = `https://rangbd.com/checkout/order-received/${order.value.number}/?key=wc_order_MWNsHxYyPaXzh`
+    const dataUrl = await QRCode.toDataURL(qrUrl, {
+      width: 150,
+      margin: 2,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    })
+    qrCodeDataUrl.value = dataUrl
+  } catch (err) {
+    console.error('Error generating QR code:', err)
+  }
+}
+
 // Fetch order details on mount
 onMounted(() => {
   fetchOrderDetails()
@@ -1625,16 +1669,43 @@ onMounted(() => {
   border-bottom: 2px solid #e5e7eb;
 }
 
+.invoice-header-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
 .invoice-logo {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  grid-column: 1;
 }
 
 .invoice-logo-image {
   height: 80px;
   width: auto;
   object-fit: contain;
+}
+
+.invoice-qr-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 2;
+  justify-self: center;
+}
+
+.qr-code-image {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background: white;
 }
 
 .invoice-header-content {
@@ -2023,8 +2094,28 @@ onMounted(() => {
     gap: 1rem;
   }
 
+  .invoice-header-top {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    justify-items: center;
+  }
+
+  .invoice-logo {
+    grid-column: 1;
+    justify-content: center;
+  }
+
+  .invoice-qr-code {
+    grid-column: 1;
+  }
+
   .invoice-logo-image {
     height: 60px;
+  }
+
+  .qr-code-image {
+    width: 120px;
+    height: 120px;
   }
 
   .invoice-header-content {

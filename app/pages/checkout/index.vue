@@ -174,29 +174,36 @@
 
                 <div class="form-group">
                   <label for="country" class="form-label">Country *</label>
-                  <div class="select-wrapper">
-                    <select
+                  <div class="searchable-select-wrapper">
+                    <input
                       id="country"
-                      v-model="shippingInfo.country"
-                      class="form-input"
+                      v-model="countrySearchTerm"
+                      type="text"
+                      class="form-input searchable-input"
+                      :placeholder="shippingInfo.country || 'Search or select country...'"
                       required
-                      @change="handleCountryChange"
-                      @blur="handleAddressFieldBlur"
-                    >
-                      <option value="">Select Country</option>
-                      <option
-                        v-for="country in countries"
-                        :key="country"
-                        :value="country"
-                      >
-                        {{ country }}
-                      </option>
-                    </select>
+                      @focus="showCountryDropdown = true"
+                      @input="showCountryDropdown = true"
+                      @blur="handleCountryBlur"
+                    />
                     <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd"
                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                         clip-rule="evenodd" />
                     </svg>
+                    <div v-if="showCountryDropdown && filteredCountries.length > 0" class="searchable-dropdown">
+                      <div
+                        v-for="country in filteredCountries"
+                        :key="country"
+                        class="searchable-option"
+                        @mousedown.prevent="selectCountry(country)"
+                      >
+                        {{ country }}
+                      </div>
+                    </div>
+                    <div v-if="showCountryDropdown && filteredCountries.length === 0 && countrySearchTerm" class="searchable-dropdown">
+                      <div class="searchable-option no-results">No countries found</div>
+                    </div>
                   </div>
                 </div>
 
@@ -994,6 +1001,11 @@ onMounted(async () => {
   // Fetch settings on mount
   fetchSettings()
   
+  // Initialize country search term with default country
+  if (shippingInfo.value.country) {
+    countrySearchTerm.value = shippingInfo.value.country
+  }
+  
   // Force checkbox styles to be applied after navigation
   await nextTick()
   
@@ -1057,6 +1069,10 @@ const countries = [
   'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam',
   'Yemen', 'Zambia', 'Zimbabwe'
 ]
+
+// Searchable select state for country (declared before computed properties)
+const countrySearchTerm = ref('')
+const showCountryDropdown = ref(false)
 
 // Bangladesh Districts/States
 const bangladeshDistricts = [
@@ -1233,6 +1249,17 @@ const isBangladesh = computed(() => {
   return shippingInfo.value.country === 'Bangladesh'
 })
 
+// Computed property for filtered countries based on search term
+const filteredCountries = computed(() => {
+  if (!countrySearchTerm.value) {
+    return countries
+  }
+  const searchLower = countrySearchTerm.value.toLowerCase()
+  return countries.filter((country: string) =>
+    country.toLowerCase().includes(searchLower)
+  )
+})
+
 // Computed property for filtered cities based on search term
 const filteredCities = computed(() => {
   if (!citySearchTerm.value) {
@@ -1275,6 +1302,24 @@ const getZoneDisplayName = () => {
       : (zoneObj.zone_name || zoneObj.name || zoneObj.zone || zoneObj.title || '')
   }
   return ''
+}
+
+// Handler for country selection from searchable dropdown
+const selectCountry = (countryName: string) => {
+  shippingInfo.value.country = countryName
+  countrySearchTerm.value = countryName
+  showCountryDropdown.value = false
+  handleCountryChange()
+}
+
+// Handler for country input blur
+const handleCountryBlur = () => {
+  if (typeof window !== 'undefined') {
+    window.setTimeout(() => {
+      showCountryDropdown.value = false
+      handleAddressFieldBlur()
+    }, 200)
+  }
 }
 
 // Handler for country change
@@ -1546,6 +1591,15 @@ watch(() => shippingInfo.value.city_id, (newCityId, oldCityId) => {
     shippingInfo.value.zone_id = null
   }
 })
+
+// Watch for country changes to sync search term
+watch(() => shippingInfo.value.country, (newCountry) => {
+  if (newCountry) {
+    countrySearchTerm.value = newCountry
+  } else {
+    countrySearchTerm.value = ''
+  }
+}, { immediate: true })
 
 // Watch for city changes to sync search term
 watch(() => shippingInfo.value.city, (newCity) => {
