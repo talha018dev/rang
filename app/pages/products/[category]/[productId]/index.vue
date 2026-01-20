@@ -214,10 +214,12 @@
 
                     <!-- Pricing -->
                     <div class="pricing">
-                        <span class="current-price">{{ formatPrice(selectedVariantPrice, selectedVariantPriceUsd) }}</span>
-                        <span v-if="selectedVariantComparePrice > selectedVariantPrice" class="original-price">{{ formatPrice(selectedVariantComparePrice, selectedVariantComparePriceUsd) }}</span>
-                        <span v-if="selectedVariantComparePrice > selectedVariantPrice" class="discount">
-                            -{{ Math.round(((selectedVariantComparePrice - selectedVariantPrice) / selectedVariantComparePrice) * 100) }}%
+                        <div class="price-container">
+                            <span v-if="showComparePrice" class="original-price">{{ formatPrice(effectiveComparePrice, effectiveComparePriceUsd) }}</span>
+                            <span class="current-price">{{ formatPrice(selectedVariantPrice, selectedVariantPriceUsd) }}</span>
+                        </div>
+                        <span v-if="showComparePrice && effectiveComparePrice > selectedVariantPrice" class="discount">
+                            -{{ Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100) }}%
                         </span>
                     </div>
 
@@ -1528,32 +1530,86 @@ const selectedVariantPriceUsd = computed(() => {
 })
 
 const selectedVariantComparePrice = computed(() => {
-  if (selectedVariant.value?.compare_price !== undefined && selectedVariant.value.compare_price !== null) {
+  if (!product.value) return 0
+  
+  // First check if variant has compare_price
+  if (selectedVariant.value?.compare_price !== undefined && selectedVariant.value.compare_price !== null && selectedVariant.value.compare_price > 0) {
     return selectedVariant.value.compare_price
   }
-  // If variant doesn't have compare_price, use product compare_price
-  // But only if it's greater than the variant price (to show discount correctly)
-  const variantPrice = selectedVariant.value?.price || product.value?.price || 0
-  const productComparePrice = product.value?.compare_price || 0
-  if (productComparePrice > variantPrice) {
+  
+  // If variant doesn't have compare_price (or no variant selected), use product compare_price
+  const productComparePrice = product.value.compare_price
+  if (productComparePrice !== undefined && productComparePrice !== null && productComparePrice > 0) {
     return productComparePrice
   }
+  
   return 0
 })
 
 const selectedVariantComparePriceUsd = computed(() => {
   if (!product.value) return undefined
   
-  if (selectedVariant.value?.compare_price_usd !== undefined && selectedVariant.value.compare_price_usd !== null) {
+  // First check if variant has compare_price_usd
+  if (selectedVariant.value?.compare_price_usd !== undefined && selectedVariant.value.compare_price_usd !== null && selectedVariant.value.compare_price_usd > 0) {
     return selectedVariant.value.compare_price_usd
   }
   
-  // Calculate USD compare price based on the ratio if variant compare price differs from product compare price
-  if (product.value.compare_price_usd && product.value.compare_price && product.value.compare_price > 0 && selectedVariant.value?.compare_price) {
+  // Calculate USD compare price based on the ratio if variant has compare_price but not compare_price_usd
+  if (selectedVariant.value?.compare_price && product.value.compare_price_usd && product.value.compare_price && product.value.compare_price > 0) {
     return (selectedVariant.value.compare_price / product.value.compare_price) * product.value.compare_price_usd
   }
   
-  return product.value.compare_price_usd
+  // If product has compare_price_usd, use it
+  if (product.value.compare_price_usd !== undefined && product.value.compare_price_usd !== null && product.value.compare_price_usd > 0) {
+    return product.value.compare_price_usd
+  }
+  
+  return undefined
+})
+
+// Get the effective compare price (from variant or product)
+const effectiveComparePrice = computed(() => {
+  if (selectedVariantComparePrice.value > 0) {
+    return selectedVariantComparePrice.value
+  }
+  return product.value?.compare_price || 0
+})
+
+// Get the effective compare price USD (from variant or product)
+const effectiveComparePriceUsd = computed(() => {
+  if (selectedVariantComparePriceUsd.value !== undefined && selectedVariantComparePriceUsd.value !== null && selectedVariantComparePriceUsd.value > 0) {
+    return selectedVariantComparePriceUsd.value
+  }
+  return product.value?.compare_price_usd
+})
+
+// Check if prices differ (for both BDT and USD)
+// Show compare_price if it exists and differs from the current price
+const showComparePrice = computed(() => {
+  if (!product.value) return false
+  
+  const currentPrice = selectedVariantPrice.value
+  const comparePrice = effectiveComparePrice.value
+  const currentPriceUsd = selectedVariantPriceUsd.value
+  const comparePriceUsd = effectiveComparePriceUsd.value
+  
+  // Check if BDT prices differ - compare_price must exist and be different from current price
+  if (comparePrice > 0 && currentPrice > 0 && comparePrice !== currentPrice) {
+    return true
+  }
+  
+  // Check if USD prices differ
+  if (comparePriceUsd !== undefined && 
+      comparePriceUsd !== null && 
+      comparePriceUsd > 0 &&
+      currentPriceUsd !== undefined &&
+      currentPriceUsd !== null &&
+      currentPriceUsd > 0 &&
+      Math.abs(comparePriceUsd - currentPriceUsd) > 0.01) {
+    return true
+  }
+  
+  return false
 })
 
 // Computed properties

@@ -411,10 +411,27 @@
     font-family: 'Poppins', sans-serif;
   }
   
+  .product-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
   .product-price {
     font-size: 1.25rem;
     font-weight: 700;
     color: black;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .product-original-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #888895;
+    text-decoration: line-through;
     margin: 0;
     font-family: 'Poppins', sans-serif;
   }

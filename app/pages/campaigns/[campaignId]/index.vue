@@ -166,7 +166,10 @@
                 </div>
                 <div class="product-info">
                   <h3 class="product-name">{{ product.name }}</h3>
-                  <p class="product-price">{{ formatPrice(product.price, product.price_usd) }}</p>
+                  <div class="product-price-container">
+                    <span v-if="shouldShowComparePrice(product)" class="product-original-price">{{ formatPrice(product.compare_price || 0, product.compare_price_usd) }}</span>
+                    <span class="product-price">{{ formatPrice(product.price, product.price_usd) }}</span>
+                  </div>
                 </div>
               </NuxtLink>
             </div>
@@ -524,6 +527,32 @@ watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
 // Cart functionality
 const { addToCart } = useCart()
 const { formatPrice } = useCurrency()
+
+// Check if prices differ and should show compare price
+const shouldShowComparePrice = (product: Product): boolean => {
+  const comparePrice = product.compare_price || 0
+  const currentPrice = product.price || 0
+  const comparePriceUsd = product.compare_price_usd
+  const currentPriceUsd = product.price_usd
+  
+  // Check if BDT prices differ
+  if (comparePrice > 0 && currentPrice > 0 && comparePrice !== currentPrice) {
+    return true
+  }
+  
+  // Check if USD prices differ
+  if (comparePriceUsd !== undefined && 
+      comparePriceUsd !== null && 
+      comparePriceUsd > 0 &&
+      currentPriceUsd !== undefined &&
+      currentPriceUsd !== null &&
+      currentPriceUsd > 0 &&
+      Math.abs(comparePriceUsd - currentPriceUsd) > 0.01) {
+    return true
+  }
+  
+  return false
+}
 
 // Wishlist functionality
 const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()
