@@ -140,12 +140,18 @@
                 </div>
 
                 <!-- Main Product Image -->
-                <div class="main-image-wrapper">
+                <div 
+                    class="main-image-wrapper"
+                    @mouseenter="handleImageMouseEnter"
+                    @mouseleave="handleImageMouseLeave"
+                    @mousemove="handleImageMouseMove"
+                >
                     <NuxtImg 
                         v-if="productImages[selectedImageIndex]" 
                         :src="getImageUrl(productImages[selectedImageIndex] || '')" 
                         :alt="product.name" 
                         class="main-image"
+                        :style="imageZoomStyle"
                         loading="eager" 
                         format="webp" 
                         quality="85"
@@ -1058,6 +1064,11 @@ const showShareTooltipMobile = ref(false)
 const showShareTooltipDesktop = ref(false)
 const shareTooltipText = ref('Link copied!')
 
+// Image zoom state
+const isImageHovered = ref(false)
+const imageZoomPosition = ref({ x: 0, y: 0 })
+const zoomLevel = 2 // Zoom level (2x zoom)
+
 // Fetch product details from API
 const fetchProductDetails = async () => {
   if (!productIdSlug.value) return
@@ -1915,6 +1926,47 @@ const addMatchingSeriesToCart = () => {
 // Nuxt UI Carousel references
 const frequentlyBoughtCarousel = ref()
 const matchingSeriesCarousel = ref()
+
+// Image zoom computed style
+const imageZoomStyle = computed(() => {
+  if (!isImageHovered.value) {
+    return {
+      transform: 'scale(1)',
+      transformOrigin: 'center center'
+    }
+  }
+  
+  const { x, y } = imageZoomPosition.value
+  return {
+    transform: `scale(${zoomLevel})`,
+    transformOrigin: `${x}% ${y}%`,
+    transition: 'transform 0.1s ease-out'
+  }
+})
+
+// Image zoom handlers
+const handleImageMouseEnter = () => {
+  if (!isMobile.value) {
+    isImageHovered.value = true
+  }
+}
+
+const handleImageMouseLeave = () => {
+  isImageHovered.value = false
+  imageZoomPosition.value = { x: 0, y: 0 }
+}
+
+const handleImageMouseMove = (event: MouseEvent) => {
+  if (!isMobile.value && isImageHovered.value) {
+    const target = event.currentTarget as HTMLElement
+    if (target) {
+      const rect = target.getBoundingClientRect()
+      const x = ((event.clientX - rect.left) / rect.width) * 100
+      const y = ((event.clientY - rect.top) / rect.height) * 100
+      imageZoomPosition.value = { x, y }
+    }
+  }
+}
 
 
 

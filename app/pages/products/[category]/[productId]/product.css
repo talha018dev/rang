@@ -168,6 +168,7 @@
     height: 650px; */
   overflow: hidden; /* Hide the zoomed parts by default */
   border-radius: 12px;
+  cursor: zoom-in;
 }
 
 .main-image {
@@ -177,13 +178,13 @@
   height: 677px;
   object-fit: contain;
   object-position: top;
-  transition: transform 0.3s ease;
-  /* transform: scale(1.3); Zoomed in by default */
+  transition: transform 0.1s ease-out;
   transform-origin: center center;
+  will-change: transform;
 }
 
-.main-image:hover {
-  /* transform: scale(1); Full view on hover */
+.main-image-wrapper:hover .main-image {
+  cursor: zoom-in;
 }
 
 /* Right Side - Product Details */
