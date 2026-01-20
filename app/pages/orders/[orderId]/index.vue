@@ -1464,7 +1464,8 @@ const generateQRCode = async () => {
   if (!order.value) return
   
   try {
-    const qrUrl = `https://rangbd.com/checkout/order-received/${order.value.number}/?key=wc_order_MWNsHxYyPaXzh`
+    // const qrUrl = `https://rang-bd.com/checkout/order-received/${order.value.number}/?key=wc_order_MWNsHxYyPaXzh`
+    const qrUrl = `https://api.rang-bd.com/admin/orders/${order.value.number}/invoice`
     const dataUrl = await QRCode.toDataURL(qrUrl, {
       width: 150,
       margin: 2,
