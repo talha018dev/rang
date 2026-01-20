@@ -215,8 +215,8 @@
                     <!-- Pricing -->
                     <div class="pricing">
                         <div class="price-container">
-                            <span v-if="showComparePrice" class="original-price">{{ formatPrice(effectiveComparePrice, effectiveComparePriceUsd) }}</span>
-                            <span class="current-price">{{ formatPrice(selectedVariantPrice, selectedVariantPriceUsd) }}</span>
+                            <span v-if="showComparePrice" class="original-price">{{ formatPrice(comparePriceToDisplay.price, comparePriceToDisplay.priceUsd) }}</span>
+                            <span class="current-price">{{ formatPrice(currentPriceToDisplay.price, currentPriceToDisplay.priceUsd) }}</span>
                         </div>
                         <span v-if="showComparePrice && effectiveComparePrice > selectedVariantPrice" class="discount">
                             -{{ Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100) }}%
@@ -1583,6 +1583,38 @@ const effectiveComparePriceUsd = computed(() => {
   return product.value?.compare_price_usd
 })
 
+// Get the compare price to display (converted to USD if currency is USD)
+const comparePriceToDisplay = computed(() => {
+  const comparePrice = effectiveComparePrice.value
+  
+  if (currency.value === 'USD') {
+    // Convert compare_price to USD using exchange rate
+    if (comparePrice > 0 && exchangeRate.value > 0) {
+      const comparePriceUsd = comparePrice / exchangeRate.value
+      return { price: 0, priceUsd: comparePriceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return compare_price as is
+  return { price: comparePrice, priceUsd: effectiveComparePriceUsd.value }
+})
+
+// Get the current price to display
+const currentPriceToDisplay = computed(() => {
+  if (currency.value === 'USD') {
+    // Convert price to USD using exchange rate
+    if (selectedVariantPrice.value > 0 && exchangeRate.value > 0) {
+      const priceUsd = selectedVariantPrice.value / exchangeRate.value
+      return { price: 0, priceUsd: priceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return price as is
+  return { price: selectedVariantPrice.value, priceUsd: selectedVariantPriceUsd.value }
+})
+
 // Check if prices differ (for both BDT and USD)
 // Show compare_price if it exists and differs from the current price
 const showComparePrice = computed(() => {
@@ -1708,7 +1740,7 @@ const decreaseQuantity = () => {
 }
 
 const { addToCart } = useCart()
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
 
 // Wishlist functionality
 const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()

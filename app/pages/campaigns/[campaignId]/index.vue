@@ -167,8 +167,8 @@
                 <div class="product-info">
                   <h3 class="product-name">{{ product.name }}</h3>
                   <div class="product-price-container">
-                    <span v-if="shouldShowComparePrice(product)" class="product-original-price">{{ formatPrice(product.compare_price || 0, product.compare_price_usd) }}</span>
-                    <span class="product-price">{{ formatPrice(product.price, product.price_usd) }}</span>
+                    <span v-if="shouldShowComparePrice(product)" class="product-original-price">{{ formatPrice(getComparePriceToDisplay(product).price, getComparePriceToDisplay(product).priceUsd) }}</span>
+                    <span class="product-price">{{ formatPrice(getCurrentPriceToDisplay(product).price, getCurrentPriceToDisplay(product).priceUsd) }}</span>
                   </div>
                 </div>
               </NuxtLink>
@@ -526,32 +526,51 @@ watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
 
 // Cart functionality
 const { addToCart } = useCart()
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
 
 // Check if prices differ and should show compare price
 const shouldShowComparePrice = (product: Product): boolean => {
   const comparePrice = product.compare_price || 0
   const currentPrice = product.price || 0
-  const comparePriceUsd = product.compare_price_usd
-  const currentPriceUsd = product.price_usd
   
-  // Check if BDT prices differ
+  // Check if prices differ
   if (comparePrice > 0 && currentPrice > 0 && comparePrice !== currentPrice) {
     return true
   }
   
-  // Check if USD prices differ
-  if (comparePriceUsd !== undefined && 
-      comparePriceUsd !== null && 
-      comparePriceUsd > 0 &&
-      currentPriceUsd !== undefined &&
-      currentPriceUsd !== null &&
-      currentPriceUsd > 0 &&
-      Math.abs(comparePriceUsd - currentPriceUsd) > 0.01) {
-    return true
+  return false
+}
+
+// Get the compare price to display (converted to USD if currency is USD)
+const getComparePriceToDisplay = (product: Product): { price: number; priceUsd?: number } => {
+  const comparePrice = product.compare_price || 0
+  
+  if (currency.value === 'USD') {
+    // Convert compare_price to USD using exchange rate
+    if (comparePrice > 0 && exchangeRate.value > 0) {
+      const comparePriceUsd = comparePrice / exchangeRate.value
+      return { price: 0, priceUsd: comparePriceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
   }
   
-  return false
+  // For BDT, return compare_price as is
+  return { price: comparePrice, priceUsd: product.compare_price_usd }
+}
+
+// Get the current price to display
+const getCurrentPriceToDisplay = (product: Product): { price: number; priceUsd?: number } => {
+  if (currency.value === 'USD') {
+    // Convert price to USD using exchange rate
+    if (product.price && exchangeRate.value > 0) {
+      const priceUsd = product.price / exchangeRate.value
+      return { price: 0, priceUsd: priceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return price as is
+  return { price: product.price || 0, priceUsd: product.price_usd }
 }
 
 // Wishlist functionality
