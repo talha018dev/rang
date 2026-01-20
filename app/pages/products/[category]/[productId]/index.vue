@@ -932,7 +932,10 @@
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">{{ relatedProduct.name }}</h3>
-                        <p class="product-price">{{ formatPrice(relatedProduct.price, relatedProduct.price_usd) }}</p>
+                        <div class="product-price-container">
+                            <span v-if="shouldShowComparePriceForRelated(relatedProduct)" class="product-original-price">{{ formatPrice(getComparePriceToDisplayForRelated(relatedProduct).price, getComparePriceToDisplayForRelated(relatedProduct).priceUsd) }}</span>
+                            <span class="product-price">{{ formatPrice(getCurrentPriceToDisplayForRelated(relatedProduct).price, getCurrentPriceToDisplayForRelated(relatedProduct).priceUsd) }}</span>
+                        </div>
                     </div>
                 </NuxtLink>
             </div>
@@ -956,7 +959,10 @@
                         loading="lazy" format="webp" quality="85" />
                     <div class="related-products-info">
                         <h3 class="new-arrival-name-light">{{ item.name }}</h3>
-                        <h4 class="related-products-price">{{ formatPrice(item.price, item.price_usd) }}</h4>
+                        <div class="related-products-price-container">
+                            <span v-if="shouldShowComparePriceForRelated(item)" class="related-products-original-price">{{ formatPrice(getComparePriceToDisplayForRelated(item).price, getComparePriceToDisplayForRelated(item).priceUsd) }}</span>
+                            <h4 class="related-products-price">{{ formatPrice(getCurrentPriceToDisplayForRelated(item).price, getCurrentPriceToDisplayForRelated(item).priceUsd) }}</h4>
+                        </div>
                     </div>
                 </NuxtLink>
             </UCarousel>
@@ -1741,6 +1747,51 @@ const decreaseQuantity = () => {
 
 const { addToCart } = useCart()
 const { formatPrice, currency, exchangeRate } = useCurrency()
+
+// Helper functions for related products price comparison
+const shouldShowComparePriceForRelated = (product: Product): boolean => {
+  const comparePrice = product.compare_price || 0
+  const currentPrice = product.price || 0
+  
+  // Check if prices differ
+  if (comparePrice > 0 && currentPrice > 0 && comparePrice !== currentPrice) {
+    return true
+  }
+  
+  return false
+}
+
+// Get the compare price to display for related products (converted to USD if currency is USD)
+const getComparePriceToDisplayForRelated = (product: Product): { price: number; priceUsd?: number } => {
+  const comparePrice = product.compare_price || 0
+  
+  if (currency.value === 'USD') {
+    // Convert compare_price to USD using exchange rate
+    if (comparePrice > 0 && exchangeRate.value > 0) {
+      const comparePriceUsd = comparePrice / exchangeRate.value
+      return { price: 0, priceUsd: comparePriceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return compare_price as is
+  return { price: comparePrice, priceUsd: product.compare_price_usd }
+}
+
+// Get the current price to display for related products
+const getCurrentPriceToDisplayForRelated = (product: Product): { price: number; priceUsd?: number } => {
+  if (currency.value === 'USD') {
+    // Convert price to USD using exchange rate
+    if (product.price && exchangeRate.value > 0) {
+      const priceUsd = product.price / exchangeRate.value
+      return { price: 0, priceUsd: priceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return price as is
+  return { price: product.price || 0, priceUsd: product.price_usd }
+}
 
 // Wishlist functionality
 const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()

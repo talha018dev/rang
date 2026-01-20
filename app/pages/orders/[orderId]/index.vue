@@ -116,8 +116,8 @@
               <div class="address-card">
                 <h2 class="address-title">Customer Information</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.customer?.name || 'Name: N/A' }}</p>
-                  <p class="address-line">{{ order.customer?.phone || 'Phone:N/A' }}</p>
+                  <p class="address-name">{{ order.customer?.name || 'Name: ' }}</p>
+                  <p class="address-line">{{ order.customer?.phone || 'Phone:' }}</p>
                   <p v-if="order.customer?.email" class="address-line">{{ order.customer.email }}</p>
                 </div>
               </div>
@@ -126,12 +126,12 @@
               <div class="address-card">
                 <h2 class="address-title">Shipping Address</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.address?.name || 'N/A' }}</p>
-                  <p class="address-line">{{ order.address?.line_1 || 'N/A' }}</p>
+                  <p class="address-name">{{ order.address?.name || '' }}</p>
+                  <p class="address-line">{{ order.address?.line_1 || '' }}</p>
                   <p v-if="order.address?.line_2" class="address-line">{{ order.address.line_2 }}</p>
-                  <p class="address-line">{{ order.address?.city || 'N/A' }}, {{ order.address?.state || 'N/A' }}</p>
-                  <p class="address-line">{{ order.address?.country || 'N/A' }} - {{ order.address?.postal_code || 'N/A' }}</p>
-                  <p class="address-line">Phone: {{ order.address?.phone || 'N/A' }}</p>
+                  <p class="address-line">{{ order.address?.city || '' }}, {{ order.address?.state || '' }}</p>
+                  <p class="address-line">{{ order.address?.country || '' }} - {{ order.address?.postal_code || '' }}</p>
+                  <p class="address-line">Phone: {{ order.address?.phone || '' }}</p>
                   <p v-if="order.address?.email" class="address-line">Email: {{ order.address.email }}</p>
                 </div>
               </div>
@@ -779,7 +779,7 @@ const printInvoice = () => {
         <div class="invoice-header-content">
           <div class="invoice-header-left">
             <h1 class="invoice-title">Order Invoice</h1>
-            <p class="invoice-number">Order #${formatInvoiceNumberForPrint(orderData.number)}</p>
+            <p class="invoice-number">Invoice #${formatInvoiceNumberForPrint(orderData.number)}</p>
           </div>
           <div class="invoice-header-right">
             <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
@@ -806,7 +806,7 @@ const printInvoice = () => {
         <div class="invoice-details-right">
           <div class="invoice-detail-row">
             <span class="invoice-detail-label">Invoice Number:</span>
-            <span class="invoice-detail-value invoice-number-bold">#${formatInvoiceNumberForPrint(orderData.number)}</span>
+            <span class="invoice-detail-value invoice-number-bold">${formatInvoiceNumberForPrint(orderData.number)}</span>
           </div>
           <div class="invoice-detail-row">
             <span class="invoice-detail-label">Order Number:</span>

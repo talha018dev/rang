@@ -2158,10 +2158,26 @@
   line-height: 1.4;
 }
 
+.product-price-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .product-price {
   font-size: 1em;
   font-weight: 600;
   color: #1f2937;
+  margin: 0;
+}
+
+.product-original-price {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: line-through;
   margin: 0;
 }
 
@@ -2779,6 +2795,15 @@
     text-align: center;
     margin-top: 10px;
   }
+  .related-products-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
   .related-products-price {
     font-family: Poppins;
     font-weight: 600;
@@ -2787,7 +2812,16 @@
     line-height: 100%;
     letter-spacing: 0%;
     text-align: center;
-    margin-top: 12px;
+    margin: 0;
+  }
+
+  .related-products-original-price {
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #6b7280;
+    text-decoration: line-through;
+    margin: 0;
   }
 }
 
