@@ -279,6 +279,9 @@
 
 .carousel-price-section {
   margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .carousel-currency {
@@ -315,6 +318,7 @@
   padding: 0.5rem;
   margin-left: auto;
   transition: color 0.15s ease-in-out;
+  margin-left: auto;
 }
 
 .carousel-cart-button:hover {

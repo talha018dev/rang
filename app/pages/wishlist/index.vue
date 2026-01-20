@@ -48,7 +48,10 @@
                 </div>
                 <div class="product-info">
                   <h3 class="product-name line-clamp-1 h-[20px]">{{ item.name }}</h3>
-                  <p class="product-price">{{ formatPrice(item.price, item.price_usd) }}</p>
+                  <div class="product-price-container">
+                    <span v-if="shouldShowComparePrice(item)" class="product-original-price">{{ formatPrice(getComparePriceToDisplay(item).price, getComparePriceToDisplay(item).priceUsd) }}</span>
+                    <span class="product-price">{{ formatPrice(getCurrentPriceToDisplay(item).price, getCurrentPriceToDisplay(item).priceUsd) }}</span>
+                  </div>
                 </div>
               </NuxtLink>
               
@@ -123,7 +126,7 @@ useHead({
 const router = useRouter()
 const { backendUrl } = useApi()
 const { addToCart } = useCart()
-const { formatPrice } = useCurrency()
+const { formatPrice, currency, exchangeRate } = useCurrency()
 
 // Wishlist data
 const wishlistItems = ref<WishlistItem[]>([])
@@ -143,6 +146,51 @@ const getImageUrl = (imagePath: string): string => {
     return imagePath
   }
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
+}
+
+// Check if prices differ and should show compare price
+const shouldShowComparePrice = (product: WishlistItem): boolean => {
+  const comparePrice = product.compare_price || 0
+  const currentPrice = product.price || 0
+  
+  // Check if prices differ
+  if (comparePrice > 0 && currentPrice > 0 && comparePrice !== currentPrice) {
+    return true
+  }
+  
+  return false
+}
+
+// Get the compare price to display (converted to USD if currency is USD)
+const getComparePriceToDisplay = (product: WishlistItem): { price: number; priceUsd?: number } => {
+  const comparePrice = product.compare_price || 0
+  
+  if (currency.value === 'USD') {
+    // Convert compare_price to USD using exchange rate
+    if (comparePrice > 0 && exchangeRate.value > 0) {
+      const comparePriceUsd = comparePrice / exchangeRate.value
+      return { price: 0, priceUsd: comparePriceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return compare_price as is
+  return { price: comparePrice, priceUsd: product.compare_price_usd }
+}
+
+// Get the current price to display
+const getCurrentPriceToDisplay = (product: WishlistItem): { price: number; priceUsd?: number } => {
+  if (currency.value === 'USD') {
+    // Convert price to USD using exchange rate
+    if (product.price && exchangeRate.value > 0) {
+      const priceUsd = product.price / exchangeRate.value
+      return { price: 0, priceUsd: priceUsd }
+    }
+    return { price: 0, priceUsd: 0 }
+  }
+  
+  // For BDT, return price as is
+  return { price: product.price || 0, priceUsd: product.price_usd }
 }
 
 // Fetch wishlist items
