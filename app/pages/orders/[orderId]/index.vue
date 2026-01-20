@@ -1248,6 +1248,8 @@ const printInvoice = () => {
           }
           /* Footer */
           .invoice-footer {
+            position: fixed;
+            bottom: 12px;
             margin-top: 1.5rem;
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
