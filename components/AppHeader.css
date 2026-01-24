@@ -124,7 +124,7 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   transition: background-color 0.3s ease-in-out;
 }
 
@@ -704,7 +704,7 @@
   .mobile-header-search {
     display: block;
     position: absolute;
-    right: 10px;
+    right: -6px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
