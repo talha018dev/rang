@@ -120,7 +120,7 @@
             <!-- Shipping Information -->
             <section class="checkout-section">
               <h2 class="section-title">Shipping Information</h2>
-              <form class="checkout-form" @submit.prevent="handleSubmit">
+              <form class="checkout-form" @submit.prevent="handleSubmit" novalidate>
                 <div class="form-group">
                   <label for="fullName" class="form-label">Full Name *</label>
                   <input
@@ -128,10 +128,12 @@
                     v-model="shippingInfo.fullName"
                     type="text"
                     class="form-input"
+                    :class="{ 'input-error': !!errors.fullName }"
                     required
                     placeholder="Enter your full name"
                     @blur="handleAddressFieldBlur"
                   />
+                  <div v-if="errors.fullName" class="field-error">{{ errors.fullName }}</div>
                 </div>
 
                 <div class="form-group">
@@ -141,10 +143,12 @@
                     v-model="shippingInfo.email"
                     type="email"
                     class="form-input"
+                    :class="{ 'input-error': !!errors.email }"
                     :required="isInternationalOrder"
                     placeholder="your.email@example.com"
                     @blur="handleAddressFieldBlur"
                   />
+                  <div v-if="errors.email" class="field-error">{{ errors.email }}</div>
                 </div>
 
                 <div class="form-group">
@@ -154,10 +158,12 @@
                     v-model="shippingInfo.phone"
                     type="tel"
                     class="form-input"
+                    :class="{ 'input-error': !!errors.phone }"
                     placeholder="01XXXXXXXXX"
                     required
                     @blur="handleAddressFieldBlur"
                   />
+                  <div v-if="errors.phone" class="field-error">{{ errors.phone }}</div>
                 </div>
 
                 <div class="form-group">
@@ -167,10 +173,12 @@
                     v-model="shippingInfo.addressLine1"
                     type="text"
                     class="form-input"
+                    :class="{ 'input-error': !!errors.addressLine1 }"
                     required
                     placeholder="House, street, area"
                     @blur="handleAddressFieldBlur"
                   />
+                  <div v-if="errors.addressLine1" class="field-error">{{ errors.addressLine1 }}</div>
                 </div>
 
                 <div class="form-group">
@@ -193,6 +201,7 @@
                       v-model="countrySearchTerm"
                       type="text"
                       class="form-input searchable-input"
+                      :class="{ 'input-error': !!errors.country }"
                       :placeholder="shippingInfo.country || 'Search or select country...'"
                       required
                       @focus="showCountryDropdown = true"
@@ -218,6 +227,7 @@
                       <div class="searchable-option no-results">No countries found</div>
                     </div>
                   </div>
+                  <div v-if="errors.country" class="field-error">{{ errors.country }}</div>
                 </div>
 
                  <div class="form-group">
@@ -228,7 +238,8 @@
                        id="city"
                        v-model="citySearchTerm"
                        type="text"
-                       class="form-input searchable-input"
+                         class="form-input searchable-input"
+                         :class="{ 'input-error': !!errors.city }"
                        :placeholder="isLoadingCities ? 'Loading cities...' : (shippingInfo.city || 'Search or select city...')"
                        :disabled="isLoadingCities"
                        @focus="showCityDropdown = true"
@@ -276,6 +287,7 @@
                        v-model="zoneSearchTerm"
                        type="text"
                        class="form-input searchable-input"
+                       :class="{ 'input-error': !!errors.zone }"
                        :placeholder="isLoadingZones ? 'Loading zones...' : (zones.length === 0 && shippingInfo.city_id ? 'No zones available' : (getZoneDisplayName() || 'Search or select zone...'))"
                        :required="!!shippingInfo.city_id"
                        :disabled="isLoadingZones || !shippingInfo.city || !shippingInfo.city_id"
@@ -303,6 +315,7 @@
                        <div class="searchable-option no-results">No zones found</div>
                      </div>
                    </div>
+                   <div v-if="errors.zone" class="field-error">{{ errors.zone }}</div>
                  </div>
 
                 <div class="form-group">
@@ -325,6 +338,7 @@
                       id="shippingMethod"
                       v-model="shippingMethod"
                       class="form-input"
+                      :class="{ 'input-error': !!errors.shippingMethod }"
                       required
                       :disabled="isLoadingShippingMethods"
                       @change="deliveryPartner = ''"
@@ -340,6 +354,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  <div v-if="errors.shippingMethod" class="field-error">{{ errors.shippingMethod }}</div>
                 </div>
 
                 <!-- Delivery Partner Selection (shown when Home Delivery is selected) -->
@@ -350,6 +365,7 @@
                       id="deliveryPartner"
                       v-model="deliveryPartner"
                       class="form-input"
+                      :class="{ 'input-error': !!errors.deliveryPartner }"
                       required
                       @change="deliveryLocation = ''"
                     >
@@ -368,6 +384,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  <div v-if="errors.deliveryPartner" class="field-error">{{ errors.deliveryPartner }}</div>
                 </div>
 
                 <!-- Delivery Location Selection (shown for SA Paribahan and Sundarban) -->
@@ -378,6 +395,7 @@
                       id="deliveryLocation"
                       v-model="deliveryLocation"
                       class="form-input"
+                      :class="{ 'input-error': !!errors.deliveryLocation }"
                       required
                     >
                       <option value="">Select Location</option>
@@ -390,6 +408,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  <div v-if="errors.deliveryLocation" class="field-error">{{ errors.deliveryLocation }}</div>
                 </div>
 
                 <!-- Outlet Selection (shown when Outlet is selected) -->
@@ -400,6 +419,7 @@
                       id="selectedOutlet"
                       v-model="selectedOutlet"
                       class="form-input"
+                      :class="{ 'input-error': !!errors.selectedOutlet }"
                       :required="shippingMethod === 'store_pickup'"
                     >
                       <option value="">Select Outlet</option>
@@ -417,6 +437,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  <div v-if="errors.selectedOutlet" class="field-error">{{ errors.selectedOutlet }}</div>
                   <!-- Display selected outlet address -->
                   <div v-if="selectedOutlet && selectedOutletLocation" class="outlet-address">
                     <p class="outlet-address-label">Outlet Address:</p>
@@ -433,6 +454,7 @@
                       id="paymentMethod"
                       v-model="paymentMethod"
                       class="form-input"
+                      :class="{ 'input-error': !!errors.paymentMethod }"
                       required
                     >
                       <option value="">Select Payment Option</option>
@@ -446,6 +468,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </div>
+                  <div v-if="errors.paymentMethod" class="field-error">{{ errors.paymentMethod }}</div>
                 </div>
 
                 <!-- Gift Package Checkbox -->
@@ -596,14 +619,16 @@
 
                 <!-- Order Notes -->
                 <div class="form-group">
-                  <label for="orderNotes" class="form-label">Order Notes (Optional)</label>
+                  <label for="orderNotes" class="form-label">Order Notes *</label>
                   <textarea
                     id="orderNotes"
                     v-model="orderNotes"
                     class="form-textarea"
+                    :class="{ 'input-error': !!errors.orderNotes }"
                     rows="4"
                     placeholder="Any special instructions for your order..."
                   ></textarea>
+                  <div v-if="errors.orderNotes" class="field-error">{{ errors.orderNotes }}</div>
                 </div>
               </form>
             </section>
@@ -1714,6 +1739,15 @@ const orderNotes = ref('')
 const isPlacingOrder = ref(false)
 const isGiftPackage = ref(false)
 
+// Inline validation errors (shown under fields)
+const errors = ref<Record<string, string>>({})
+
+const clearError = (key: string) => {
+  if (errors.value[key]) {
+    delete errors.value[key]
+  }
+}
+
 // Settings data
 const settingsData = ref<any>(null)
 const isLoadingSettings = ref(false)
@@ -2080,9 +2114,82 @@ const removeCoupon = () => {
   couponError.value = ''
 }
 
+const validateCheckout = (): boolean => {
+  const nextErrors: Record<string, string> = {}
+
+  const required = (key: string, value: any, message: string) => {
+    if (value === null || value === undefined || String(value).trim() === '') {
+      nextErrors[key] = message
+    }
+  }
+
+  required('fullName', shippingInfo.value.fullName, 'Full name is required.')
+  required('phone', shippingInfo.value.phone, 'Phone number is required.')
+  required('addressLine1', shippingInfo.value.addressLine1, 'Address line 1 is required.')
+  required('country', shippingInfo.value.country, 'Country is required.')
+  required('city', shippingInfo.value.city, 'City is required.')
+
+  if (isInternationalOrder.value) {
+    required('email', shippingInfo.value.email, 'Email is required for international orders.')
+  }
+
+  if (shippingInfo.value.country === 'Bangladesh' && shippingInfo.value.city_id && !shippingInfo.value.zone) {
+    nextErrors.zone = 'Zone is required.'
+  }
+
+  required('shippingMethod', shippingMethod.value, 'Delivery option is required.')
+
+  if (shippingMethod.value === 'store_pickup') {
+    required('selectedOutlet', selectedOutlet.value, 'Outlet is required.')
+  }
+
+  if (shippingMethod.value === 'home_delivery') {
+    required('deliveryPartner', deliveryPartner.value, 'Delivery partner is required.')
+    if (requiresLocationSelection.value) {
+      required('deliveryLocation', deliveryLocation.value, 'Delivery location is required.')
+    }
+  }
+
+  required('paymentMethod', paymentMethod.value, 'Payment option is required.')
+  required('orderNotes', orderNotes.value, 'Order notes is required.')
+
+  errors.value = nextErrors
+  return Object.keys(nextErrors).length === 0
+}
+
+// Clear validation errors as user fixes inputs (on change)
+watch(() => shippingInfo.value.fullName, (v) => { if (String(v || '').trim()) clearError('fullName') })
+watch(() => shippingInfo.value.phone, (v) => { if (String(v || '').trim()) clearError('phone') })
+watch(() => shippingInfo.value.addressLine1, (v) => { if (String(v || '').trim()) clearError('addressLine1') })
+watch(() => shippingInfo.value.country, (v) => { if (String(v || '').trim()) clearError('country') })
+watch(() => shippingInfo.value.city, (v) => { if (String(v || '').trim()) clearError('city') })
+watch(() => shippingInfo.value.zone, (v) => { if (String(v || '').trim()) clearError('zone') })
+watch(() => shippingInfo.value.email, (v) => { if (String(v || '').trim()) clearError('email') })
+watch(orderNotes, (v) => { if (String(v || '').trim()) clearError('orderNotes') })
+
+watch(shippingMethod, (v) => {
+  if (String(v || '').trim()) clearError('shippingMethod')
+  // Clear dependent errors when switching delivery type
+  if (v !== 'store_pickup') clearError('selectedOutlet')
+  if (v !== 'home_delivery') {
+    clearError('deliveryPartner')
+    clearError('deliveryLocation')
+  }
+})
+
+watch(deliveryPartner, (v) => { if (String(v || '').trim()) clearError('deliveryPartner') })
+watch(deliveryLocation, (v) => { if (String(v || '').trim()) clearError('deliveryLocation') })
+watch(selectedOutlet, (v) => { if (String(v || '').trim()) clearError('selectedOutlet') })
+watch(paymentMethod, (v) => { if (String(v || '').trim()) clearError('paymentMethod') })
+
+watch(isInternationalOrder, (isIntl) => {
+  // If international is turned off, don't keep email error around
+  if (!isIntl) clearError('email')
+})
+
 
 const handleSubmit = () => {
-  // Form validation is handled by HTML5 required attributes
+  if (!validateCheckout()) return
   handlePlaceOrder()
 }
 
@@ -2092,58 +2199,8 @@ const handlePlaceOrder = async () => {
     return
   }
 
-  // Validate required fields
-  if (!shippingInfo.value.fullName || 
-      !shippingInfo.value.phone ||
-      !shippingInfo.value.addressLine1 || 
-      !shippingInfo.value.city || 
-      !shippingInfo.value.country || 
-      shippingInfo.value.country.trim() === '') {
-    alert('Please fill in all required fields: Full Name, Phone Number, Address Line 1, City, and Country.')
-    return
-  }
-
-  // Email is mandatory for international orders
-  if (isInternationalOrder.value && (!shippingInfo.value.email || shippingInfo.value.email.trim() === '')) {
-    alert('Email address is required for international orders.')
-    return
-  }
-
-  // Validate zone selection if Bangladesh is selected and city_id exists
-  if (shippingInfo.value.country === 'Bangladesh' && shippingInfo.value.city_id && !shippingInfo.value.zone) {
-    alert('Please select a zone.')
-    return
-  }
-
-  if (!shippingMethod.value) {
-    alert('Please select a delivery option.')
-    return
-  }
-
-  // Validate outlet selection if outlet is selected
-  if (shippingMethod.value === 'store_pickup' && !selectedOutlet.value) {
-    alert('Please select an outlet.')
-    return
-  }
-
-  // Validate delivery partner selection if home delivery is selected
-  if (shippingMethod.value === 'home_delivery' && !deliveryPartner.value) {
-    alert('Please select a delivery partner.')
-    return
-  }
-
-  // Validate delivery location if required (for SA Paribahan and Sundarban)
-  if (shippingMethod.value === 'home_delivery' && requiresLocationSelection.value && !deliveryLocation.value) {
-    alert('Please select a delivery location.')
-    return
-  }
-
-
-  // Validate payment method
-  if (!paymentMethod.value) {
-    alert('Please select a payment option.')
-    return
-  }
+  // Inline validation (show errors under fields)
+  if (!validateCheckout()) return
 
   // Validate that cart items have product_id and variant_id (or products array for combo items in new format)
   console.log('Cart items for validation:', cartItems.value)
@@ -2256,7 +2313,7 @@ const handlePlaceOrder = async () => {
     // Prepare order data according to API structure
     const orderData: any = {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
-      customer_notes: orderNotes.value || null,
+      customer_notes: orderNotes.value?.trim() || '',
       shipping_method: shippingMethod.value === 'home_delivery' && deliveryPartner.value 
         ? (deliveryLocation.value 
           ? `home_delivery.${deliveryPartner.value}.${deliveryLocation.value}` 
