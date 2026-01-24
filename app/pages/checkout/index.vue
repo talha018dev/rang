@@ -135,12 +135,13 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="email" class="form-label">Email Address</label>
+                  <label for="email" class="form-label">Email Address<span v-if="isInternationalOrder" class="required-star"> *</span></label>
                   <input
                     id="email"
                     v-model="shippingInfo.email"
                     type="email"
                     class="form-input"
+                    :required="isInternationalOrder"
                     placeholder="your.email@example.com"
                     @blur="handleAddressFieldBlur"
                   />
@@ -160,14 +161,26 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="address" class="form-label">Address *</label>
+                  <label for="addressLine1" class="form-label">Address Line 1 *</label>
                   <input
-                    id="address"
-                    v-model="shippingInfo.address"
+                    id="addressLine1"
+                    v-model="shippingInfo.addressLine1"
                     type="text"
                     class="form-input"
                     required
-                    placeholder="Street address"
+                    placeholder="House, street, area"
+                    @blur="handleAddressFieldBlur"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="addressLine2" class="form-label">Address Line 2</label>
+                  <input
+                    id="addressLine2"
+                    v-model="shippingInfo.addressLine2"
+                    type="text"
+                    class="form-input"
+                    placeholder="Apartment, suite, unit, etc. (optional)"
                     @blur="handleAddressFieldBlur"
                   />
                 </div>
@@ -882,8 +895,8 @@ const fetchShippingMethodsWithAddress = async (forceCall: boolean = false) => {
     name: shippingInfo.value.fullName || '',
     phone: shippingInfo.value.phone || '',
     email: shippingInfo.value.email || '',
-    line_1: shippingInfo.value.address || '',
-    line_2: '',
+    line_1: shippingInfo.value.addressLine1 || '',
+    line_2: shippingInfo.value.addressLine2 || '',
     city: shippingInfo.value.city || '',
     country: shippingInfo.value.country || '',
     postal_code: shippingInfo.value.postalCode || ''
@@ -1158,7 +1171,8 @@ const shippingInfo = ref({
   fullName: '',
   email: '',
   phone: '',
-  address: '',
+  addressLine1: '',
+  addressLine2: '',
   city: '',
   zone: '',
   postalCode: '',
@@ -1669,6 +1683,7 @@ const billingInfo = ref({
 
 const billingSameAsShipping = ref(true)
 const shippingMethod = ref('')
+const isInternationalOrder = computed(() => shippingMethod.value === 'international_shipping')
 const selectedOutlet = ref<number | string>('')
 const deliveryPartner = ref('') // Format: "pathao", "sa_paribahan", or "sundarban"
 const deliveryLocation = ref('') // Format: "inside_dhaka" or "outside_dhaka" (for SA Paribahan and Sundarban)
@@ -1787,7 +1802,7 @@ watch(billingSameAsShipping, (same) => {
   if (same) {
     billingInfo.value = {
       fullName: shippingInfo.value.fullName,
-      address: shippingInfo.value.address,
+      address: [shippingInfo.value.addressLine1, shippingInfo.value.addressLine2].filter(Boolean).join(', '),
       city: shippingInfo.value.city
     }
   }
@@ -1798,7 +1813,7 @@ watch(shippingInfo, () => {
   if (billingSameAsShipping.value) {
     billingInfo.value = {
       fullName: shippingInfo.value.fullName,
-      address: shippingInfo.value.address,
+      address: [shippingInfo.value.addressLine1, shippingInfo.value.addressLine2].filter(Boolean).join(', '),
       city: shippingInfo.value.city
     }
   }
@@ -2080,11 +2095,17 @@ const handlePlaceOrder = async () => {
   // Validate required fields
   if (!shippingInfo.value.fullName || 
       !shippingInfo.value.phone ||
-      !shippingInfo.value.address || 
+      !shippingInfo.value.addressLine1 || 
       !shippingInfo.value.city || 
       !shippingInfo.value.country || 
       shippingInfo.value.country.trim() === '') {
-    alert('Please fill in all required fields: Full Name, Phone Number, Address, City, and Country.')
+    alert('Please fill in all required fields: Full Name, Phone Number, Address Line 1, City, and Country.')
+    return
+  }
+
+  // Email is mandatory for international orders
+  if (isInternationalOrder.value && (!shippingInfo.value.email || shippingInfo.value.email.trim() === '')) {
+    alert('Email address is required for international orders.')
     return
   }
 
@@ -2249,8 +2270,8 @@ const handlePlaceOrder = async () => {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
         email: shippingInfo.value.email || '',
-        line_1: shippingInfo.value.address,
-        line_2: '',
+        line_1: shippingInfo.value.addressLine1,
+        line_2: shippingInfo.value.addressLine2 || '',
         city: shippingInfo.value.city,
         country: shippingInfo.value.country,
         postal_code: shippingInfo.value.postalCode || ''
