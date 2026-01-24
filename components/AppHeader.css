@@ -38,7 +38,7 @@
 
 /* Add hover effect like other elements */
 .heading-text:hover {
-  /* color: #ea580c; */
+  color: inherit;
 }
 
 .header-drawer {
@@ -698,6 +698,46 @@
 
   .mobile-logo-image {
     height: 40px;
+  }
+
+  /* Mobile Header Search */
+  .mobile-header-search {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+  }
+
+  .mobile-header-search-button {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease-in-out;
+  }
+
+  .mobile-header-search-button:hover {
+    color: #ea580c;
+  }
+
+  .mobile-header-search-button .action-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Make search icon white on home page when not scrolled */
+  .header-home:not(.header-scrolled) .mobile-header-search-button {
+    color: white;
+  }
+
+  .header-scrolled .mobile-header-search-button {
+    color: black;
   }
 
   .mobile-menu-button {

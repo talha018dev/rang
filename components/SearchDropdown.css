@@ -132,3 +132,20 @@
   font-size: 0.875rem;
 }
 
+/* Mobile Search Dropdown Styles */
+@media (max-width: 600px) {
+  .mobile-search-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 300px;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* Hide mobile search on desktop */
+@media (min-width: 601px) {
+  .mobile-header-search {
+    display: none;
+  }
+}

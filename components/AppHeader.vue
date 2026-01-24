@@ -14,6 +14,30 @@
           />
         </NuxtLink>
       </div>
+      <!-- Mobile Search (shown only on mobile) -->
+      <div class="mobile-header-search">
+        <div class="search-dropdown-container">
+          <button class="mobile-header-search-button" @click="toggleSearchMenu">
+            <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+
+          <!-- Search Menu Dropdown -->
+          <SearchDropdown
+            :show="showSearchMenu"
+            v-model:search-text="searchText"
+            :search-options="searchOptions"
+            :is-searching="isSearching"
+            :show-search-results="showSearchResults"
+            dropdown-class="search-menu-dropdown mobile-search-dropdown"
+            @input="handleSearch"
+            @focus="showSearchResults = true"
+            @close="closeSearchMenu"
+          />
+        </div>
+      </div>
       <div>
         <h1 class="heading-text">RANG BANGLADESH</h1>
       </div>
@@ -609,7 +633,14 @@ const closeMobileSearch = () => {
 onMounted(() => {
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement
-    if (!target.closest('.search-container') && !target.closest('.action-button')) {
+    // Keep search open when interacting with search icon/button or dropdown
+    if (
+      !target.closest('.search-dropdown-container') &&
+      !target.closest('.search-container') &&
+      !target.closest('.action-button') &&
+      !target.closest('.mobile-header-search') &&
+      !target.closest('.mobile-header-search-button')
+    ) {
       showSearchResults.value = false
       showSearchMenu.value = false
     }
