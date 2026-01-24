@@ -191,7 +191,7 @@
                   <h3 class="product-name">{{ product.name }}</h3>
                   <div class="product-price-container">
                     <span v-if="shouldShowComparePrice(product)" class="product-original-price">{{ formatPrice(getComparePriceToDisplay(product).price, getComparePriceToDisplay(product).priceUsd) }}</span>
-                    <span class="product-price">{{ formatPrice(getCurrentPriceToDisplay(product).price, getCurrentPriceToDisplay(product).priceUsd) }}</span>
+                    <span class="product-price">{{ getCurrentPriceDisplay(product) }}</span>
                   </div>
                 </div>
               </NuxtLink>
@@ -755,18 +755,49 @@ const getComparePriceToDisplay = (product: Product): { price: number; priceUsd?:
 }
 
 // Get the current price to display
-const getCurrentPriceToDisplay = (product: Product): { price: number; priceUsd?: number } => {
-  if (currency.value === 'USD') {
-    // Convert price to USD using exchange rate
-    if (product.price && exchangeRate.value > 0) {
-      const priceUsd = product.price / exchangeRate.value
-      return { price: 0, priceUsd: priceUsd }
+const getCurrentPriceDisplay = (product: Product): string => {
+  const variants = (product as any).variants as any[] | undefined
+  const hasVariants = Array.isArray(variants) && variants.length > 0
+
+  // Gather variant prices (fallback to product price)
+  const bdtPrices: number[] = []
+  const usdPrices: number[] = []
+
+  if (hasVariants) {
+    for (const v of variants) {
+      const pBdt = Number(v?.price ?? product.price ?? 0)
+      if (Number.isFinite(pBdt)) bdtPrices.push(pBdt)
+
+      const pUsdRaw = v?.price_usd ?? (product as any).price_usd
+      const pUsd = pUsdRaw !== undefined && pUsdRaw !== null ? Number(pUsdRaw) : NaN
+      if (Number.isFinite(pUsd) && pUsd > 0) usdPrices.push(pUsd)
     }
-    return { price: 0, priceUsd: 0 }
   }
-  
-  // For BDT, return price as is
-  return { price: product.price || 0, priceUsd: product.price_usd }
+
+  if (bdtPrices.length === 0) {
+    const p = Number(product.price ?? 0)
+    bdtPrices.push(Number.isFinite(p) ? p : 0)
+  }
+
+  const minBdt = Math.min(...bdtPrices)
+  const maxBdt = Math.max(...bdtPrices)
+
+  // Only show a range when variants exist and prices differ
+  const shouldShowRange = hasVariants && minBdt !== maxBdt
+
+  if (currency.value === 'USD') {
+    const minUsd = usdPrices.length > 0 ? Math.min(...usdPrices) : (exchangeRate.value > 0 ? minBdt / exchangeRate.value : 0)
+    const maxUsd = usdPrices.length > 0 ? Math.max(...usdPrices) : (exchangeRate.value > 0 ? maxBdt / exchangeRate.value : 0)
+    const minText = formatPrice(0, minUsd)
+    if (!shouldShowRange || minUsd === maxUsd) return minText
+    const maxText = formatPrice(0, maxUsd).replace(/^\$/, '')
+    return `${minText}-${maxText}`
+  }
+
+  const minText = formatPrice(minBdt, (product as any).price_usd)
+  if (!shouldShowRange) return minText
+  const maxText = formatPrice(maxBdt, (product as any).price_usd).replace(/^Tk\s+/, '')
+  return `${minText}-${maxText}`
 }
 
 // Wishlist functionality
