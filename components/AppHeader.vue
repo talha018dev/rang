@@ -108,42 +108,25 @@
 
         <!-- Desktop Header Actions -->
         <div class="header-actions desktop-actions ml-auto!">
-          <button class="action-button" @click="toggleSearchMenu">
-            <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+          <div class="search-dropdown-container">
+            <button class="action-button" @click="toggleSearchMenu">
+              <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
 
-          <!-- Search Menu Dropdown -->
-          <div v-if="showSearchMenu" class="search-menu-dropdown">
-            <div class="search-container">
-              <UInput v-model="searchText" placeholder="Search products..." class="search-input-menu"
-                icon="i-heroicons-magnifying-glass" @input="handleSearch" @focus="showSearchResults = true" autofocus />
-              <div v-if="showSearchResults && (searchOptions.length > 0 || searchText.length >= 2)"
-                class="search-results-dropdown">
-                <div v-if="isSearching" class="search-loading">
-                  <p>Searching...</p>
-                </div>
-                <div v-else-if="searchOptions.length > 0" class="search-results-list">
-                  <NuxtLink v-for="option in searchOptions" :key="option.id"
-                    :to="`/products/${option.category.slug}/${option.slug}`" class="search-result-item"
-                    @click="closeSearchMenu">
-                    <div class="search-result-image">
-                      <NuxtImg :src="getImageUrl(option.image)" :alt="option.name" class="result-image" loading="lazy"
-                        format="webp" quality="85" />
-                    </div>
-                    <div class="search-result-details">
-                      <div class="search-result-name">{{ option.name }}</div>
-                      <div class="search-result-price">{{ formatPrice(option.price) }}</div>
-                    </div>
-                  </NuxtLink>
-                </div>
-                <div v-else-if="searchText.length >= 2" class="search-empty">
-                  <p>No products found</p>
-                </div>
-              </div>
-            </div>
+            <!-- Search Menu Dropdown -->
+            <SearchDropdown
+              :show="showSearchMenu"
+              v-model:search-text="searchText"
+              :search-options="searchOptions"
+              :is-searching="isSearching"
+              :show-search-results="showSearchResults"
+              @input="handleSearch"
+              @focus="showSearchResults = true"
+              @close="closeSearchMenu"
+            />
           </div>
           <div class="currency-dropdown-container">
             <button class="action-button-flex" @click="toggleCurrencyDropdown">
@@ -507,6 +490,7 @@ import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
 import type { Category, CategoryResponse, MenuItem, Product, ProductResponse, SettingsResponse } from '../types/homepage';
+import SearchDropdown from './SearchDropdown.vue';
 
 const route = useRoute()
 const router = useRouter()
