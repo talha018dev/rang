@@ -377,7 +377,7 @@ const formatOrderPrice = (price: number): string => {
     if (!isFinite(displayPrice) || isNaN(displayPrice)) {
       return 'Tk 0'
     }
-    return `Tk ${displayPrice.toLocaleString()}`
+    return `Tk ${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 }
 
@@ -628,7 +628,7 @@ const printInvoice = () => {
       if (!isFinite(displayPrice) || isNaN(displayPrice)) {
         return 'Tk 0'
       }
-      return `Tk ${displayPrice.toLocaleString()}`
+      return `Tk ${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     }
   }
 

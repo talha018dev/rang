@@ -182,7 +182,7 @@ const formatItemTotal = (item: any) => {
     return `$${totalUsd.toFixed(2)}`
   } else {
     const total = item.price * item.quantity
-    return `Tk ${total.toLocaleString()}`
+    return `Tk ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 }
 

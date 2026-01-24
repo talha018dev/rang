@@ -784,7 +784,7 @@ const formatItemTotal = (item: any) => {
     return `$${totalUsd.toFixed(2)}`
   } else {
     const total = item.price * item.quantity
-    return `Tk ${total.toLocaleString()}`
+    return `Tk ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 }
 
@@ -1967,7 +1967,7 @@ const giftPackageChargeDisplay = computed(() => {
     }
     return `$${usdCharge.toFixed(2)}`
   }
-  return `Tk ${giftPackageChargeBDT.value.toLocaleString()}`
+  return `Tk ${giftPackageChargeBDT.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 })
 
 const shippingCostDisplay = computed(() => {
@@ -2009,7 +2009,7 @@ const shippingCostDisplay = computed(() => {
     }
     return `$${usdShipping.toFixed(2)}`
   }
-  return `Tk ${shippingCostBDT.value.toLocaleString()}`
+  return `Tk ${shippingCostBDT.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 })
 
 // Calculate grand total with coupon discount
@@ -2060,7 +2060,7 @@ const grandTotalDisplay = computed(() => {
   if (currency.value === 'USD') {
     return `$${total.toFixed(2)}`
   } else {
-    return `Tk ${total.toLocaleString()}`
+    return `Tk ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 })
 

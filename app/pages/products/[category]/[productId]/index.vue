@@ -1331,7 +1331,7 @@ watch(crossSoldProducts, (newCrossSoldProducts) => {
       id: product.id,
       name: product.name,
       description: description,
-      price: `TK : ${minPrice.toLocaleString()}`,
+      price: `TK : ${minPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       priceValue: minPrice,
       image: product.image,
       selected: index === 0, // First item selected by default

@@ -422,7 +422,7 @@
   .product-price {
     font-size: 1.25rem;
     font-weight: 700;
-    color: black;
+    color: #ea580c !important;
     margin: 0;
     font-family: 'Poppins', sans-serif;
   }

@@ -201,7 +201,7 @@ export const useCart = () => {
       }
       return `$${totalUsd.toFixed(2)}`
     } else {
-      return `Tk ${totalPrice.value.toLocaleString()}`
+      return `Tk ${totalPrice.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     }
   })
 
@@ -213,7 +213,7 @@ export const useCart = () => {
       }
       return `$${subtotalUsd.toFixed(2)}`
     } else {
-      return `Tk ${subtotal.value.toLocaleString()}`
+      return `Tk ${subtotal.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     }
   })
 
@@ -225,7 +225,7 @@ export const useCart = () => {
       }
       return `$${vatUsd.toFixed(2)}`
     } else {
-      return `Tk ${totalVat.value.toLocaleString()}`
+      return `Tk ${totalVat.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     }
   })
 

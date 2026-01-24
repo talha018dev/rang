@@ -96,7 +96,7 @@ export const useCurrency = () => {
     if (!isFinite(price) || isNaN(price)) {
       price = 0
     }
-    return `Tk ${price.toLocaleString()}`
+    return `Tk ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 
   // Get raw price in current currency

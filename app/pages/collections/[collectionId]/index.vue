@@ -269,7 +269,7 @@ const formatPrice = (priceBDT: number, priceUSD?: number) => {
     const usdPrice = priceUSD || (priceBDT / exchangeRate.value)
     return `$${usdPrice.toFixed(2)}`
   }
-  return `TK ${priceBDT.toLocaleString()}`
+  return `TK ${priceBDT.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 // Total price for matching series items
@@ -285,7 +285,7 @@ const matchingSeriesTotalPrice = computed(() => {
   }
   
   const totalBDT = selectedItems.reduce((sum, item) => sum + item.price, 0)
-  return `TK ${totalBDT.toLocaleString()}`
+  return `TK ${totalBDT.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 })
 
 // Add matching series to cart
