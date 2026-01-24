@@ -790,7 +790,7 @@
 /* Mobile Menu Button */
 .mobile-menu-button {
   display: none;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   padding-bottom: 0;
   color: white;
   background: none;
@@ -816,10 +816,10 @@
   /* Show mobile logo on mobile */
   .mobile-logo-container {
     display: block;
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: fixed;
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
     z-index: 100;
   }
 
@@ -831,6 +831,7 @@
     padding-left: 0;
   }
   .heading-text {
+    display: none;
     right: 10px;
     font-size: 0.7em;
     left: auto;
