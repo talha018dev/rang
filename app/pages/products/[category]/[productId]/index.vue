@@ -240,7 +240,17 @@
                         <!-- SKU -->
                         <div class="sku-share-btn">
                             <div class="sku">
-                                SKU: {{ product.sku }}
+                                <span>SKU: {{ product.sku }}</span>
+                                <button
+                                    type="button"
+                                    class="sku-copy-btn"
+                                    :class="{ copied: skuCopied }"
+                                    @click.stop.prevent="copySku(product.sku)"
+                                    aria-label="Copy SKU"
+                                    title="Copy SKU"
+                                >
+                                    {{ skuCopied ? 'Copied' : 'Copy' }}
+                                </button>
                             </div>
 
                             <div class="share-wishlist-buttons">
@@ -1967,6 +1977,43 @@ const handleShare = async (event: Event, buttonType: 'mobile' | 'desktop') => {
         document.body.removeChild(textArea)
         showTooltip()
     }
+}
+
+const skuCopied = ref(false)
+let skuCopyTimeout: ReturnType<typeof setTimeout> | null = null
+
+const copySku = async (sku: string | undefined | null) => {
+    const value = (sku || '').toString().trim()
+    if (!value) return
+
+    const markCopied = () => {
+        skuCopied.value = true
+        if (skuCopyTimeout) clearTimeout(skuCopyTimeout)
+        skuCopyTimeout = setTimeout(() => {
+            skuCopied.value = false
+        }, 1500)
+    }
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(value)
+            markCopied()
+            return
+        }
+    } catch (err) {
+        // fall through to legacy copy
+    }
+
+    // Legacy fallback
+    const textArea = document.createElement('textarea')
+    textArea.value = value
+    textArea.style.position = 'fixed'
+    textArea.style.left = '-999999px'
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    markCopied()
 }
 
 const addFrequentlyBoughtToCart = () => {
