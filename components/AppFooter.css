@@ -395,3 +395,14 @@
   width: 20px;
   height: 24px;
 }
+
+.home-page .app-footer {
+  position: relative;
+  top: 100px;
+}
+
+@media screen and (max-width: 768px) {
+  .home-page .app-footer {
+    top: 0px;
+  }
+}

@@ -217,6 +217,14 @@
   flex-wrap: wrap;
 }
 
+.vat-text {
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 0.85em;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
 .current-price {
   font-size: 1.75em;
   font-weight: bold;

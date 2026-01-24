@@ -217,6 +217,7 @@
                         <div class="price-container">
                             <span v-if="showComparePrice" class="original-price">{{ formatPrice(comparePriceToDisplay.price, comparePriceToDisplay.priceUsd) }}</span>
                             <span class="current-price">{{ formatPrice(currentPriceToDisplay.price, currentPriceToDisplay.priceUsd) }}</span>
+                            <span class="vat-text">+ VAT</span>
                         </div>
                         <span v-if="showComparePrice && effectiveComparePrice > selectedVariantPrice" class="discount">
                             -{{ Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100) }}%

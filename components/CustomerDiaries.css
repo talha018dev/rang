@@ -456,6 +456,8 @@
   gap: 1rem;
 }
 .customer-diaries-image-section {
+  position: relative;
+  top: 40px;
   width: 90%;
   max-width: 1600px;
   margin: auto;
@@ -472,5 +474,11 @@
 @media  (max-width: 600px) {
   .customer-diaries-image-section {
     padding-bottom: 40px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .customer-diaries-image-section {
+    top: 0px;
   }
 }
