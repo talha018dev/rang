@@ -998,6 +998,45 @@ const route = useRoute()
 const category = route.params.category as string
 const productIdSlug = computed(() => route.params.productId as string)
 
+// Size sorting helper (small -> large)
+const SIZE_ORDER = [
+  'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'
+]
+
+const normalizeSize = (size: string) => size.trim().toUpperCase()
+
+const parseLeadingNumber = (s: string): number | null => {
+  // Extract first number from strings like "32", "32-34", "2-3Y", "EU 38"
+  const match = s.match(/(\d+(\.\d+)?)/)
+  if (!match) return null
+  const num = Number(match[1])
+  return Number.isFinite(num) ? num : null
+}
+
+const compareSizes = (aRaw: string, bRaw: string) => {
+  const a = normalizeSize(aRaw)
+  const b = normalizeSize(bRaw)
+
+  const aIsOneSize = a === 'ONE SIZE' || a === 'ONESIZE' || a === 'FREE' || a === 'FREE SIZE'
+  const bIsOneSize = b === 'ONE SIZE' || b === 'ONESIZE' || b === 'FREE' || b === 'FREE SIZE'
+  if (aIsOneSize && !bIsOneSize) return 1
+  if (!aIsOneSize && bIsOneSize) return -1
+
+  const aIdx = SIZE_ORDER.indexOf(a)
+  const bIdx = SIZE_ORDER.indexOf(b)
+  if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx
+  if (aIdx !== -1) return -1
+  if (bIdx !== -1) return 1
+
+  const aNum = parseLeadingNumber(a)
+  const bNum = parseLeadingNumber(b)
+  if (aNum !== null && bNum !== null) return aNum - bNum
+  if (aNum !== null) return -1
+  if (bNum !== null) return 1
+
+  return a.localeCompare(b)
+}
+
 // Product data from API
 const product = ref<Product | null>(null)
 const relatedProducts = ref<Product[]>([])
@@ -1130,7 +1169,7 @@ const fetchProductDetails = async () => {
               sizes.add(variant.attributes.size)
             }
           })
-          const sortedSizes = Array.from(sizes).sort()
+          const sortedSizes = Array.from(sizes).sort(compareSizes)
           if (sortedSizes.length > 0) {
             selectedSize.value = sortedSizes[0] || ''
           }
@@ -1462,7 +1501,7 @@ const availableSizes = computed(() => {
     }
   })
   
-  return Array.from(sizes).sort()
+  return Array.from(sizes).sort(compareSizes)
 })
 
 // Available colors from variants
@@ -2055,7 +2094,8 @@ const getAvailableSizesForProduct = (product: Product | undefined): string[] => 
     }
   })
   
-  return Array.from(sizes).sort().length > 0 ? Array.from(sizes).sort() : ['S', 'M', 'L', 'XL', 'XXL']
+  const sorted = Array.from(sizes).sort(compareSizes)
+  return sorted.length > 0 ? sorted : ['S', 'M', 'L', 'XL', 'XXL']
 }
 
 // Update matching series item price when size changes
