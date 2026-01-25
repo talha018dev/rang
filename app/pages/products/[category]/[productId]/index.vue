@@ -1004,7 +1004,7 @@ const SIZE_ORDER = [
   'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'
 ]
 
-const normalizeSize = (size: string) => size.trim().toUpperCase()
+const normalizeSize = (size: string) => String(size || '').trim().toUpperCase()
 
 const parseLeadingNumber = (s: string): number | null => {
   // Extract first number from strings like "32", "32-34", "2-3Y", "EU 38"
