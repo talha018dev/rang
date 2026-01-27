@@ -57,7 +57,7 @@
             <div v-else-if="error" class="!text-center !py-12">
               <p class="!text-red-600 !mb-4">{{ error }}</p>
               <button 
-                @click="fetchOrders" 
+                @click="() => fetchOrders(currentPage)" 
                 class="!px-4 !py-2 !bg-orange-600 !text-white !rounded-lg hover:!bg-orange-700 !transition-colors">
                 Try Again
               </button>
@@ -72,49 +72,108 @@
             </div>
 
             <!-- Orders Table -->
-            <div v-else class="!overflow-x-auto">
-              <table class="!min-w-full !divide-y !divide-gray-200">
-                <thead class="!bg-gray-50">
-                  <tr>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Order ID</th>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Date</th>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Status</th>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Total</th>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Items</th>
-                    <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody class="!bg-white !divide-y !divide-gray-200">
-                  <tr v-for="order in orders" :key="order.number" class="hover:!bg-gray-50">
-                    <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      #{{ order.number }}
-                    </td>
-                    <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
-                      {{ formatDate(order.created_at) }}
-                    </td>
-                    <td class="!px-6 !py-4 !whitespace-nowrap">
-                      <span 
-                        class="!px-2 !inline-flex !text-xs !leading-5 !font-semibold !rounded-full"
-                        :class="getStatusClass(order.status)">
-                        {{ order.readable_status || order.status || 'Pending' }}
-                      </span>
-                    </td>
-                    <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      {{ formatOrderPrice(order.total || 0, order.currency, order.address?.country) }}
-                    </td>
-                    <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
-                      {{ order.items?.length || 0 }} item(s)
-                    </td>
-                    <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium">
-                      <button 
-                        @click="viewOrderDetails(order)"
-                        class="!text-orange-600 hover:!text-orange-900">
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div v-else>
+              <div class="!overflow-x-auto">
+                <table class="!min-w-full !divide-y !divide-gray-200">
+                  <thead class="!bg-gray-50">
+                    <tr>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Order ID</th>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Date</th>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Status</th>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Total</th>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Items</th>
+                      <th class="!px-6 !py-3 !text-left !text-xs !font-medium !text-gray-500 !uppercase !tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="!bg-white !divide-y !divide-gray-200">
+                    <tr v-for="order in orders" :key="order.number" class="hover:!bg-gray-50">
+                      <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
+                        #{{ order.number }}
+                      </td>
+                      <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
+                        {{ formatDate(order.created_at) }}
+                      </td>
+                      <td class="!px-6 !py-4 !whitespace-nowrap">
+                        <span 
+                          class="!px-2 !inline-flex !text-xs !leading-5 !font-semibold !rounded-full"
+                          :class="getStatusClass(order.status)">
+                          {{ order.readable_status || order.status || 'Pending' }}
+                        </span>
+                      </td>
+                      <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
+                        {{ formatOrderPrice(order.total || 0, order.currency, order.address?.country) }}
+                      </td>
+                      <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
+                        {{ order.items?.length || 0 }} item(s)
+                      </td>
+                      <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium">
+                        <button 
+                          @click="viewOrderDetails(order)"
+                          class="!text-orange-600 hover:!text-orange-900">
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- Pagination -->
+              <div v-if="pagination && pagination.last_page > 1" class="!mt-6 !flex !flex-col !items-center !gap-4 !border-t !border-gray-200 !pt-4">
+                <!-- Result Count -->
+                <div class="!w-full !text-center">
+                  <p class="!text-sm !text-gray-700">
+                    Showing
+                    <span class="!font-medium">{{ pagination.from }}</span>
+                    to
+                    <span class="!font-medium">{{ pagination.to }}</span>
+                    of
+                    <span class="!font-medium">{{ pagination.total }}</span>
+                    results
+                  </p>
+                </div>
+                
+                <!-- Pagination Controls -->
+                <nav class="!flex !items-center !justify-center !gap-1" aria-label="Pagination">
+                  <!-- Previous Button -->
+                  <button
+                    @click="goToPage(pagination.current_page - 1)"
+                    :disabled="pagination.current_page === 1"
+                    class="!relative !inline-flex !items-center !rounded-md !border !border-gray-300 !bg-white !px-3 !py-2 !text-sm !font-medium !text-gray-700 hover:!bg-gray-50 focus:!z-20 focus:!outline-offset-0 disabled:!opacity-50 disabled:!cursor-not-allowed">
+                    <span class="!sr-only">Previous</span>
+                    <svg class="!h-5 !w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  
+                  <!-- Page Numbers -->
+                  <div class="!flex !items-center !gap-1 !flex-wrap !justify-center">
+                    <button
+                      v-for="page in getPageNumbers()"
+                      :key="page"
+                      @click="goToPage(page)"
+                      :class="[
+                        page === pagination.current_page
+                          ? '!relative !z-10 !inline-flex !items-center !justify-center !bg-orange-600 !px-4 !py-2 !text-sm !font-semibold !text-white !min-w-[40px] focus:!z-20 focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-orange-600'
+                          : '!relative !inline-flex !items-center !justify-center !px-4 !py-2 !text-sm !font-semibold !text-gray-900 !border !border-gray-300 !bg-white !min-w-[40px] hover:!bg-gray-50 focus:!z-20 focus:!outline-offset-0'
+                      ]"
+                      :aria-current="page === pagination.current_page ? 'page' : undefined">
+                      {{ page }}
+                    </button>
+                  </div>
+                  
+                  <!-- Next Button -->
+                  <button
+                    @click="goToPage(pagination.current_page + 1)"
+                    :disabled="pagination.current_page === pagination.last_page"
+                    class="!relative !inline-flex !items-center !rounded-md !border !border-gray-300 !bg-white !px-3 !py-2 !text-sm !font-medium !text-gray-700 hover:!bg-gray-50 focus:!z-20 focus:!outline-offset-0 disabled:!opacity-50 disabled:!cursor-not-allowed">
+                    <span class="!sr-only">Next</span>
+                    <svg class="!h-5 !w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </nav>
+              </div>
             </div>
           </div>
         </div>
@@ -127,7 +186,7 @@
 <script setup lang="ts">
 import { useHead, useRoute, useRouter } from 'nuxt/app'
 import { $fetch } from 'ofetch'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCurrency } from '~~/composables/useCurrency'
@@ -188,10 +247,28 @@ interface Order {
   items: OrderItem[]
 }
 
+interface PaginationLink {
+  url: string | null
+  label: string
+  active: boolean
+}
+
+interface Pagination {
+  current_page: number
+  from: number
+  last_page: number
+  links: PaginationLink[]
+  path: string
+  per_page: number
+  to: number
+  total: number
+}
+
 interface OrdersResponse {
   success: boolean
   message?: string
   data?: Order[]
+  pagination?: Pagination
 }
 
 // Meta
@@ -209,10 +286,18 @@ const { formatPrice, currency, exchangeRate } = useCurrency()
 
 // Orders data
 const orders = ref<Order[]>([])
+const pagination = ref<Pagination | null>(null)
 
 // UI state
 const isLoading = ref(false)
 const error = ref<string | null>(null)
+const lastFetchedPage = ref<number>(0)
+
+// Get current page from route query
+const currentPage = computed(() => {
+  const page = route.query.page
+  return page ? parseInt(page as string, 10) : 1
+})
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -221,7 +306,7 @@ const getToken = (): string | null => {
 }
 
 // Fetch orders
-const fetchOrders = async () => {
+const fetchOrders = async (page: number = 1) => {
   const token = getToken()
   
   if (!token) {
@@ -233,7 +318,7 @@ const fetchOrders = async () => {
   error.value = null
 
   try {
-    const response = await $fetch<OrdersResponse>(`${backendUrl}/order`, {
+    const response = await $fetch<OrdersResponse>(`${backendUrl}/order?page=${page}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -244,14 +329,20 @@ const fetchOrders = async () => {
 
     if (response.success && response.data) {
       orders.value = response.data
+      if (response.pagination) {
+        pagination.value = response.pagination
+      }
+      lastFetchedPage.value = page
     } else {
       orders.value = []
+      pagination.value = null
       error.value = response.message || 'Failed to load orders.'
     }
   } catch (err: any) {
     console.error('Error fetching orders:', err)
     error.value = err.data?.message || err.message || 'Failed to load orders.'
     orders.value = []
+    pagination.value = null
     
     // If unauthorized, redirect to login
     if (err.status === 401 || err.statusCode === 401) {
@@ -335,9 +426,40 @@ const viewOrderDetails = (order: Order) => {
   router.push(`/orders/${order.number}`)
 }
 
+// Go to specific page
+const goToPage = (page: number) => {
+  if (page < 1 || (pagination.value && page > pagination.value.last_page)) {
+    return
+  }
+  router.push({ query: { ...route.query, page } })
+}
+
+// Get page numbers for pagination display - show all pages from 1 to last page
+const getPageNumbers = (): number[] => {
+  if (!pagination.value) return []
+  
+  const last = pagination.value.last_page
+  const pages: number[] = []
+  
+  // Show all page numbers from 1 to last page
+  for (let i = 1; i <= last; i++) {
+    pages.push(i)
+  }
+  
+  return pages
+}
+
+// Watch for route query changes to update page
+watch(() => route.query.page, (newPage) => {
+  const page = newPage ? parseInt(newPage as string, 10) : 1
+  if (page !== lastFetchedPage.value && !isLoading.value) {
+    fetchOrders(page)
+  }
+}, { immediate: false })
+
 // Fetch orders on mount
 onMounted(() => {
-  fetchOrders()
+  fetchOrders(currentPage.value)
 })
 </script>
 
