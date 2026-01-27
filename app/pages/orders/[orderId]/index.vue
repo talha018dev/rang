@@ -886,51 +886,49 @@ const printInvoice = () => {
         </table>
       </div>
 
-     <div class="summary-footer-div">
-        <!-- Summary Section -->
-        <div class="summary-section">
-          <div class="summary-rows">
-            <div class="summary-row">
-              <span class="summary-label">Items Subtotal:</span>
-              <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
-            </div>
-            ${orderData.coupon_discount > 0 ? `
-            <div class="summary-row">
-              <span class="summary-label">Discount:</span>
-              <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
-            </div>
-            ` : ''}
-            <div class="summary-row">
-              <span class="summary-label">Shipping (ex. tax):</span>
-              <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
-            </div>
-            <div class="summary-row">
-              <span class="summary-label">VAT:</span>
-              <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
-            </div>
-            <div class="summary-row summary-row-total">
-              <span class="summary-label-total">Order Total:</span>
-              <span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span>
-            </div>
+      <!-- Summary Section -->
+      <div class="summary-section">
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span class="summary-label">Items Subtotal:</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
+          </div>
+          ${orderData.coupon_discount > 0 ? `
+          <div class="summary-row">
+            <span class="summary-label">Discount:</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
+          </div>
+          ` : ''}
+          <div class="summary-row">
+            <span class="summary-label">Shipping (ex. tax):</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">VAT:</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
+          </div>
+          <div class="summary-row summary-row-total">
+            <span class="summary-label-total">Order Total:</span>
+            <span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span>
           </div>
         </div>
+      </div>
 
-        <!-- Footer: Claim Policy and Contact -->
-        <div class="invoice-footer">
-          <div class="claim-policy">
-            <h4 class="claim-policy-title">== Claim Policy ==</h4>
-            <p class="claim-policy-text">All claims must be made within 7 days of delivery. Items must be in original condition with tags attached. Exchange is available for size/color issues within 14 days. Returns are accepted for defective or damaged items only. Customized or personalized items are non-refundable. Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p>
-          </div>
-          <div class="invoice-thankyou">
-            <p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p>
-          </div>
-          <div class="invoice-contact">
-            <p class="contact-info">Website: www.rang-bd.com</p>
-            <p class="contact-info">Helpline: +880 1777744344, +880 1799998877</p>
-            <p class="contact-info">Email: contactrang@gmail.com</p>
-          </div>
+      <!-- Footer: Claim Policy and Contact -->
+      <div class="invoice-footer">
+        <div class="claim-policy">
+          <h4 class="claim-policy-title">== Claim Policy ==</h4>
+          <p class="claim-policy-text">All claims must be made within 7 days of delivery. Items must be in original condition with tags attached. Exchange is available for size/color issues within 14 days. Returns are accepted for defective or damaged items only. Customized or personalized items are non-refundable. Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p>
         </div>
-     </div>
+        <div class="invoice-thankyou">
+          <p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p>
+        </div>
+        <div class="invoice-contact">
+          <p class="contact-info">Website: www.rang-bd.com</p>
+          <p class="contact-info">Helpline: +880 1777744344, +880 1799998877</p>
+          <p class="contact-info">Email: contactrang@gmail.com</p>
+        </div>
+      </div>
     </div>
   `
 
@@ -958,6 +956,9 @@ const printInvoice = () => {
           .invoice-container {
             max-width: 100%;
             margin: 0 auto;
+            min-height: 95dvh;
+            display: flex;
+            flex-direction: column;
           }
           /* Top Header: Logo, QR Code, Company Info */
           .invoice-top-header {
@@ -1248,16 +1249,11 @@ const printInvoice = () => {
           .summary-value-discount {
             color: #dc2626;
           }
-
-          .summary-footer-div {
-            display: flex;
-            flex-direction: column;
-          }
           /* Footer */
           .invoice-footer {
             // position: fixed;
-            // bottom: 12px;
-            margin-top: 1.5rem;
+            bottom: 12px;
+            margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
             font-size: 0.65rem;
