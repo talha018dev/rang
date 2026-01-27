@@ -6,13 +6,13 @@
   font-family: Poppins;
   font-weight: 600;
   font-style: SemiBold;
-  font-size: 1.2em;
+  font-size: 1.1em;
   line-height: 100%;
   letter-spacing: 0%;
   color: black;
   z-index: 100;
   position: absolute;
-  top: 15px;
+  top: 10px;
   right: 10px;
   transform: translateY(-50%);
   transition: color 0.15s ease-in-out, font-size 0.3s ease-in-out;
