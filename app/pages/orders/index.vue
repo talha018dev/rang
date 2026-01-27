@@ -100,7 +100,7 @@
                       </span>
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !font-medium !text-gray-900">
-                      {{ formatOrderPrice(order.total || 0, order.currency) }}
+                      {{ formatOrderPrice(order.total || 0, order.currency, order.address?.country) }}
                     </td>
                     <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
                       {{ order.items?.length || 0 }} item(s)
@@ -277,39 +277,39 @@ const formatDate = (dateString?: string): string => {
   }
 }
 
-// Format price based on order currency and user's selected currency
-const formatOrderPrice = (price: number, orderCurrency?: string): string => {
+// Format price based on country: Bangladesh shows BDT, all others show USD
+const formatOrderPrice = (price: number, orderCurrency?: string, country?: string): string => {
   if (!price && price !== 0) return '-'
   
   const orderCurr = orderCurrency || 'BDT'
-  const selectedCurr = currency.value
+  const countryName = country || ''
+  const isBangladesh = countryName.toLowerCase() === 'bangladesh'
   
-  // Convert price based on selected currency
+  // Convert price based on country requirement
   let displayPrice = price
   
-  // If order is in USD but user selected BDT, convert to BDT
-  if (orderCurr === 'USD' && selectedCurr === 'BDT') {
-    displayPrice = price * exchangeRate.value
-  }
-  // If order is in BDT but user selected USD, convert to USD
-  else if (orderCurr === 'BDT' && selectedCurr === 'USD') {
-    displayPrice = price / exchangeRate.value
-  }
-  // If currencies match, use price as is
-  
-  // Format based on selected currency
-  if (selectedCurr === 'USD') {
-    // Format as USD
-    if (!isFinite(displayPrice) || isNaN(displayPrice)) {
-      return '$0.00'
+  // If country is Bangladesh, show in BDT
+  if (isBangladesh) {
+    // If order is in USD, convert to BDT
+    if (orderCurr === 'USD') {
+      displayPrice = price * exchangeRate.value
     }
-    return `$${displayPrice.toFixed(2)}`
-  } else {
     // Format as BDT (Taka)
     if (!isFinite(displayPrice) || isNaN(displayPrice)) {
       return 'Tk 0'
     }
     return `Tk ${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  } else {
+    // For all other countries, show in USD
+    // If order is in BDT, convert to USD
+    if (orderCurr === 'BDT') {
+      displayPrice = price / exchangeRate.value
+    }
+    // Format as USD
+    if (!isFinite(displayPrice) || isNaN(displayPrice)) {
+      return '$0.00'
+    }
+    return `$${displayPrice.toFixed(2)}`
   }
 }
 
