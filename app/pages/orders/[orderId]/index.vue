@@ -76,7 +76,7 @@
             <div class="invoice-header-content">
               <div class="invoice-header-left">
                 <h1 class="invoice-title">Order Invoice</h1>
-                <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p>
+                <!-- <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p> -->
               </div>
               <div class="invoice-header-right">
                 <div class="status-badge" :class="getStatusClass(order.status)">
@@ -116,9 +116,9 @@
               <div class="address-card">
                 <h2 class="address-title">Customer Information</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.customer?.name || 'Name: ' }}</p>
-                  <p class="address-line">{{ order.customer?.phone || 'Phone:' }}</p>
-                  <p v-if="order.customer?.email" class="address-line">{{ order.customer.email }}</p>
+                  <p class="address-name">{{ order.address?.name || 'Name: ' }}</p>
+                  <p class="address-line">{{ order.address?.phone || 'Phone:' }}</p>
+                  <p v-if="order.address?.email" class="address-line">{{ order.address.email }}</p>
                 </div>
               </div>
 
@@ -126,13 +126,13 @@
               <div class="address-card">
                 <h2 class="address-title">Shipping Address</h2>
                 <div class="address-details">
-                  <p class="address-name">{{ order.address?.name || '' }}</p>
+                  <!-- <p class="address-name">{{ order.address?.name || '' }}</p> -->
                   <p class="address-line">{{ order.address?.line_1 || '' }}</p>
                   <p v-if="order.address?.line_2" class="address-line">{{ order.address.line_2 }}</p>
-                  <p class="address-line">{{ order.address?.city || '' }}, {{ order.address?.state || '' }}</p>
-                  <p class="address-line">{{ order.address?.country || '' }} - {{ order.address?.postal_code || '' }}</p>
-                  <p class="address-line">Phone: {{ order.address?.phone || '' }}</p>
-                  <p v-if="order.address?.email" class="address-line">Email: {{ order.address.email }}</p>
+                  <p class="address-line">{{ order.address?.city || '' }}{{ order.address?.state ? `, ${order.address.state}` : '' }}</p>
+                  <p class="address-line">{{ order.address?.country || '' }}{{ order.address?.postal_code ? ` - ${order.address.postal_code}` : '' }}</p>
+                  <!-- <p class="address-line">Phone: {{ order.address?.phone || '' }}</p> -->
+                  <!-- <p v-if="order.address?.email" class="address-line">Email: {{ order.address.email }}</p> -->
                 </div>
               </div>
             </div>
@@ -680,7 +680,7 @@ const printInvoice = () => {
     if (orderData.paid_amount > 0 && orderData.paid_amount >= orderData.total) {
       return 'Paid'
     }
-    return 'Cash on delivery'
+    return 'N/A'
   }
 
   // Format invoice number for print (same logic as formatInvoiceNumber)
@@ -779,7 +779,7 @@ const printInvoice = () => {
         <div class="invoice-header-content">
           <div class="invoice-header-left">
             <h1 class="invoice-title">Order Invoice</h1>
-            <p class="invoice-number">Invoice #${formatInvoiceNumberForPrint(orderData.number)}</p>
+            // <p class="invoice-number">Invoice #${formatInvoiceNumberForPrint(orderData.number)}</p>
           </div>
           <div class="invoice-header-right">
             <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
