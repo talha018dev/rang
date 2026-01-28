@@ -170,7 +170,7 @@
                         />
                         <div class="product-info">
                           <p class="product-name">{{ item.product?.name || 'N/A' }}</p>
-                          <p class="product-name">{{ item.product?.sku || 'N/A' }}</p>
+                          <p class="product-name">SKU: {{ item.product?.sku || 'N/A' }}</p>
                           <NuxtLink 
                             v-if="item.product?.slug"
                             :to="`/products/${item.product.category?.slug || 'all'}/${item.product.slug}`"
