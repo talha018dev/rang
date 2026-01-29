@@ -60,6 +60,12 @@
               <a href="https://www.linkedin.com/company/rang-bangladesh" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
                 <Icon name="mdi:linkedin" />
               </a>
+              <a href="https://www.tiktok.com/@rangbangladesh.ltd" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="TikTok">
+                <Icon name="simple-icons:tiktok" />
+              </a>
+              <a href="https://www.youtube.com/channel/UCL7kihcRo3nU6YcJojOr6ZA" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="YouTube">
+                <Icon name="mdi:youtube" />
+              </a>
             </div>
           </div>
         </div>
