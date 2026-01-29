@@ -170,6 +170,7 @@
                         />
                         <div class="product-info">
                           <p class="product-name">{{ item.product?.name || 'N/A' }}</p>
+                          <p class="product-name">SKU: {{ item.product?.sku || 'N/A' }}</p>
                           <NuxtLink 
                             v-if="item.product?.slug"
                             :to="`/products/${item.product.category?.slug || 'all'}/${item.product.slug}`"
@@ -859,7 +860,7 @@ const printInvoice = () => {
                       <img src="${itemImageUrl}" alt="${item.product?.name || ''}" class="item-image" />
                       <div class="item-info">
                         <p class="item-name">${item.product?.name || ''}</p>
-                        <p class="item-sku">SKU: ${variantName}</p>
+                        <p class="item-sku">SKU: ${item.product?.sku}</p>
                         <p class="item-variant">Color: ${getVariantColor(variantName)}</p>
                         <p class="item-variant">Fabric: ${getVariantFabric(variantName)}</p>
                         <p class="item-variant">Size: ${getVariantSize(variantName)}</p>
