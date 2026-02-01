@@ -576,8 +576,8 @@ const goBack = () => {
   router.push('/orders')
 }
 
-// Build full invoice HTML (used by both print and download)
-const getInvoiceFullHtml = (): string => {
+// Build full invoice HTML (used by both print and download). When forPrint is true, includes script that triggers print dialog.
+const getInvoiceFullHtml = (forPrint = false): string => {
   const invoiceElement = document.querySelector('.invoice-container')
   if (!invoiceElement) return ''
 
@@ -1349,7 +1349,7 @@ const getInvoiceFullHtml = (): string => {
         <div class="invoice-container">
           ${invoiceHTML}
         </div>
-        <` + 'script' + `>
+        ${forPrint ? `<` + 'script' + `>
           function waitForImages() {
             const images = document.querySelectorAll('img');
             let loadedCount = 0;
@@ -1398,7 +1398,7 @@ const getInvoiceFullHtml = (): string => {
           window.onload = function() {
             waitForImages();
           };
-        </` + 'script' + `>
+        </` + 'script' + `>` : ''}
       </body>
     </html>
   `
@@ -1417,15 +1417,15 @@ const printInvoice = () => {
     console.error('Failed to open print window')
     return
   }
-  const fullHtml = getInvoiceFullHtml()
+  const fullHtml = getInvoiceFullHtml(true)
   if (!fullHtml) return
   printWindow.document.write(fullHtml)
   printWindow.document.close()
 }
 
-// Download invoice (uses same HTML as print)
+// Download invoice (uses same HTML as print, but without print script)
 const downloadInvoice = () => {
-  const fullHtml = getInvoiceFullHtml()
+  const fullHtml = getInvoiceFullHtml(false)
   if (!fullHtml) return
   const orderData = order.value
   const fileName = orderData?.number ? `invoice-${orderData.number.replace(/[/\\?%*:|"<>]/g, '-')}.html` : 'invoice.html'
