@@ -576,36 +576,20 @@ const goBack = () => {
   router.push('/orders')
 }
 
-// Print invoice
-const printInvoice = () => {
-  // Get the invoice container element
+// Build full invoice HTML (used by both print and download)
+const getInvoiceFullHtml = (): string => {
   const invoiceElement = document.querySelector('.invoice-container')
-  if (!invoiceElement) {
-    console.error('Invoice container not found')
-    return
-  }
+  if (!invoiceElement) return ''
 
-  // Create a new window for printing
-  const printWindow = window.open('', '_blank')
-  if (!printWindow) {
-    console.error('Failed to open print window')
-    return
-  }
+  const orderData = order.value
+  if (!orderData) return ''
 
-  // Clone the element to avoid modifying the original
   const clonedElement = invoiceElement.cloneNode(true) as HTMLElement
-  
-  // Remove the actions section (print button) from the cloned element
   const actionsSection = clonedElement.querySelector('.actions-section')
   if (actionsSection) {
     actionsSection.remove()
   }
 
-  // Get order data for restructuring
-  const orderData = order.value
-  if (!orderData) return
-  
-  // Helper function to format price based on country: Bangladesh shows BDT, all others show USD
   const formatPriceForPrint = (price: number): string => {
     if (!price && price !== 0) return '-'
     
@@ -972,9 +956,8 @@ const printInvoice = () => {
 
   const invoiceHTML = printHTML
 
-  // Create the print document
-  printWindow.document.write(`
-    <!DOCTYPE html>
+  // Build full document (same HTML for both print and download)
+  const fullDocHtml = `<!DOCTYPE html>
     <html>
       <head>
         <title>Invoice - Order #${formatInvoiceNumberForPrint(order.value?.number || '')}</title>
@@ -1418,209 +1401,39 @@ const printInvoice = () => {
         </` + 'script' + `>
       </body>
     </html>
-  `)
-
-  printWindow.document.close()
+  `
+  return fullDocHtml
 }
 
-// Download invoice as HTML file (same content as printed invoice)
-const downloadInvoice = () => {
+// Print invoice (uses same HTML as download)
+const printInvoice = () => {
   const invoiceElement = document.querySelector('.invoice-container')
   if (!invoiceElement) {
     console.error('Invoice container not found')
     return
   }
+  const printWindow = window.open('', '_blank')
+  if (!printWindow) {
+    console.error('Failed to open print window')
+    return
+  }
+  const fullHtml = getInvoiceFullHtml()
+  if (!fullHtml) return
+  printWindow.document.write(fullHtml)
+  printWindow.document.close()
+}
+
+// Download invoice (uses same HTML as print)
+const downloadInvoice = () => {
+  const fullHtml = getInvoiceFullHtml()
+  if (!fullHtml) return
   const orderData = order.value
-  if (!orderData) return
-
-  // Build same content as printed invoice
-  const clonedElement = invoiceElement.cloneNode(true) as HTMLElement
-  const actionsSection = clonedElement.querySelector('.actions-section')
-  if (actionsSection) {
-    actionsSection.remove()
-  }
-
-  const formatPriceForPrint = (price: number): string => {
-    if (!price && price !== 0) return '-'
-    const country = orderData.address?.country || ''
-    const orderCurrency = orderData.currency || 'BDT'
-    const isBangladesh = country.toLowerCase() === 'bangladesh'
-    let displayPrice = price
-    if (isBangladesh) {
-      if (orderCurrency === 'USD') displayPrice = price * exchangeRate.value
-      if (!isFinite(displayPrice) || isNaN(displayPrice)) return 'Tk 0'
-      return `Tk ${displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-    } else {
-      if (orderCurrency === 'BDT') displayPrice = price / exchangeRate.value
-      if (!isFinite(displayPrice) || isNaN(displayPrice)) return '$0.00'
-      return `$${displayPrice.toFixed(2)}`
-    }
-  }
-
-  const formatDateShort = (dateString?: string): string => {
-    if (!dateString) return '-'
-    try {
-      const date = new Date(dateString)
-      const day = date.getDate().toString().padStart(2, '0')
-      const month = date.toLocaleDateString('en-US', { month: 'short' })
-      const year = date.getFullYear()
-      return `${day} ${month}, ${year}`
-    } catch {
-      return dateString
-    }
-  }
-
-  const getPaymentMethod = (): string => {
-    if (orderData.paid_amount > 0 && orderData.paid_amount >= orderData.total) return 'Paid'
-    return 'N/A'
-  }
-
-  const formatInvoiceNumberForPrint = (orderNumber?: string): string => {
-    if (!orderNumber) return ''
-    const parts = orderNumber.split('-')
-    // if (parts.length > 1) {
-    //   const invoicePart = parts[parts.length - 1]
-    //   if (!invoicePart) return orderNumber
-    //   const invoiceNumber = parseInt(invoicePart, 10)
-    //   return isNaN(invoiceNumber) ? invoicePart : invoiceNumber.toString()
-    // }
-    return orderNumber
-  }
-
-  const formatShippingMethodForPrint = (method?: string): string => {
-    if (!method) return 'Home Delivery'
-    const parts = method.split('.')
-    const formatMethodName = (name: string) =>
-      name.split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-    const formatPartnerName = (name: string) =>
-      name.includes('_') ? formatMethodName(name) : name.charAt(0).toUpperCase() + name.slice(1)
-    if (parts.length === 1 && parts[0]) return formatMethodName(parts[0])
-    if (parts.length >= 2 && parts[0] && parts[1]) {
-      const main = formatMethodName(parts[0])
-      const partner = formatPartnerName(parts[1])
-      if (parts.length > 2 && parts[2]) return `${main} - ${partner} (${formatPartnerName(parts[2])})`
-      return `${main} - ${partner}`
-    }
-    return method
-  }
-
-  const logoImg = clonedElement.querySelector('.invoice-logo-image') as HTMLImageElement
-  const logoUrl = logoImg ? logoImg.src : ''
-  const qrCodeUrl = qrCodeDataUrl.value || ''
-
-  const getVariantSize = (name: string): string => {
-    let match = name.match(/(?:size):\s*([^,]+)/i)
-    if (match?.[1]) return match[1].trim()
-    match = name.match(/\b(XXS|XS|S|M|L|XL|XXL)\b/i)
-    if (match?.[1]) return match[1].trim()
-    match = name.match(/\b(\d+\/\d+)\b/i)
-    if (match?.[1]) return match[1].trim()
-    match = name.match(/\b(\d{2,3})\b/i)
-    if (match?.[1]) return match[1].trim()
-    const parts = name.split('/')
-    if (parts.length > 1) {
-      const lastPart = parts[parts.length - 1]?.trim()
-      if (lastPart && (lastPart.match(/^\d+\/\d+$/) || lastPart.match(/^\d+$/))) return lastPart
-    }
-    return 'N/A'
-  }
-  const getVariantColor = (name: string) =>
-    name.match(/(?:color|colour):\s*([^,]+)/i)?.[1]?.trim() || name.split(',')[0]?.trim() || 'N/A'
-  const getVariantFabric = (name: string) =>
-    name.match(/(?:fabric|material):\s*([^,]+)/i)?.[1]?.trim() || 'Cotton'
-
-  const itemsRows = (orderData.items || []).map((item: any) => {
-    const itemImage = item.product?.image_url || ''
-    const itemImageUrl = itemImage.startsWith('http') ? itemImage : (itemImage.startsWith('/') ? window.location.origin + itemImage : window.location.origin + '/' + itemImage)
-    const variantName = item.variant?.name || 'N/A'
-    return `
-      <tr class="table-row">
-        <td class="table-cell table-cell-item">
-          <div class="item-details">
-            <img src="${itemImageUrl}" alt="${(item.product?.name || '').replace(/"/g, '&quot;')}" class="item-image" />
-            <div class="item-info">
-              <p class="item-name">${(item.product?.name || '').replace(/</g, '&lt;')}</p>
-              <p class="item-sku">SKU: ${variantName.replace(/</g, '&lt;')}</p>
-              <p class="item-variant">Color: ${getVariantColor(variantName)}</p>
-              <p class="item-variant">Fabric: ${getVariantFabric(variantName)}</p>
-              <p class="item-variant">Size: ${getVariantSize(variantName)}</p>
-            </div>
-          </div>
-        </td>
-        <td class="table-cell text-right"><p class="cost-text">${formatPriceForPrint(item.price)}</p></td>
-        <td class="table-cell text-center"><p class="quantity-text">x ${item.quantity}</p></td>
-        <td class="table-cell text-right"><p class="total-text">${formatPriceForPrint(item.price * item.quantity)}</p></td>
-      </tr>`
-  }).join('')
-
-  const invoiceBody = `
-    <div class="invoice-container">
-      <div class="invoice-top-header">
-        <div class="invoice-logo"><img src="${logoUrl}" alt="Rang Bangladesh Logo" class="invoice-logo-image" /></div>
-        <div class="invoice-qr-code">${qrCodeUrl ? `<img src="${qrCodeUrl}" alt="Order QR Code" class="qr-code-image-print" />` : '<div class="qr-placeholder">QR Code</div>'}</div>
-        <div class="invoice-company-info">
-          <p class="company-address">রঙ বাংলাদেশ, 91 West Masdair, Narayanganj, 1400 Bangladesh</p>
-          <p class="company-bin">BIN: 005358452-0204</p>
-          <p class="company-mushak">Mushak: 6.3</p>
-        </div>
-      </div>
-      <div class="invoice-header">
-        <div class="invoice-header-content">
-          <div class="invoice-header-left"><h1 class="invoice-title">Order Invoice</h1></div>
-          <div class="invoice-header-right"><div class="status-badge ${(orderData.status || '').toLowerCase().replace(/\s+/g, '-')}">${orderData.readable_status || orderData.status || ''}</div></div>
-        </div>
-      </div>
-      <div class="invoice-details-section">
-        <div class="billing-section">
-          <h3 class="section-label">Billing</h3>
-          <div class="billing-details">
-            <p class="billing-name">${(orderData.address?.name || orderData.customer?.name || '').replace(/</g, '&lt;')}</p>
-            <p class="billing-address">${(orderData.address?.line_1 || '').replace(/</g, '&lt;')}</p>
-            ${orderData.address?.line_2 ? `<p class="billing-address">${orderData.address.line_2.replace(/</g, '&lt;')}</p>` : ''}
-            <p class="billing-address">${(orderData.address?.city || '')}, ${(orderData.address?.state ?? '')}, ${(orderData.address?.postal_code ?? '')}</p>
-            <p class="billing-address">${(orderData.address?.country || '').replace(/</g, '&lt;')}</p>
-            <p class="billing-phone">Phone: ${(orderData.address?.phone || orderData.customer?.phone || '').replace(/</g, '&lt;')}</p>
-            ${(orderData.address?.email || orderData.customer?.email) ? `<p class="billing-email">Email: ${(orderData.address?.email || orderData.customer?.email || '').replace(/</g, '&lt;')}</p>` : ''}
-          </div>
-        </div>
-        <div class="invoice-details-right">
-          <div class="invoice-detail-row"><span class="invoice-detail-label">Invoice Number:</span><span class="invoice-detail-value">${formatInvoiceNumberForPrint(orderData.number)}</span></div>
-          <div class="invoice-detail-row"><span class="invoice-detail-label">Order Date:</span><span class="invoice-detail-value">${formatDateShort(orderData.created_at)}</span></div>
-          <div class="invoice-detail-row"><span class="invoice-detail-label">Payment Method:</span><span class="invoice-detail-value">${getPaymentMethod()}</span></div>
-          <div class="invoice-detail-row"><span class="invoice-detail-label">Shipping Method:</span><span class="invoice-detail-value">${formatShippingMethodForPrint(orderData.shipping_method)}</span></div>
-        </div>
-      </div>
-      <div class="items-section">
-        <table class="items-table">
-          <thead><tr><th class="table-header">Item</th><th class="table-header text-right">Cost</th><th class="table-header text-center">Qty</th><th class="table-header text-right">Total</th></tr></thead>
-          <tbody>${itemsRows}</tbody>
-        </table>
-      </div>
-      <div class="summary-section">
-        <div class="summary-rows">
-          <div class="summary-row"><span class="summary-label">Items Subtotal:</span><span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span></div>
-          ${orderData.coupon_discount > 0 ? `<div class="summary-row"><span class="summary-label">Discount:</span><span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span></div>` : ''}
-          <div class="summary-row"><span class="summary-label">Shipping (ex. tax):</span><span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span></div>
-          <div class="summary-row"><span class="summary-label">VAT:</span><span class="summary-value">${formatPriceForPrint(orderData.vat)}</span></div>
-          <div class="summary-row summary-row-total"><span class="summary-label-total">Order Total:</span><span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span></div>
-        </div>
-      </div>
-      <div class="invoice-footer">
-        <div class="claim-policy"><h4 class="claim-policy-title">== Claim Policy ==</h4><p class="claim-policy-text">All claims must be made within 7 days of delivery. Items must be in original condition with tags attached. Exchange is available for size/color issues within 14 days. Returns are accepted for defective or damaged items only. Customized or personalized items are non-refundable. Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p></div>
-        <div class="invoice-thankyou"><p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p></div>
-        <div class="invoice-contact"><p class="contact-info">Website: www.rang-bd.com</p><p class="contact-info">Helpline: +880 1777744344, +880 1799998877</p><p class="contact-info">Email: contactrang@gmail.com</p></div>
-      </div>
-    </div>`
-
-  const fullHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Invoice - ${orderData.number}</title><style>
-  *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:15px;color:#000;background:#fff;font-size:11px}.invoice-container{max-width:100%;margin:0 auto}.invoice-top-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:2px solid #000}.invoice-logo-image{height:90px;width:auto;object-fit:contain}.qr-code-image-print{width:80px;height:80px;object-fit:contain;border:1px solid #ccc;padding:.25rem;background:#fff}.qr-placeholder{width:80px;height:80px;border:1px solid #ccc;background:#f9fafb;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#666}.invoice-company-info{text-align:right;font-size:.7rem;line-height:1.4}.invoice-header{margin-bottom:1rem;padding-bottom:.75rem;border-bottom:2px solid #000}.invoice-header-content{display:flex;justify-content:space-between;align-items:center}.invoice-title{font-size:1.25rem;font-weight:700;color:#000}.status-badge{display:inline-block;padding:.25rem .75rem;border-radius:.25rem;font-size:.7rem;font-weight:600;text-transform:capitalize}.status-badge.pending,.status-badge.processing{background:#fef3c7;color:#92400e}.status-badge.shipped{background:#dbeafe;color:#1e40af}.status-badge.delivered,.status-badge.completed{background:#d1fae5;color:#065f46}.status-badge.cancelled{background:#fee2e2;color:#991b1b}.invoice-details-section{display:flex;justify-content:space-between;gap:2rem;margin-bottom:1rem}.billing-section{flex:1}.section-label{font-size:.85rem;font-weight:600;margin-bottom:.5rem;color:#374151}.billing-details p{font-size:.7rem;line-height:1.4;margin-bottom:.2rem}.billing-name{font-weight:600}.invoice-details-right{flex:1;text-align:right}.invoice-detail-row{display:flex;justify-content:flex-end;gap:.5rem;margin-bottom:.35rem;font-size:.7rem}.invoice-detail-label{font-weight:500;color:#666}.invoice-detail-value{font-weight:600;color:#000}.items-section{margin-bottom:1rem}.items-table{width:100%;border-collapse:collapse;margin-top:.5rem}.items-table th{background:#4b5563;color:#fff;font-weight:600;font-size:.75rem;padding:.5rem;text-align:left}.items-table th.text-right{text-align:right}.items-table th.text-center{text-align:center}.items-table td{padding:.5rem;text-align:left;border-bottom:1px solid #e5e7eb;font-size:.7rem;vertical-align:top}.items-table td.text-right{text-align:right}.items-table td.text-center{text-align:center}.item-details{display:flex;align-items:flex-start;gap:.5rem}.item-image{width:45px;height:45px;object-fit:cover;border-radius:.25rem;flex-shrink:0}.item-name{font-weight:600;font-size:.75rem;margin-bottom:.2rem}.item-sku,.item-variant{font-size:.65rem;color:#666;margin-bottom:.1rem;line-height:1.3}.cost-text,.quantity-text,.total-text{font-size:.7rem;font-weight:500}.summary-section{margin-bottom:1rem}.summary-rows{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem}.summary-row{display:flex;justify-content:space-between;gap:2rem;max-width:300px;padding:.3rem 0;font-size:.7rem}.summary-row-total{border-top:1px solid #000;padding-top:.5rem;margin-top:.25rem}.summary-label{font-size:.7rem;color:#374151}.summary-label-total{font-size:.8rem;font-weight:600}.summary-value{font-size:.7rem;font-weight:600;color:#374151}.summary-value-total{font-size:.9rem;font-weight:700;color:#000}.summary-value-discount{color:#dc2626}.invoice-footer{margin-top:auto;padding-top:1rem;border-top:1px solid #e5e7eb;font-size:.65rem}.claim-policy{margin-bottom:.75rem}.claim-policy-title{font-size:.7rem;font-weight:600;margin-bottom:.5rem;text-align:center}.claim-policy-text{font-size:.65rem;line-height:1.5;text-align:center}.invoice-thankyou{margin-bottom:.5rem;text-align:center}.thankyou-message{font-weight:600;font-size:.7rem;text-align:center}.invoice-contact{font-size:.65rem;line-height:1.5;text-align:center}.contact-info{margin-bottom:.15rem}
-  </style></head><body>${invoiceBody}</body></html>`
-
+  const fileName = orderData?.number ? `invoice-${orderData.number.replace(/[/\\?%*:|"<>]/g, '-')}.html` : 'invoice.html'
   const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `invoice-${orderData.number.replace(/[/\\?%*:|"<>]/g, '-')}.html`
+  a.download = fileName
   a.click()
   URL.revokeObjectURL(url)
 }
