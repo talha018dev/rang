@@ -274,6 +274,7 @@ interface OrderItem {
   price: number
   quantity: number
   product: {
+    sku: string
     name: string
     slug: string
     image_url: string
@@ -850,8 +851,41 @@ const printInvoice = () => {
                 return match && match[1] ? match[1].trim() : 'Cotton'
               }
               const getVariantSize = (name: string) => {
-                const match = name.match(/(?:size):\s*([^,]+)/i) || name.match(/\b(XXS|XS|S|M|L|XL|XXL|\d{2,3})\b/i)
-                return match && match[1] ? match[1].trim() : 'N/A'
+                // Try to match "size: something" first
+                let match = name.match(/(?:size):\s*([^,]+)/i)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
+                // Try to match standard sizes (XXS, XS, S, M, L, XL, XXL)
+                match = name.match(/\b(XXS|XS|S|M|L|XL|XXL)\b/i)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
+                // Try to match fractional sizes like "2/3", "4/5", "10/11"
+                match = name.match(/\b(\d+\/\d+)\b/i)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
+                // Try to match single numbers (2-3 digits)
+                match = name.match(/\b(\d{2,3})\b/i)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
+                // Extract the part after the last "/" if it looks like a size
+                const parts = name.split('/')
+                if (parts.length > 1) {
+                  const lastPart = parts[parts.length - 1]?.trim()
+                  // Check if it's a fractional size or a number
+                  if (lastPart && (lastPart.match(/^\d+\/\d+$/) || lastPart.match(/^\d+$/))) {
+                    return lastPart
+                  }
+                }
+                
+                return 'N/A'
               }
               return `
                 <tr class="table-row">
