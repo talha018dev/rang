@@ -76,6 +76,7 @@
             <div class="invoice-header-content">
               <div class="invoice-header-left">
                 <h1 class="invoice-title">Order Invoice</h1>
+                <p class="invoice-number">Invoice Number: {{ order.number }}</p>
                 <!-- <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p> -->
               </div>
               <div class="invoice-header-right">
@@ -807,7 +808,7 @@ const printInvoice = () => {
         <div class="invoice-details-right">
           
           <div class="invoice-detail-row">
-            <span class="invoice-detail-label">Order Number:</span>
+            <span class="invoice-detail-label">Invoice Number:</span>
             <span class="invoice-detail-value">${orderData.number}</span>
           </div>
           <div class="invoice-detail-row">
@@ -998,7 +999,6 @@ const printInvoice = () => {
             align-items: flex-start;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 2px solid #000;
             page-break-inside: avoid;
             break-inside: avoid;
           }
@@ -1051,7 +1051,6 @@ const printInvoice = () => {
           .invoice-header {
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 2px solid #000;
             page-break-inside: avoid;
             break-inside: avoid;
           }
