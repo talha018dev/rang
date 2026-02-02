@@ -605,7 +605,7 @@
                     {{ couponError }}
                   </div>
                   <div v-if="couponValidated && couponData" class="coupon-success">
-                    Coupon applied! Discount: {{ formatPrice(couponData.discount || 0) }}
+                    Coupon applied! Discount: {{ formatPrice(effectiveCouponDiscount) }}
                   </div>
                   <button
                     v-if="couponValidated"
@@ -680,7 +680,7 @@
                 </div>
                 <div v-if="couponValidated && couponData" class="total-row">
                   <span class="total-label">Discount</span>
-                  <span class="total-value discount-value">-{{ formatPrice(couponData.discount || 0) }}</span>
+                  <span class="total-value discount-value">-{{ formatPrice(effectiveCouponDiscount) }}</span>
                 </div>
                 <div class="total-row">
                   <span class="total-label">Shipping</span>
@@ -2012,11 +2012,31 @@ const shippingCostDisplay = computed(() => {
   return `Tk ${shippingCostBDT.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 })
 
+// Effective coupon discount: apply min_cost rule when API returns discount 0
+// (e.g. when order amount >= min_cost, fixed coupon should give full value)
+const effectiveCouponDiscount = computed(() => {
+  if (!couponValidated.value || !couponData.value) return 0
+  const data = couponData.value
+  const coupon = data.coupon
+  const orderAmount = subtotal.value ?? 0
+  if (coupon && typeof coupon.min_cost === 'number' && orderAmount >= coupon.min_cost) {
+    if (coupon.discount_type === 'fixed' && typeof coupon.value === 'number') {
+      return coupon.value
+    }
+    if (coupon.discount_type === 'percentage' && typeof coupon.value === 'number') {
+      const amount = (orderAmount * coupon.value) / 100
+      const cap = coupon.max_discount != null ? Number(coupon.max_discount) : Infinity
+      return Math.min(amount, cap)
+    }
+  }
+  return data.discount ?? 0
+})
+
 // Calculate grand total with coupon discount
 // Note: totalPrice already includes VAT, so we use it directly
 const grandTotal = computed(() => {
   const baseTotal = totalPrice.value // This already includes VAT
-  const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
+  const discount = effectiveCouponDiscount.value
   
   // Convert discount to current currency if needed
   let discountInCurrentCurrency = discount
@@ -2039,7 +2059,7 @@ const grandTotal = computed(() => {
 const grandTotalDisplay = computed(() => {
   // Calculate total with discounts and gift package, but without shipping if not selected
   const baseTotal = totalPrice.value // This already includes VAT
-  const discount = couponValidated.value && couponData.value ? (couponData.value.discount || 0) : 0
+  const discount = effectiveCouponDiscount.value
   
   // Convert discount to current currency if needed
   let discountInCurrentCurrency = discount
