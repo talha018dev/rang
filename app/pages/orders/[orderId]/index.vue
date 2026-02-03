@@ -217,6 +217,10 @@
                 <span class="summary-label">Coupon Discount:</span>
                 <span class="summary-value discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
               </div>
+              <div v-if="order.fixed_discount > 0" class="summary-row">
+                <span class="summary-label">Fixed Discount:</span>
+                <span class="summary-value discount">-{{ formatOrderPrice(order.fixed_discount) }}</span>
+              </div>
               <div class="summary-row">
                 <span class="summary-label">Shipping:</span>
                 <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
@@ -317,6 +321,7 @@ interface OrderCustomer {
 interface Order {
   number: string
   coupon_discount: number
+  fixed_discount: number
   vat: number
   shipping: number
   item_total: number
@@ -917,8 +922,14 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           </div>
           ${orderData.coupon_discount > 0 ? `
           <div class="summary-row">
-            <span class="summary-label">Discount:</span>
+            <span class="summary-label">Coupon Discount:</span>
             <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
+          </div>
+          ` : ''}
+          ${orderData.fixed_discount > 0 ? `
+          <div class="summary-row">
+            <span class="summary-label">Fixed Discount:</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.fixed_discount)}</span>
           </div>
           ` : ''}
           <div class="summary-row">
