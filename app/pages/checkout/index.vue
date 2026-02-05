@@ -2017,18 +2017,18 @@ const shippingCostDisplay = computed(() => {
 const effectiveCouponDiscount = computed(() => {
   if (!couponValidated.value || !couponData.value) return 0
   const data = couponData.value
-  const coupon = data.coupon
-  const orderAmount = subtotal.value ?? 0
-  if (coupon && typeof coupon.min_cost === 'number' && orderAmount >= coupon.min_cost) {
-    if (coupon.discount_type === 'fixed' && typeof coupon.value === 'number') {
-      return coupon.value
-    }
-    if (coupon.discount_type === 'percentage' && typeof coupon.value === 'number') {
-      const amount = (orderAmount * coupon.value) / 100
-      const cap = coupon.max_discount != null ? Number(coupon.max_discount) : Infinity
-      return Math.min(amount, cap)
-    }
-  }
+  // const coupon = data.coupon
+  // const orderAmount = subtotal.value ?? 0
+  // if (coupon && typeof coupon.min_cost === 'number' && orderAmount >= coupon.min_cost) {
+  //   if (coupon.discount_type === 'fixed' && typeof coupon.value === 'number') {
+  //     return coupon.value
+  //   }
+  //   if (coupon.discount_type === 'percentage' && typeof coupon.value === 'number') {
+  //     const amount = (orderAmount * coupon.value) / 100
+  //     const cap = coupon.max_discount != null ? Number(coupon.max_discount) : Infinity
+  //     return Math.min(amount, cap)
+  //   }
+  // }
   return data.discount ?? 0
 })
 
