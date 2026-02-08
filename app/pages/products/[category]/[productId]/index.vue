@@ -220,7 +220,7 @@
                             <span class="vat-text">+ VAT</span>
                         </div>
                         <span v-if="showComparePrice && effectiveComparePrice > selectedVariantPrice" class="discount">
-                            -{{ Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100) }}%
+                            -{{ product?.active_campaign?.discount_type === 'fixed' ? `${product?.active_campaign?.discount_value}` : Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100) }}%
                         </span>
                     </div>
 
