@@ -23,7 +23,13 @@ export interface ProductCategory {
   slug: string
 }
 
+export interface ActiveCampaign {
+  discount_type: string
+  discount_value: number
+}
+
 export interface Product {
+  active_campaign: ActiveCampaign
   id: number
   name: string
   slug: string
