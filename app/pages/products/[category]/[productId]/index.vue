@@ -125,7 +125,7 @@
                         <!-- Show Less Overlay for last thumbnail (when all images are shown) -->
                         <div v-if="hasMoreImages && index === productImages.length - 1 && showMoreImages" 
                             class="thumbnail-show-more-overlay"
-                            @click.stop="showMoreImages = false">
+                            @click.stop="setShowLessImages">
                             <div class="thumbnail-show-more-content">
                                 <span class="thumbnail-show-more-text">Show Less</span>
                                 <svg class="thumbnail-show-more-arrow rotated"
@@ -1118,6 +1118,13 @@ const selectedColorIndex = ref(0)
 const selectedSize = ref('')
 const quantity = ref(1)
 const showMoreImages = ref(false)
+const THUMBNAILS_VISIBLE_COLLAPSED = 4
+const setShowLessImages = () => {
+  showMoreImages.value = false
+  if (selectedImageIndex.value >= THUMBNAILS_VISIBLE_COLLAPSED) {
+    selectedImageIndex.value = 0
+  }
+}
 const showShareTooltipMobile = ref(false)
 const showShareTooltipDesktop = ref(false)
 const shareTooltipText = ref('Link copied!')
