@@ -236,20 +236,20 @@
                 <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-label">VAT:</span>
-                <span class="summary-value">+{{ formatOrderPrice(order.vat) }}</span>
+                <span class="summary-label">(+) VAT:</span>
+                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
               </div>
               <div v-if="order.coupon_discount > 0" class="summary-row">
-                <span class="summary-label">Coupon Discount:</span>
+                <span class="summary-label">(-) Coupon Discount:</span>
                 <span class="summary-value discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
               </div>
               <div v-if="order.fixed_discount > 0" class="summary-row">
-                <span class="summary-label">Fixed Discount:</span>
+                <span class="summary-label">(-) Fixed Discount:</span>
                 <span class="summary-value discount">-{{ formatOrderPrice(order.fixed_discount) }}</span>
               </div>
               <div class="summary-row">
-                <span class="summary-label">Shipping:</span>
-                <span class="summary-value">+{{ formatOrderPrice(order.shipping) }}</span>
+                <span class="summary-label">(+) Shipping Charge:</span>
+                <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
               </div>
               <div class="summary-row summary-row-total">
                 <span class="summary-label-total">Total:</span>
@@ -930,24 +930,24 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">VAT:</span>
-            <span class="summary-value">+${formatPriceForPrint(orderData.vat)}</span>
+            <span class="summary-label">(+) VAT:</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
           </div>
           ${orderData.coupon_discount > 0 ? `
           <div class="summary-row">
-            <span class="summary-label">Coupon Discount:</span>
+            <span class="summary-label">(-) Coupon Discount:</span>
             <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
           </div>
           ` : ''}
           ${orderData.fixed_discount > 0 ? `
           <div class="summary-row">
-            <span class="summary-label">Fixed Discount:</span>
+            <span class="summary-label">(-) Fixed Discount:</span>
             <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.fixed_discount)}</span>
           </div>
           ` : ''}
           <div class="summary-row">
-            <span class="summary-label">Shipping (ex. tax):</span>
-            <span class="summary-value">+${formatPriceForPrint(orderData.shipping)}</span>
+            <span class="summary-label">(+) Shipping Charge:</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
           </div>
           <div class="summary-row summary-row-total">
             <span class="summary-label-total">Order Total:</span>
@@ -968,7 +968,6 @@ const getInvoiceFullHtml = (forPrint = false): string => {
         <div class="invoice-contact">
           <p class="contact-info">Website: www.rang-bd.com</p>
           <p class="contact-info">Helpline: +880 1777744344, +880 1799998877</p>
-          <p class="contact-info">Email: contactrang@gmail.com</p>
         </div>
       </div>
     </div>
