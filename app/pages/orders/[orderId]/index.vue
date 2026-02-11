@@ -235,6 +235,10 @@
                 <span class="summary-label">Item Total:</span>
                 <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
               </div>
+              <div class="summary-row">
+                <span class="summary-label">VAT:</span>
+                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
+              </div>
               <div v-if="order.coupon_discount > 0" class="summary-row">
                 <span class="summary-label">Coupon Discount:</span>
                 <span class="summary-value discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
@@ -246,10 +250,6 @@
               <div class="summary-row">
                 <span class="summary-label">Shipping:</span>
                 <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
-              </div>
-              <div class="summary-row">
-                <span class="summary-label">VAT:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
               </div>
               <div class="summary-row summary-row-total">
                 <span class="summary-label-total">Total:</span>
@@ -933,6 +933,10 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-label">Items Subtotal:</span>
             <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
           </div>
+          <div class="summary-row">
+            <span class="summary-label">VAT:</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
+          </div>
           ${orderData.coupon_discount > 0 ? `
           <div class="summary-row">
             <span class="summary-label">Coupon Discount:</span>
@@ -948,10 +952,6 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           <div class="summary-row">
             <span class="summary-label">Shipping (ex. tax):</span>
             <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
-          </div>
-          <div class="summary-row">
-            <span class="summary-label">VAT:</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
           </div>
           <div class="summary-row summary-row-total">
             <span class="summary-label-total">Order Total:</span>
