@@ -84,6 +84,8 @@
                   <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
                   <p class="invoice-company-name">Rangbangladesh Headoffice</p>
                   <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+                  <p class="invoice-company-contact">contactrang@gmail.com</p>
+                  <p class="invoice-company-contact">+8801777-744344</p>
                 </div>
                 <div class="status-badge" :class="getStatusClass(order.status)">
                   {{ order.readable_status || order.status }}
@@ -788,6 +790,8 @@ const getInvoiceFullHtml = (forPrint = false): string => {
               <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
               <p class="invoice-company-name">Rangbangladesh Headoffice</p>
               <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+              <p class="invoice-company-contact">contactrang@gmail.com</p>
+              <p class="invoice-company-contact">+8801777-744344</p>
             </div>
             <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
               ${orderData.readable_status || orderData.status || ''}
@@ -1108,6 +1112,12 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             font-size: 0.75rem;
             color: #6b7280;
             margin: 0;
+            line-height: 1.3;
+          }
+          .invoice-company-address .invoice-company-contact {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0.15rem 0 0 0;
             line-height: 1.3;
           }
           .status-badge {
@@ -1846,6 +1856,13 @@ onMounted(() => {
   font-size: 0.875rem;
   color: #6b7280;
   margin: 0;
+  line-height: 1.4;
+}
+
+.invoice-company-address .invoice-company-contact {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
   line-height: 1.4;
 }
 
