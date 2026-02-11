@@ -80,6 +80,11 @@
                 <!-- <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p> -->
               </div>
               <div class="invoice-header-right">
+                <div class="invoice-company-address">
+                  <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
+                  <p class="invoice-company-name">Rangbangladesh Headoffice</p>
+                  <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+                </div>
                 <div class="status-badge" :class="getStatusClass(order.status)">
                   {{ order.readable_status || order.status }}
                 </div>
@@ -779,6 +784,11 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <h1 class="invoice-title">Order Invoice</h1>
           </div>
           <div class="invoice-header-right">
+            <div class="invoice-company-address">
+              <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
+              <p class="invoice-company-name">Rangbangladesh Headoffice</p>
+              <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+            </div>
             <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
               ${orderData.readable_status || orderData.status || ''}
             </div>
@@ -1075,6 +1085,30 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           }
           .invoice-header-right {
             flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+            text-align: right;
+          }
+          .invoice-company-address { margin: 0; }
+          .invoice-company-address .invoice-company-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #000;
+            margin: 0 0 0.2rem 0;
+          }
+          .invoice-company-address .invoice-company-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #374151;
+            margin: 0 0 0.1rem 0;
+          }
+          .invoice-company-address .invoice-company-address-line {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.3;
           }
           .status-badge {
             display: inline-block;
@@ -1780,6 +1814,39 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.invoice-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  text-align: right;
+}
+
+.invoice-company-address {
+  margin: 0;
+}
+
+.invoice-company-address .invoice-company-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.invoice-company-address .invoice-company-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 0.125rem 0;
+}
+
+.invoice-company-address .invoice-company-address-line {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .invoice-title {
