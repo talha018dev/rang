@@ -237,7 +237,7 @@
               </div>
               <div class="summary-row">
                 <span class="summary-label">VAT:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
+                <span class="summary-value">+{{ formatOrderPrice(order.vat) }}</span>
               </div>
               <div v-if="order.coupon_discount > 0" class="summary-row">
                 <span class="summary-label">Coupon Discount:</span>
@@ -249,7 +249,7 @@
               </div>
               <div class="summary-row">
                 <span class="summary-label">Shipping:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
+                <span class="summary-value">+{{ formatOrderPrice(order.shipping) }}</span>
               </div>
               <div class="summary-row summary-row-total">
                 <span class="summary-label-total">Total:</span>
@@ -935,7 +935,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           </div>
           <div class="summary-row">
             <span class="summary-label">VAT:</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
+            <span class="summary-value">+${formatPriceForPrint(orderData.vat)}</span>
           </div>
           ${orderData.coupon_discount > 0 ? `
           <div class="summary-row">
@@ -951,7 +951,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           ` : ''}
           <div class="summary-row">
             <span class="summary-label">Shipping (ex. tax):</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
+            <span class="summary-value">+${formatPriceForPrint(orderData.shipping)}</span>
           </div>
           <div class="summary-row summary-row-total">
             <span class="summary-label-total">Order Total:</span>
