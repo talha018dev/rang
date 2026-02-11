@@ -87,24 +87,24 @@
                   class="qr-code-image"
                 />
               </div>
+              <div class="invoice-header-right">
+                <div class="invoice-company-address">
+                  <p class="invoice-company-name">Rang Bangladesh Head Office</p>
+                  <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+                  <p class="invoice-company-contact">contactrang@gmail.com</p>
+                  <p class="invoice-company-contact">+8801777-744344</p>
+                  <p class="invoice-company-contact">BIN: 005358452-0204</p>
+                  <p class="invoice-company-contact">Mushak: 6.3</p>
+                </div>
+                <div class="status-badge" :class="getStatusClass(order.status)">
+                  {{ order.readable_status || order.status }}
+                </div>
+              </div>
             </div>
             <div class="invoice-header-content">
               <div class="invoice-header-left">
                 <h1 class="invoice-title">Order Invoice</h1>
                 <p class="invoice-number">Invoice Number: {{ order.number }}</p>
-                <!-- <p class="invoice-number">Order #{{ formatInvoiceNumber(order.number) }}</p> -->
-              </div>
-              <div class="invoice-header-right">
-                <div class="invoice-company-address">
-                  <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
-                  <p class="invoice-company-name">Rangbangladesh Headoffice</p>
-                  <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
-                  <p class="invoice-company-contact">contactrang@gmail.com</p>
-                  <p class="invoice-company-contact">+8801777-744344</p>
-                </div>
-                <div class="status-badge" :class="getStatusClass(order.status)">
-                  {{ order.readable_status || order.status }}
-                </div>
               </div>
             </div>
           </div>
@@ -763,18 +763,26 @@ const getInvoiceFullHtml = (forPrint = false): string => {
   // Build restructured HTML for print
   const printHTML = `
     <div class="invoice-container">
-      <!-- Top Header: Logo, QR Code, Company Info -->
-      <div class="invoice-top-header">
+      <!-- Top Header: Logo, QR Code + Company Address + Status -->
+      <div class="invoice-top-header invoice-header-top">
         <div class="invoice-logo">
           <img src="${logoUrl}" alt="Rang Bangladesh Logo" class="invoice-logo-image" />
         </div>
         <div class="invoice-qr-code">
           ${qrCodeUrl ? `<img src="${qrCodeUrl}" alt="Order QR Code" class="qr-code-image-print" />` : '<div class="qr-placeholder">QR Code</div>'}
         </div>
-        <div class="invoice-company-info">
-          <p class="company-address">রঙ বাংলাদেশ, 91 West Masdair, Narayanganj, 1400 Bangladesh</p>
-          <p class="company-bin">BIN: 005358452-0204</p>
-          <p class="company-mushak">Mushak: 6.3</p>
+        <div class="invoice-header-right">
+          <div class="invoice-company-address">
+            <p class="invoice-company-name">Rang Bangladesh Head Office</p>
+            <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
+            <p class="invoice-company-contact">contactrang@gmail.com</p>
+            <p class="invoice-company-contact">+8801777-744344</p>
+            <p class="invoice-company-contact">BIN: 005358452-0204</p>
+            <p class="invoice-company-contact">Mushak: 6.3</p>
+          </div>
+          <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
+            ${orderData.readable_status || orderData.status || ''}
+          </div>
         </div>
       </div>
 
@@ -783,18 +791,6 @@ const getInvoiceFullHtml = (forPrint = false): string => {
         <div class="invoice-header-content">
           <div class="invoice-header-left">
             <h1 class="invoice-title">Order Invoice</h1>
-          </div>
-          <div class="invoice-header-right">
-            <div class="invoice-company-address">
-              <p class="invoice-company-title">Invoice - Rang Bangladesh</p>
-              <p class="invoice-company-name">Rangbangladesh Headoffice</p>
-              <p class="invoice-company-address-line">91 West Masdair, Narayanganj, 1400 Bangladesh</p>
-              <p class="invoice-company-contact">contactrang@gmail.com</p>
-              <p class="invoice-company-contact">+8801777-744344</p>
-            </div>
-            <div class="status-badge ${orderData.status ? orderData.status.toLowerCase().replace(/\s+/g, '-') : ''}">
-              ${orderData.readable_status || orderData.status || ''}
-            </div>
           </div>
         </div>
       </div>
@@ -1005,29 +1001,35 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             display: flex;
             flex-direction: column;
           }
-          /* Top Header: Logo, QR Code, Company Info */
-          .invoice-top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+          /* Top Header: Logo, QR Code (center), Company Address */
+          .invoice-top-header.invoice-header-top {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
             page-break-inside: avoid;
             break-inside: avoid;
           }
-          .invoice-logo {
-            flex: 0 0 auto;
+          .invoice-top-header .invoice-logo {
+            grid-column: 1;
           }
           .invoice-logo-image {
             height: 90px;
             width: auto;
             object-fit: contain;
           }
-          .invoice-qr-code {
-            flex: 0 0 auto;
+          .invoice-top-header .invoice-qr-code {
+            grid-column: 2;
+            justify-self: center;
             display: flex;
             align-items: center;
             justify-content: center;
+          }
+          .invoice-top-header .invoice-header-right {
+            grid-column: 3;
+            justify-self: end;
           }
           .qr-code-image-print {
             width: 80px;
@@ -1809,6 +1811,11 @@ onMounted(() => {
   justify-self: center;
 }
 
+.invoice-header-top .invoice-header-right {
+  grid-column: 3;
+  justify-self: end;
+}
+
 .qr-code-image {
   width: 150px;
   height: 150px;
@@ -2265,12 +2272,19 @@ onMounted(() => {
   }
 
   .invoice-logo {
-    grid-column: 1;
     justify-content: center;
+    grid-column: 1;
   }
 
   .invoice-qr-code {
     grid-column: 1;
+  }
+
+  .invoice-header-top .invoice-header-right {
+    grid-column: 1;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
   }
 
   .invoice-logo-image {
