@@ -54,6 +54,21 @@
 
         <!-- Invoice Content -->
         <div v-else-if="order" class="invoice-container">
+          <!-- Print and Download Buttons (top) -->
+          <div class="actions-section actions-section-top">
+            <button @click="printInvoice" class="print-button">
+              <svg class="print-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print Invoice
+            </button>
+            <button @click="downloadInvoice" class="download-button">
+              <svg class="download-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Download Invoice
+            </button>
+          </div>
           <!-- Invoice Header -->
           <div class="invoice-header">
             <div class="invoice-header-top">
@@ -249,22 +264,6 @@
                 <span class="summary-value due">{{ formatOrderPrice(order.due) }}</span>
               </div>
             </div>
-          </div>
-
-          <!-- Print and Download Buttons -->
-          <div class="actions-section">
-            <button @click="printInvoice" class="print-button">
-              <svg class="print-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-              </svg>
-              Print Invoice
-            </button>
-            <button @click="downloadInvoice" class="download-button">
-              <svg class="download-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Download Invoice
-            </button>
           </div>
         </div>
       </div>
@@ -2185,6 +2184,15 @@ onMounted(() => {
   gap: 1rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e5e7eb;
+}
+
+.actions-section-top {
+  padding-top: 0;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-top: none;
+  border-bottom: 1px solid #e5e7eb;
+  justify-content: flex-end;
 }
 
 .print-button,
