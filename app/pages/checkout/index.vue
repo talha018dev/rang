@@ -619,7 +619,7 @@
 
                 <!-- Order Notes -->
                 <div class="form-group">
-                  <label for="orderNotes" class="form-label">Order Notes *</label>
+                  <label for="orderNotes" class="form-label">Order Notes</label>
                   <textarea
                     id="orderNotes"
                     v-model="orderNotes"
@@ -2171,7 +2171,6 @@ const validateCheckout = (): boolean => {
   }
 
   required('paymentMethod', paymentMethod.value, 'Payment option is required.')
-  required('orderNotes', orderNotes.value, 'Order notes is required.')
 
   errors.value = nextErrors
   return Object.keys(nextErrors).length === 0
