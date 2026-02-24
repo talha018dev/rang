@@ -42,11 +42,30 @@ export default defineNuxtPlugin(() => {
     }
 
     const testEventCode = getTestEventCode()
+    const advancedMatching = getAdvancedMatchingFromStorage()
 
-    // If pixel already initialized (e.g. from app.vue script in head), optionally re-init with test_event_code
+    function getAdvancedMatchingFromStorage(): Record<string, string> | null {
+      try {
+        const raw = localStorage.getItem('meta_pixel_advanced_matching')
+        if (!raw) return null
+        const parsed = JSON.parse(raw) as Record<string, string>
+        const out: Record<string, string> = {}
+        for (const [k, v] of Object.entries(parsed)) {
+          if (v && typeof v === 'string' && v.trim()) out[k] = v.trim()
+        }
+        return Object.keys(out).length > 0 ? out : null
+      } catch (_) {
+        return null
+      }
+    }
+
+    const initOptions: Record<string, unknown> = { ...(advancedMatching || {}) }
+    if (testEventCode) initOptions.test_event_code = testEventCode
+
+    // If pixel already initialized (e.g. from app.vue script in head), re-init with advanced matching and/or test_event_code
     if (window.fbq) {
-      if (testEventCode) {
-        window.fbq('init', pixelId, { test_event_code: testEventCode })
+      if (Object.keys(initOptions).length > 0) {
+        window.fbq('init', pixelId, initOptions)
       }
       return
     }
@@ -76,8 +95,8 @@ export default defineNuxtPlugin(() => {
       'https://connect.facebook.net/en_US/fbevents.js'
     )
 
-    // Initialize and track PageView (with test_event_code if in URL or sessionStorage)
-    window.fbq('init', pixelId, testEventCode ? { test_event_code: testEventCode } : undefined)
+    // Initialize and track PageView (with advanced matching and/or test_event_code)
+    window.fbq('init', pixelId, Object.keys(initOptions).length > 0 ? initOptions : undefined)
     window.fbq('track', 'PageView')
   }
 })

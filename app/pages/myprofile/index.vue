@@ -113,6 +113,7 @@ import { useHead, useRoute, useRouter } from 'nuxt/app'
 import { onMounted, ref } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
+import { setMetaPixelAdvancedMatching } from '~~/composables/useMetaPixelAdvancedMatching'
 import '../profile/profile.css'
 
 // Type definitions
@@ -188,6 +189,11 @@ const fetchProfile = async () => {
         name: response.data.name || '',
         email: response.data.email || ''
       }
+      setMetaPixelAdvancedMatching({
+        email: response.data.email,
+        phone: response.data.phone,
+        name: response.data.name
+      })
     } else {
       errorMessage.value = response.message || 'Failed to load profile.'
     }
@@ -242,7 +248,11 @@ const handleUpdateProfile = async () => {
         name: formData.value.name.trim(),
         email: formData.value.email.trim() || null
       }
-      
+      setMetaPixelAdvancedMatching({
+        email: formData.value.email.trim() || null,
+        phone: profileData.value.phone,
+        name: formData.value.name.trim()
+      })
       // Clear success message after 3 seconds
       setTimeout(() => {
         successMessage.value = ''

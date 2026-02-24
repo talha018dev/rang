@@ -108,6 +108,7 @@
 import { useHead, useRouter } from 'nuxt/app'
 import { ref } from 'vue'
 import { useApi } from '~~/composables/useApi'
+import { setMetaPixelAdvancedMatching } from '~~/composables/useMetaPixelAdvancedMatching'
 import './login.css'
 
 // Type definitions
@@ -219,8 +220,17 @@ const handleVerifyOTP = async () => {
         }
       }
 
+      const customer = response.data.customer
+      if (customer) {
+        setMetaPixelAdvancedMatching({
+          email: customer.email,
+          phone: phone.value || customer.phone,
+          name: customer.name
+        })
+      }
+
       // Check if name is missing
-      const customerName = response.data.customer?.name
+      const customerName = customer?.name
       if (!customerName || customerName.trim() === '') {
         // Name is missing, show profile completion form
         step.value = 'profile'
@@ -262,6 +272,11 @@ const handleUpdateProfile = async () => {
     })
 
     if (response.success) {
+      setMetaPixelAdvancedMatching({
+        email: email.value.trim() || null,
+        phone: phone.value,
+        name: name.value.trim()
+      })
       // Profile updated successfully, login complete
       await handleLoginSuccess()
     } else {
