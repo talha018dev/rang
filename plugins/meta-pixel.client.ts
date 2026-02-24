@@ -24,8 +24,30 @@ export default defineNuxtPlugin(() => {
       return
     }
 
-    // Skip if pixel already initialized (e.g. from app.vue script in head) to avoid double PageView
+    function getTestEventCode(): string | null {
+      if (typeof window === 'undefined' || !window.location) return null
+      const params = new URLSearchParams(window.location.search)
+      const fromUrl = params.get('test_event_code')
+      if (fromUrl) {
+        try {
+          sessionStorage.setItem('meta_pixel_test_event_code', fromUrl)
+        } catch (_) {}
+        return fromUrl
+      }
+      try {
+        return sessionStorage.getItem('meta_pixel_test_event_code')
+      } catch (_) {
+        return null
+      }
+    }
+
+    const testEventCode = getTestEventCode()
+
+    // If pixel already initialized (e.g. from app.vue script in head), optionally re-init with test_event_code
     if (window.fbq) {
+      if (testEventCode) {
+        window.fbq('init', pixelId, { test_event_code: testEventCode })
+      }
       return
     }
 
@@ -54,8 +76,8 @@ export default defineNuxtPlugin(() => {
       'https://connect.facebook.net/en_US/fbevents.js'
     )
 
-    // Initialize and track PageView
-    window.fbq('init', pixelId)
+    // Initialize and track PageView (with test_event_code if in URL or sessionStorage)
+    window.fbq('init', pixelId, testEventCode ? { test_event_code: testEventCode } : undefined)
     window.fbq('track', 'PageView')
   }
 })

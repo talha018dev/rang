@@ -2383,6 +2383,10 @@ const handlePlaceOrder = async () => {
 
     // Check if order was successful
     if (response && (response.success !== false)) {
+      // Capture order total and currency before clearCart() (clearing cart zeros out grandTotal)
+      const orderTotalForPixel = grandTotal.value
+      const currencyForPixel = currencyCode.value
+
       // Clear cart after successful order
       clearCart()
 
@@ -2403,8 +2407,8 @@ const handlePlaceOrder = async () => {
         query: {
           orderNumber: orderNumber,
           gateway: gateway,
-          orderTotal: String(grandTotal.value),
-          currency: currencyCode.value
+          orderTotal: String(orderTotalForPixel),
+          currency: currencyForPixel
         }
       })
     } else {

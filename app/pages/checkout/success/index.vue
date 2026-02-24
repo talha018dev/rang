@@ -52,17 +52,20 @@ useHead({
 
 const route = useRoute()
 
-// Fire Meta Pixel Purchase event once per order (thank-you page only, per Meta support)
+// Fire Meta Pixel Purchase event once per order (thank-you page only, per Meta support).
+// Only send when value > 0 and currency are valid so Meta can calculate ROAS.
 function trackMetaPixelPurchase() {
   const w = window as Window & { fbq?: (a: string, e: string, p?: Record<string, unknown>) => void }
   if (typeof window === 'undefined' || !w.fbq) return
   const orderNumber = (route.query.orderNumber as string) || ''
   if (!orderNumber) return
+  const orderTotal = parseFloat((route.query.orderTotal as string) || '')
+  const currency = ((route.query.currency as string) || 'BDT').trim()
+  // Meta requires valid price and currency for ROAS; skip if value missing or not positive
+  if (!(orderTotal > 0) || !currency) return
   const storageKey = `meta_pixel_purchase_${orderNumber}`
   if (sessionStorage.getItem(storageKey)) return
   sessionStorage.setItem(storageKey, '1')
-  const orderTotal = parseFloat((route.query.orderTotal as string) || '0')
-  const currency = (route.query.currency as string) || 'BDT'
   w.fbq('track', 'Purchase', {
     value: orderTotal,
     currency,
