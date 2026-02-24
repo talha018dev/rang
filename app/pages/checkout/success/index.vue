@@ -54,7 +54,8 @@ const route = useRoute()
 
 // Fire Meta Pixel Purchase event once per order (thank-you page only, per Meta support)
 function trackMetaPixelPurchase() {
-  if (typeof window === 'undefined' || !window.fbq) return
+  const w = window as Window & { fbq?: (a: string, e: string, p?: Record<string, unknown>) => void }
+  if (typeof window === 'undefined' || !w.fbq) return
   const orderNumber = (route.query.orderNumber as string) || ''
   if (!orderNumber) return
   const storageKey = `meta_pixel_purchase_${orderNumber}`
@@ -62,7 +63,7 @@ function trackMetaPixelPurchase() {
   sessionStorage.setItem(storageKey, '1')
   const orderTotal = parseFloat((route.query.orderTotal as string) || '0')
   const currency = (route.query.currency as string) || 'BDT'
-  window.fbq('track', 'Purchase', {
+  w.fbq('track', 'Purchase', {
     value: orderTotal,
     currency,
     order_id: orderNumber
