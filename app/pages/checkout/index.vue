@@ -2397,12 +2397,14 @@ const handlePlaceOrder = async () => {
         gateway = 'paypal'
       }
 
-      // Navigate to order confirmation page with order number and gateway
+      // Navigate to order confirmation page with order number, gateway, and order value for Meta Pixel
       navigateTo({
         path: '/checkout/success',
         query: {
           orderNumber: orderNumber,
-          gateway: gateway
+          gateway: gateway,
+          orderTotal: String(grandTotal.value),
+          currency: currencyCode.value
         }
       })
     } else {

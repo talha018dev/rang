@@ -52,8 +52,27 @@ useHead({
 
 const route = useRoute()
 
+// Fire Meta Pixel Purchase event once per order (thank-you page only, per Meta support)
+function trackMetaPixelPurchase() {
+  if (typeof window === 'undefined' || !window.fbq) return
+  const orderNumber = (route.query.orderNumber as string) || ''
+  if (!orderNumber) return
+  const storageKey = `meta_pixel_purchase_${orderNumber}`
+  if (sessionStorage.getItem(storageKey)) return
+  sessionStorage.setItem(storageKey, '1')
+  const orderTotal = parseFloat((route.query.orderTotal as string) || '0')
+  const currency = (route.query.currency as string) || 'BDT'
+  window.fbq('track', 'Purchase', {
+    value: orderTotal,
+    currency,
+    order_id: orderNumber
+  })
+}
+
 // Call payment redirect API
 onMounted(async () => {
+  trackMetaPixelPurchase()
+
   // Get gateway from query params
   const gateway = (route.query.gateway as string) || 'ssl'
   

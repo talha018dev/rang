@@ -24,6 +24,11 @@ export default defineNuxtPlugin(() => {
       return
     }
 
+    // Skip if pixel already initialized (e.g. from app.vue script in head) to avoid double PageView
+    if (window.fbq) {
+      return
+    }
+
     // Initialize Meta Pixel
     ;(function(f: any, b: any, e: string, v: string, n?: any, t?: any, s?: any) {
       if (f.fbq) return
