@@ -231,37 +231,47 @@
           <div class="summary-section">
             <div class="summary-card">
               <h2 class="section-title">Order Summary</h2>
-              <div class="summary-row">
-                <span class="summary-label">Item Total:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
-              </div>
-              <div class="summary-row">
-                <span class="summary-label">(+) VAT:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
-              </div>
-              <div v-if="order.coupon_discount > 0" class="summary-row">
-                <span class="summary-label">(-) Coupon Discount:</span>
-                <span class="summary-value discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
-              </div>
-              <div v-if="order.fixed_discount > 0" class="summary-row">
-                <span class="summary-label">(-) Fixed Discount:</span>
-                <span class="summary-value discount">-{{ formatOrderPrice(order.fixed_discount) }}</span>
-              </div>
-              <div class="summary-row">
-                <span class="summary-label">(+) Shipping Charge:</span>
-                <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
-              </div>
-              <div class="summary-row summary-row-total">
-                <span class="summary-label-total">Total:</span>
-                <span class="summary-value-total">{{ formatOrderPrice(order.total) }}</span>
-              </div>
-              <div v-if="order.paid_amount > 0" class="summary-row">
-                <span class="summary-label">Paid Amount:</span>
-                <span class="summary-value paid">{{ formatOrderPrice(order.paid_amount) }}</span>
-              </div>
-              <div v-if="order.due > 0" class="summary-row">
-                <span class="summary-label">Due:</span>
-                <span class="summary-value due">{{ formatOrderPrice(order.due) }}</span>
+              <div class="summary-rows">
+                <div class="summary-row">
+                  <span class="summary-label">Item Sub Total</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
+                  <span class="summary-label">(-) Discount{{ invoiceSummary?.discountPercent ? ` (${invoiceSummary.discountPercent}%)` : '' }}</span>
+                  <span class="summary-value summary-value-discount">{{ formatOrderPrice(invoiceSummary?.totalDiscount ?? 0) }}</span>
+                </div>
+                <div class="summary-row summary-row-divider">
+                  <span class="summary-label">Total Amount</span>
+                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.totalAmount) : '-' }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
+                  <span class="summary-label">(+) VAT (10%)</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
+                </div>
+                <div class="summary-row summary-row-divider">
+                  <span class="summary-label">Grand Total</span>
+                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.grandTotal) : '-' }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
+                  <span class="summary-label">(+) Wages (Making)</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.wagesMaking ?? 0) }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
+                  <span class="summary-label">(+) Wages (Alter)</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.wagesAlter ?? 0) }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
+                  <span class="summary-label">(+) Shipping Charge</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
+                </div>
+                <div class="summary-row summary-row-divider summary-row-total">
+                  <span class="summary-label-total">Total Order Amount</span>
+                  <span class="summary-value-total">{{ formatOrderPrice(order.total) }}</span>
+                </div>
+                <div v-if="order.paid_amount > 0" class="summary-row">
+                  <span class="summary-label">Paid Amount</span>
+                  <span class="summary-value paid">{{ formatOrderPrice(order.paid_amount) }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -344,6 +354,8 @@ interface Order {
   shipping_method: string
   pickup_location: any | null
   items: OrderItem[]
+  wages_making?: number
+  wages_alter?: number
 }
 
 interface OrderResponse {
@@ -420,6 +432,30 @@ const isLoading = ref(false)
 const error = ref<string | null>(null)
 const showPaymentFailedAlert = ref(false)
 const qrCodeDataUrl = ref<string>('')
+
+// Invoice summary derived values (match printed invoice pattern)
+const invoiceSummary = computed(() => {
+  const o = order.value
+  if (!o) return null
+  const totalDiscount = (o.coupon_discount || 0) + (o.fixed_discount || 0)
+  const totalAmount = (o.item_total || 0) - totalDiscount
+  const grandTotal = totalAmount + (o.vat || 0)
+  const wagesMaking = o.wages_making ?? 0
+  const wagesAlter = o.wages_alter ?? 0
+  const totalOrderAmount = grandTotal + wagesMaking + wagesAlter + (o.shipping || 0)
+  const discountPercent = (o.item_total && o.item_total > 0 && totalDiscount > 0)
+    ? Math.round((totalDiscount / o.item_total) * 100)
+    : 0
+  return {
+    totalDiscount,
+    totalAmount,
+    grandTotal,
+    wagesMaking,
+    wagesAlter,
+    totalOrderAmount,
+    discountPercent
+  }
+})
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -926,33 +962,54 @@ const getInvoiceFullHtml = (forPrint = false): string => {
       <div class="summary-section">
         <div class="summary-rows">
           <div class="summary-row">
-            <span class="summary-label">Items Subtotal:</span>
+            <span class="summary-label">Item Sub Total</span>
             <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
           </div>
-          <div class="summary-row">
-            <span class="summary-label">(+) VAT:</span>
+          ${(function () {
+            const totalDiscount = (orderData.coupon_discount || 0) + (orderData.fixed_discount || 0)
+            const totalAmount = (orderData.item_total || 0) - totalDiscount
+            const grandTotal = totalAmount + (orderData.vat || 0)
+            const wagesMaking = orderData.wages_making ?? 0
+            const wagesAlter = orderData.wages_alter ?? 0
+            const totalOrderAmount = grandTotal + wagesMaking + wagesAlter + (orderData.shipping || 0)
+            const discountPercent = (orderData.item_total && orderData.item_total > 0 && totalDiscount > 0)
+              ? Math.round((totalDiscount / orderData.item_total) * 100)
+              : 0
+            return `
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(-) Discount${discountPercent ? ` (${discountPercent}%)` : ''}</span>
+            <span class="summary-value summary-value-discount">${formatPriceForPrint(totalDiscount)}</span>
+          </div>
+          <div class="summary-row summary-row-divider">
+            <span class="summary-label">Total Amount</span>
+            <span class="summary-value">${formatPriceForPrint(totalAmount)}</span>
+          </div>
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(+) VAT (10%)</span>
             <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
           </div>
-          ${orderData.coupon_discount > 0 ? `
-          <div class="summary-row">
-            <span class="summary-label">(-) Coupon Discount:</span>
-            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.coupon_discount)}</span>
+          <div class="summary-row summary-row-divider">
+            <span class="summary-label">Grand Total</span>
+            <span class="summary-value">${formatPriceForPrint(grandTotal)}</span>
           </div>
-          ` : ''}
-          ${orderData.fixed_discount > 0 ? `
-          <div class="summary-row">
-            <span class="summary-label">(-) Fixed Discount:</span>
-            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.fixed_discount)}</span>
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(+) Wages (Making)</span>
+            <span class="summary-value">${formatPriceForPrint(wagesMaking)}</span>
           </div>
-          ` : ''}
-          <div class="summary-row">
-            <span class="summary-label">(+) Shipping Charge:</span>
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(+) Wages (Alter)</span>
+            <span class="summary-value">${formatPriceForPrint(wagesAlter)}</span>
+          </div>
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(+) Shipping Charge</span>
             <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
           </div>
-          <div class="summary-row summary-row-total">
-            <span class="summary-label-total">Order Total:</span>
+          <div class="summary-row summary-row-divider summary-row-total">
+            <span class="summary-label-total">Total Order Amount</span>
             <span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span>
           </div>
+            `
+          })()}
         </div>
       </div>
 
@@ -1285,22 +1342,33 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           .summary-rows {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            gap: 0.25rem;
+            align-items: stretch;
+            gap: 0;
+            max-width: 320px;
+            margin-left: auto;
           }
           .summary-row {
             display: flex;
             justify-content: space-between;
             gap: 2rem;
             width: 100%;
-            max-width: 300px;
             padding: 0.3rem 0;
             font-size: 0.7rem;
           }
+          .summary-row-indent .summary-label {
+            padding-left: 0.5rem;
+          }
+          .summary-row-divider {
+            border-top: 1px solid #333;
+            padding-top: 0.35rem;
+            margin-top: 0.2rem;
+          }
           .summary-row-total {
-            border-top: 1px solid #000;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
             padding-top: 0.5rem;
-            margin-top: 0.25rem;
+            padding-bottom: 0.5rem;
+            margin-top: 0.35rem;
           }
           .summary-label {
             font-size: 0.7rem;
@@ -1308,7 +1376,8 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           }
           .summary-label-total {
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
+            color: #000;
           }
           .summary-value {
             font-size: 0.7rem;
@@ -2127,12 +2196,28 @@ onMounted(() => {
   border: 1px solid #e5e7eb;
 }
 
+.summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .summary-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0;
+  border-bottom: none;
+}
+
+.summary-row-indent .summary-label {
+  padding-left: 0.5rem;
+}
+
+.summary-row-divider {
+  border-top: 1px solid #d1d5db;
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .summary-row:last-child {
@@ -2156,6 +2241,10 @@ onMounted(() => {
   font-size: 0.875rem;
   font-weight: 500;
   color: #111827;
+}
+
+.summary-value-discount {
+  color: #dc2626;
 }
 
 .summary-value.discount {
