@@ -5,14 +5,15 @@ export interface WorkingHours {
 }
 
 export interface Location {
+  id: number
   name: string
   address: string
   phone: string
   working_hours: WorkingHours
-  off_day: string
-  fb_page_link: string
-  email: string
-  google_map_url: string
+  off_day: string | null
+  fb_page_link: string | null
+  email: string | null
+  google_map_url: string | null
   image: string
 }
 
@@ -27,6 +28,6 @@ export interface LocationResponse {
   message: string
   data: Location[]
   pagination: null
-  queries: LocationQuery[]
+  queries?: LocationQuery[]
 }
 

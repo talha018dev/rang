@@ -15,15 +15,15 @@
       </div>
 
       <section v-else-if="locations && locations.length > 0" class="districts-section">
-        <h2 class="districts-title">Browse by District</h2>
+        <h2 class="districts-title">Browse by Store</h2>
         <div class="districts-buttons">
           <button
-            v-for="district in districts"
-            :key="district"
-            @click="scrollToDistrict(district)"
+            v-for="location in locations"
+            :key="location.name"
+            @click="scrollToLocation(location)"
             class="district-button"
           >
-            {{ district }}
+            {{ displayName(location.name) }}
           </button>
         </div>
       </section>
@@ -45,7 +45,7 @@
               />
             </div>
             <div class="location-content">
-              <h2 class="location-name">{{ location.name }}</h2>
+              <h2 class="location-name">{{ displayName(location.name) }}</h2>
               <div class="location-details">
                 <div class="location-address">
                   <strong>Address:</strong>
@@ -120,69 +120,23 @@ const locations = ref<Location[] | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
-// Extract districts from locations
-const districts = computed(() => {
-  if (!locations.value || locations.value.length === 0) return []
-  
-  const districtSet = new Set<string>()
-  locations.value.forEach(location => {
-    // Extract district from location name (assuming format like "Rang - District Name" or just "District Name")
-    // You can adjust this logic based on your actual data format
-    const district = extractDistrict(location.name, location.address)
-    if (district) {
-      districtSet.add(district)
-    }
-  })
-  
-  return Array.from(districtSet).sort()
-})
-
-// Extract district from name or address
-const extractDistrict = (name: string, address: string): string => {
-  // Try to extract from name first (common patterns: "Rang - District", "District Branch", etc.)
-  const nameParts = name.split(/[-–—]/).map(part => part.trim())
-  if (nameParts.length > 1) {
-    const lastPart = nameParts[nameParts.length - 1]
-    if (lastPart) {
-      return lastPart
-    }
-  }
-  
-  // Try to extract from address (look for common district patterns)
-  const addressLower = address.toLowerCase()
-  const commonDistricts = ['dhaka', 'chittagong', 'sylhet', 'rajshahi', 'khulna', 'barisal', 'rangpur', 'mymensingh']
-  for (const district of commonDistricts) {
-    if (addressLower.includes(district)) {
-      return district.charAt(0).toUpperCase() + district.slice(1)
-    }
-  }
-  
-  // If no pattern matches, use the location name as district
-  return name
+// Strip "Rang Bangladesh - " or "Rang Bangladesh " from the start of the name
+const displayName = (name: string): string => {
+  return name.replace(/^Rang Bangladesh\s*[-–—]?\s*/i, '').trim() || name
 }
 
-// Generate a unique ID for each location card
+// Generate a stable ID for each location card (for scroll target), using name-based slug
 const getLocationId = (location: Location): string => {
-  const district = extractDistrict(location.name, location.address)
-  return `location-${district.toLowerCase().replace(/\s+/g, '-')}-${location.name.toLowerCase().replace(/\s+/g, '-')}`
+  const slug = location.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  return `location-${slug}`
 }
 
-// Scroll to a specific district
-const scrollToDistrict = (district: string) => {
-  if (!locations.value) return
-  
-  // Find the first location in this district
-  const location = locations.value.find(loc => {
-    const locDistrict = extractDistrict(loc.name, loc.address)
-    return locDistrict === district
-  })
-  
-  if (location) {
-    const locationId = getLocationId(location)
-    const element = document.getElementById(locationId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+// Scroll to a specific location by location object
+const scrollToLocation = (location: Location) => {
+  const locationId = getLocationId(location)
+  const element = document.getElementById(locationId)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 
