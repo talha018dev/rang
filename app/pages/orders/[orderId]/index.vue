@@ -62,11 +62,11 @@
               </svg>
               Print Invoice
             </button>
-            <button @click="downloadInvoice" class="download-button">
+            <button @click="downloadInvoice" class="download-button" :disabled="isDownloadingPdf">
               <svg class="download-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              Download Invoice
+              {{ isDownloadingPdf ? 'Generating PDF...' : 'Download Invoice' }}
             </button>
           </div>
           <!-- Invoice Header -->
@@ -1565,19 +1565,36 @@ const printInvoice = () => {
   printWindow.document.close()
 }
 
-// Download invoice (uses same HTML as print, but without print script)
-const downloadInvoice = () => {
-  const fullHtml = getInvoiceFullHtml(false)
-  if (!fullHtml) return
+// Download invoice as PDF
+const isDownloadingPdf = ref(false)
+const downloadInvoice = async () => {
+  const invoiceElement = document.querySelector('.invoice-container')
+  if (!invoiceElement || !order.value) return
   const orderData = order.value
-  const fileName = orderData?.number ? `invoice-${orderData.number.replace(/[/\\?%*:|"<>]/g, '-')}.html` : 'invoice.html'
-  const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = fileName
-  a.click()
-  URL.revokeObjectURL(url)
+  const fileName = orderData.number ? `invoice-${orderData.number.replace(/[/\\?%*:|"<>]/g, '-')}.pdf` : 'invoice.pdf'
+  const actionsSection = invoiceElement.querySelector('.actions-section')
+  const previousDisplay = actionsSection ? (actionsSection as HTMLElement).style.display : ''
+  if (actionsSection) {
+    (actionsSection as HTMLElement).style.display = 'none'
+  }
+  isDownloadingPdf.value = true
+  try {
+    const html2pdf = (await import('html2pdf.js')).default
+    await html2pdf().set({
+      margin: [8, 8, 8, 8],
+      filename: fileName,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(invoiceElement as HTMLElement).save()
+  } catch (err) {
+    console.error('PDF download failed:', err)
+  } finally {
+    if (actionsSection) {
+      (actionsSection as HTMLElement).style.display = previousDisplay
+    }
+    isDownloadingPdf.value = false
+  }
 }
 
 // Check for payment failed query parameter
@@ -2327,6 +2344,17 @@ onMounted(() => {
 .print-button:hover,
 .download-button:hover {
   background: #c2410c;
+}
+
+.print-button:disabled,
+.download-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.print-button:disabled:hover,
+.download-button:disabled:hover {
+  background: #ea580c;
 }
 
 .print-icon,
