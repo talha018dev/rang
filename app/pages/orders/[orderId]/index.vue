@@ -236,15 +236,15 @@
                   <span class="summary-label">Item Sub Total</span>
                   <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
                 </div>
-                <div class="summary-row summary-row-indent">
+                <div v-if="invoiceSummary && invoiceSummary.totalDiscount > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Discount{{ invoiceSummary?.discountPercent ? ` (${invoiceSummary.discountPercent}%)` : '' }}</span>
-                  <span class="summary-value summary-value-discount">{{ formatOrderPrice(invoiceSummary?.totalDiscount ?? 0) }}</span>
+                  <span class="summary-value summary-value-discount">{{ formatOrderPrice(invoiceSummary.totalDiscount) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Total Amount</span>
                   <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.totalAmount) : '-' }}</span>
                 </div>
-                <div class="summary-row summary-row-indent">
+                <div v-if="order.vat > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) VAT (10%)</span>
                   <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
                 </div>
@@ -252,15 +252,15 @@
                   <span class="summary-label">Grand Total</span>
                   <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.grandTotal) : '-' }}</span>
                 </div>
-                <div class="summary-row summary-row-indent">
+                <div v-if="(invoiceSummary?.wagesMaking ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Making)</span>
                   <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.wagesMaking ?? 0) }}</span>
                 </div>
-                <div class="summary-row summary-row-indent">
+                <div v-if="(invoiceSummary?.wagesAlter ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Alter)</span>
                   <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.wagesAlter ?? 0) }}</span>
                 </div>
-                <div class="summary-row summary-row-indent">
+                <div v-if="order.shipping > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Shipping Charge</span>
                   <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
                 </div>
@@ -971,44 +971,62 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             const grandTotal = totalAmount + (orderData.vat || 0)
             const wagesMaking = orderData.wages_making ?? 0
             const wagesAlter = orderData.wages_alter ?? 0
-            const totalOrderAmount = grandTotal + wagesMaking + wagesAlter + (orderData.shipping || 0)
+            const shipping = orderData.shipping || 0
             const discountPercent = (orderData.item_total && orderData.item_total > 0 && totalDiscount > 0)
               ? Math.round((totalDiscount / orderData.item_total) * 100)
               : 0
-            return `
+            const parts = []
+            if (totalDiscount > 0) {
+              parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(-) Discount${discountPercent ? ` (${discountPercent}%)` : ''}</span>
             <span class="summary-value summary-value-discount">${formatPriceForPrint(totalDiscount)}</span>
-          </div>
+          </div>`)
+            }
+            parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Total Amount</span>
             <span class="summary-value">${formatPriceForPrint(totalAmount)}</span>
-          </div>
+          </div>`)
+            if (orderData.vat > 0) {
+              parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) VAT (10%)</span>
             <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
-          </div>
+          </div>`)
+            }
+            parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Grand Total</span>
             <span class="summary-value">${formatPriceForPrint(grandTotal)}</span>
-          </div>
+          </div>`)
+            if (wagesMaking > 0) {
+              parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) Wages (Making)</span>
             <span class="summary-value">${formatPriceForPrint(wagesMaking)}</span>
-          </div>
+          </div>`)
+            }
+            if (wagesAlter > 0) {
+              parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) Wages (Alter)</span>
             <span class="summary-value">${formatPriceForPrint(wagesAlter)}</span>
-          </div>
+          </div>`)
+            }
+            if (shipping > 0) {
+              parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) Shipping Charge</span>
             <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
-          </div>
+          </div>`)
+            }
+            parts.push(`
           <div class="summary-row summary-row-divider summary-row-total">
             <span class="summary-label-total">Total Order Amount</span>
             <span class="summary-value-total">${formatPriceForPrint(orderData.total)}</span>
-          </div>
-            `
+          </div>`)
+            return parts.join('')
           })()}
         </div>
       </div>
@@ -1017,7 +1035,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
       <div class="invoice-footer">
         <div class="claim-policy">
           <h4 class="claim-policy-title">== Claim Policy ==</h4>
-          <p class="claim-policy-text">All claims must be made within 7 days of delivery. Items must be in original condition with tags attached. Exchange is available for size/color issues within 14 days. Returns are accepted for defective or damaged items only. Customized or personalized items are non-refundable. Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p>
+          <p class="claim-policy-text">*All claims must be made within 7 days of delivery. *Items must be in original condition with tags attached. *Exchange is available for size/color issues within 14 days. *Returns are accepted for defective or damaged items only. *Customized or personalized items are non-refundable. *Shipping charges are non-refundable unless item is defective. Please contact customer service for any claims or returns.</p>
         </div>
         <div class="invoice-thankyou">
           <p class="thankyou-message">Thank you for shopping with Rang Bangladesh Ltd.</p>
