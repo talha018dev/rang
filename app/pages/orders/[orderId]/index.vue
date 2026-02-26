@@ -898,6 +898,12 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                   return match[1].trim()
                 }
                 
+                // Try to match decimal sizes (e.g. 6.75, 7.5) before integer match to avoid "75" from "6.75"
+                match = name.match(/\b(\d+\.\d+)\b/)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
                 // Try to match standard sizes (XXS, XS, S, M, L, XL, XXL)
                 match = name.match(/\b(XXS|XS|S|M|L|XL|XXL)\b/i)
                 if (match && match[1]) {
@@ -910,7 +916,13 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                   return match[1].trim()
                 }
                 
-                // Try to match single numbers (2-3 digits)
+                // Try to match "X Yards" or "X yards" (e.g. "6.75 Yards" when decimal already matched above, or integer)
+                match = name.match(/\b(\d+\.?\d*)\s*[Yy]ards?\b/i)
+                if (match && match[1]) {
+                  return match[1].trim()
+                }
+                
+                // Try to match single numbers (2-3 digits) - after decimal so we don't grab "75" from "6.75"
                 match = name.match(/\b(\d{2,3})\b/i)
                 if (match && match[1]) {
                   return match[1].trim()
@@ -920,10 +932,13 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                 const parts = name.split('/')
                 if (parts.length > 1) {
                   const lastPart = parts[parts.length - 1]?.trim()
-                  // Check if it's a fractional size or a number
-                  if (lastPart && (lastPart.match(/^\d+\/\d+$/) || lastPart.match(/^\d+$/))) {
+                  // Check if it's a fractional size or a number (including decimal)
+                  if (lastPart && (lastPart.match(/^\d+\/\d+$/) || lastPart.match(/^\d+\.?\d*$/))) {
                     return lastPart
                   }
+                  // "6.75 Yards" - extract number
+                  const yardMatch = lastPart?.match(/(\d+\.?\d*)\s*[Yy]ards?/)
+                  if (yardMatch && yardMatch[1]) return yardMatch[1].trim()
                 }
                 
                 return 'N/A'
