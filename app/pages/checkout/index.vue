@@ -668,31 +668,39 @@
                 </div>
               </div>
 
-              <!-- Order Totals -->
-              <div class="order-totals">
-                <div class="total-row">
-                  <span class="total-label">Subtotal</span>
-                  <span class="total-value">{{ subtotalDisplay }}</span>
+              <!-- Order Totals (same layout as invoice: Subtotal → Discount → Total Amount → VAT → Grand Total → Shipping → Gift → Total Order Amount) -->
+              <div class="order-totals summary-rows">
+                <div class="total-row summary-row">
+                  <span class="total-label summary-label">Item Sub Total</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(subtotal) }}</span>
                 </div>
-                <div v-if="totalVat > 0" class="total-row">
-                  <span class="total-label">VAT</span>
-                  <span class="total-value">{{ totalVatDisplay }}</span>
+                <div v-if="couponValidated && couponData && effectiveCouponDiscount > 0" class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(-) Discount</span>
+                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(effectiveDiscountInCurrentCurrency) }}</span>
                 </div>
-                <div v-if="couponValidated && couponData" class="total-row">
-                  <span class="total-label">Discount</span>
-                  <span class="total-value discount-value">-{{ formatPrice(effectiveCouponDiscount) }}</span>
+                <div class="total-row summary-row summary-row-divider">
+                  <span class="total-label summary-label">Total Amount</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(totalAmountAfterDiscount) }}</span>
                 </div>
-                <div class="total-row">
-                  <span class="total-label">Shipping</span>
-                  <span class="total-value">{{ shippingCostDisplay }}</span>
+                <div v-if="totalVat > 0" class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(+) VAT</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(totalVat) }}</span>
                 </div>
-                <div v-if="isGiftPackage" class="total-row">
-                  <span class="total-label">Gift Package</span>
-                  <span class="total-value">{{ giftPackageChargeDisplay }}</span>
+                <div class="total-row summary-row summary-row-divider">
+                  <span class="total-label summary-label">Grand Total</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(grandTotalBeforeShipping) }}</span>
                 </div>
-                <div class="total-row total-row-final">
-                  <span class="total-label">Total</span>
-                  <span class="total-value">{{ grandTotalDisplay }}</span>
+                <div class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(+) Shipping Charge</span>
+                  <span class="total-value summary-value">{{ shippingCostDisplay }}</span>
+                </div>
+                <div v-if="isGiftPackage" class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(+) Gift Package</span>
+                  <span class="total-value summary-value">{{ giftPackageChargeDisplay }}</span>
+                </div>
+                <div class="total-row total-row-final summary-row summary-row-divider summary-row-total">
+                  <span class="total-label summary-label summary-label-total">Total Order Amount</span>
+                  <span class="total-value summary-value summary-value-total">{{ formatCheckoutPrice(totalOrderAmount) }}</span>
                 </div>
               </div>
 
@@ -753,6 +761,44 @@ const {
 
 const { formatPrice, currency, currencyCode, exchangeRate, setCurrency } = useCurrency()
 
+// Format price same as invoice: BDT = Tk + toLocaleString(2 decimals), USD = $ + toFixed(2)
+const formatCheckoutPrice = (price: number | null | undefined): string => {
+  if (price === null || price === undefined || !isFinite(price) || isNaN(price)) {
+    return currency.value === 'USD' ? '$0.00' : 'Tk 0'
+  }
+  if (currency.value === 'USD') {
+    return `$${Number(price).toFixed(2)}`
+  }
+  return `Tk ${Number(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+// Discount in current currency (API returns BDT)
+const effectiveDiscountInCurrentCurrency = computed(() => {
+  const discount = effectiveCouponDiscount.value
+  if (!discount || discount <= 0) return 0
+  if (currency.value === 'USD') return discount / exchangeRate.value
+  return discount
+})
+
+// Total amount after discount (subtotal - discount)
+const totalAmountAfterDiscount = computed(() => {
+  const sub = subtotal.value
+  const disc = effectiveDiscountInCurrentCurrency.value
+  return Math.max(0, sub - disc)
+})
+
+// Grand total before shipping/gift (Total Amount + VAT)
+const grandTotalBeforeShipping = computed(() => {
+  return totalAmountAfterDiscount.value + totalVat.value
+})
+
+// Final total order amount (Grand Total + Shipping + Gift Package)
+const totalOrderAmount = computed(() => {
+  const shipping = shippingMethod.value && shippingCost.value != null ? shippingCost.value : 0
+  const gift = giftPackageCharge.value
+  return grandTotalBeforeShipping.value + shipping + gift
+})
+
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') return null
@@ -771,21 +817,17 @@ const getAuthHeaders = () => {
   return headers
 }
 
-// Format item total price based on current currency
+// Format item total price (same format as invoice)
 const formatItemTotal = (item: any) => {
   if (currency.value === 'USD') {
-    const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0 
-      ? item.price_usd 
+    const itemPriceUsd = item.price_usd !== undefined && item.price_usd > 0
+      ? item.price_usd
       : (item.price / exchangeRate.value)
     const totalUsd = itemPriceUsd * item.quantity
-    if (!isFinite(totalUsd) || isNaN(totalUsd)) {
-      return '$0.00'
-    }
-    return `$${totalUsd.toFixed(2)}`
-  } else {
-    const total = item.price * item.quantity
-    return `Tk ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    return formatCheckoutPrice(totalUsd)
   }
+  const total = item.price * item.quantity
+  return formatCheckoutPrice(total)
 }
 
 // Loading state for cart initialization

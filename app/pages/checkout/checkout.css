@@ -528,6 +528,48 @@
 }
 
 /* Order Totals */
+.order-totals.summary-rows {
+  gap: 0;
+  padding-top: 1rem;
+}
+
+.order-totals .summary-row {
+  padding: 0.5rem 0;
+}
+
+.order-totals .summary-row-indent .summary-label {
+  padding-left: 0.5rem;
+}
+
+.order-totals .summary-row-divider {
+  border-top: 1px solid #d1d5db;
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.order-totals .summary-row-total {
+  border-top: 2px solid #111827;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.order-totals .summary-label-total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.order-totals .summary-value-total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.order-totals .summary-value-discount {
+  color: #dc2626;
+}
+
 .order-totals {
   display: flex;
   flex-direction: column;
