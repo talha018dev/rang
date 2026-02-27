@@ -244,9 +244,9 @@
                   <span class="summary-label">Total Amount</span>
                   <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.totalAmount) : '-' }}</span>
                 </div>
-                <div v-if="order.vat > 0" class="summary-row summary-row-indent">
+                <div v-if="(invoiceSummary?.vat ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) VAT (10%)</span>
-                  <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.vat ?? 0) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Grand Total</span>
@@ -434,12 +434,15 @@ const showPaymentFailedAlert = ref(false)
 const qrCodeDataUrl = ref<string>('')
 
 // Invoice summary derived values (match printed invoice pattern)
+// VAT is calculated after discount is applied (10% of totalAmount)
+const VAT_RATE = 0.10
 const invoiceSummary = computed(() => {
   const o = order.value
   if (!o) return null
   const totalDiscount = (o.coupon_discount || 0) + (o.fixed_discount || 0)
   const totalAmount = (o.item_total || 0) - totalDiscount
-  const grandTotal = totalAmount + (o.vat || 0)
+  const vat = Math.round(totalAmount * VAT_RATE * 100) / 100
+  const grandTotal = totalAmount + vat
   const wagesMaking = o.wages_making ?? 0
   const wagesAlter = o.wages_alter ?? 0
   const totalOrderAmount = grandTotal + wagesMaking + wagesAlter + (o.shipping || 0)
@@ -449,6 +452,7 @@ const invoiceSummary = computed(() => {
   return {
     totalDiscount,
     totalAmount,
+    vat,
     grandTotal,
     wagesMaking,
     wagesAlter,
@@ -983,7 +987,8 @@ const getInvoiceFullHtml = (forPrint = false): string => {
           ${(function () {
             const totalDiscount = (orderData.coupon_discount || 0) + (orderData.fixed_discount || 0)
             const totalAmount = (orderData.item_total || 0) - totalDiscount
-            const grandTotal = totalAmount + (orderData.vat || 0)
+            const vat = Math.round(totalAmount * 0.10 * 100) / 100
+            const grandTotal = totalAmount + vat
             const wagesMaking = orderData.wages_making ?? 0
             const wagesAlter = orderData.wages_alter ?? 0
             const shipping = orderData.shipping || 0
@@ -1003,11 +1008,11 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-label">Total Amount</span>
             <span class="summary-value">${formatPriceForPrint(totalAmount)}</span>
           </div>`)
-            if (orderData.vat > 0) {
+            if (vat > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) VAT (10%)</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
+            <span class="summary-value">${formatPriceForPrint(vat)}</span>
           </div>`)
             }
             parts.push(`
