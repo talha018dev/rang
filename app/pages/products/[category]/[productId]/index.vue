@@ -217,7 +217,8 @@
                         <div class="price-container">
                             <span v-if="showComparePrice" class="original-price">{{ formatPrice(comparePriceToDisplay.price, comparePriceToDisplay.priceUsd) }}</span>
                             <span class="current-price">{{ formatPrice(currentPriceToDisplay.price, currentPriceToDisplay.priceUsd) }}</span>
-                            <span class="vat-text">+ VAT</span>
+                            <span v-if="product?.vat != null && product?.vat !== ''" class="vat-text">+ VAT ({{ product.vat }}%)</span>
+                            <span v-else class="vat-text">+ VAT</span>
                         </div>
                         <span v-if="showComparePrice && effectiveComparePrice > selectedVariantPrice" class="discount">
                             -{{ product?.active_campaign?.discount_type === 'fixed' ? `${currency === 'BDT' ? 'Tk' : '$'}${currency === 'BDT' ? product?.active_campaign?.discount_value : product?.active_campaign?.discount_value/exchangeRate}` : `${Math.round(((effectiveComparePrice - selectedVariantPrice) / effectiveComparePrice) * 100)}%` }}
@@ -1909,7 +1910,7 @@ const handleAddToCart = () => {
             sku: selectedVariant?.sku || product.value.sku,
             product_id: product.value.id,
             variant_id: selectedVariant?.id,
-            vat: (product.value as any).vat || (product.value as any).category?.vat || null
+            vat: product.value?.vat ?? product.value?.category?.vat ?? null
         }
 
         // Add combo product properties if it's a combo - new format
@@ -2084,7 +2085,7 @@ const addFrequentlyBoughtToCart = () => {
           sku: firstVariant?.sku || item.product?.sku || '',
           product_id: item.id,
           variant_id: firstVariant?.id,
-          vat: (item.product as any)?.vat || ((item.product as any)?.category as any)?.vat || null
+          vat: (item.product as any)?.vat ?? ((item.product as any)?.category as any)?.vat ?? null
       })
     })
 
@@ -2150,7 +2151,7 @@ const addMatchingSeriesToCart = () => {
           sku: selectedVariant?.sku || item.product?.sku || '',
           product_id: item.id,
           variant_id: selectedVariant?.id,
-          vat: (item.product as any)?.vat || ((item.product as any)?.category as any)?.vat || null
+          vat: (item.product as any)?.vat ?? ((item.product as any)?.category as any)?.vat ?? null
       })
     })
 

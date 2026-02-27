@@ -21,6 +21,7 @@ export interface ProductVariant {
 export interface ProductCategory {
   name: string
   slug: string
+  vat?: string | number | null
 }
 
 export interface ActiveCampaign {
@@ -40,6 +41,7 @@ export interface Product {
   compare_price: number
   price_usd?: number
   compare_price_usd?: number
+  vat?: string | number | null
   images: Record<string, string>
   category: ProductCategory
   variants: ProductVariant[]
