@@ -16,6 +16,12 @@ export interface CartItem {
   product_id?: number
   variant_id?: number
   vat?: string | number // VAT percentage (e.g., "10" or 10)
+  // Campaign discount (from product active_campaign) – for display in cart/checkout
+  compare_price?: number
+  compare_price_usd?: number
+  campaign_discount_type?: string
+  campaign_discount_value?: number
+  campaign_name?: string
 }
 
 const cartItems = ref<CartItem[]>([])
@@ -229,6 +235,44 @@ export const useCart = () => {
     }
   })
 
+  // Total campaign discount (from product active_campaign) across all items
+  const totalCampaignDiscount = computed(() => {
+    if (currency.value === 'USD') {
+      return cartItems.value.reduce((sum, item) => {
+        const compareUsd = item.compare_price_usd ?? (item.compare_price != null && item.compare_price > 0 && exchangeRate.value > 0 ? item.compare_price / exchangeRate.value : 0)
+        const priceUsd = item.price_usd !== undefined && item.price_usd > 0 ? item.price_usd : (item.price / exchangeRate.value)
+        if (compareUsd > priceUsd) {
+          return sum + (compareUsd - priceUsd) * item.quantity
+        }
+        return sum
+      }, 0)
+    } else {
+      return cartItems.value.reduce((sum, item) => {
+        if (item.compare_price != null && item.compare_price > item.price) {
+          return sum + (item.compare_price - item.price) * item.quantity
+        }
+        return sum
+      }, 0)
+    }
+  })
+
+  // Subtotal before campaign discount (for display when there is campaign discount)
+  const subtotalBeforeCampaignDiscount = computed(() => {
+    if (currency.value === 'USD') {
+      return cartItems.value.reduce((total, item) => {
+        const compareUsd = item.compare_price_usd ?? (item.compare_price != null && item.compare_price > 0 && exchangeRate.value > 0 ? item.compare_price / exchangeRate.value : 0)
+        const priceUsd = item.price_usd !== undefined && item.price_usd > 0 ? item.price_usd : (item.price / exchangeRate.value)
+        const unitPrice = (item.compare_price != null && item.compare_price > item.price ? compareUsd : priceUsd)
+        return total + unitPrice * item.quantity
+      }, 0)
+    } else {
+      return cartItems.value.reduce((total, item) => {
+        const unitPrice = (item.compare_price != null && item.compare_price > item.price ? item.compare_price : item.price)
+        return total + unitPrice * item.quantity
+      }, 0)
+    }
+  })
+
   const isEmpty = computed(() => cartItems.value.length === 0)
 
   // Force reload cart from localStorage (useful for debugging/sync issues)
@@ -272,6 +316,8 @@ export const useCart = () => {
     totalVatDisplay,
     totalPrice,
     totalPriceDisplay,
+    totalCampaignDiscount,
+    subtotalBeforeCampaignDiscount,
     isEmpty
   }
 }

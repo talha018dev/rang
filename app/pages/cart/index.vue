@@ -60,7 +60,14 @@
                     <span v-if="item.sku" class="item-attribute">SKU: {{ item.sku }}</span>
                   </div>
                   <div class="item-price-row">
-                    <span class="item-price">{{ formatPrice(item.price, item.price_usd) }}</span>
+                    <span v-if="item.compare_price != null && item.compare_price > item.price" class="item-price">
+                      <span class="item-compare-price">{{ formatPrice(item.compare_price, item.compare_price_usd) }}</span>
+                      <span class="item-final-price">{{ formatPrice(item.price, item.price_usd) }}</span>
+                    </span>
+                    <span v-else class="item-price">{{ formatPrice(item.price, item.price_usd) }}</span>
+                  </div>
+                  <div v-if="item.compare_price != null && item.compare_price > item.price && item.campaign_name" class="item-discount-label">
+                    {{ item.campaign_name }} -{{ formatSummaryPrice(currency === 'USD' ? (item.campaign_discount_value != null ? (item.campaign_discount_value / exchangeRate) * item.quantity : ((item.compare_price - item.price) / exchangeRate) * item.quantity) : (item.campaign_discount_value != null ? item.campaign_discount_value * item.quantity : (item.compare_price - item.price) * item.quantity)) }}
                   </div>
                 </div>
                 
@@ -90,7 +97,11 @@
                 </div>
                 
                 <div class="cart-item-total">
-                  <span class="item-total-price">{{ formatItemTotal(item) }}</span>
+                  <template v-if="item.compare_price != null && item.compare_price > item.price">
+                    <span class="item-total-compare">{{ formatSummaryPrice(currency === 'USD' ? (item.compare_price_usd ?? item.compare_price / exchangeRate) * item.quantity : item.compare_price * item.quantity) }}</span>
+                    <span class="item-total-price">{{ formatItemTotal(item) }}</span>
+                  </template>
+                  <span v-else class="item-total-price">{{ formatItemTotal(item) }}</span>
                 </div>
               </div>
             </div>
@@ -102,6 +113,14 @@
               <h2 class="summary-title">Order Summary</h2>
               
               <div class="summary-details">
+                <div v-if="totalCampaignDiscount > 0" class="summary-row">
+                  <span class="summary-label">Subtotal (before campaign discount)</span>
+                  <span class="summary-value">{{ formatSummaryPrice(subtotalBeforeCampaignDiscount) }}</span>
+                </div>
+                <div v-if="totalCampaignDiscount > 0" class="summary-row summary-row-discount">
+                  <span class="summary-label">(-) Campaign discount</span>
+                  <span class="summary-value summary-value-discount">-{{ formatSummaryPrice(totalCampaignDiscount) }}</span>
+                </div>
                 <div class="summary-row">
                   <span class="summary-label">Subtotal</span>
                   <span class="summary-value">{{ subtotalDisplay }}</span>
@@ -164,10 +183,23 @@ const {
   totalVat,
   totalVatDisplay,
   totalPriceDisplay,
+  totalCampaignDiscount,
+  subtotalBeforeCampaignDiscount,
   isEmpty: isEmptyComputed
 } = useCart()
 
 const { formatPrice, currency, exchangeRate } = useCurrency()
+
+// Format price for summary (same as checkout)
+const formatSummaryPrice = (price: number): string => {
+  if (price === null || price === undefined || !isFinite(price) || isNaN(price)) {
+    return currency.value === 'USD' ? '$0.00' : 'Tk 0'
+  }
+  if (currency.value === 'USD') {
+    return `$${Number(price).toFixed(2)}`
+  }
+  return `Tk ${Number(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
 
 // Format item total price based on current currency
 const formatItemTotal = (item: any) => {

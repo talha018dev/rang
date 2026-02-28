@@ -525,6 +525,26 @@
   font-weight: 600;
   color: #1f2937;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.order-item-compare-price {
+  text-decoration: line-through;
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
+.order-item-final-price {
+  color: #1f2937;
+}
+
+.order-item-discount-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #059669;
 }
 
 /* Order Totals */

@@ -1892,6 +1892,9 @@ const handleAddToCart = () => {
       variantPriceUsd = product.value.price_usd
     }
     const variantImage = selectedVariant?.image || product.value.image
+    const activeCampaign = (product.value as any).active_campaign
+    const comparePrice = selectedVariantComparePrice.value > variantPrice ? selectedVariantComparePrice.value : undefined
+    const comparePriceUsd = comparePrice != null ? (selectedVariantComparePriceUsd.value ?? (variantPriceUsd && variantPrice > 0 ? (comparePrice / variantPrice) * variantPriceUsd : undefined)) : undefined
 
     // Check if product is a combo product
     const isCombo = (product.value as any).is_combo === true
@@ -1911,6 +1914,13 @@ const handleAddToCart = () => {
             product_id: product.value.id,
             variant_id: selectedVariant?.id,
             vat: product.value?.vat ?? product.value?.category?.vat ?? null
+        }
+        if (activeCampaign && comparePrice != null && comparePrice > variantPrice) {
+          cartItem.compare_price = comparePrice
+          cartItem.compare_price_usd = comparePriceUsd
+          cartItem.campaign_discount_type = activeCampaign.discount_type
+          cartItem.campaign_discount_value = activeCampaign.discount_value
+          cartItem.campaign_name = activeCampaign.name
         }
 
         // Add combo product properties if it's a combo - new format
@@ -2073,8 +2083,13 @@ const addFrequentlyBoughtToCart = () => {
       const variantPriceUsd = firstVariant?.price_usd || item.product?.price_usd
       const variantImage = firstVariant?.image || item.product?.image || item.image
       const variantSize = firstVariant?.attributes?.size
+      const prod = item.product as any
+      const activeCampaign = prod?.active_campaign
+      const comparePrice = (firstVariant?.compare_price ?? prod?.compare_price) as number | undefined
+      const comparePriceUsd = (firstVariant?.compare_price_usd ?? prod?.compare_price_usd) as number | undefined
+      const hasCampaignDiscount = activeCampaign && comparePrice != null && comparePrice > variantPrice
 
-      addToCart({
+      const cartPayload: any = {
           id: item.id.toString(),
           name: item.name,
           price: variantPrice,
@@ -2085,8 +2100,16 @@ const addFrequentlyBoughtToCart = () => {
           sku: firstVariant?.sku || item.product?.sku || '',
           product_id: item.id,
           variant_id: firstVariant?.id,
-          vat: (item.product as any)?.vat ?? ((item.product as any)?.category as any)?.vat ?? null
-      })
+          vat: prod?.vat ?? prod?.category?.vat ?? null
+      }
+      if (hasCampaignDiscount) {
+        cartPayload.compare_price = comparePrice
+        cartPayload.compare_price_usd = comparePriceUsd
+        cartPayload.campaign_discount_type = activeCampaign.discount_type
+        cartPayload.campaign_discount_value = activeCampaign.discount_value
+        cartPayload.campaign_name = activeCampaign.name
+      }
+      addToCart(cartPayload)
     })
 
     // alert(`Added ${selectedItems.length} item(s) to cart!`)
@@ -2139,8 +2162,13 @@ const addMatchingSeriesToCart = () => {
       const variantPrice = selectedVariant?.price || item.price
       const variantPriceUsd = selectedVariant?.price_usd || item.product?.price_usd
       const variantImage = selectedVariant?.image || item.image
-      
-      addToCart({
+      const prod = item.product as any
+      const activeCampaign = prod?.active_campaign
+      const comparePrice = (selectedVariant?.compare_price ?? prod?.compare_price) as number | undefined
+      const comparePriceUsd = (selectedVariant?.compare_price_usd ?? prod?.compare_price_usd) as number | undefined
+      const hasCampaignDiscount = activeCampaign && comparePrice != null && comparePrice > variantPrice
+
+      const cartPayload: any = {
           id: item.id.toString(),
           name: item.name,
           price: variantPrice,
@@ -2151,8 +2179,16 @@ const addMatchingSeriesToCart = () => {
           sku: selectedVariant?.sku || item.product?.sku || '',
           product_id: item.id,
           variant_id: selectedVariant?.id,
-          vat: (item.product as any)?.vat ?? ((item.product as any)?.category as any)?.vat ?? null
-      })
+          vat: prod?.vat ?? prod?.category?.vat ?? null
+      }
+      if (hasCampaignDiscount) {
+        cartPayload.compare_price = comparePrice
+        cartPayload.compare_price_usd = comparePriceUsd
+        cartPayload.campaign_discount_type = activeCampaign.discount_type
+        cartPayload.campaign_discount_value = activeCampaign.discount_value
+        cartPayload.campaign_name = activeCampaign.name
+      }
+      addToCart(cartPayload)
     })
 
     // alert(`Added ${selectedItems.length} matching series item(s) to cart!`)

@@ -663,14 +663,29 @@
                       <span v-if="item.color" class="order-item-attr">Color: {{ item.color }}</span>
                       <span class="order-item-attr">Qty: {{ item.quantity }}</span>
                     </div>
-                    <p class="order-item-price">{{ formatItemTotal(item) }}</p>
+                    <p class="order-item-price">
+                      <template v-if="item.compare_price != null && item.compare_price > item.price">
+                        <span class="order-item-compare-price">{{ formatCheckoutPrice(currency === 'USD' ? (item.compare_price_usd ?? item.compare_price / exchangeRate) * item.quantity : item.compare_price * item.quantity) }}</span>
+                        <span class="order-item-final-price">{{ formatItemTotal(item) }}</span>
+                        <span v-if="item.campaign_name" class="order-item-discount-label">{{ item.campaign_name }} -{{ formatCheckoutPrice(currency === 'USD' ? (item.campaign_discount_value != null ? (item.campaign_discount_value / exchangeRate) * item.quantity : ((item.compare_price - item.price) / exchangeRate) * item.quantity) : (item.campaign_discount_value != null ? item.campaign_discount_value * item.quantity : (item.compare_price - item.price) * item.quantity)) }}</span>
+                      </template>
+                      <template v-else>{{ formatItemTotal(item) }}</template>
+                    </p>
                   </div>
                 </div>
               </div>
 
               <!-- Order Totals (same layout as invoice: Subtotal → Discount → Total Amount → VAT → Grand Total → Shipping → Gift → Total Order Amount) -->
               <div class="order-totals summary-rows">
-                <div class="total-row summary-row">
+                <div v-if="totalCampaignDiscount > 0" class="total-row summary-row">
+                  <span class="total-label summary-label">Subtotal (before campaign discount)</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(subtotalBeforeCampaignDiscount) }}</span>
+                </div>
+                <div v-if="totalCampaignDiscount > 0" class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(-) Campaign discount</span>
+                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(totalCampaignDiscount) }}</span>
+                </div>
+                <div class="total-row summary-row" :class="{ 'summary-row-divider': totalCampaignDiscount <= 0 }">
                   <span class="total-label summary-label">Item Sub Total</span>
                   <span class="total-value summary-value">{{ formatCheckoutPrice(subtotal) }}</span>
                 </div>
@@ -755,6 +770,8 @@ const {
   totalVatDisplay,
   totalPrice,
   totalPriceDisplay,
+  totalCampaignDiscount,
+  subtotalBeforeCampaignDiscount,
   isEmpty,
   clearCart
 } = useCart()
