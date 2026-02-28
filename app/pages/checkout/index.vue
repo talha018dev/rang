@@ -341,7 +341,6 @@
                       :class="{ 'input-error': !!errors.shippingMethod }"
                       required
                       :disabled="isLoadingShippingMethods"
-                      @change="deliveryPartner = ''"
                     >
                       <option value="">Select Delivery Option</option>
                       <option value="home_delivery">Home Delivery</option>
@@ -1777,10 +1776,10 @@ const billingInfo = ref({
 })
 
 const billingSameAsShipping = ref(true)
-const shippingMethod = ref('')
+const shippingMethod = ref('home_delivery')
 const isInternationalOrder = computed(() => shippingMethod.value === 'international_shipping')
 const selectedOutlet = ref<number | string>('')
-const deliveryPartner = ref('') // Format: "pathao", "sa_paribahan", or "sundarban"
+const deliveryPartner = ref('pathao') // Format: "pathao", "sa_paribahan", or "sundarban"
 const deliveryLocation = ref('') // Format: "inside_dhaka" or "outside_dhaka" (for SA Paribahan and Sundarban)
 const locations = ref<any[]>([])
 const isLoadingLocations = ref(false)
@@ -1804,7 +1803,7 @@ const selectedOutletLocation = computed(() => {
   }
   return locations.value.find(location => location.id === selectedOutlet.value || location.id?.toString() === selectedOutlet.value.toString())
 })
-const paymentMethod = ref('')
+const paymentMethod = ref('cash_on_delivery')
 const orderNotes = ref('')
 const isPlacingOrder = ref(false)
 const isGiftPackage = ref(false)
@@ -1830,6 +1829,10 @@ watch(shippingMethod, (newValue) => {
   if (newValue !== 'home_delivery') {
     deliveryPartner.value = ''
     deliveryLocation.value = ''
+  } else {
+    // Default to Pathao and Cash on Delivery when Home Delivery is selected
+    deliveryPartner.value = 'pathao'
+    paymentMethod.value = 'cash_on_delivery'
   }
   
   // Auto-select PayPal when international shipping is selected
