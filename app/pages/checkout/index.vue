@@ -697,9 +697,9 @@
                   <span class="total-label summary-label">Total Amount</span>
                   <span class="total-value summary-value">{{ formatCheckoutPrice(totalAmountAfterDiscount) }}</span>
                 </div>
-                <div v-if="totalVat > 0" class="total-row summary-row summary-row-indent">
-                  <span class="total-label summary-label">(+) VAT</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(totalVat) }}</span>
+                <div v-if="checkoutVat > 0" class="total-row summary-row summary-row-indent">
+                  <span class="total-label summary-label">(+) VAT (10%)</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(checkoutVat) }}</span>
                 </div>
                 <div class="total-row summary-row summary-row-divider">
                   <span class="total-label summary-label">Grand Total</span>
@@ -797,16 +797,27 @@ const effectiveDiscountInCurrentCurrency = computed(() => {
   return discount
 })
 
-// Total amount after discount (subtotal - discount)
+// Total amount after discount (subtotal - coupon discount; subtotal is already after campaign discount)
 const totalAmountAfterDiscount = computed(() => {
   const sub = subtotal.value
   const disc = effectiveDiscountInCurrentCurrency.value
   return Math.max(0, sub - disc)
 })
 
+// VAT: fixed 10% on amount after all discounts (campaign + coupon)
+const VAT_RATE = 0.1
+const checkoutVat = computed(() => {
+  const base = totalAmountAfterDiscount.value
+  const vatAmount = base * VAT_RATE
+  if (currency.value === 'USD') {
+    return Math.round(vatAmount * 100) / 100
+  }
+  return Math.round(vatAmount)
+})
+
 // Grand total before shipping/gift (Total Amount + VAT)
 const grandTotalBeforeShipping = computed(() => {
-  return totalAmountAfterDiscount.value + totalVat.value
+  return totalAmountAfterDiscount.value + checkoutVat.value
 })
 
 // Final total order amount (Grand Total + Shipping + Gift Package)

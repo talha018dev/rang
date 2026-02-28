@@ -125,9 +125,9 @@
                   <span class="summary-label">Subtotal</span>
                   <span class="summary-value">{{ subtotalDisplay }}</span>
                 </div>
-                <div v-if="totalVat > 0" class="summary-row">
-                  <span class="summary-label">VAT</span>
-                  <span class="summary-value">{{ totalVatDisplay }}</span>
+                <div v-if="cartVat > 0" class="summary-row">
+                  <span class="summary-label">VAT (10%)</span>
+                  <span class="summary-value">{{ formatSummaryPrice(cartVat) }}</span>
                 </div>
                 <div class="summary-row">
                   <span class="summary-label">Shipping</span>
@@ -135,7 +135,7 @@
                 </div>
                 <div class="summary-row total-row">
                   <span class="summary-label">Total</span>
-                  <span class="summary-value">{{ totalPriceDisplay }}</span>
+                  <span class="summary-value">{{ cartTotalDisplay }}</span>
                 </div>
               </div>
               
@@ -180,9 +180,6 @@ const {
   totalItems,
   subtotal,
   subtotalDisplay,
-  totalVat,
-  totalVatDisplay,
-  totalPriceDisplay,
   totalCampaignDiscount,
   subtotalBeforeCampaignDiscount,
   isEmpty: isEmptyComputed
@@ -200,6 +197,21 @@ const formatSummaryPrice = (price: number): string => {
   }
   return `Tk ${Number(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
+
+// VAT: fixed 10% on subtotal (amount after campaign discount; no coupon on cart)
+const VAT_RATE = 0.1
+const cartVat = computed(() => {
+  const base = subtotal.value
+  const vatAmount = base * VAT_RATE
+  if (currency.value === 'USD') {
+    return Math.round(vatAmount * 100) / 100
+  }
+  return Math.round(vatAmount)
+})
+
+const cartTotal = computed(() => subtotal.value + cartVat.value)
+
+const cartTotalDisplay = computed(() => formatSummaryPrice(cartTotal.value))
 
 // Format item total price based on current currency
 const formatItemTotal = (item: any) => {
