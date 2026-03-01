@@ -204,7 +204,11 @@
                       </div>
                     </td>
                     <td class="table-cell" data-label="Variant">
-                      <p class="variant-name">{{ item.variant?.name || 'N/A' }}</p>
+                      <template v-if="item.variant?.attributes && (item.variant.attributes.color || item.variant.attributes.size)">
+                        <p v-if="item.variant.attributes.color" class="variant-name">Color: {{ item.variant.attributes.color }}</p>
+                        <p v-if="item.variant.attributes.size" class="variant-name">Size: {{ item.variant.attributes.size }}</p>
+                      </template>
+                      <p v-else class="variant-name">{{ item.variant?.name || 'N/A' }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Quantity">
                       <p class="quantity-text">{{ item.quantity }}</p>
@@ -312,6 +316,7 @@ interface OrderItem {
   variant: {
     image_url: string
     name: string
+    attributes?: Record<string, string>
   } | null
   package: any | null
 }
@@ -882,16 +887,20 @@ const getInvoiceFullHtml = (forPrint = false): string => {
               const itemImage = item.product?.image_url || ''
               const itemImageUrl = itemImage.startsWith('http') ? itemImage : (itemImage.startsWith('/') ? window.location.origin + itemImage : window.location.origin + '/' + itemImage)
               const variantName = item.variant?.name || 'N/A'
-              // Extract variant details
+              const attrs = item.variant?.attributes || {}
+              // Use variant.attributes when available, else parse from name
               const getVariantColor = (name: string) => {
+                if (attrs.color) return attrs.color
                 const match = name.match(/(?:color|colour):\s*([^,]+)/i) || name.match(/(red|blue|green|yellow|violet|purple|black|white|pink|orange|brown|gray|grey)/i)
                 return match && match[1] ? match[1].trim() : name.split(',')[0] || 'N/A'
               }
               const getVariantFabric = (name: string) => {
+                if (attrs.fabric) return attrs.fabric
                 const match = name.match(/(?:fabric|material):\s*([^,]+)/i) || name.match(/(cotton|silk|polyester|linen|wool|chiffon|georgette)/i)
                 return match && match[1] ? match[1].trim() : 'Cotton'
               }
               const getVariantSize = (name: string) => {
+                if (attrs.size) return attrs.size
                 // Try to match "size: something" first
                 let match = name.match(/(?:size):\s*([^,]+)/i)
                 if (match && match[1]) {
@@ -943,6 +952,9 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                 
                 return 'N/A'
               }
+              const displayColor = getVariantColor(variantName)
+              const displaySize = getVariantSize(variantName)
+              const displayFabric = getVariantFabric(variantName)
               return `
                 <tr class="table-row">
                   <td class="table-cell table-cell-item">
@@ -951,9 +963,9 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                       <div class="item-info">
                         <p class="item-name">${item.product?.name || ''}</p>
                         <p class="item-sku">SKU: ${item.product?.sku}</p>
-                        <p class="item-variant">Color: ${getVariantColor(variantName)}</p>
-                        <p class="item-variant">Fabric: ${getVariantFabric(variantName)}</p>
-                        <p class="item-variant">Size: ${getVariantSize(variantName)}</p>
+                        <p class="item-variant">Color: ${displayColor}</p>
+                        <p class="item-variant">Fabric: ${displayFabric}</p>
+                        <p class="item-variant">Size: ${displaySize}</p>
                       </div>
                     </div>
                   </td>
