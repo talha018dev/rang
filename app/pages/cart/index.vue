@@ -113,28 +113,32 @@
               <h2 class="summary-title">Order Summary</h2>
               
               <div class="summary-details">
-                <div v-if="summarySubtotalBeforeDiscount > 0" class="summary-row">
-                  <span class="summary-label">Subtotal (before campaign discount)</span>
+                <div class="summary-row">
+                  <span class="summary-label">Subtotal</span>
                   <span class="summary-value">{{ formatSummaryPrice(summarySubtotalBeforeDiscount) }}</span>
                 </div>
                 <div v-if="summaryItemDiscount > 0" class="summary-row summary-row-discount">
                   <span class="summary-label">(-) Campaign discount</span>
                   <span class="summary-value summary-value-discount">-{{ formatSummaryPrice(summaryItemDiscount) }}</span>
                 </div>
-                <div class="summary-row">
-                  <span class="summary-label">Subtotal</span>
+                <div class="summary-row summary-row-divider">
+                  <span class="summary-label">Total</span>
                   <span class="summary-value">{{ formatSummaryPrice(summarySubtotal) }}</span>
                 </div>
                 <div v-if="summaryVat > 0" class="summary-row">
-                  <span class="summary-label">VAT (10%)</span>
+                  <span class="summary-label">(+) VAT (10%)</span>
                   <span class="summary-value">{{ formatSummaryPrice(summaryVat) }}</span>
                 </div>
+                <div class="summary-row summary-row-divider">
+                  <span class="summary-label">Grand Total</span>
+                  <span class="summary-value">{{ formatSummaryPrice(summaryGrandTotal) }}</span>
+                </div>
                 <div class="summary-row">
-                  <span class="summary-label">Shipping</span>
+                  <span class="summary-label">(+) Shipping Charge</span>
                   <span class="summary-value">{{ summaryShippingLabel }}</span>
                 </div>
                 <div class="summary-row total-row">
-                  <span class="summary-label">Total</span>
+                  <span class="summary-label">Total Order Amount</span>
                   <span class="summary-value">{{ summaryTotalDisplay }}</span>
                 </div>
               </div>
@@ -316,6 +320,8 @@ const summaryTotalDisplay = computed(() => {
   }
   return cartTotalDisplay.value
 })
+
+const summaryGrandTotal = computed(() => summarySubtotal.value + summaryVat.value)
 
 // Format item total price based on current currency
 const formatItemTotal = (item: any) => {

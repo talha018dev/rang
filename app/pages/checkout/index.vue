@@ -684,26 +684,22 @@
                 </div>
               </div>
 
-              <!-- Order Totals (same layout as invoice: Subtotal → Discount → Total Amount → VAT → Grand Total → Shipping → Gift → Total Order Amount) -->
+              <!-- Order Totals: Subtotal → Campaign discount → Coupon discount → Total → VAT → Grand Total → Shipping → Total Order Amount -->
               <div class="order-totals summary-rows">
-                <div v-if="summaryItemDiscount > 0" class="total-row summary-row">
-                  <span class="total-label summary-label">Subtotal (before campaign discount)</span>
+                <div class="total-row summary-row">
+                  <span class="total-label summary-label">Subtotal</span>
                   <span class="total-value summary-value">{{ formatCheckoutPrice(summarySubtotalBeforeDiscount) }}</span>
                 </div>
                 <div v-if="summaryItemDiscount > 0" class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(-) Campaign discount</span>
                   <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(summaryItemDiscount) }}</span>
                 </div>
-                <div class="total-row summary-row" :class="{ 'summary-row-divider': summaryItemDiscount <= 0 }">
-                  <span class="total-label summary-label">Item Sub Total</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(summarySubtotal) }}</span>
-                </div>
                 <div v-if="(couponValidated && effectiveCouponDiscount > 0) || summaryCouponDiscount > 0" class="total-row summary-row summary-row-indent">
-                  <span class="total-label summary-label">(-) Discount</span>
+                  <span class="total-label summary-label">(-) Coupon discount</span>
                   <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(summaryCouponDiscount) }}</span>
                 </div>
                 <div class="total-row summary-row summary-row-divider">
-                  <span class="total-label summary-label">Total Amount</span>
+                  <span class="total-label summary-label">Total</span>
                   <span class="total-value summary-value">{{ formatCheckoutPrice(summaryTotalAmountAfterDiscount) }}</span>
                 </div>
                 <div v-if="summaryVat > 0" class="total-row summary-row summary-row-indent">

@@ -237,24 +237,28 @@
               <h2 class="section-title">Order Summary</h2>
               <div class="summary-rows">
                 <div class="summary-row">
-                  <span class="summary-label">Item Sub Total</span>
-                  <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
+                  <span class="summary-label">Subtotal</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.subtotalBeforeCampaign ?? order.item_total) }}</span>
                 </div>
-                <div v-if="invoiceSummary && invoiceSummary.totalDiscount > 0" class="summary-row summary-row-indent">
-                  <span class="summary-label">(-) Discount{{ invoiceSummary?.discountPercent ? ` (${invoiceSummary.discountPercent}%)` : '' }}</span>
-                  <span class="summary-value summary-value-discount">{{ formatOrderPrice(invoiceSummary.totalDiscount) }}</span>
+                <div v-if="invoiceSummary && invoiceSummary.itemDiscountTotal > 0" class="summary-row summary-row-indent">
+                  <span class="summary-label">(-) Campaign discount</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(invoiceSummary.itemDiscountTotal) }}</span>
+                </div>
+                <div v-if="invoiceSummary && invoiceSummary.couponDiscount > 0" class="summary-row summary-row-indent">
+                  <span class="summary-label">(-) Coupon discount</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(invoiceSummary.couponDiscount) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
-                  <span class="summary-label">Total Amount</span>
-                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.totalAmount) : '-' }}</span>
+                  <span class="summary-label">Total</span>
+                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.totalAmountAfterDiscount) : '-' }}</span>
                 </div>
-                <div v-if="order.vat > 0" class="summary-row summary-row-indent">
+                <div v-if="invoiceSummary && invoiceSummary.vat > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) VAT (10%)</span>
-                  <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary.vat) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Grand Total</span>
-                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.grandTotal) : '-' }}</span>
+                  <span class="summary-value">{{ invoiceSummary ? formatOrderPrice(invoiceSummary.grandTotalBeforeShipping) : '-' }}</span>
                 </div>
                 <div v-if="(invoiceSummary?.wagesMaking ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Making)</span>
@@ -264,9 +268,13 @@
                   <span class="summary-label">(+) Wages (Alter)</span>
                   <span class="summary-value">{{ formatOrderPrice(invoiceSummary?.wagesAlter ?? 0) }}</span>
                 </div>
-                <div v-if="order.shipping > 0" class="summary-row summary-row-indent">
+                <div v-if="invoiceSummary && invoiceSummary.giftCost > 0" class="summary-row summary-row-indent">
+                  <span class="summary-label">(+) Gift Package</span>
+                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary.giftCost) }}</span>
+                </div>
+                <div class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Shipping Charge</span>
-                  <span class="summary-value">{{ formatOrderPrice(order.shipping) }}</span>
+                  <span class="summary-value">{{ invoiceSummary && invoiceSummary.shipping > 0 ? formatOrderPrice(invoiceSummary.shipping) : 'Free' }}</span>
                 </div>
                 <div class="summary-row summary-row-divider summary-row-total">
                   <span class="summary-label-total">Total Order Amount</span>
@@ -361,6 +369,10 @@ interface Order {
   items: OrderItem[]
   wages_making?: number
   wages_alter?: number
+  /** Campaign / line discount total (before coupon). When present, item_total is after this discount. */
+  item_discount_total?: number
+  /** Gift package charge */
+  gift_cost?: number
 }
 
 interface OrderResponse {
@@ -438,27 +450,36 @@ const error = ref<string | null>(null)
 const showPaymentFailedAlert = ref(false)
 const qrCodeDataUrl = ref<string>('')
 
-// Invoice summary derived values (match printed invoice pattern)
+// Invoice summary derived from API (sequence: Subtotal → Campaign discount → Coupon discount → Total → VAT → Grand Total → Shipping → Total Order Amount)
+// API returns item_total as amount AFTER coupon; so Subtotal = item_total + campaign + coupon for display
 const invoiceSummary = computed(() => {
   const o = order.value
   if (!o) return null
-  const totalDiscount = (o.coupon_discount || 0) + (o.fixed_discount || 0)
-  const totalAmount = (o.item_total || 0) - totalDiscount
-  const grandTotal = totalAmount + (o.vat || 0)
+  const itemDiscountTotal = o.item_discount_total ?? 0 // campaign discount
+  const couponDiscount = (o.coupon_discount || 0) + (o.fixed_discount || 0)
+  const itemTotal = o.item_total || 0 // API: amount after campaign + coupon
+  const subtotalBeforeCampaign = itemTotal + itemDiscountTotal + couponDiscount // first row "Subtotal"
+  const totalAmountAfterDiscount = itemTotal // "Total" row = item_total (API already after discounts)
+  const vat = o.vat || 0
+  const grandTotalBeforeShipping = itemTotal + vat
   const wagesMaking = o.wages_making ?? 0
   const wagesAlter = o.wages_alter ?? 0
-  const totalOrderAmount = grandTotal + wagesMaking + wagesAlter + (o.shipping || 0)
-  const discountPercent = (o.item_total && o.item_total > 0 && totalDiscount > 0)
-    ? Math.round((totalDiscount / o.item_total) * 100)
-    : 0
+  const shipping = o.shipping || 0
+  const giftCost = o.gift_cost ?? 0
+  const totalOrderAmount = grandTotalBeforeShipping + wagesMaking + wagesAlter + shipping + giftCost
   return {
-    totalDiscount,
-    totalAmount,
-    grandTotal,
+    subtotalBeforeCampaign,
+    itemDiscountTotal,
+    subtotal: itemTotal,
+    couponDiscount,
+    totalAmountAfterDiscount,
+    vat,
+    grandTotalBeforeShipping,
     wagesMaking,
     wagesAlter,
-    totalOrderAmount,
-    discountPercent
+    shipping,
+    giftCost,
+    totalOrderAmount
   }
 })
 
@@ -988,44 +1009,54 @@ const getInvoiceFullHtml = (forPrint = false): string => {
       <!-- Summary Section -->
       <div class="summary-section">
         <div class="summary-rows">
-          <div class="summary-row">
-            <span class="summary-label">Item Sub Total</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.item_total)}</span>
-          </div>
           ${(function () {
-            const totalDiscount = (orderData.coupon_discount || 0) + (orderData.fixed_discount || 0)
-            const totalAmount = (orderData.item_total || 0) - totalDiscount
-            const grandTotal = totalAmount + (orderData.vat || 0)
+            const itemDiscountTotal = orderData.item_discount_total ?? 0
+            const couponDiscount = (orderData.coupon_discount || 0) + (orderData.fixed_discount || 0)
+            const itemTotal = orderData.item_total || 0
+            const subtotalBeforeCampaign = itemTotal + itemDiscountTotal + couponDiscount
+            const totalAmountAfterDiscount = itemTotal
+            const vat = orderData.vat || 0
+            const grandTotalBeforeShipping = itemTotal + vat
             const wagesMaking = orderData.wages_making ?? 0
             const wagesAlter = orderData.wages_alter ?? 0
             const shipping = orderData.shipping || 0
-            const discountPercent = (orderData.item_total && orderData.item_total > 0 && totalDiscount > 0)
-              ? Math.round((totalDiscount / orderData.item_total) * 100)
-              : 0
+            const giftCost = orderData.gift_cost ?? 0
             const parts = []
-            if (totalDiscount > 0) {
+            parts.push(`
+          <div class="summary-row">
+            <span class="summary-label">Subtotal</span>
+            <span class="summary-value">${formatPriceForPrint(subtotalBeforeCampaign)}</span>
+          </div>`)
+            if (itemDiscountTotal > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
-            <span class="summary-label">(-) Discount${discountPercent ? ` (${discountPercent}%)` : ''}</span>
-            <span class="summary-value summary-value-discount">${formatPriceForPrint(totalDiscount)}</span>
+            <span class="summary-label">(-) Campaign discount</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(itemDiscountTotal)}</span>
+          </div>`)
+            }
+            if (couponDiscount > 0) {
+              parts.push(`
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(-) Coupon discount</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(couponDiscount)}</span>
           </div>`)
             }
             parts.push(`
           <div class="summary-row summary-row-divider">
-            <span class="summary-label">Total Amount</span>
-            <span class="summary-value">${formatPriceForPrint(totalAmount)}</span>
+            <span class="summary-label">Total</span>
+            <span class="summary-value">${formatPriceForPrint(totalAmountAfterDiscount)}</span>
           </div>`)
-            if (orderData.vat > 0) {
+            if (vat > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) VAT (10%)</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
+            <span class="summary-value">${formatPriceForPrint(vat)}</span>
           </div>`)
             }
             parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Grand Total</span>
-            <span class="summary-value">${formatPriceForPrint(grandTotal)}</span>
+            <span class="summary-value">${formatPriceForPrint(grandTotalBeforeShipping)}</span>
           </div>`)
             if (wagesMaking > 0) {
               parts.push(`
@@ -1041,13 +1072,18 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-value">${formatPriceForPrint(wagesAlter)}</span>
           </div>`)
             }
-            if (shipping > 0) {
+            if (giftCost > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
-            <span class="summary-label">(+) Shipping Charge</span>
-            <span class="summary-value">${formatPriceForPrint(orderData.shipping)}</span>
+            <span class="summary-label">(+) Gift Package</span>
+            <span class="summary-value">${formatPriceForPrint(giftCost)}</span>
           </div>`)
             }
+            parts.push(`
+          <div class="summary-row summary-row-indent">
+            <span class="summary-label">(+) Shipping Charge</span>
+            <span class="summary-value">${shipping > 0 ? formatPriceForPrint(orderData.shipping) : 'Free'}</span>
+          </div>`)
             parts.push(`
           <div class="summary-row summary-row-divider summary-row-total">
             <span class="summary-label-total">Total Order Amount</span>
