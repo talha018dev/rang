@@ -405,11 +405,14 @@
 
 .summary-label {
   font-weight: 500;
+  min-width: 0;
 }
 
 .summary-value {
   font-weight: 600;
   color: #000;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .total-row {

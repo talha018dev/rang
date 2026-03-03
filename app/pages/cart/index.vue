@@ -75,7 +75,7 @@
                   <div class="quantity-controls">
                     <button 
                       class="quantity-btn minus" 
-                      @click="updateQuantity(item.id, item.quantity - 1, item.size, item.color)"
+                      @click="handleUpdateQuantity(item.id, item.quantity - 1, item.size, item.color)"
                       :disabled="item.quantity <= 1"
                     >
                       -
@@ -83,14 +83,14 @@
                     <span class="quantity-value">{{ item.quantity }}</span>
                     <button 
                       class="quantity-btn plus" 
-                      @click="updateQuantity(item.id, item.quantity + 1, item.size, item.color)"
+                      @click="handleUpdateQuantity(item.id, item.quantity + 1, item.size, item.color)"
                     >
                       +
                     </button>
                   </div>
                   <button 
                     class="remove-item-btn" 
-                    @click="removeFromCart(item.id, item.size, item.color)"
+                    @click="handleRemoveFromCart(item.id, item.size, item.color)"
                   >
                     Remove
                   </button>
@@ -113,29 +113,29 @@
               <h2 class="summary-title">Order Summary</h2>
               
               <div class="summary-details">
-                <div v-if="totalCampaignDiscount > 0" class="summary-row">
+                <div v-if="summarySubtotalBeforeDiscount > 0" class="summary-row">
                   <span class="summary-label">Subtotal (before campaign discount)</span>
-                  <span class="summary-value">{{ formatSummaryPrice(subtotalBeforeCampaignDiscount) }}</span>
+                  <span class="summary-value">{{ formatSummaryPrice(summarySubtotalBeforeDiscount) }}</span>
                 </div>
-                <div v-if="totalCampaignDiscount > 0" class="summary-row summary-row-discount">
+                <div v-if="summaryItemDiscount > 0" class="summary-row summary-row-discount">
                   <span class="summary-label">(-) Campaign discount</span>
-                  <span class="summary-value summary-value-discount">-{{ formatSummaryPrice(totalCampaignDiscount) }}</span>
+                  <span class="summary-value summary-value-discount">-{{ formatSummaryPrice(summaryItemDiscount) }}</span>
                 </div>
                 <div class="summary-row">
                   <span class="summary-label">Subtotal</span>
-                  <span class="summary-value">{{ subtotalDisplay }}</span>
+                  <span class="summary-value">{{ formatSummaryPrice(summarySubtotal) }}</span>
                 </div>
-                <div v-if="cartVat > 0" class="summary-row">
+                <div v-if="summaryVat > 0" class="summary-row">
                   <span class="summary-label">VAT (10%)</span>
-                  <span class="summary-value">{{ formatSummaryPrice(cartVat) }}</span>
+                  <span class="summary-value">{{ formatSummaryPrice(summaryVat) }}</span>
                 </div>
                 <div class="summary-row">
                   <span class="summary-label">Shipping</span>
-                  <span class="summary-value">Calculated at checkout</span>
+                  <span class="summary-value">{{ summaryShippingLabel }}</span>
                 </div>
                 <div class="summary-row total-row">
                   <span class="summary-label">Total</span>
-                  <span class="summary-value">{{ cartTotalDisplay }}</span>
+                  <span class="summary-value">{{ summaryTotalDisplay }}</span>
                 </div>
               </div>
               
@@ -160,6 +160,7 @@
 import { navigateTo, useHead } from 'nuxt/app'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
+import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
 import { useCurrency } from '../../../composables/useCurrency'
 import './cart.css'
@@ -187,6 +188,69 @@ const {
 
 const { formatPrice, currency, exchangeRate } = useCurrency()
 
+const { backendUrl } = useApi()
+
+interface PreviewTotals {
+  item_total: number
+  item_discount_total: number
+  coupon_discount: number
+  fixed_discount: number
+  taxable_subtotal: number
+  vat: number
+  gift_cost: number
+  shipping: number | null
+  grand_total_excluding_shipping: number
+  grand_total: number | null
+  currency: string
+}
+
+const orderPreviewData = ref<{ totals: PreviewTotals } | null>(null)
+
+async function fetchOrderPreview () {
+  if (cartItems.value.length === 0) {
+    orderPreviewData.value = null
+    return
+  }
+  try {
+    const productsData = cartItems.value.map((item: any) => {
+      const hasProductsArray = item.products && Array.isArray(item.products) && item.products.length > 0
+      if (hasProductsArray) {
+        return {
+          product_id: item.product_id ?? item.id,
+          qty: item.qty ?? item.quantity ?? 1,
+          products: item.products
+        }
+      }
+      const productData: any = { product_id: item.product_id ?? item.id, qty: item.quantity }
+      if (item.variant_id) productData.variant_id = item.variant_id
+      return productData
+    })
+    const body = {
+      currency: currency.value === 'USD' ? 'USD' : 'BDT',
+      products: productsData
+    }
+    const response = await $fetch<any>(`${backendUrl}/order/preview`, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        ...(typeof window !== 'undefined' && localStorage.getItem('auth_token')
+          ? { Authorization: `Bearer ${localStorage.getItem('auth_token')}` }
+          : {})
+      },
+      body
+    })
+    console.log('Order preview result:', response)
+    if (response?.success && response?.data?.totals) {
+      orderPreviewData.value = { totals: response.data.totals }
+    } else {
+      orderPreviewData.value = null
+    }
+  } catch (e) {
+    console.error('Order preview error:', e)
+    orderPreviewData.value = null
+  }
+}
+
 // Format price for summary (same as checkout)
 const formatSummaryPrice = (price: number): string => {
   if (price === null || price === undefined || !isFinite(price) || isNaN(price)) {
@@ -212,6 +276,46 @@ const cartVat = computed(() => {
 const cartTotal = computed(() => subtotal.value + cartVat.value)
 
 const cartTotalDisplay = computed(() => formatSummaryPrice(cartTotal.value))
+
+// Summary values: use order preview totals when available, else local cart values
+const summarySubtotalBeforeDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t && t.item_discount_total > 0) return t.item_total + t.item_discount_total
+  return subtotalBeforeCampaignDiscount.value
+})
+
+const summaryItemDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.item_discount_total ?? 0
+  return totalCampaignDiscount.value
+})
+
+const summarySubtotal = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.item_total
+  return subtotal.value
+})
+
+const summaryVat = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.vat ?? 0
+  return cartVat.value
+})
+
+const summaryShippingLabel = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t?.shipping != null && t.shipping > 0) return formatSummaryPrice(t.shipping)
+  return 'Calculated at checkout'
+})
+
+const summaryTotalDisplay = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) {
+    const total = t.grand_total_excluding_shipping ?? t.grand_total ?? (t.item_total + (t.vat ?? 0))
+    return formatSummaryPrice(total)
+  }
+  return cartTotalDisplay.value
+})
 
 // Format item total price based on current currency
 const formatItemTotal = (item: any) => {
@@ -277,12 +381,27 @@ onMounted(async () => {
   
   setTimeout(() => {
     isLoading.value = false
+    if (cartItems.value.length > 0) {
+      fetchOrderPreview()
+    }
   }, remainingTime)
 })
 
 
 const handleCheckout = () => {
   navigateTo('/checkout')
+}
+
+async function handleUpdateQuantity (id: string, qty: number, size?: string, color?: string) {
+  updateQuantity(id, qty, size, color)
+  await nextTick()
+  await fetchOrderPreview()
+}
+
+async function handleRemoveFromCart (id: string, size?: string, color?: string) {
+  removeFromCart(id, size, color)
+  await nextTick()
+  await fetchOrderPreview()
 }
 </script>
 
