@@ -64,8 +64,12 @@ function trackMetaPixelPurchase() {
   // Meta requires valid price and currency for ROAS; skip if value missing or not positive
   if (!(orderTotal > 0) || !currency) return
   const storageKey = `meta_pixel_purchase_${orderNumber}`
-  if (sessionStorage.getItem(storageKey)) return
-  sessionStorage.setItem(storageKey, '1')
+  try {
+    if (localStorage.getItem(storageKey)) return
+    localStorage.setItem(storageKey, '1')
+  } catch (_) {
+    // localStorage may be full or disabled; allow one fire
+  }
   w.fbq('track', 'Purchase', {
     value: orderTotal,
     currency,
