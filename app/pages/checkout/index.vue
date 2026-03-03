@@ -341,6 +341,8 @@
                       :class="{ 'input-error': !!errors.shippingMethod }"
                       required
                       :disabled="isLoadingShippingMethods"
+                      @blur="fetchOrderPreview"
+                      @change="fetchOrderPreview"
                     >
                       <option value="">Select Delivery Option</option>
                       <option value="home_delivery">Home Delivery</option>
@@ -366,7 +368,8 @@
                       class="form-input"
                       :class="{ 'input-error': !!errors.deliveryPartner }"
                       required
-                      @change="deliveryLocation = ''"
+                      @change="deliveryLocation = ''; fetchOrderPreview()"
+                      @blur="fetchOrderPreview"
                     >
                       <option value="">Select Delivery Partner</option>
                       <option 
@@ -396,6 +399,8 @@
                       class="form-input"
                       :class="{ 'input-error': !!errors.deliveryLocation }"
                       required
+                      @blur="fetchOrderPreview"
+                      @change="fetchOrderPreview"
                     >
                       <option value="">Select Location</option>
                       <option value="inside_dhaka">Inside Dhaka</option>
@@ -420,6 +425,8 @@
                       class="form-input"
                       :class="{ 'input-error': !!errors.selectedOutlet }"
                       :required="shippingMethod === 'store_pickup'"
+                      @blur="fetchOrderPreview"
+                      @change="fetchOrderPreview"
                     >
                       <option value="">Select Outlet</option>
                       <option 
@@ -477,6 +484,7 @@
                       type="checkbox"
                       v-model="isGiftPackage"
                       class="checkout-checkbox-input"
+                      @change="fetchOrderPreview"
                     />
                   </label>
                   <span>Gift package?</span>
@@ -588,6 +596,7 @@
                       class="form-input coupon-input"
                       placeholder="Enter coupon code"
                       :disabled="isValidatingCoupon || couponValidated"
+                      @blur="fetchOrderPreview"
                     />
                     <button
                       type="button"
@@ -626,6 +635,7 @@
                     :class="{ 'input-error': !!errors.orderNotes }"
                     rows="4"
                     placeholder="Any special instructions for your order..."
+                    @blur="fetchOrderPreview"
                   ></textarea>
                   <div v-if="errors.orderNotes" class="field-error">{{ errors.orderNotes }}</div>
                 </div>
@@ -676,45 +686,45 @@
 
               <!-- Order Totals (same layout as invoice: Subtotal → Discount → Total Amount → VAT → Grand Total → Shipping → Gift → Total Order Amount) -->
               <div class="order-totals summary-rows">
-                <div v-if="totalCampaignDiscount > 0" class="total-row summary-row">
+                <div v-if="summaryItemDiscount > 0" class="total-row summary-row">
                   <span class="total-label summary-label">Subtotal (before campaign discount)</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(subtotalBeforeCampaignDiscount) }}</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(summarySubtotalBeforeDiscount) }}</span>
                 </div>
-                <div v-if="totalCampaignDiscount > 0" class="total-row summary-row summary-row-indent">
+                <div v-if="summaryItemDiscount > 0" class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(-) Campaign discount</span>
-                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(totalCampaignDiscount) }}</span>
+                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(summaryItemDiscount) }}</span>
                 </div>
-                <div class="total-row summary-row" :class="{ 'summary-row-divider': totalCampaignDiscount <= 0 }">
+                <div class="total-row summary-row" :class="{ 'summary-row-divider': summaryItemDiscount <= 0 }">
                   <span class="total-label summary-label">Item Sub Total</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(subtotal) }}</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(summarySubtotal) }}</span>
                 </div>
-                <div v-if="couponValidated && couponData && effectiveCouponDiscount > 0" class="total-row summary-row summary-row-indent">
+                <div v-if="(couponValidated && effectiveCouponDiscount > 0) || summaryCouponDiscount > 0" class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(-) Discount</span>
-                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(effectiveDiscountInCurrentCurrency) }}</span>
+                  <span class="total-value summary-value summary-value-discount">-{{ formatCheckoutPrice(summaryCouponDiscount) }}</span>
                 </div>
                 <div class="total-row summary-row summary-row-divider">
                   <span class="total-label summary-label">Total Amount</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(totalAmountAfterDiscount) }}</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(summaryTotalAmountAfterDiscount) }}</span>
                 </div>
-                <div v-if="checkoutVat > 0" class="total-row summary-row summary-row-indent">
+                <div v-if="summaryVat > 0" class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(+) VAT (10%)</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(checkoutVat) }}</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(summaryVat) }}</span>
                 </div>
                 <div class="total-row summary-row summary-row-divider">
                   <span class="total-label summary-label">Grand Total</span>
-                  <span class="total-value summary-value">{{ formatCheckoutPrice(grandTotalBeforeShipping) }}</span>
+                  <span class="total-value summary-value">{{ formatCheckoutPrice(summaryGrandTotalBeforeShipping) }}</span>
                 </div>
                 <div class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(+) Shipping Charge</span>
-                  <span class="total-value summary-value">{{ shippingCostDisplay }}</span>
+                  <span class="total-value summary-value">{{ summaryShippingDisplay }}</span>
                 </div>
                 <div v-if="isGiftPackage" class="total-row summary-row summary-row-indent">
                   <span class="total-label summary-label">(+) Gift Package</span>
-                  <span class="total-value summary-value">{{ giftPackageChargeDisplay }}</span>
+                  <span class="total-value summary-value">{{ summaryGiftDisplay }}</span>
                 </div>
                 <div class="total-row total-row-final summary-row summary-row-divider summary-row-total">
                   <span class="total-label summary-label summary-label-total">Total Order Amount</span>
-                  <span class="total-value summary-value summary-value-total">{{ formatCheckoutPrice(totalOrderAmount) }}</span>
+                  <span class="total-value summary-value summary-value-total">{{ summaryTotalOrderAmount }}</span>
                 </div>
               </div>
 
@@ -826,6 +836,62 @@ const totalOrderAmount = computed(() => {
   return grandTotalBeforeShipping.value + shipping + gift
 })
 
+// Summary values: use order preview totals when available, else local computed values
+const summarySubtotalBeforeDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t && t.item_discount_total > 0) return t.item_total + t.item_discount_total
+  return subtotalBeforeCampaignDiscount.value
+})
+const summaryItemDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.item_discount_total ?? 0
+  return totalCampaignDiscount.value
+})
+const summarySubtotal = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.item_total
+  return subtotal.value
+})
+const summaryCouponDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.coupon_discount ?? 0
+  return effectiveDiscountInCurrentCurrency.value
+})
+const summaryTotalAmountAfterDiscount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.taxable_subtotal ?? t.item_total - (t.coupon_discount ?? 0)
+  return totalAmountAfterDiscount.value
+})
+const summaryVat = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.vat ?? 0
+  return checkoutVat.value
+})
+const summaryGrandTotalBeforeShipping = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) return t.grand_total_excluding_shipping ?? (t.item_total - (t.coupon_discount ?? 0) + (t.vat ?? 0))
+  return grandTotalBeforeShipping.value
+})
+const summaryShippingDisplay = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t && t.shipping != null && t.shipping > 0) return formatCheckoutPrice(t.shipping)
+  if (t && t.shipping === 0) return 'Free'
+  return shippingCostDisplay.value
+})
+const summaryGiftDisplay = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t && t.gift_cost != null && t.gift_cost > 0) return formatCheckoutPrice(t.gift_cost)
+  return giftPackageChargeDisplay.value
+})
+const summaryTotalOrderAmount = computed(() => {
+  const t = orderPreviewData.value?.totals
+  if (t) {
+    const total = t.grand_total ?? (t.grand_total_excluding_shipping + (t.shipping ?? 0) + (t.gift_cost ?? 0))
+    return formatCheckoutPrice(total)
+  }
+  return formatCheckoutPrice(totalOrderAmount.value)
+})
+
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') return null
@@ -843,6 +909,22 @@ const getAuthHeaders = () => {
   }
   return headers
 }
+
+// Order preview API response (same structure as cart)
+interface PreviewTotals {
+  item_total: number
+  item_discount_total: number
+  coupon_discount: number
+  fixed_discount: number
+  taxable_subtotal: number
+  vat: number
+  gift_cost: number
+  shipping: number | null
+  grand_total_excluding_shipping: number
+  grand_total: number | null
+  currency: string
+}
+const orderPreviewData = ref<{ totals: PreviewTotals } | null>(null)
 
 // Format item total price (same format as invoice)
 const formatItemTotal = (item: any) => {
@@ -978,8 +1060,8 @@ const fetchShippingMethods = async (addressData?: any) => {
 
 // Handler for address field blur events
 const handleAddressFieldBlur = async () => {
-  // Call the existing function to fetch shipping methods with current address data
   await fetchShippingMethodsWithAddress()
+  await fetchOrderPreview()
 }
 
 // Function to fetch shipping methods with current address data
@@ -1149,6 +1231,8 @@ onMounted(async () => {
   if (isEmpty.value) {
     // Optionally redirect to cart page
     // navigateTo('/cart')
+  } else {
+    await fetchOrderPreview()
   }
 })
 
@@ -2085,6 +2169,74 @@ const shippingCostDisplay = computed(() => {
   return `Tk ${shippingCostBDT.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 })
 
+// Fetch order preview from API and store result for summary
+async function fetchOrderPreview () {
+  if (cartItems.value.length === 0) {
+    orderPreviewData.value = null
+    return
+  }
+  try {
+    const { backendUrl } = useApi()
+    const productsData: any[] = []
+    for (const item of cartItems.value) {
+      const hasProductsArray = (item as any).products && Array.isArray((item as any).products) && (item as any).products.length > 0
+      if (hasProductsArray) {
+        productsData.push({
+          product_id: (item as any).product_id ?? item.product_id ?? item.id,
+          qty: (item as any).qty ?? item.quantity ?? 1,
+          products: (item as any).products
+        })
+      } else {
+        const productData: any = { product_id: (item as any).product_id ?? item.id, qty: item.quantity }
+        if (item.variant_id) productData.variant_id = item.variant_id
+        productsData.push(productData)
+      }
+    }
+    const shippingMethodValue = shippingMethod.value === 'home_delivery' && deliveryPartner.value
+      ? (deliveryLocation.value ? `home_delivery.${deliveryPartner.value}.${deliveryLocation.value}` : `home_delivery.${deliveryPartner.value}`)
+      : shippingMethod.value
+    const body: any = {
+      coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
+      customer_notes: orderNotes.value?.trim() || null,
+      shipping_method: shippingMethodValue || null,
+      currency: currencyCode.value,
+      address: {
+        name: shippingInfo.value.fullName || '',
+        phone: shippingInfo.value.phone || '',
+        email: shippingInfo.value.email || '',
+        line_1: shippingInfo.value.addressLine1 || '',
+        line_2: shippingInfo.value.addressLine2 || '',
+        city: shippingInfo.value.city || '',
+        country: shippingInfo.value.country || '',
+        postal_code: shippingInfo.value.postalCode || ''
+      },
+      products: productsData
+    }
+    if (shippingInfo.value.city_id) body.address.city_id = shippingInfo.value.city_id
+    if (shippingInfo.value.zone_id) body.address.zone_id = shippingInfo.value.zone_id
+    if (shippingMethod.value === 'store_pickup' && selectedOutlet.value) {
+      body.pickup_location_id = selectedOutlet.value
+    }
+    if (isGiftPackage.value) {
+      body.is_gift = true
+      body.gift_package_charge = giftPackageChargeBDT.value
+    }
+    const response = await $fetch<any>(`${backendUrl}/order/preview`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body
+    })
+    if (response?.success && response?.data?.totals) {
+      orderPreviewData.value = { totals: response.data.totals }
+    } else {
+      orderPreviewData.value = null
+    }
+  } catch (e) {
+    console.error('Order preview error:', e)
+    orderPreviewData.value = null
+  }
+}
+
 // Effective coupon discount: apply min_cost rule when API returns discount 0
 // (e.g. when order amount >= min_cost, fixed coupon should give full value)
 const effectiveCouponDiscount = computed(() => {
@@ -2184,6 +2336,7 @@ const validateCoupon = async () => {
       couponValidated.value = true
       couponData.value = response.data || response
       couponError.value = ''
+      await fetchOrderPreview()
     } else {
       couponError.value = response?.message || 'Invalid coupon code'
       couponValidated.value = false
@@ -2200,11 +2353,12 @@ const validateCoupon = async () => {
 }
 
 // Remove coupon function
-const removeCoupon = () => {
+const removeCoupon = async () => {
   couponCode.value = ''
   couponValidated.value = false
   couponData.value = null
   couponError.value = ''
+  await fetchOrderPreview()
 }
 
 const validateCheckout = (): boolean => {
