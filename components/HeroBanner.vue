@@ -4,7 +4,7 @@
       <div class="hero-slider-wrapper">
         <div 
           class="hero-slider-track" 
-          :style="{ transform: `translateX(-${currentBannerIndex * 0}%)` }"
+          :style="{ transform: `translateX(-${currentBannerIndex * 100}%)` }"
         >
           <div 
             v-for="(banner, index) in banners" 
@@ -19,11 +19,11 @@
               quality="85" 
               loading="eager" 
               preload
-              :sizes="index === 0 ? '100vw' : undefined"
-              :priority="index === 0"
               width="1920"
               height="800"
-            />
+              />
+              <!-- :priority="index === 0" -->
+              <!-- :sizes="index === 0 ? '100vw' : undefined" -->
           </div>
         </div>
       </div>
