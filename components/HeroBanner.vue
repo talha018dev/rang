@@ -4,7 +4,7 @@
       <div class="hero-slider-wrapper">
         <div 
           class="hero-slider-track" 
-          :style="{ transform: `translateX(-${currentBannerIndex * 100}%)` }"
+          :style="{ transform: `translateX(-${currentBannerIndex * 0}%)` }"
         >
           <div 
             v-for="(banner, index) in banners" 
