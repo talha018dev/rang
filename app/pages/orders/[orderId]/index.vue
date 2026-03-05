@@ -991,7 +991,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                     </div>
                   </td>
                   <td class="table-cell text-right">
-                    <p class="cost-text">${formatPriceForPrint(item.price)}</p>
+                    <p class="cost-text">${formatPriceForPrint(item.price + item.discount)}</p>
                   </td>
                   <td class="table-cell text-center">
                     <p class="quantity-text">x ${item.quantity}</p>
