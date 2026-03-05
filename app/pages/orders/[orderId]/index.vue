@@ -214,10 +214,10 @@
                       <p class="quantity-text">{{ item.quantity }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Price">
-                      <p class="price-text">{{ formatOrderPrice(item.price) }}</p>
+                      <p class="price-text">{{ formatOrderPrice(item.price + item.discount) }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Total">
-                      <p class="total-text">{{ formatOrderPrice(item.price * item.quantity) }}</p>
+                      <p class="total-text">{{ formatOrderPrice((item.price + item.discount) * item.quantity) }}</p>
                     </td>
                   </tr>
                 </tbody>
@@ -997,7 +997,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
                     <p class="quantity-text">x ${item.quantity}</p>
                   </td>
                   <td class="table-cell text-right">
-                    <p class="total-text">${formatPriceForPrint(item.price * item.quantity)}</p>
+                    <p class="total-text">${formatPriceForPrint((item.price + item.discount) * item.quantity)}</p>
                   </td>
                 </tr>
               `
