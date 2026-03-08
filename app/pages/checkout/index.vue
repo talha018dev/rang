@@ -984,7 +984,7 @@ const fetchShippingMethods = async (addressData?: any) => {
       headers: getAuthHeaders(),
       body: {
         address: addressData,
-        currency: currencyCode.value
+        currency: checkoutApiCurrency.value
       }
     })
     console.log('Shipping Methods API Response:', response)
@@ -1437,6 +1437,11 @@ const isBangladesh = computed(() => {
   return shippingInfo.value.country === 'Bangladesh'
 })
 
+// Currency to send in checkout APIs: BDT for Bangladesh, USD for any other country
+const checkoutApiCurrency = computed(() => {
+  return isBangladesh.value ? 'BDT' : 'USD'
+})
+
 // Computed property for filtered countries based on search term
 const filteredCountries = computed(() => {
   if (!countrySearchTerm.value) {
@@ -1511,7 +1516,16 @@ const handleCountryBlur = () => {
 }
 
 // Handler for country change
-const handleCountryChange = () => {
+const handleCountryChange = async () => {
+  // When country is not Bangladesh, switch to international shipping, PayPal, and USD
+  if (shippingInfo.value.country !== 'Bangladesh') {
+    setCurrency('USD', false)
+    shippingMethod.value = 'international_shipping'
+    paymentMethod.value = 'paypal'
+    await fetchShippingMethodsWithAddress(true)
+    await fetchOrderPreview()
+  }
+
   // Reset city and zone when country changes
   shippingInfo.value.city = ''
   shippingInfo.value.zone = ''
@@ -2195,7 +2209,7 @@ async function fetchOrderPreview () {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value?.trim() || null,
       shipping_method: shippingMethodValue || null,
-      currency: currencyCode.value,
+      currency: checkoutApiCurrency.value,
       address: {
         name: shippingInfo.value.fullName || '',
         phone: shippingInfo.value.phone || '',
@@ -2564,7 +2578,7 @@ const handlePlaceOrder = async () => {
       payment_method: paymentMethod.value,
       is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
-      currency: currencyCode.value,
+      currency: checkoutApiCurrency.value,
       address: {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
