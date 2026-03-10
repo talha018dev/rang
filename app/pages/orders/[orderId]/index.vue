@@ -258,7 +258,7 @@
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Grand Total</span>
-                  <span class="summary-value">{{ formatOrderPrice(order?.total) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order?.total - invoiceSummary.shipping) }}</span>
                 </div>
                 <div v-if="(invoiceSummary?.wagesMaking ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Making)</span>
