@@ -238,11 +238,11 @@
               <div class="summary-rows">
                 <div class="summary-row">
                   <span class="summary-label">Subtotal</span>
-                  <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.item_total + order?.campaign_discount) }}</span>
                 </div>
-                <div v-if="invoiceSummary && invoiceSummary.itemDiscountTotal > 0" class="summary-row summary-row-indent">
+                <div v-if="invoiceSummary && order?.campaign_discount > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Campaign discount</span>
-                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.itemDiscountTotal) }}</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.campaign_discount) }}</span>
                 </div>
                 <div v-if="invoiceSummary && invoiceSummary.couponDiscount > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Coupon discount</span>
@@ -250,7 +250,7 @@
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Total</span>
-                  <span class="summary-value">{{ formatOrderPrice(order?.item_total - order?.coupon_discount - order?.fixed_discount) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order?.item_total - order?.coupon_discount - order?.fixed_discount - order?.campaign_discount) }}</span>
                 </div>
                 <div v-if="invoiceSummary && invoiceSummary.vat > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) VAT (10%)</span>
