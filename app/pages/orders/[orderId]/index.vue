@@ -238,27 +238,27 @@
               <div class="summary-rows">
                 <div class="summary-row">
                   <span class="summary-label">Subtotal</span>
-                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary.item_total) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.item_total) }}</span>
                 </div>
                 <div v-if="invoiceSummary && invoiceSummary.itemDiscountTotal > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Campaign discount</span>
-                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(invoiceSummary.fixed_discount) }}</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.fixed_discount) }}</span>
                 </div>
                 <div v-if="invoiceSummary && invoiceSummary.couponDiscount > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Coupon discount</span>
-                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(invoiceSummary.couponDiscount) }}</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.couponDiscount) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Total</span>
-                  <span class="summary-value">{{ invoiceSummary?.item_total - invoiceSummary?.coupon_discount - invoiceSummary?.fixed_discount }}</span>
+                  <span class="summary-value">{{ order?.item_total - order?.coupon_discount - order?.fixed_discount }}</span>
                 </div>
                 <div v-if="invoiceSummary && invoiceSummary.vat > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) VAT (10%)</span>
-                  <span class="summary-value">{{ formatOrderPrice(invoiceSummary.vat) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order.vat) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Grand Total</span>
-                  <span class="summary-value">{{ invoiceSummary?.total }}</span>
+                  <span class="summary-value">{{ order?.total }}</span>
                 </div>
                 <div v-if="(invoiceSummary?.wagesMaking ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Making)</span>
