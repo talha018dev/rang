@@ -1056,7 +1056,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Grand Total</span>
-            <span class="summary-value">${formatPriceForPrint(orderData?.total - invoiceSummary.shipping)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData?.total - orderData.shipping)}</span>
           </div>`)
             if (wagesMaking > 0) {
               parts.push(`
