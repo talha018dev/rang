@@ -244,9 +244,9 @@
                   <span class="summary-label">(-) Campaign discount</span>
                   <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.fixed_discount) }}</span>
                 </div>
-                <div v-if="invoiceSummary && invoiceSummary.couponDiscount > 0" class="summary-row summary-row-indent">
+                <div v-if="invoiceSummary && invoiceSummary.coupon_discount > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(-) Coupon discount</span>
-                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.couponDiscount) }}</span>
+                  <span class="summary-value summary-value-discount">-{{ formatOrderPrice(order.coupon_discount) }}</span>
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Total</span>
