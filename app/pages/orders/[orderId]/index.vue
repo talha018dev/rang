@@ -1027,14 +1027,14 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-label">Subtotal</span>
             <span class="summary-value">${formatPriceForPrint(orderData.item_total + orderData?.campaign_discount)}</span>
           </div>`)
-            if (itemDiscountTotal > 0) {
+            if (orderData.campaign_discount > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(-) Campaign discount</span>
             <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.campaign_discount)}</span>
           </div>`)
             }
-            if (couponDiscount > 0) {
+            if (orderData?.coupon_discount > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(-) Coupon discount</span>
@@ -1046,7 +1046,7 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             <span class="summary-label">Total</span>
             <span class="summary-value">${formatPriceForPrint(orderData?.item_total - orderData?.coupon_discount - orderData?.fixed_discount)}</span>
           </div>`)
-            if (vat > 0) {
+            if (orderData.vat) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) VAT (10%)</span>
