@@ -1025,38 +1025,38 @@ const getInvoiceFullHtml = (forPrint = false): string => {
             parts.push(`
           <div class="summary-row">
             <span class="summary-label">Subtotal</span>
-            <span class="summary-value">${formatPriceForPrint(order.item_total + order?.campaign_discount)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.item_total + orderData?.campaign_discount)}</span>
           </div>`)
             if (itemDiscountTotal > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(-) Campaign discount</span>
-            <span class="summary-value summary-value-discount">-${formatPriceForPrint(order.campaign_discount)}</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData.campaign_discount)}</span>
           </div>`)
             }
             if (couponDiscount > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(-) Coupon discount</span>
-            <span class="summary-value summary-value-discount">-${formatPriceForPrint(order?.coupon_discount)}</span>
+            <span class="summary-value summary-value-discount">-${formatPriceForPrint(orderData?.coupon_discount)}</span>
           </div>`)
             }
             parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Total</span>
-            <span class="summary-value">${formatPriceForPrint(order?.item_total - order?.coupon_discount - order?.fixed_discount)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData?.item_total - orderData?.coupon_discount - orderData?.fixed_discount)}</span>
           </div>`)
             if (vat > 0) {
               parts.push(`
           <div class="summary-row summary-row-indent">
             <span class="summary-label">(+) VAT (10%)</span>
-            <span class="summary-value">${formatPriceForPrint(order.vat)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData.vat)}</span>
           </div>`)
             }
             parts.push(`
           <div class="summary-row summary-row-divider">
             <span class="summary-label">Grand Total</span>
-            <span class="summary-value">${formatPriceForPrint(order?.total - invoiceSummary.shipping)}</span>
+            <span class="summary-value">${formatPriceForPrint(orderData?.total - invoiceSummary.shipping)}</span>
           </div>`)
             if (wagesMaking > 0) {
               parts.push(`
