@@ -2,11 +2,19 @@
 export default defineNuxtPlugin(() => {
   if (typeof window === 'undefined') return
 
-  const { setCurrency, currency } = useCurrency()
-  
+  const { setCurrency } = useCurrency()
+
+  // Always restore saved currency from localStorage first.
+  // This fixes the deployed-app bug where after switching to USD and refreshing,
+  // the navbar showed Taka (SSR payload had BDT) while product prices showed USD.
+  const savedCurrency = localStorage.getItem('currency') as 'BDT' | 'USD' | null
+  if (savedCurrency && (savedCurrency === 'BDT' || savedCurrency === 'USD')) {
+    setCurrency(savedCurrency, false)
+  }
+
   // Check if user has manually selected a currency before
   const hasManualCurrencySelection = localStorage.getItem('currency_manually_set') === 'true'
-  
+
   // If user has manually selected currency, don't auto-detect
   if (hasManualCurrencySelection) {
     return
