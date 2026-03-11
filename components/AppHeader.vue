@@ -79,7 +79,11 @@
               />
             </div>
             <div class="currency-dropdown-container">
-              <button class="action-button-flex" @click="toggleCurrencyDropdown">
+              <button
+                :key="currency"
+                class="action-button-flex"
+                @click="toggleCurrencyDropdown"
+              >
                 <!-- BDT (Taka) Icon -->
                 <svg v-if="currency === 'BDT'" class="action-icon color-inherit" width="24" height="24"
                   viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -405,8 +409,13 @@
 
           <div class="header-drawer-template-buttons">
             <div class="mobile-currency-container">
-              <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50"
-                @click="toggleMobileCurrencyDropdown">
+              <UButton
+                :key="currency"
+                color="primary"
+                variant="ghost"
+                class="w-full justify-start text-orange-600 hover:bg-orange-50"
+                @click="toggleMobileCurrencyDropdown"
+              >
                 <template #leading>
                   <!-- BDT (Taka) Icon -->
                   <svg v-if="currency === 'BDT'" class="w-5 h-5" viewBox="0 0 24 24" fill="none"

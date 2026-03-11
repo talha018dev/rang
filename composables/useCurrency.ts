@@ -114,7 +114,7 @@ export const useCurrency = () => {
   }
 
   return {
-    currency: computed(() => currency.value),
+    currency,
     currencySymbol,
     currencyCode,
     setCurrency,
