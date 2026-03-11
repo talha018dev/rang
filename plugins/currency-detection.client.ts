@@ -1,28 +1,14 @@
 // Currency detection plugin - automatically detects user location and sets currency
-export default defineNuxtPlugin((nuxtApp) => {
+import { defineNuxtPlugin } from 'nuxt/app'
+import { useCurrency } from '../composables/useCurrency'
+
+export default defineNuxtPlugin(() => {
   if (typeof window === 'undefined') return
 
   const { setCurrency } = useCurrency()
 
-  const syncCurrencyFromStorage = () => {
-    const saved = localStorage.getItem('currency') as 'BDT' | 'USD' | null
-    if (saved && (saved === 'BDT' || saved === 'USD')) {
-      setCurrency(saved, false)
-    }
-  }
-
-  // Restore saved currency immediately so navbar and dropdown stay in sync
-  syncCurrencyFromStorage()
-
-  // Run again after hydration in case Nuxt payload overwrote the ref (fixes navbar icon showing wrong currency)
-  nuxtApp.hook('app:mounted', () => {
-    syncCurrencyFromStorage()
-  })
-
-  // Check if user has manually selected a currency before
+  // If user has manually selected currency, don't auto-detect (currency is now in cookie; no sync needed)
   const hasManualCurrencySelection = localStorage.getItem('currency_manually_set') === 'true'
-
-  // If user has manually selected currency, don't auto-detect
   if (hasManualCurrencySelection) {
     return
   }
