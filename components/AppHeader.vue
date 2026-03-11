@@ -57,7 +57,7 @@
 
         <section class='flex flex-col w-full gap-2.5'>
           <!-- Desktop Header Actions -->
-          <div class="header-actions desktop-actions ml-auto! mt-2!">
+          <div class="header-actions desktop-actions ml-auto! mt-4!">
             <div class="search-dropdown-container">
               <button class="action-button" @click="toggleSearchMenu">
                 <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

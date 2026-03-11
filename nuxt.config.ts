@@ -14,6 +14,24 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/image', '@nuxt/ui'],
   css: ['~/assets/css/main.css'],
+  appConfig: {
+    ui: {
+      toast: {
+        slots: {
+          root: 'nuxt-ui-toast-root relative group overflow-hidden bg-default shadow-lg rounded-lg ring ring-default flex gap-2.5 focus:outline-none',
+          icon: 'shrink-0 size-5 text-[#e18719]',
+          progress: 'absolute inset-x-0 bottom-0 [&>*]:!bg-[#e18719]'
+        },
+        variants: {
+          color: {
+            success: {
+              icon: '!text-[#e18719]'
+            }
+          }
+        }
+      }
+    }
+  },
   app: {
     head: {
       link: [

@@ -1803,6 +1803,7 @@ const decreaseQuantity = () => {
 
 const { addToCart } = useCart()
 const { formatPrice, currency, exchangeRate } = useCurrency()
+const toast = useToast()
 
 // Helper functions for related products price comparison
 const shouldShowComparePriceForRelated = (product: Product): boolean => {
@@ -1964,6 +1965,14 @@ const handleAddToCart = () => {
         addToCart(cartItem)
     }
 
+    toast.add({
+        title: 'Added to basket',
+        description: quantity.value > 1
+            ? `${product.value.name} (${quantity.value} items) has been added to your basket.`
+            : `${product.value.name} has been added to your basket.`,
+        color: 'success',
+        icon: 'i-heroicons-shopping-cart'
+    })
 }
 
 const handleBuyNow = () => {

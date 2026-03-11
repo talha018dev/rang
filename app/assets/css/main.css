@@ -651,6 +651,30 @@ div [data-vaul-handle] {
   color: inherit !important;
 }
 
+/* Nuxt UI Toast - padding (reset uses padding:0 on *, so we need !important).
+   Viewport is ol, each toast is li; the visible box is the first child of li.
+   Must be in global CSS (not scoped) so it matches toast content rendered in portal. */
+.nuxt-ui-toast-root {
+  padding: 1.25rem 1.5rem !important;
+}
+ol[role="region"][tabindex="-1"] > li > * {
+  padding: 1.25rem 1.5rem !important;
+}
+
+/* Toast icon and progress bar color (#e18719) */
+ol[role="region"][tabindex="-1"] > li > * > *:first-child {
+  color: #e18719 !important;
+}
+ol[role="region"][tabindex="-1"] > li > * > *:first-child svg {
+  fill: #e18719 !important;
+  color: #e18719 !important;
+}
+/* Progress bar filled portion */
+ol[role="region"][tabindex="-1"] > li > * [class*="absolute"][class*="bottom"] *,
+ol[role="region"][tabindex="-1"] > li > * [class*="progress"] * {
+  background-color: #e18719 !important;
+}
+
 /* Global scale to simulate 75% zoom without changing browser zoom */
 /* Default is 1 for all pages, home page will override to 0.75 */
 :root {
