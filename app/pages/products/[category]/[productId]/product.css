@@ -300,6 +300,11 @@
 }
 
 /* SKU */
+.sku-block {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
 .sku {
   font-family: Poppins;
   font-weight: 500;

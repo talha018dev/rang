@@ -225,8 +225,8 @@
                         </span>
                     </div>
 
-                    <!-- Rating and Reviews -->
-                    <div class="rating-section-sku-share-btn">
+                    <!-- Rating -->
+                    <div class="rating-section-sku-share-btn mt-2!">
                         <div class="rating-section">
                             <div class="stars">
                                 <svg v-for="i in 5" :key="i" class="star" :class="{ filled: i <= 4 }"
@@ -238,23 +238,78 @@
                             <span class="rating-number">4.9</span>
                             <span class="reviews">5 Reviews</span>
                         </div>
+                    </div>
 
-                        <!-- SKU -->
-                        <div class="sku-share-btn">
-                            <div class="sku">
-                                <span>SKU: {{ product.sku }}</span>
-                                <button
-                                    type="button"
-                                    class="sku-copy-btn"
-                                    :class="{ copied: skuCopied }"
-                                    @click.stop.prevent="copySku(product.sku)"
-                                    aria-label="Copy SKU"
-                                    title="Copy SKU"
-                                >
-                                    {{ skuCopied ? 'Copied' : 'Copy' }}
-                                </button>
+                    <!-- SKU -->
+                    <div class="sku-block">
+                        <div class="sku">
+                            <span>SKU: {{ product.sku }}</span>
+                            <button
+                                type="button"
+                                class="sku-copy-btn"
+                                :class="{ copied: skuCopied }"
+                                @click.stop.prevent="copySku(product.sku)"
+                                aria-label="Copy SKU"
+                                title="Copy SKU"
+                            >
+                                {{ skuCopied ? 'Copied' : 'Copy' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details Section (Desktop) -->
+                <div class="product-details-p-2" v-if="!isMobile">
+                    <!-- Size Selection -->
+                    <div v-if="availableSizes.length > 0" class="size-selection">
+                        <label class="selection-label">Size</label>
+                        <div class="size-radio-group">
+                            <label v-for="size in availableSizes" :key="size" class="size-radio-option"
+                                :class="{ selected: selectedSize === size }">
+                                <input type="radio" :value="size" v-model="selectedSize" class="size-radio-input" />
+                                <span class="size-radio-label">{{ size }}</span>
+                            </label>
+                        </div>
+                        <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                    </div>
+
+                    <!-- Color Selection -->
+                    <div class="color-selection">
+                        <label class="selection-label">Color</label>
+                        <div class="color-options">
+                            <div 
+                                v-for="(color, index) in availableColors" 
+                                :key="index" 
+                                class="color-option-wrapper"
+                                @click="selectedColorIndex = index"
+                            >
+                                <div
+                                    class="color-option"
+                                    :class="{ selected: selectedColorIndex === index }"
+                                    :style="{ backgroundColor: color.value || '#ccc' }"
+                                ></div>
+                                <span class="color-name">{{ color.name }}</span>
                             </div>
+                        </div>
+                    </div>
 
+                    <!-- Quantity Selector -->
+                    <div class="quantity-selector">
+                        <button class="quantity-btn minus" @click="decreaseQuantity"
+                            :disabled="quantity <= 1">-</button>
+                        <span class="quantity-text">Quantity: {{ quantity }}</span>
+                        <button class="quantity-btn plus" @click="increaseQuantity" :disabled="quantity >= 20">+</button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="buy-now-btn" @click="handleBuyNow" :disabled="quantity >= 20">Buy Now</button>
+                        <button class="add-to-basket-btn" @click="handleAddToCart" :disabled="quantity >= 20">Add to Basket</button>
+                    </div>
+
+                    <!-- Share/Wishlist (rest) -->
+                    <div class="rating-section-sku-share-btn mt-2!">
+                        <div class="sku-share-btn">
                             <div class="share-wishlist-buttons">
                                 <!-- Wishlist Button (only for logged-in users) -->
                                 <button 
@@ -300,10 +355,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Product Details Section (Desktop) -->
-                <div class="product-details-p-2" v-if="!isMobile">
                     <!-- Product Description -->
                     <div class="product-description" v-if="product?.description">
                         <h2 class="info-section-title">Product Description</h2>
@@ -370,124 +422,13 @@
                     </div>
                 </div>
 
-                    <!-- Size Selection -->
-                    <div v-if="availableSizes.length > 0" class="size-selection">
-                        <label class="selection-label">Size</label>
-                        <div class="size-radio-group">
-                            <label v-for="size in availableSizes" :key="size" class="size-radio-option"
-                                :class="{ selected: selectedSize === size }">
-                                <input type="radio" :value="size" v-model="selectedSize" class="size-radio-input" />
-                                <span class="size-radio-label">{{ size }}</span>
-                            </label>
-                        </div>
-                        <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
-                    </div>
-
-                    <!-- Color Selection -->
-                    <div class="color-selection">
-                        <label class="selection-label">Color</label>
-                        <div class="color-options">
-                            <div 
-                                v-for="(color, index) in availableColors" 
-                                :key="index" 
-                                class="color-option-wrapper"
-                                @click="selectedColorIndex = index"
-                            >
-                                <div
-                                    class="color-option"
-                                    :class="{ selected: selectedColorIndex === index }"
-                                    :style="{ backgroundColor: color.value || '#ccc' }"
-                                ></div>
-                                <span class="color-name">{{ color.name }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quantity Selector -->
-                    <div class="quantity-selector">
-                        <button class="quantity-btn minus" @click="decreaseQuantity"
-                            :disabled="quantity <= 1">-</button>
-                        <span class="quantity-text">Quantity: {{ quantity }}</span>
-                        <button class="quantity-btn plus" @click="increaseQuantity" :disabled="quantity >= 20">+</button>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="action-buttons">
-                        <button class="buy-now-btn" @click="handleBuyNow" :disabled="quantity >= 20">Buy Now</button>
-                        <button class="add-to-basket-btn" @click="handleAddToCart" :disabled="quantity >= 20">Add to Basket</button>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Product Details Section (always shown on mobile) -->
-        <div class="product-details-p-2-mobile" v-if="isMobile">
-            <!-- Product Description -->
-            <div class="product-description" v-if="product?.description">
-                <h2 class="info-section-title">Product Description</h2>
-                <div class="description-content">
-                    <div class="description-item">
-                        <div class="description-text" v-html="product.description"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tags and Campaigns -->
-            <div v-if="hasTags || hasCampaigns" class="product-tags-campaigns">
-                <!-- Tags -->
-                <div v-if="hasTags" class="tags-section">
-                    <span class="tags-label">Tags: </span>
-                    <template v-if="Array.isArray((product as any)?.tags)">
-                        <!-- Tags as array -->
-                        <NuxtLink 
-                            v-for="tag in (product as any).tags" 
-                            :key="tag" 
-                            :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
-                            class="tag-link"
-                        >
-                            {{ tag }}
-                        </NuxtLink>
-                    </template>
-                    <template v-else>
-                        <!-- Tags as object -->
-                        <NuxtLink 
-                            v-for="(displayName, tagKey) in (product as any)?.tags" 
-                            :key="tagKey" 
-                            :to="`/tags/${encodeURIComponent(tagKey)}`"
-                            class="tag-link"
-                        >
-                            {{ displayName }}
-                        </NuxtLink>
-                    </template>
-                </div>
-                <!-- Campaigns -->
-                <div v-if="hasCampaigns" class="campaigns-section">
-                    <span class="campaigns-label">Campaigns: </span>
-                    <template v-if="Array.isArray((product as any)?.campaigns)">
-                        <!-- Campaigns as array -->
-                        <NuxtLink 
-                            v-for="campaign in (product as any).campaigns" 
-                            :key="campaign" 
-                            :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
-                            class="campaign-link"
-                        >
-                            {{ campaign }}
-                        </NuxtLink>
-                    </template>
-                    <template v-else>
-                        <!-- Campaigns as object -->
-                        <NuxtLink 
-                            v-for="(displayName, campaignKey) in (product as any)?.campaigns" 
-                            :key="campaignKey" 
-                            :to="`/campaigns/${encodeURIComponent(campaignKey)}`"
-                            class="campaign-link"
-                        >
-                            {{ displayName }}
-                        </NuxtLink>
-                    </template>
-                </div>
-            </div>
-
+        <div class="product-details-p-2-mobile" v-if="product && isMobile">
+            <!-- Size, Color, Quantity, Buttons first (same order as desktop) -->
             <div class="size-selection" v-if="availableSizes.length > 0">
                 <label class="selection-label">Size</label>
                 <div class="size-radio-group">
@@ -500,7 +441,6 @@
                 <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
             </div>
 
-            <!-- Color Selection -->
             <div class="color-selection">
                 <label class="selection-label">Color</label>
                 <div class="color-options">
@@ -520,17 +460,75 @@
                 </div>
             </div>
 
-            <!-- Quantity Selector -->
             <div class="quantity-selector">
                 <button class="quantity-btn minus" @click="decreaseQuantity" :disabled="quantity <= 1">-</button>
                 <span class="quantity-text">Quantity: {{ quantity }}</span>
                 <button class="quantity-btn plus" @click="increaseQuantity" :disabled="quantity >= 20">+</button>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="buy-now-btn" @click="handleBuyNow" :disabled="quantity >= 20">Buy Now</button>
                 <button class="add-to-basket-btn" @click="handleAddToCart" :disabled="quantity >= 20">Add to Basket</button>
+            </div>
+
+            <!-- Product Description -->
+            <div class="product-description" v-if="product?.description">
+                <h2 class="info-section-title">Product Description</h2>
+                <div class="description-content">
+                    <div class="description-item">
+                        <div class="description-text" v-html="product.description"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags and Campaigns -->
+            <div v-if="hasTags || hasCampaigns" class="product-tags-campaigns">
+                <div v-if="hasTags" class="tags-section">
+                    <span class="tags-label">Tags: </span>
+                    <template v-if="Array.isArray((product as any)?.tags)">
+                        <NuxtLink 
+                            v-for="tag in (product as any).tags" 
+                            :key="tag" 
+                            :to="`/products/${category}?tag=${encodeURIComponent(tag)}`"
+                            class="tag-link"
+                        >
+                            {{ tag }}
+                        </NuxtLink>
+                    </template>
+                    <template v-else>
+                        <NuxtLink 
+                            v-for="(displayName, tagKey) in (product as any)?.tags" 
+                            :key="tagKey" 
+                            :to="`/tags/${encodeURIComponent(tagKey)}`"
+                            class="tag-link"
+                        >
+                            {{ displayName }}
+                        </NuxtLink>
+                    </template>
+                </div>
+                <div v-if="hasCampaigns" class="campaigns-section">
+                    <span class="campaigns-label">Campaigns: </span>
+                    <template v-if="Array.isArray((product as any)?.campaigns)">
+                        <NuxtLink 
+                            v-for="campaign in (product as any).campaigns" 
+                            :key="campaign" 
+                            :to="`/products/${category}?campaign=${encodeURIComponent(campaign)}`"
+                            class="campaign-link"
+                        >
+                            {{ campaign }}
+                        </NuxtLink>
+                    </template>
+                    <template v-else>
+                        <NuxtLink 
+                            v-for="(displayName, campaignKey) in (product as any)?.campaigns" 
+                            :key="campaignKey" 
+                            :to="`/campaigns/${encodeURIComponent(campaignKey)}`"
+                            class="campaign-link"
+                        >
+                            {{ displayName }}
+                        </NuxtLink>
+                    </template>
+                </div>
             </div>
         </div>
 
