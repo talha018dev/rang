@@ -124,6 +124,46 @@
   font-weight: 600;
 }
 
+.mobile-nav-brands {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: min(100%, 300px);
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.mobile-nav-brands-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.mobile-nav-brands .mobile-nav-link {
+  color: #000000 !important;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 0;
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+
+.mobile-nav-brands .mobile-nav-link:hover {
+  color: #ea580c !important;
+}
+
+/* Show brands in mobile menu only under 600px (when header brand links are hidden) */
+@media (min-width: 601px) {
+  .mobile-nav-brands {
+    display: none !important;
+  }
+}
+
 .header-drawer-template-buttons {
   display: flex;
   flex-direction: column;
@@ -733,6 +773,7 @@
 
   .mobile-header-search-button {
     padding: 0.5rem;
+    padding-right: 1rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -802,6 +843,11 @@
     padding-right: 4px;
     padding-top: 12px;
     padding-bottom: 12px;
+  }
+
+  /* Hide header brand links on small screens; they appear in mobile menu */
+  .header-brand-link {
+    display: none !important;
   }
 }
 

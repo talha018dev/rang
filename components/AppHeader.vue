@@ -376,6 +376,20 @@
             </template>
           </div>
 
+          <!-- Mobile Brand Links (shown when drawer is used on small screens) -->
+          <div v-if="brands.length > 1" class="mobile-nav-brands">
+            <div class="mobile-nav-brands-title">Brands</div>
+            <NuxtLink
+              v-for="brand in brands.slice(1)"
+              :key="brand.slug"
+              :to="`/products/all?brand=${brand.slug}`"
+              class="mobile-nav-link"
+              @click="closeDrawer"
+            >
+              {{ brand.name }}
+            </NuxtLink>
+          </div>
+
           <!-- Mobile Search Section -->
           <div class="mobile-search-section">
             <div v-if="!showMobileSearch" class="mobile-search-toggle">
