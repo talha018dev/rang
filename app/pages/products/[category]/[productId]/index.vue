@@ -1970,8 +1970,8 @@ const handleAddToCart = () => {
         description: quantity.value > 1
             ? `${product.value.name} (${quantity.value} items) has been added to your basket.`
             : `${product.value.name} has been added to your basket.`,
-        color: 'success',
-        icon: 'i-heroicons-shopping-cart'
+        // color: 'success',
+        // icon: 'i-heroicons-shopping-cart'
     })
 }
 
