@@ -64,7 +64,7 @@
               </svg>
             </button>
             <NuxtLink 
-              :to="`/products/all?brand=${brand.slug}`"
+              :to="`/products/brand/${brand.slug}`"
               v-for="brand in brands.slice(1)" 
               :key="brand.slug" 
               class="header-brand-link"
@@ -390,7 +390,7 @@
             <NuxtLink
               v-for="brand in brands.slice(1)"
               :key="brand.slug"
-              :to="`/products/all?brand=${brand.slug}`"
+              :to="`/products/brand/${brand.slug}`"
               class="mobile-nav-link"
               @click="closeDrawer"
             >
