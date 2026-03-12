@@ -136,7 +136,7 @@
                                 :src="getImageUrl(item.image)" 
                                 :alt="item.name"
                                 class="carousel-image"
-                                loading="lazy"
+                                loading="eager"
                                 format="webp"
                                 quality="80"
                                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"

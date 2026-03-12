@@ -19,7 +19,7 @@
                         class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
                         quality="80" 
-                        loading="lazy"
+                        loading="eager"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 800px"
                         width="800"
                         height="462"
@@ -39,7 +39,7 @@
                         class="w-full h-full! object-cover rounded-lg!"
                         format="webp" 
                         quality="80" 
-                        loading="lazy"
+                        loading="eager"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 40vw, 500px"
                         width="500"
                         height="500"
@@ -65,7 +65,7 @@
                         style="height: 100%;" 
                         format="webp" 
                         quality="85" 
-                        loading="lazy" 
+                        loading="eager" 
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ item?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
