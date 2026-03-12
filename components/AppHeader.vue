@@ -2,7 +2,7 @@
   <header class="header" :class="{ 'header-scrolled': isScrolled, 'header-home': isHomeActive }" ref="headerEl">
     <div class="header-container">
       <!-- Mobile Logo (shown only on mobile) -->
-      <div class="mobile-logo-container">
+      <!-- <div class="mobile-logo-container">
         <NuxtLink to="/">
           <NuxtImg 
             src="/rang-logo-2026-v2.png" 
@@ -13,7 +13,7 @@
             priority
           />
         </NuxtLink>
-      </div>
+      </div> -->
       <!-- Mobile Search (shown only on mobile) -->
       <div class="mobile-header-search">
         <div class="search-dropdown-container">
@@ -55,9 +55,14 @@
           </NuxtLink>
         </div>
 
-        <section class=''>
+        <section class='w-full'>
           
-          <div class='flex items-center ml-3! gap-4'>
+          <div class='flex items-center gap-4'>
+            <button class="mobile-menu-button ml-0!" @click="toggleDrawer">
+              <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
             <div 
               v-for="brand in brands" 
               :key="brand.slug" 
@@ -275,11 +280,7 @@
         
 
         <!-- Mobile Menu Button -->
-        <button class="mobile-menu-button mr-auto! md:mr-0! ml-0! md:ml-auto!" @click="toggleDrawer">
-          <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+       
       </div>
     </div>
 
