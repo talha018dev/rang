@@ -20,6 +20,11 @@
 .header-brand-link:hover {
   color: #ea580c;
 }
+.header-brand-link.header-brand-link-active,
+.header-brand-link-active {
+  color: #ea580c;
+  font-weight: 600;
+}
 .header-brand-name {
   font-size: 0.875rem;
 }

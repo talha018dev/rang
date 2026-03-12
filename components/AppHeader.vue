@@ -68,6 +68,7 @@
               v-for="brand in brands.slice(1)" 
               :key="brand.slug" 
               class="header-brand-link"
+              :class="{ 'header-brand-link-active': isBrandPageActive(brand.slug) }"
             >
               <span class="header-brand-name">{{ brand.name }}</span>
             </NuxtLink>
@@ -392,6 +393,7 @@
               :key="brand.slug"
               :to="`/products/brand/${brand.slug}`"
               class="mobile-nav-link"
+              :class="{ 'header-brand-link-active': isBrandPageActive(brand.slug) }"
               @click="closeDrawer"
             >
               {{ brand.name }}
@@ -1004,7 +1006,14 @@ const selectMobileCurrency = (newCurrency: 'BDT' | 'USD') => {
 
 // Computed property to get current route
 const currentRoute = computed(() => router.currentRoute.value.path)
-console.log('🚀 - currentRoute:', currentRoute.value)
+
+// Check if current page is a brand page and the given brand slug is active
+const isBrandPageActive = (brandSlug: string): boolean => {
+  const path = route.path
+  if (!path.startsWith('/products/brand/')) return false
+  const currentBrandId = route.params.brandId as string
+  return currentBrandId === brandSlug
+}
 
 // Computed properties for each nav link to determine if it's active
 const isHomeActive = computed(() => currentRoute.value === '/')
