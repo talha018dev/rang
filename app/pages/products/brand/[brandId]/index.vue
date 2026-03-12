@@ -10,6 +10,63 @@
         </div>
       </section>
 
+      <!-- Filter Section (only when brand is loaded) -->
+      <section v-if="brand" class="filter-section">
+        <div class="filter-container">
+          <div class="filter-dropdowns">
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedSize">
+                <option value="">Size</option>
+                <option v-for="size in availableSizes" :key="size" :value="size">{{ size }}</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedPrice">
+                <option value="">Price</option>
+                <option value="0-1000">Under Tk 1,000</option>
+                <option value="1000-2000">Tk 1,000 - 2,000</option>
+                <option value="2000-3000">Tk 2,000 - 3,000</option>
+                <option value="3000+">Above Tk 3,000</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedCombo">
+                <option value="">Combo</option>
+                <option value="true">Only combo products</option>
+                <option value="false">Except combo products</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="filter-dropdown">
+              <select class="filter-select" v-model="selectedSort">
+                <option value="high-to-low">High to Low</option>
+                <option value="low-to-high">Low to High</option>
+                <option value="on-sale">On Sale</option>
+              </select>
+              <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Products Grid Section -->
       <section class="products-section">
         <div class="products-container">
@@ -34,11 +91,11 @@
             <p>Brand not found.</p>
             <NuxtLink to="/" class="brand-page-back-link">Back to Home</NuxtLink>
           </div>
-          <div v-else-if="products.length === 0" class="empty-state">
-            <p>No products in this brand yet.</p>
+          <div v-else-if="filteredProducts.length === 0" class="empty-state">
+            <p>{{ hasActiveFilters ? 'No products found matching your filters.' : 'No products in this brand yet.' }}</p>
           </div>
           <div v-else class="products-grid">
-            <div v-for="(product, index) in products" :key="product.id" class="product-card-wrapper">
+            <div v-for="(product, index) in filteredProducts" :key="product.id" class="product-card-wrapper">
               <NuxtLink :to="productLink(product)" class="product-card">
                 <div class="product-image-item">
                   <div class="product-image-container">
@@ -181,12 +238,25 @@ const route = useRoute()
 const router = useRouter()
 const brandId = computed(() => (route.params.brandId as string) || '')
 
+// Query params for filters (no brand - we're on a brand page)
+const sizeFromUrl = computed(() => (route.query.size as string) || '')
+const priceFromUrl = computed(() => (route.query.price as string) || '')
+const comboFromUrl = computed(() => (route.query.combo as string) || '')
+const sortFromUrl = computed(() => (route.query.sort as string) || 'high-to-low')
+
 const brand = ref<Brand | null>(null)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
 const currentPage = ref(1)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
+
+// Filter state (init from URL)
+const selectedSize = ref(sizeFromUrl.value)
+const selectedPrice = ref(priceFromUrl.value)
+const selectedCombo = ref(comboFromUrl.value)
+const selectedSort = ref(sortFromUrl.value || 'high-to-low')
+const isUpdatingFromUrl = ref(false)
 
 // Product link: use category slug (parent or category) for /products/[category]/[slug]
 function productLink(product: Product): string {
@@ -236,6 +306,64 @@ const pageFromUrl = computed(() => {
   return page ? Math.max(1, parseInt(page, 10) || 1) : 1
 })
 
+// Sizes from current products (for filter dropdown)
+const availableSizes = computed(() => {
+  const sizes = new Set<string>()
+  products.value.forEach((product) => {
+    product.variants?.forEach((variant) => {
+      if (variant.attributes?.size) sizes.add(variant.attributes.size)
+    })
+  })
+  return Array.from(sizes).sort()
+})
+
+// Client-side filter by size and price (Combo and Sort are API-side)
+const filteredProducts = computed(() => {
+  return products.value.filter((product) => {
+    const sizeMatch =
+      !selectedSize.value ||
+      !!product.variants?.some((v) => v.attributes?.size === selectedSize.value)
+    let priceMatch = true
+    if (selectedPrice.value) {
+      const price = Number(product.price ?? 0)
+      switch (selectedPrice.value) {
+        case '0-1000':
+          priceMatch = price < 1000
+          break
+        case '1000-2000':
+          priceMatch = price >= 1000 && price < 2000
+          break
+        case '2000-3000':
+          priceMatch = price >= 2000 && price < 3000
+          break
+        case '3000+':
+          priceMatch = price >= 3000
+          break
+      }
+    }
+    return sizeMatch && priceMatch
+  })
+})
+
+const hasActiveFilters = computed(
+  () =>
+    !!selectedSize.value ||
+    !!selectedPrice.value ||
+    !!selectedCombo.value ||
+    (selectedSort.value && selectedSort.value !== 'high-to-low')
+)
+
+// Update URL from current filters (no brand param)
+function updateUrlQuery() {
+  const query: Record<string, string> = {}
+  if (selectedSize.value) query.size = selectedSize.value
+  if (selectedPrice.value) query.price = selectedPrice.value
+  if (selectedCombo.value !== '') query.combo = selectedCombo.value
+  if (selectedSort.value && selectedSort.value !== 'high-to-low') query.sort = selectedSort.value
+  if (currentPage.value > 1) query.page = currentPage.value.toString()
+  router.replace({ path: route.path, query })
+}
+
 const visiblePages = computed(() => {
   if (!pagination.value) return []
   const total = pagination.value.last_page
@@ -256,7 +384,7 @@ const visiblePages = computed(() => {
 const goToPage = (page: number) => {
   if (!pagination.value || page < 1 || page > pagination.value.last_page) return
   currentPage.value = page
-  router.replace({ path: route.path, query: { ...route.query, page: page === 1 ? undefined : page } })
+  updateUrlQuery()
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
@@ -299,7 +427,10 @@ async function fetchProducts() {
   try {
     const { backendUrl } = useApi()
     const page = currentPage.value
-    const url = `${backendUrl}/product?brand=${encodeURIComponent(brandId.value)}&page=${page}`
+    let url = `${backendUrl}/product?brand=${encodeURIComponent(brandId.value)}&sort=${selectedSort.value || 'high-to-low'}&page=${page}`
+    if (selectedCombo.value !== '') {
+      url += `&combo=${selectedCombo.value}`
+    }
     const response = await $fetch<ProductResponse>(url)
     if (response?.success && Array.isArray(response.data)) {
       products.value = response.data
@@ -379,13 +510,34 @@ const handleToggleWishlist = async (event: Event, product: Product) => {
   if (product.id && product.slug) await toggleWishlist(product.id, product.slug)
 }
 
+// Sync filters from URL and refetch
+watch([sizeFromUrl, priceFromUrl, comboFromUrl, sortFromUrl, pageFromUrl], () => {
+  isUpdatingFromUrl.value = true
+  if (sizeFromUrl.value !== selectedSize.value) selectedSize.value = sizeFromUrl.value
+  if (priceFromUrl.value !== selectedPrice.value) selectedPrice.value = priceFromUrl.value
+  if (comboFromUrl.value !== selectedCombo.value) selectedCombo.value = comboFromUrl.value
+  if (sortFromUrl.value && sortFromUrl.value !== selectedSort.value) selectedSort.value = sortFromUrl.value || 'high-to-low'
+  if (pageFromUrl.value !== currentPage.value) currentPage.value = pageFromUrl.value
+  isUpdatingFromUrl.value = false
+  if (brand.value) fetchProducts()
+})
+
+// When filters change: reset to page 1, update URL, refetch (skip when syncing from URL)
+watch([selectedSize, selectedPrice, selectedCombo, selectedSort], () => {
+  if (isUpdatingFromUrl.value) return
+  currentPage.value = 1
+  updateUrlQuery()
+  if (brand.value) fetchProducts()
+})
+
 watch(brandId, () => {
   currentPage.value = 1
   fetchBrand()
 }, { immediate: true })
 
 watch(currentPage, (newPage, oldPage) => {
-  if (oldPage !== undefined && newPage !== oldPage && brand.value) {
+  if (oldPage !== undefined && newPage !== oldPage && brand.value && !isUpdatingFromUrl.value) {
+    updateUrlQuery()
     fetchProducts()
   }
 })

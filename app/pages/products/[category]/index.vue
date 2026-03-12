@@ -78,9 +78,8 @@
             </div>
             <div class="filter-dropdown">
               <select class="filter-select" v-model="selectedSort">
-                <option value="latest">Latest</option>
-                <option value="low-to-high">Low to High</option>
                 <option value="high-to-low">High to Low</option>
+                <option value="low-to-high">Low to High</option>
                 <option value="on-sale">On Sale</option>
               </select>
               <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -267,7 +266,7 @@ const brandFromUrl = computed(() => (route.query.brand as string) || '')
 const sizeFromUrl = computed(() => (route.query.size as string) || '')
 const priceFromUrl = computed(() => (route.query.price as string) || '')
 const comboFromUrl = computed(() => (route.query.combo as string) || '')
-const sortFromUrl = computed(() => (route.query.sort as string) || 'latest')
+const sortFromUrl = computed(() => (route.query.sort as string) || 'high-to-low')
 const pageFromUrl = computed(() => {
   const page = route.query.page as string
   return page ? parseInt(page, 10) : 1
@@ -345,7 +344,7 @@ const selectedSize = ref(sizeFromUrl.value)
 const selectedPrice = ref(priceFromUrl.value)
 const selectedBrand = ref(brandFromUrl.value)
 const selectedCombo = ref(comboFromUrl.value)
-const selectedSort = ref(sortFromUrl.value || 'latest')
+const selectedSort = ref(sortFromUrl.value || 'high-to-low')
 const currentPage = ref(pageFromUrl.value)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
@@ -549,7 +548,7 @@ watch([selectedTag, selectedCampaign, brandFromUrl, sizeFromUrl, priceFromUrl, c
     selectedCombo.value = comboFromUrl.value
   }
   if (sortFromUrl.value && sortFromUrl.value !== selectedSort.value) {
-    selectedSort.value = sortFromUrl.value || 'latest'
+    selectedSort.value = sortFromUrl.value || 'high-to-low'
   }
   if (pageFromUrl.value !== currentPage.value) {
     currentPage.value = pageFromUrl.value
@@ -694,7 +693,7 @@ const updateUrlQuery = () => {
   if (selectedCombo.value !== '') {
     query.combo = selectedCombo.value
   }
-  if (selectedSort.value && selectedSort.value !== 'latest') {
+  if (selectedSort.value && selectedSort.value !== 'high-to-low') {
     query.sort = selectedSort.value
   }
   if (currentPage.value > 1) {

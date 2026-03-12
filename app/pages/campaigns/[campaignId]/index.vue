@@ -67,9 +67,8 @@
             </div>
             <div class="filter-dropdown">
               <select class="filter-select" v-model="selectedSort">
-                <option value="latest">Latest</option>
-                <option value="low-to-high">Low to High</option>
                 <option value="high-to-low">High to Low</option>
+                <option value="low-to-high">Low to High</option>
                 <option value="on-sale">On Sale</option>
               </select>
               <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -261,7 +260,7 @@ const selectedSize = ref('')
 const selectedPrice = ref('')
 const selectedBrand = ref('')
 const selectedCombo = ref('')
-const selectedSort = ref('latest') // Default sort is latest
+const selectedSort = ref('high-to-low') // Default sort is high to low
 const currentPage = ref(1)
 const products = ref<Product[]>([])
 const pagination = ref<PaginationData | null>(null)
