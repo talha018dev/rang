@@ -72,6 +72,28 @@
   color: black !important;
 }
 
+/* Custom mobile drawer (replaces UDrawer so content is always in DOM and opens instantly) */
+.header-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.15s ease-out;
+}
+
+.header-drawer-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9999;
+  width: min(320px, 85vw);
+  max-width: 100%;
+  overflow: auto;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease-out;
+}
+
 .header-drawer-template {
   background-color: white !important;
   color: black !important;
@@ -934,6 +956,12 @@
 .header-drawer [data-vaul-drawer][data-vaul-snap-points='false'][data-vaul-drawer-direction='right'][data-state='open'] {
   display: none !important;
 }
+/* Faster drawer open/close - feel instant */
+.header-drawer [data-vaul-drawer],
+.header-drawer [data-vaul-overlay] {
+  transition-duration: 0.1s !important;
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1) !important;
+}
 div [data-vaul-handle] {
   display: none !important;
 }
@@ -944,6 +972,6 @@ div [data-vaul-handle] {
 .header-drawer [data-vaul-drawer-visible='true'] {
   display: none !important;
 }
-.header-drawer {
+/* .header-drawer {
   background-color: red !important;
-}
+} */

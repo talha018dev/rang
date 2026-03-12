@@ -274,13 +274,21 @@
       </div>
     </div>
 
-    <!-- Nuxt UI Drawer -->
-    <UDrawer nobodyStyles='false' v-model:open="isDrawerOpen" direction="left" class="header-drawer" :ui="{
-      content: 'header-drawer',
-      header: '',
-      body: ''
-    }">
-      <template #content>
+    <!-- Mobile menu drawer - custom implementation with v-show so content is always in DOM and opens instantly -->
+    <Teleport to="body">
+      <div
+        v-show="isDrawerOpen"
+        class="header-drawer-overlay"
+        aria-hidden="true"
+        @click="closeDrawer"
+      />
+      <div
+        v-show="isDrawerOpen"
+        class="header-drawer-panel header-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile menu"
+      >
         <div class="p-6 bg-white header-drawer-template overflow-auto">
           <div class="flex items-center justify-between mb-6">
             <NuxtLink to="/" @click="closeDrawer">
@@ -496,16 +504,6 @@
               </UButton>
               <span v-if="cartTotalItems > 0" class="cart-badge mobile-cart-badge">{{ cartTotalItems }}</span>
             </NuxtLink>
-            <!-- <NuxtLink to="/store" class="action-button color-inherit" style="padding: 0;">
-
-              <UButton color="primary" variant="ghost" class="w-full justify-start text-orange-600 hover:bg-orange-50">
-                <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 10-8 0v4" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14l-1 12H6L5 8z" />
-                </svg>
-                Store
-              </UButton>
-            </NuxtLink> -->
             <NuxtLink to="/store-location-rang" class="action-button color-inherit" style="padding: 0;" @click="closeDrawer">
               <button class="color-inherit flex items-center gap-1">
                 <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -540,14 +538,14 @@
             </button>
           </div>
         </div>
-      </template>
-    </UDrawer>
+      </div>
+    </Teleport>
   </header>
 </template>
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'nuxt/app';
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
@@ -697,6 +695,7 @@ const fetchBrands = async () => {
 // Close search results when clicking outside
 onMounted(() => {
   fetchBrands()
+  document.addEventListener('keydown', onDrawerKeydown)
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement
     // Keep search open when interacting with search icon/button or dropdown
@@ -930,6 +929,17 @@ const closeDrawer = () => {
   })
 }
 
+// Body scroll lock when drawer is open
+watch(isDrawerOpen, (open) => {
+  if (typeof document === 'undefined') return
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
+// Escape key to close drawer
+function onDrawerKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && isDrawerOpen.value) closeDrawer()
+}
+
 // Handle logout
 const handleLogout = async () => {
   try {
@@ -1065,6 +1075,7 @@ onMounted(async () => {
 
 // Remove scroll event listener on unmount
 onUnmounted(() => {
+  document.removeEventListener('keydown', onDrawerKeydown)
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('resize', handleScroll)
 })
