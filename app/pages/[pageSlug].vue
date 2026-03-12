@@ -31,6 +31,7 @@
       <div class="page-body">
         <div class="page-content-wrapper" v-html="pageData.content"></div>
       </div>
+      <AppFooter />
     </div>
   </main>
 </template>
@@ -39,6 +40,7 @@
 import { useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useApi } from '~~/composables/useApi'
+import AppFooter from '~~/components/AppFooter.vue'
 
 // Types
 interface PageData {

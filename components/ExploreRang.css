@@ -7,6 +7,11 @@
   margin: 0 auto;
 }
 
+.explore-container img.explore-img-loaded {
+  /* Keep decoded image in memory when scrolled out of view; reduces fragment/reload when scrolling back */
+  content-visibility: visible;
+}
+
 .explore-header {
   margin: 2rem 0 1rem 0;
 }

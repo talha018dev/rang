@@ -65,22 +65,11 @@
             </button>
             <NuxtLink 
               :to="`/products/all?brand=${brand.slug}`"
-              v-for="brand in brands" 
+              v-for="brand in brands.slice(1)" 
               :key="brand.slug" 
-              class="max-w-9 sm:max-w-14 block"
+              class="header-brand-link"
             >
-              <NuxtImg 
-                :src="brand.image.url" 
-                :alt="brand.name" 
-                class="image-fade h-10 object-contain w-full" 
-                format="webp" 
-                quality="80"
-                loading="lazy"
-                sizes="(max-width: 768px) 20vw, (max-width: 1024px) 15vw, 12vw"
-                width="70"
-                height="70"
-                @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
-              />
+              <span class="header-brand-name">{{ brand.name }}</span>
             </NuxtLink>
 
             <!-- Desktop Header Actions -->
@@ -203,7 +192,7 @@
                 </button>
               </div>
           </div>
-          <nav class="nav items-end! ml-3!">
+          <nav class="nav items-end! ml-3! mt-4!">
             
             
             <!-- Dynamic Menu Items from Settings API -->

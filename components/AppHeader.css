@@ -8,6 +8,25 @@
   height: 90px;
   object-fit: contain;
 }
+
+.header-brand-link {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.15s ease-in-out;
+}
+.header-brand-link:hover {
+  color: #ea580c;
+}
+.header-brand-name {
+  font-size: 0.875rem;
+}
+@media (min-width: 640px) {
+  .header-brand-name {
+    font-size: 0.9375rem;
+  }
+}
 .header-container .heading-text {
   font-family: Poppins;
   font-weight: 600;
@@ -122,11 +141,9 @@
   left: 0;
   right: 0;
   z-index: 50;
-  /* background-color: rgba(255, 255, 255, 0.95); */
-  /* background-color: transparent !important; */
+  background-color: white !important;
   backdrop-filter: blur(4px);
   color: black;
-  /* max-width: 1600px; */
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -145,18 +162,13 @@
   }
 }
 
-/* Ensure transparent header when not scrolled */
+/* Header always white - no transparent state */
 .header:not(.header-scrolled) {
-  background-color: transparent !important;
+  background-color: white !important;
 }
 
-/* Add background color for home page when not scrolled */
-/* .header-home:not(.header-scrolled) {
-  background-color: rgba(247, 148, 28, 0.26) !important;
-} */
-
 .header-scrolled {
-  background-color: rgba(255, 255, 255, 0.95) !important;
+  background-color: white !important;
 }
 
 .header-scrolled .nav-link {
@@ -179,9 +191,9 @@
   color: black !important;
 }
 
-/* Make hamburger white only on home page when not scrolled */
+/* Make hamburger always black */
 .header-home:not(.header-scrolled) .mobile-menu-button {
-  color: white !important;
+  color: black !important;
 }
 
 .header-content {
@@ -219,7 +231,7 @@
 }
 
 .nav-link {
-  color: white;
+  color: black;
   transition: color 0.15s ease-in-out;
   display: flex;
   align-items: center;
@@ -235,7 +247,7 @@
 }
 
 .nav-link-home-page {
-  color: white !important;
+  color: black !important;
   font-weight: 500;
 }
 
@@ -399,8 +411,7 @@
 .header-actions {
   display: flex;
   align-items: center;
-  /* gap: 0.5rem; */
-  color: white;
+  color: black;
   position: relative;
   top: 0.5rem;
 }
@@ -409,7 +420,7 @@
   position: relative;
 }
 
-/* Make icons black on all pages except home page */
+/* Icons always black */
 .header:not(.header-home) .header-actions {
   color: black;
 }
@@ -742,9 +753,9 @@
     height: 1.25rem;
   }
 
-  /* Make search icon white on home page when not scrolled */
+  /* Make search icon always black */
   .header-home:not(.header-scrolled) .mobile-header-search-button {
-    color: white;
+    color: black;
   }
 
   .header-scrolled .mobile-header-search-button {
