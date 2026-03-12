@@ -57,16 +57,17 @@
 
         <section class='w-full'>
           
-          <div class='flex items-center gap-4'>
+          <div class='flex items-center gap-4 ml-3!'>
             <button class="mobile-menu-button ml-0!" @click="toggleDrawer">
               <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <div 
+            <NuxtLink 
+              :to="`/products/all?brand=${brand.slug}`"
               v-for="brand in brands" 
               :key="brand.slug" 
-              class="max-w-9 sm:max-w-14"
+              class="max-w-9 sm:max-w-14 block"
             >
               <NuxtImg 
                 :src="brand.image.url" 
@@ -80,7 +81,7 @@
                 height="70"
                 @load="(e) => (e.target as HTMLImageElement)?.classList.add('loaded')"
               />
-            </div>
+            </NuxtLink>
 
             <!-- Desktop Header Actions -->
               <div class="header-actions desktop-actions ml-auto!">
