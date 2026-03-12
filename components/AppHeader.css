@@ -2,6 +2,12 @@
 .header-container {
   position: relative;
 }
+
+.header-brand-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
 .header-container .heading-text {
   font-family: Poppins;
   font-weight: 600;

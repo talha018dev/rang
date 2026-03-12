@@ -146,6 +146,6 @@
 /* Hide mobile search on desktop */
 @media (min-width: 601px) {
   .mobile-header-search {
-    display: none;
+    display: none !important;
   }
 }
