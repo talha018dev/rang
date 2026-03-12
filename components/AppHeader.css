@@ -147,7 +147,7 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   transition: background-color 0.3s ease-in-out;
 }
 
@@ -211,10 +211,9 @@
   top: 2px; */
 }
 
-/* Make logo bigger on home page when not scrolled */
+/* Make logo 70px on home page when not scrolled */
 .header-home:not(.header-scrolled) .logo-image {
-  height: 100px;
-  /* top:6px; */
+  height: 64px;
 }
 
 .nav {
@@ -794,6 +793,15 @@
   /* Hide desktop navigation under 600px */
   .nav {
     display: none !important;
+  }
+
+  /* Header home: no side padding, 12px vertical padding, no top margin */
+  .header.header-home {
+    margin-top: 0;
+    padding-left: 0;
+    padding-right: 4px;
+    padding-top: 12px;
+    padding-bottom: 12px;
   }
 }
 

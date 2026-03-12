@@ -192,7 +192,7 @@
                 </button>
               </div>
           </div>
-          <nav class="nav flex items-end! ml-3! mt-4!">
+          <nav class="nav flex items-end! ml-3! mt-1!">
             
             
             <!-- Dynamic Menu Items from Settings API -->
