@@ -837,13 +837,48 @@
     display: none !important;
   }
 
-  /* Header home: no side padding, 12px vertical padding, no top margin */
+  /* Show and center logo in header under 600px */
+  .header-content {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 40px;
+  }
+  .header-content > div:first-child {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .header-content .logo-image {
+    width: 40px !important;
+    height: 40px !important;
+    object-fit: contain;
+    object-position: center;
+  }
+  .header-content > section {
+    position: absolute;
+    left: 0;
+  }
+
+  /* Header height and padding under 600px so logo fits without cropping */
+  .header {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    min-height: 68px;
+    box-sizing: border-box;
+  }
+
+  /* Header home: no side padding, consistent vertical padding */
   .header.header-home {
     margin-top: 0;
     padding-left: 0;
     padding-right: 4px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 14px;
+    padding-bottom: 14px;
   }
 
   /* Hide header brand links on small screens; they appear in mobile menu */
