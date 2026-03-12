@@ -2638,6 +2638,18 @@ const handlePlaceOrder = async () => {
       }
 
       // Navigate to order confirmation page with order number, gateway, and order value for Meta Pixel
+      const contactForPixel = {
+        email: (shippingInfo.value.email || '').trim().toLowerCase() || undefined,
+        phone: (shippingInfo.value.phone || '').trim().replace(/\D/g, '') || undefined
+      }
+      if (contactForPixel.email || contactForPixel.phone) {
+        try {
+          sessionStorage.setItem(
+            `meta_pixel_purchase_contact_${orderNumber}`,
+            JSON.stringify(contactForPixel)
+          )
+        } catch (_) {}
+      }
       navigateTo({
         path: '/checkout/success',
         query: {

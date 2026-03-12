@@ -70,11 +70,22 @@ function trackMetaPixelPurchase() {
   } catch (_) {
     // localStorage may be full or disabled; allow one fire
   }
-  w.fbq('track', 'Purchase', {
+  const payload: Record<string, unknown> = {
     value: orderTotal,
     currency,
     order_id: orderNumber
-  })
+  }
+  // Include email and phone for advanced matching when available
+  try {
+    const contactRaw = sessionStorage.getItem(`meta_pixel_purchase_contact_${orderNumber}`)
+    if (contactRaw) {
+      const contact = JSON.parse(contactRaw) as { email?: string; phone?: string }
+      if (contact.email) payload.em = contact.email
+      if (contact.phone) payload.ph = contact.phone
+      sessionStorage.removeItem(`meta_pixel_purchase_contact_${orderNumber}`)
+    }
+  } catch (_) {}
+  w.fbq('track', 'Purchase', payload)
 }
 
 // Call payment redirect API
