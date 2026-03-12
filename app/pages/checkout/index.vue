@@ -2638,11 +2638,23 @@ const handlePlaceOrder = async () => {
       }
 
       // Navigate to order confirmation page with order number, gateway, and order value for Meta Pixel
+      const fullName = (shippingInfo.value.fullName || '').trim()
+      const nameParts = fullName.split(/\s+/).filter(Boolean)
+      const firstName = nameParts[0] || undefined
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : undefined
       const contactForPixel = {
         email: (shippingInfo.value.email || '').trim().toLowerCase() || undefined,
-        phone: (shippingInfo.value.phone || '').trim().replace(/\D/g, '') || undefined
+        phone: (shippingInfo.value.phone || '').trim().replace(/\D/g, '') || undefined,
+        fn: firstName,
+        ln: lastName,
+        ct: (shippingInfo.value.city || '').trim() || undefined,
+        st: (shippingInfo.value.zone || '').trim() || undefined,
+        zp: (shippingInfo.value.postalCode || '').trim() || undefined,
+        country: (shippingInfo.value.country || '').trim() || undefined
       }
-      if (contactForPixel.email || contactForPixel.phone) {
+      const hasAny = contactForPixel.email || contactForPixel.phone || contactForPixel.fn ||
+        contactForPixel.ln || contactForPixel.ct || contactForPixel.st || contactForPixel.zp || contactForPixel.country
+      if (hasAny) {
         try {
           sessionStorage.setItem(
             `meta_pixel_purchase_contact_${orderNumber}`,

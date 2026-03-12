@@ -75,16 +75,36 @@ function trackMetaPixelPurchase() {
     currency,
     order_id: orderNumber
   }
-  // Include email and phone for advanced matching when available
+  // Include advanced matching fields when available (Meta hashes these for matching)
   try {
     const contactRaw = sessionStorage.getItem(`meta_pixel_purchase_contact_${orderNumber}`)
     if (contactRaw) {
-      const contact = JSON.parse(contactRaw) as { email?: string; phone?: string }
+      const contact = JSON.parse(contactRaw) as {
+        email?: string
+        phone?: string
+        fn?: string
+        ln?: string
+        ct?: string
+        st?: string
+        zp?: string
+        country?: string
+      }
       if (contact.email) payload.em = contact.email
       if (contact.phone) payload.ph = contact.phone
+      if (contact.fn) payload.fn = contact.fn
+      if (contact.ln) payload.ln = contact.ln
+      if (contact.ct) payload.ct = contact.ct
+      if (contact.st) payload.st = contact.st
+      if (contact.zp) payload.zp = contact.zp
+      if (contact.country) payload.country = contact.country
       sessionStorage.removeItem(`meta_pixel_purchase_contact_${orderNumber}`)
     }
   } catch (_) {}
+  // User agent is available client-side; include when present (Meta may use for matching)
+  if (typeof navigator !== 'undefined' && navigator.userAgent) {
+    payload.client_user_agent = navigator.userAgent
+  }
+  // Note: IP address is not available in client-side JS; Meta may infer it from the pixel request.
   w.fbq('track', 'Purchase', payload)
 }
 

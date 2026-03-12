@@ -15,7 +15,7 @@
             width="100%"
             height="450"
             style="border:0;"
-            allowfullscreen=""
+            allowfullscreen="true"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             title="Rang Bangladesh Location"
@@ -71,7 +71,7 @@
               </div>
               <div class="contact-details">
                 <h3 class="contact-label">Email</h3>
-                <p class="contact-value">
+                <p class="contact-value break-all">
                   <a href="mailto:contactrang@gmail.com" class="contact-link">contactrang@gmail.com</a>
                 </p>
               </div>

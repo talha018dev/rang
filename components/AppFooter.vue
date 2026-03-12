@@ -38,7 +38,7 @@
             </div>
             <div class="contact-item">
               <span class="contact-icon"><Icon name="heroicons:envelope" /></span>
-              <span>contactrang@gmail.com</span>
+              <span class="break-all">contactrang@gmail.com</span>
             </div>
             <div class="contact-item">
               <span class="contact-icon"><Icon name="heroicons:phone" /></span>
@@ -117,14 +117,14 @@
           <div class="download-section">
             <h3 class="section-heading">Download App</h3>
             <div class="app-buttons">
-              <a href="#" class="app-button app-store">
+              <a href="#" class="app-button app-store w-fit">
                 <Icon name="simple-icons:apple" />
                 <div class="app-text">
                   <span class="app-subtitle">Download on the</span>
                   <span class="app-title">App Store</span>
                 </div>
               </a>
-              <a href="#" class="app-button google-play">
+              <a href="#" class="app-button google-play w-fit">
                 <NuxtImg src="/play-store-logo.svg" alt="Google Play" format="webp" quality="85" loading="lazy" />
 
                 <div class="app-text">

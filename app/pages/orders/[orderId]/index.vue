@@ -214,10 +214,10 @@
                       <p class="quantity-text">{{ item.quantity }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Price">
-                      <p class="price-text">{{ formatOrderPrice(item.price + item.discount) }}</p>
+                      <p class="price-text">{{ formatOrderPrice(item.price + item?.discount) }}</p>
                     </td>
                     <td class="table-cell text-right" data-label="Total">
-                      <p class="total-text">{{ formatOrderPrice((item.price + item.discount) * item.quantity) }}</p>
+                      <p class="total-text">{{ formatOrderPrice((item.price + item?.discount) * item.quantity) }}</p>
                     </td>
                   </tr>
                 </tbody>
@@ -258,7 +258,7 @@
                 </div>
                 <div class="summary-row summary-row-divider">
                   <span class="summary-label">Grand Total</span>
-                  <span class="summary-value">{{ formatOrderPrice(order?.total - invoiceSummary.shipping) }}</span>
+                  <span class="summary-value">{{ formatOrderPrice(order?.total - invoiceSummary?.shipping) }}</span>
                 </div>
                 <div v-if="(invoiceSummary?.wagesMaking ?? 0) > 0" class="summary-row summary-row-indent">
                   <span class="summary-label">(+) Wages (Making)</span>
@@ -311,6 +311,7 @@ definePageMeta({
 // Type definitions (same as orders page)
 interface OrderItem {
   price: number
+  discount: number
   quantity: number
   product: {
     sku: string
@@ -349,6 +350,8 @@ interface OrderCustomer {
 
 interface Order {
   number: string
+  discount: number
+  campaign_discount: number
   coupon_discount: number
   fixed_discount: number
   vat: number
