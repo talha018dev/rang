@@ -790,10 +790,10 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1000px) {
-  /* Hide desktop navigation under 1000px */
+@media (max-width: 600px) {
+  /* Hide desktop navigation under 600px */
   .nav {
-    display: none;
+    display: none !important;
   }
 }
 
