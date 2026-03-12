@@ -65,7 +65,9 @@
                         style="height: 100%;" 
                         format="webp" 
                         quality="85" 
-                        loading="eager" 
+                        loading="eager"
+                        width="400"
+                        height="488"
                     />
                     <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ item?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">

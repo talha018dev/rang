@@ -156,12 +156,14 @@
         </section>
       </div>
     </div>
+    <AppFooter />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useHead } from 'nuxt/app'
+import AppFooter from '~~/components/AppFooter.vue'
 import './contact-us.css'
 
 // Meta
