@@ -2638,19 +2638,19 @@ const handlePlaceOrder = async () => {
       }
 
       // Navigate to order confirmation page with order number, gateway, and order value for Meta Pixel
-      const fullName = (shippingInfo.value.fullName || '').trim()
+      const fullName = String(shippingInfo.value.fullName ?? '').trim()
       const nameParts = fullName.split(/\s+/).filter(Boolean)
       const firstName = nameParts[0] || undefined
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : undefined
       const contactForPixel = {
-        email: (shippingInfo.value.email || '').trim().toLowerCase() || undefined,
-        phone: (shippingInfo.value.phone || '').trim().replace(/\D/g, '') || undefined,
+        email: String(shippingInfo.value.email ?? '').trim().toLowerCase() || undefined,
+        phone: String(shippingInfo.value.phone ?? '').trim().replace(/\D/g, '') || undefined,
         fn: firstName,
         ln: lastName,
-        ct: (shippingInfo.value.city || '').trim() || undefined,
-        st: (shippingInfo.value.zone || '').trim() || undefined,
-        zp: (shippingInfo.value.postalCode || '').trim() || undefined,
-        country: (shippingInfo.value.country || '').trim() || undefined
+        ct: String(shippingInfo.value.city ?? '').trim() || undefined,
+        st: String(shippingInfo.value.zone ?? '').trim() || undefined,
+        zp: String(shippingInfo.value.postalCode ?? '').trim() || undefined,
+        country: String(shippingInfo.value.country ?? '').trim() || undefined
       }
       const hasAny = contactForPixel.email || contactForPixel.phone || contactForPixel.fn ||
         contactForPixel.ln || contactForPixel.ct || contactForPixel.st || contactForPixel.zp || contactForPixel.country
