@@ -10,8 +10,8 @@
 /* Home Page Content - Position relative for absolute hero section */
 .home-page {
   position: relative;
-  min-height: calc(100svh + 250px);
-  top: -175px;
+  min-height: calc(100svh);
+  /* top: -175px; */
   font-family: 'Bixby CF', sans-serif;
 }
 

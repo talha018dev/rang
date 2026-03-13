@@ -6,7 +6,25 @@
       </div>
     </section>
 
-    <section>
+    <section class="carousel-section">
+      <!-- Carousel Navigation Arrows -->
+      <button
+        v-if="validProducts.length > 1"
+        @click="goToPrevious"
+        class="carousel-nav-arrow carousel-nav-prev"
+        aria-label="Previous"
+      >
+        <Icon name="heroicons:chevron-left" size="24" />
+      </button>
+      <button
+        v-if="validProducts.length > 1"
+        @click="goToNext"
+        class="carousel-nav-arrow carousel-nav-next"
+        aria-label="Next"
+      >
+        <Icon name="heroicons:chevron-right" size="24" />
+      </button>
+
       <!-- Carousel -->
       <UCarousel 
         ref="carouselRef" 

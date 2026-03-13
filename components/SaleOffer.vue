@@ -7,7 +7,7 @@
         </section>
 
         <SaleOfferCountdown :products="dealsProducts" :section-title="dealsOfTheMonthTitle" />
-        <section v-if="sectionTitle === 'Sale Offer' && saleOfferProducts.length > 0" class="sale-brands-section-secondary">
+        <section v-if="sectionTitle === 'Sale Offer' && saleOfferProducts.length > 0" class="overflow-hidden sm:overflow-auto sale-brands-section-secondary">
             <div class="sale-brands-grid-secondary">
                 <div class="image-div category-grid-main-men">
                     <NuxtLink :to="`/products/${saleOfferProducts[0]?.category?.slug}/${saleOfferProducts[0]?.slug}`">

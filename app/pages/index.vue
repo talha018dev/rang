@@ -100,7 +100,7 @@
 
     <!-- Actual Content -->
     <div v-else class="home-page-content">
-      <HeroBanner :banners="homepageData?.banners" :cta="homepageData?.cta" />
+      <HeroBanner2 :banners="homepageData?.banners" :cta="homepageData?.cta" />
       <OfferBanner :marquee_text="homepageData?.cta?.marquee_text" :marquee_url="homepageData?.cta?.marquee_url" />
       <!-- <AllCategories /> -->
       <!-- <ApiCategories :sections="homepageData?.sections || null" /> -->
@@ -138,7 +138,7 @@ import ShopByCategory from '../../components/ShopByCategory.vue'
 import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
 import WhyRang from '../../components/WhyRang.vue'
-import HeroBanner from '../../components/HeroBanner.vue'
+import HeroBanner2 from '../../components/HeroBanner2.vue'
 
 const items = [
   '/sale-carousel-1.png',
@@ -258,7 +258,7 @@ onMounted(async () => {
 <style>
 /* Set global scale to 0.75 for home page only */
 .home-page {
-  --global-scale: 0.75;
+  --global-scale: 1;
   zoom: var(--global-scale);
 }
 

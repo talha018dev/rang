@@ -225,8 +225,9 @@
     padding: 1.5rem 1.5rem;
   }
   .header:not(.header-scrolled){
-    padding: 0rem 1.5rem;
-    margin-top: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    /* padding-top: 0.5rem; */
+    /* margin-top: 1.5rem; */
   }
 }
 
@@ -267,10 +268,10 @@
 .header-content {
   display: flex;
   /* justify-content: space-between; */
-  align-items: flex-end;
+  align-items: center;
 }
 .logo-image {
-  height: 70px;
+  height: 52px;
   transition: height 0.3s ease-in-out;
   object-fit: contain;
   object-position: bottom;
@@ -281,7 +282,7 @@
 
 /* Make logo 70px on home page when not scrolled */
 .header-home:not(.header-scrolled) .logo-image {
-  height: 64px;
+  height: 52px;
 }
 
 .nav {

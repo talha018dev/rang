@@ -80,6 +80,57 @@
   overflow: hidden;
 }
 
+/* Carousel navigation arrows */
+.new-arrival-container .carousel-section {
+  position: relative;
+}
+
+.new-arrival-container .carousel-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.new-arrival-container .carousel-nav-arrow:hover {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.new-arrival-container .carousel-nav-prev {
+  left: -12px;
+}
+
+.new-arrival-container .carousel-nav-next {
+  right: -12px;
+}
+
+@media (max-width: 640px) {
+  .new-arrival-container .carousel-nav-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .new-arrival-container .carousel-nav-prev {
+    left: 4px;
+  }
+
+  .new-arrival-container .carousel-nav-next {
+    right: 4px;
+  }
+}
+
 .new-arrival-container :deep(.carousel-nuxt) {
   margin-top: 6px !important;
   margin-bottom: 6px !important;
