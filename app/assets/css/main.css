@@ -675,6 +675,18 @@ ol[role="region"][tabindex="-1"] > li > * [class*="progress"] * {
   background-color: #e18719 !important;
 }
 
+/* Vue Sonner - #c2410c #e18719 for success toasts */
+body [data-sonner-toaster][data-sonner-theme='light'] {
+  --success-bg: hsl(32, 80%, 97%);
+  --success-border: hsl(32, 80%, 88%);
+  --success-text: #c2410c;
+}
+body [data-sonner-toaster][data-sonner-theme='dark'] {
+  --success-bg: hsl(20, 60%, 12%);
+  --success-border: hsl(32, 50%, 25%);
+  --success-text: #e18719;
+}
+
 /* Global scale to simulate 75% zoom without changing browser zoom */
 /* Default is 1 for all pages, home page will override to 0.75 */
 :root {

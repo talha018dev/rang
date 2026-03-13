@@ -24,7 +24,7 @@
                         width="800"
                         height="462"
                     />
-                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[0]?.title }}</div>
+                    <div class="absolute backdrop-blur-xs text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[0]?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
                         <ShopNowCTA text="Shop Now" :url="exploreItems[0]?.url" />
                     </div>
@@ -44,7 +44,7 @@
                         width="500"
                         height="500"
                     />
-                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[1]?.title }}</div>
+                    <div class="absolute backdrop-blur-xs text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ exploreItems[1]?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
                         <ShopNowCTA text="Shop Now" :url="exploreItems[1]?.url" />
                     </div>
@@ -69,7 +69,7 @@
                         width="400"
                         height="488"
                     />
-                    <div class="absolute text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ item?.title }}</div>
+                    <div class="absolute backdrop-blur-xs text-xl! md:text-2xl! lg:text-4xl! top-2 left-2 md:top-10 md:left-10 z-20 explore-rang-top-text">{{ item?.title }}</div>
                     <div class="explore-rang-bottom-text text-sm! md:text-xl! lg:text-2xl! absolute bottom-2 right-2 md:bottom-10 md:right-10 z-20">
                         <ShopNowCTA text="Shop Now" :url="item?.url" />
                     </div>

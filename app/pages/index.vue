@@ -1,7 +1,8 @@
 <template>
   <div class="home-page">
     <!-- Loading Skeleton -->
-    <div v-if="isLoading" class="homepage-skeleton">
+    <template v-if="isLoading">
+    <div class="homepage-skeleton">
       <!-- Hero Banner Skeleton -->
       <!-- <section class="skeleton-hero-banner">
         <div class="skeleton-box skeleton-hero-image"></div>
@@ -97,9 +98,11 @@
         </div>
       </section>
     </div>
+    </template>
 
     <!-- Actual Content -->
-    <div v-else class="home-page-content">
+    <template v-else>
+    <div class="home-page-content">
       <HeroBanner2 :banners="homepageData?.banners" :cta="homepageData?.cta" />
       <OfferBanner :marquee_text="homepageData?.cta?.marquee_text" :marquee_url="homepageData?.cta?.marquee_url" />
       <!-- <AllCategories /> -->
@@ -119,11 +122,20 @@
       <WhyRang :items="homepageData?.dynamic_sections?.why_rangbd || []" />
       <CustomerDiaries />
     </div>
+    </template>
+
+    <!-- Welcome Popup (shows on home page load / refresh) -->
+    <WelcomePopup
+      ref="welcomePopupRef"
+      :image="welcomePopupImage"
+      :cta-text="welcomePopupCtaText"
+      :cta-url="welcomePopupCtaUrl"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useApi } from '../../composables/useApi'
 import type { HomePageData2, HomePageProduct2, HomePageResponse2 } from '../../types/homepage'
 import './index.css'
@@ -139,6 +151,23 @@ import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
 import WhyRang from '../../components/WhyRang.vue'
 import HeroBanner2 from '../../components/HeroBanner2.vue'
+import WelcomePopup from '../../components/WelcomePopup.vue'
+
+const welcomePopupRef = ref<InstanceType<typeof WelcomePopup> | null>(null)
+
+// Welcome popup content - can be overridden from API (e.g. homepageData?.cta)
+function getImageUrl(path: string): string {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  return `https://rangbd.thecell.tech${path.startsWith('/') ? path : '/' + path}`
+}
+const welcomePopupImage = computed(() => {
+  const banner = homepageData.value?.banners?.[0]
+  if (banner && typeof banner === 'string') return getImageUrl(banner)
+  return '/rang-logo-2026-v2.png'
+})
+const welcomePopupCtaText = computed(() => homepageData.value?.cta?.button_text || 'Explore Now')
+const welcomePopupCtaUrl = computed(() => homepageData.value?.cta?.button_url || '/products')
 
 const items = [
   '/sale-carousel-1.png',
@@ -151,7 +180,7 @@ const items = [
 
 // Reactive state for homepage data
 const homepageData = ref<HomePageData2 | null>(null)
-const isLoading = ref(false)
+const isLoading = ref(true)
 const error = ref<string | null>(null)
 
 // Find New Arrival section products
@@ -252,6 +281,10 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+
+  // Show welcome popup on home page load (navigate or refresh)
+  await nextTick()
+  welcomePopupRef.value?.open()
 })
 </script>
 

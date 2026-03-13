@@ -1,5 +1,6 @@
 <template>
   <UApp>
+    <Toaster position="bottom-right" rich-colors close-button />
     <AppHeader v-if="!shouldHideHeader" />
     <NuxtPage />
     <!-- Meta Pixel noscript fallback -->

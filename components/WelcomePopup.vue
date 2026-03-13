@@ -1,0 +1,263 @@
+<template>
+  <Teleport to="body">
+    <Transition name="welcome-popup">
+      <div
+        v-if="isOpen"
+        class="welcome-popup-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="welcome-popup-title"
+        @click.self="close"
+      >
+        <div class="welcome-popup-content">
+          <button
+            class="welcome-popup-close"
+            aria-label="Close"
+            @click="close"
+          >
+            <Icon name="heroicons:x-mark" size="24" />
+          </button>
+
+          <div class="welcome-popup-image-wrap">
+            <NuxtImg
+              v-if="image"
+              :src="image"
+              :alt="imageAlt"
+              class="welcome-popup-image"
+              width="600"
+              height="400"
+              format="webp"
+              quality="85"
+            />
+          </div>
+
+          <div v-if="title" class="welcome-popup-title" id="welcome-popup-title">
+            {{ title }}
+          </div>
+
+          <NuxtLink
+            v-if="ctaUrl && !isExternalUrl(ctaUrl)"
+            :to="ctaUrl"
+            class="welcome-popup-cta"
+            @click="close"
+          >
+            {{ ctaText }}
+          </NuxtLink>
+          <a
+            v-else-if="ctaUrl && isExternalUrl(ctaUrl)"
+            :href="ctaUrl"
+            class="welcome-popup-cta"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="close"
+          >
+            {{ ctaText }}
+          </a>
+          <button
+            v-else
+            class="welcome-popup-cta"
+            @click="close"
+          >
+            {{ ctaText }}
+          </button>
+
+          <!-- <label v-if="showDontShowAgain" class="welcome-popup-dismiss">
+            <input
+              v-model="dontShowAgain"
+              type="checkbox"
+            />
+            Don't show again
+          </label> -->
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+</template>
+
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+
+interface Props {
+  modelValue?: boolean
+  image?: string
+  imageAlt?: string
+  title?: string
+  ctaText?: string
+  ctaUrl?: string
+  showDontShowAgain?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  image: '/rang-logo-2026-v2.png',
+  imageAlt: 'Welcome',
+  title: '',
+  ctaText: 'Explore Now',
+  ctaUrl: '/products',
+  showDontShowAgain: true
+})
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://')
+}
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+  (e: 'close'): void
+}>()
+
+const STORAGE_KEY = 'welcome_popup_dismissed'
+const dontShowAgain = ref(false)
+
+const isOpen = ref(props.modelValue)
+
+function close() {
+  if (dontShowAgain.value) {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, 'true')
+    } catch (_) {}
+  }
+  isOpen.value = false
+  emit('update:modelValue', false)
+  emit('close')
+}
+
+watch(() => props.modelValue, (val) => {
+  isOpen.value = val
+})
+
+function shouldShow(): boolean {
+  if (props.showDontShowAgain) {
+    try {
+      if (sessionStorage.getItem(STORAGE_KEY) === 'true') return false
+    } catch (_) {}
+  }
+  return true
+}
+
+defineExpose({
+  open: () => { if (shouldShow()) isOpen.value = true },
+  close
+})
+</script>
+
+<style scoped>
+.welcome-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1rem;
+}
+
+.welcome-popup-content {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  padding: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.welcome-popup-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.welcome-popup-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.welcome-popup-image-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  aspect-ratio: 3 / 2;
+}
+
+.welcome-popup-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.welcome-popup-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.welcome-popup-cta {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+  background: #f1592c;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.welcome-popup-cta:hover {
+  background: #e04a1f;
+  color: white;
+}
+
+.welcome-popup-dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.welcome-popup-dismiss input {
+  cursor: pointer;
+}
+
+/* Transitions */
+.welcome-popup-enter-active,
+.welcome-popup-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.welcome-popup-enter-active .welcome-popup-content,
+.welcome-popup-leave-active .welcome-popup-content {
+  transition: transform 0.2s ease;
+}
+
+.welcome-popup-enter-from,
+.welcome-popup-leave-to {
+  opacity: 0;
+}
+
+.welcome-popup-enter-from .welcome-popup-content,
+.welcome-popup-leave-to .welcome-popup-content {
+  transform: scale(0.95);
+}
+</style>
