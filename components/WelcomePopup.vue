@@ -157,7 +157,7 @@ defineExpose({
   position: relative;
   background: white;
   border-radius: 12px;
-  max-width: 80%;
+  max-width: 60%;
   width: 100%;
   padding: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
