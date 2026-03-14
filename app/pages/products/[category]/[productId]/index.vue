@@ -986,6 +986,7 @@
 // CSS is imported globally via nuxt.config.ts
 import { navigateTo, useHead, useRoute } from 'nuxt/app'
 import { computed, onMounted, ref, watch } from 'vue'
+import { toast } from 'vue-sonner'
 import AppFooter from '../../../../../components/AppFooter.vue'
 import { useApi } from '../../../../../composables/useApi'
 import { useCart } from '../../../../../composables/useCart'
@@ -1803,7 +1804,6 @@ const decreaseQuantity = () => {
 
 const { addToCart } = useCart()
 const { formatPrice, currency, exchangeRate } = useCurrency()
-const { $toast: toast } = useNuxtApp()
 
 // Helper functions for related products price comparison
 const shouldShowComparePriceForRelated = (product: Product): boolean => {

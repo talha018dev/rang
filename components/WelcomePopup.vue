@@ -205,24 +205,31 @@ defineExpose({
 }
 
 .welcome-popup-cta {
+  font-family: 'Futura PT', 'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif;
+  width: fit-content !important;
+  margin: 0 auto !important;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e0e0e0;
   display: block;
   width: 100%;
-  padding: 0.75rem 1.5rem;
+  padding: 10px 25px;
   text-align: center;
-  font-weight: 600;
-  font-size: 1rem;
-  color: white;
-  background: #f1592c;
+  background-color: #000000;
   border: none;
-  border-radius: 8px;
+  border-radius: 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.2s, opacity 0.2s;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .welcome-popup-cta:hover {
-  background: #e04a1f;
-  color: white;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  color: #e0e0e0;
 }
 
 .welcome-popup-dismiss {

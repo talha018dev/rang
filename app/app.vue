@@ -1,6 +1,8 @@
 <template>
   <UApp>
-    <Toaster position="bottom-right" rich-colors close-button />
+    <ClientOnly>
+      <Toaster position="bottom-right" rich-colors close-button />
+    </ClientOnly>
     <AppHeader v-if="!shouldHideHeader" />
     <NuxtPage />
     <!-- Meta Pixel noscript fallback -->
@@ -19,6 +21,7 @@
 <script setup lang="ts">
 import { useRoute } from 'nuxt/app'
 import { computed } from 'vue'
+import { Toaster } from 'vue-sonner'
 import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
