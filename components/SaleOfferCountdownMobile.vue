@@ -3,7 +3,7 @@
         <!-- Mobile Countdown Card -->
         <div class="countdown-mobile-card">
             <!-- Background Image -->
-            <NuxtImg src="/landing-image.png" alt="Deals of the Month" class="countdown-mobile-background" format="webp" quality="85" loading="eager" />
+            <NuxtImg src="/landing-image.png" alt="Deals of the Month" class="countdown-mobile-background" format="webp" quality="85" loading="lazy" />
             
             <!-- Content Overlay -->
             <div class="countdown-mobile-content">
