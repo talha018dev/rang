@@ -1,7 +1,7 @@
 <template>
   <UApp>
     <ClientOnly>
-      <Toaster position="bottom-right" rich-colors close-button />
+      <Toaster position="bottom-right" rich-colors class="toast-container" />
     </ClientOnly>
     <AppHeader v-if="!shouldHideHeader" />
     <NuxtPage />

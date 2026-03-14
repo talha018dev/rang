@@ -1965,11 +1965,9 @@ const handleAddToCart = () => {
         addToCart(cartItem)
     }
 
-    toast.success('Added to basket', {
-        description: quantity.value > 1
+    toast.success(quantity.value > 1
             ? `${product.value.name} (${quantity.value} items) has been added to your basket.`
-            : `${product.value.name} has been added to your basket.`
-    })
+            : `${product.value.name} has been added to your basket.`)
 }
 
 const handleBuyNow = () => {

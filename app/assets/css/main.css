@@ -693,12 +693,21 @@ ol[role="region"][tabindex="-1"] > li > * [class*="progress"] * {
 }
 /* Direct overrides on success toast (vue-sonner injects styles late, so we override) */
 [data-sonner-toast][data-type='success'] {
-  background: rgba(225, 135, 25, 0.15) !important;
+  background: #fbeddd !important;
   border-color: rgba(225, 135, 25, 0.5) !important;
   color: #c2410c !important;
+  padding: 12px !important;
+  gap: 12px !important;
 }
+
+@media (max-width: 600px) {
+  [data-sonner-toast][data-type='success'] {
+   bottom: 80px !important
+  }
+}
+
 [data-sonner-toast][data-type='success'] [data-close-button] {
-  background: rgba(225, 135, 25, 0.15) !important;
+  background: #fbeddd !important;
   border-color: rgba(225, 135, 25, 0.5) !important;
   color: #c2410c !important;
 }
