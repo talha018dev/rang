@@ -140,7 +140,7 @@
             <h3 class="section-heading">Payment Gateway Partner</h3>
             <div class="payment-logos">
               <div class="payment-logo sslcommerz">
-                <NuxtImg src="/ssl.png" alt="SSL Commerz" format="webp" quality="85" loading="lazy" />
+                <NuxtImg src="/footer/ssl-banner.webp" alt="SSL Commerz" format="webp" quality="85" loading="lazy" />
               </div>
               <div class="payment-logo paypal">
                 <NuxtImg src="/paypal.png" alt="PayPal" format="webp" quality="85" loading="lazy" />

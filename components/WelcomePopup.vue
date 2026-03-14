@@ -157,7 +157,7 @@ defineExpose({
   position: relative;
   background: white;
   border-radius: 12px;
-  max-width: 480px;
+  max-width: 80%;
   width: 100%;
   padding: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -165,8 +165,8 @@ defineExpose({
 
 .welcome-popup-close {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: -2rem;
+  right: -2rem;
   width: 36px;
   height: 36px;
   display: flex;
@@ -174,13 +174,14 @@ defineExpose({
   justify-content: center;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.05);
+  background: white;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .welcome-popup-close:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: #c2410c;
+  color: white
 }
 
 .welcome-popup-image-wrap {
