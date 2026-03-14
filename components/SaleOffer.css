@@ -125,7 +125,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0;
+  border-radius: 8px;
 }
 
 .sale-brand-image-cover:hover {
@@ -344,6 +344,7 @@
   aspect-ratio: 1;
   object-fit: cover;
   object-position: top;
+  border-radius: 8px;
 }
 .category-grid-main-men img {
   height: 100%;

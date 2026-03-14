@@ -124,10 +124,12 @@
     </div>
     </template>
 
-    <!-- Welcome Popup (shows on home page load / refresh) -->
+    <!-- Welcome Popup (shows on home page load when homepage_popup.enabled or no settings) -->
     <WelcomePopup
+      v-if="shouldShowWelcomePopup"
       ref="welcomePopupRef"
       :image="welcomePopupImage"
+      :title="welcomePopupTitle"
       :cta-text="welcomePopupCtaText"
       :cta-url="welcomePopupCtaUrl"
     />
@@ -137,7 +139,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useApi } from '../../composables/useApi'
-import type { HomePageData2, HomePageProduct2, HomePageResponse2 } from '../../types/homepage'
+import type { HomePageData2, HomePageProduct2, HomePageResponse2, SettingsResponse } from '../../types/homepage'
 import './index.css'
 
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
@@ -154,20 +156,35 @@ import HeroBanner2 from '../../components/HeroBanner2.vue'
 import WelcomePopup from '../../components/WelcomePopup.vue'
 
 const welcomePopupRef = ref<InstanceType<typeof WelcomePopup> | null>(null)
+const homepagePopupSettings = ref<{ enabled?: boolean; image?: string | null; description?: string | null; cta_text?: string | null; cta_url?: string | null } | null>(null)
 
-// Welcome popup content - can be overridden from API (e.g. homepageData?.cta)
+// Welcome popup: prefer settings homepage_popup when available, else homepageData?.cta, else defaults
 function getImageUrl(path: string): string {
   if (!path) return ''
   if (path.startsWith('http://') || path.startsWith('https://')) return path
   return `https://rangbd.thecell.tech${path.startsWith('/') ? path : '/' + path}`
 }
+const shouldShowWelcomePopup = computed(() => {
+  const popup = homepagePopupSettings.value
+  if (popup && popup.enabled === false) return false
+  return true
+})
 const welcomePopupImage = computed(() => {
+  const img = homepagePopupSettings.value?.image
+  if (img) return getImageUrl(img)
   const banner = homepageData.value?.banners?.[0]
   if (banner && typeof banner === 'string') return getImageUrl(banner)
   return '/rang-logo-2026-v2.png'
 })
-const welcomePopupCtaText = computed(() => homepageData.value?.cta?.button_text || 'Explore Now')
-const welcomePopupCtaUrl = computed(() => homepageData.value?.cta?.button_url || '/products')
+const welcomePopupTitle = computed(() =>
+  homepagePopupSettings.value?.description ?? ''
+)
+const welcomePopupCtaText = computed(() =>
+  homepagePopupSettings.value?.cta_text ?? homepageData.value?.cta?.button_text ?? 'Explore Now'
+)
+const welcomePopupCtaUrl = computed(() =>
+  homepagePopupSettings.value?.cta_url ?? homepageData.value?.cta?.button_url ?? '/products'
+)
 
 const items = [
   '/sale-carousel-1.png',
@@ -257,22 +274,23 @@ const timelessSixYardsProducts = computed(() => {
   }))
 })
 
-// Fetch homepage data from API
+// Fetch homepage data and settings from API
 onMounted(async () => {
   isLoading.value = true
   error.value = null
-  
+  const { backendUrl } = useApi()
+
   try {
-    const { backendUrl } = useApi()
-    const response = await $fetch<HomePageResponse2>(`${backendUrl}/homepage`)
-    console.log('Homepage API Response:', response)
-    
-    if (response.success && response.data) {
-      homepageData.value = response.data
-      console.log('Banners:', response.data.banners)
-      console.log('Sections:', response.data.sections)
-      console.log('Dynamic Sections:', response.data.dynamic_sections)
-      console.log('Shop by Category:', response.data.dynamic_sections?.shop_by_category)
+    const [homeResponse, settingsResponse] = await Promise.all([
+      $fetch<HomePageResponse2>(`${backendUrl}/homepage`),
+      $fetch<SettingsResponse>(`${backendUrl}/settings`).catch(() => null)
+    ])
+
+    if (homeResponse.success && homeResponse.data) {
+      homepageData.value = homeResponse.data
+    }
+    if (settingsResponse?.success && settingsResponse?.data?.homepage_popup) {
+      homepagePopupSettings.value = settingsResponse.data.homepage_popup
     }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
@@ -282,9 +300,11 @@ onMounted(async () => {
     isLoading.value = false
   }
 
-  // Show welcome popup on home page load (navigate or refresh)
-  await nextTick()
-  welcomePopupRef.value?.open()
+  // Show welcome popup on home page load when enabled (or when no settings)
+  if (shouldShowWelcomePopup.value) {
+    await nextTick()
+    welcomePopupRef.value?.open()
+  }
 })
 </script>
 

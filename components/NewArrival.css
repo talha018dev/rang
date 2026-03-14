@@ -109,11 +109,11 @@
 }
 
 .new-arrival-container .carousel-nav-prev {
-  left: -12px;
+  left: 4px;
 }
 
 .new-arrival-container .carousel-nav-next {
-  right: -12px;
+  right: 4px;
 }
 
 @media (max-width: 640px) {

@@ -183,8 +183,17 @@ export interface MenuItem {
   children: MenuItem[]
 }
 
+export interface HomepagePopupSettings {
+  enabled?: boolean
+  image?: string | null
+  description?: string | null
+  cta_text?: string | null
+  cta_url?: string | null
+}
+
 export interface SettingsData {
   menu?: MenuItem[]
+  homepage_popup?: HomepagePopupSettings
   [key: string]: any
 }
 
