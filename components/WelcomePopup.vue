@@ -157,16 +157,25 @@ defineExpose({
   position: relative;
   background: white;
   border-radius: 12px;
-  max-width: 60%;
-  width: 100%;
+  width: 50vw;
+  height: 50vh;
+  overflow-y: auto;
   padding: 0rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+@media (max-width: 600px) {
+  .welcome-popup-content {
+    width: 80vw;
+    height: 80vh;
+  }
+}
+
 .welcome-popup-close {
   position: absolute;
-  top: -2rem;
-  right: -2rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
   width: 36px;
   height: 36px;
   display: flex;
@@ -185,37 +194,45 @@ defineExpose({
 }
 
 .welcome-popup-image-wrap {
-  border-radius: 8px;
+  position: absolute;
+  inset: 0;
+  border-radius: 0px;
   overflow: hidden;
-  margin-bottom: 0rem;
-  aspect-ratio: 3 / 2;
+  z-index: 0;
 }
 
 .welcome-popup-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .welcome-popup-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.25rem;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 1rem;
   color: #1f2937;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .welcome-popup-cta {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
   font-family: 'Futura PT', 'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif;
-  width: fit-content !important;
-  margin: 0 auto !important;
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #e0e0e0;
-  display: block;
-  width: 100%;
   padding: 10px 25px;
   text-align: center;
   background-color: #000000;
@@ -225,11 +242,6 @@ defineExpose({
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .welcome-popup-cta:hover {
