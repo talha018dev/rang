@@ -159,7 +159,7 @@ defineExpose({
   border-radius: 12px;
   width: 50vw;
   height: 50vh;
-  overflow-y: auto;
+  overflow: visible;
   padding: 0rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
@@ -173,8 +173,8 @@ defineExpose({
 
 .welcome-popup-close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: -2rem;
+  right: -2rem;
   z-index: 2;
   width: 36px;
   height: 36px;
