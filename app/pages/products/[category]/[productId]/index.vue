@@ -701,6 +701,47 @@
             </div>
         </div>
 
+        <!-- Frequently Bought Together Section (Desktop - standalone when no Matching Series) -->
+        <div v-if="frequentlyBoughtItems.length > 0 && !isMobile" class="frequently-bought-section standalone-desktop">
+            <h2 class="section-title">Frequently bought together</h2>
+
+            <div class="frequently-bought-container">
+                <!-- Desktop Grid Layout -->
+                <div class="frequently-bought-products desktop-layout">
+                    <div v-for="(item, index) in frequentlyBoughtItems" :key="index" class="frequently-bought-item">
+                        <!-- Product Image -->
+                        <div class="item-image">
+                            <NuxtLink :to="`/products/${item.product?.category?.slug || category}/${item.slug}`">
+                                <NuxtImg :src="getImageUrl(item.image)" :alt="item.name" class="product-img" loading="lazy"
+                                    format="webp" quality="85" />
+                            </NuxtLink>
+                            <div class="item-checkbox">
+                                <input type="checkbox" :id="`item-standalone-${index}`" v-model="item.selected"
+                                    class="checkbox-input" />
+                                <label :for="`item-standalone-${index}`" class="checkbox-label"></label>
+                            </div>
+                        </div>
+
+                        <div class="item-details">
+                            <p class="item-description line-clamp-2 min-h-[40px]">{{ item.description }}</p>
+                            <p class="item-price">{{ formatPrice(item.priceValue, item.product?.price_usd) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section - Below the products -->
+            <div class="frequently-bought-summary">
+                <div class="total-price">
+                    <span class="total-label">Total price :</span>
+                    <span class="total-amount">{{ totalPrice }}</span>
+                </div>
+                <button class="add-to-cart-btn" @click="addFrequentlyBoughtToCart">
+                    Add to cart
+                </button>
+            </div>
+        </div>
+
         <!-- Customer Reviews Section -->
         <!-- <div class="reviews-section">
             <h2 class="reviews-title">Customer Reviews</h2>
@@ -1148,20 +1189,49 @@ const fetchProductDetails = async () => {
     console.log('Product Detail API Response:', response)
 
     if (response.success && response.data) {
+      const data = response.data as Record<string, any>
+      // Extract cross_sold from various possible locations (snake_case / camelCase / nested)
+      const rawCrossSold = data?.cross_sold ?? data?.crossSold ?? (response as any).cross_sold ?? (response as any).crossSold ?? []
+      const crossSoldList = Array.isArray(rawCrossSold) ? rawCrossSold : []
+
       // Check if data is a Product or an object with product and related
-      if ('product' in response.data) {
-        product.value = response.data.product
-        relatedProducts.value = response.data.related || []
-        crossSoldProducts.value = (response.data as any).cross_sold || []
-      } else if ('related' in response.data || 'cross_sold' in response.data) {
-        product.value = response.data as Product
-        relatedProducts.value = (response.data as any).related || []
-        crossSoldProducts.value = (response.data as any).cross_sold || []
+      if ('product' in data) {
+        product.value = data.product
+        relatedProducts.value = Array.isArray(data.related) ? data.related : []
+        crossSoldProducts.value = crossSoldList
+      } else if ('related' in data || 'cross_sold' in data || crossSoldList.length > 0) {
+        product.value = data as Product
+        relatedProducts.value = Array.isArray(data.related) ? data.related : []
+        crossSoldProducts.value = crossSoldList
       } else {
-        product.value = response.data as Product
-        // Check if there's a related or cross_sold field at the root level
-        relatedProducts.value = (response as any).related || []
-        crossSoldProducts.value = (response as any).cross_sold || []
+        product.value = data as Product
+        relatedProducts.value = Array.isArray((response as any).related) ? (response as any).related : []
+        crossSoldProducts.value = crossSoldList
+      }
+
+      // Explicitly sync "Frequently bought together" from cross_sold so the section shows
+      if (crossSoldList.length > 0) {
+        frequentlyBoughtItems.value = crossSoldList.map((p: Product, index: number) => {
+          const minPrice = p.variants?.length > 0
+            ? Math.min(...p.variants.map(v => v.price))
+            : p.price
+          const description = p.description
+            ? p.description.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+            : `This Item: ${p.name}`
+          return {
+            id: p.id,
+            name: p.name,
+            description,
+            price: `TK : ${minPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+            priceValue: minPrice,
+            image: p.image,
+            selected: index === 0,
+            slug: p.slug,
+            product: p
+          }
+        })
+      } else {
+        frequentlyBoughtItems.value = []
       }
       
       // Set first available size as default
