@@ -2148,6 +2148,7 @@ const copySku = async (sku: string | undefined | null) => {
 
 const addFrequentlyBoughtToCart = () => {
     const selectedItems = frequentlyBoughtItems.value.filter(item => item.selected)
+    if (selectedItems.length === 0) return
     selectedItems.forEach(item => {
       // Get first variant or use product price
       const firstVariant = item.product?.variants?.[0]
@@ -2184,7 +2185,10 @@ const addFrequentlyBoughtToCart = () => {
       addToCart(cartPayload)
     })
 
-    // alert(`Added ${selectedItems.length} item(s) to cart!`)
+    const count = selectedItems.length
+    toast.success(count > 1
+      ? `${count} items have been added to your basket.`
+      : `${selectedItems[0]?.name ?? 'Item'} has been added to your basket.`)
 }
 
 // Helper function to get available sizes for a product
