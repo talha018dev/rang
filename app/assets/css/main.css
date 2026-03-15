@@ -769,3 +769,16 @@ html {
   line-height: 100%;
   letter-spacing: 0%;
 }
+
+/* UTooltip padding override - exclude trigger ([data-grace-area-trigger]) to avoid icon movement on hover */
+[data-state="delayed-open"]:not([data-grace-area-trigger]),
+[data-state="instant-open"]:not([data-grace-area-trigger]) {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+[data-state="delayed-open"]:not([data-grace-area-trigger]) > div,
+[data-state="instant-open"]:not([data-grace-area-trigger]) > div {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}

@@ -76,12 +76,14 @@
             <!-- Desktop Header Actions -->
               <div class="header-actions desktop-actions ml-auto!">
                 <div class="search-dropdown-container">
-                  <button class="action-button" @click="toggleSearchMenu">
-                    <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
+                  <UTooltip text="Search" :ui="{ content: '!px-4' }">
+                    <button class="action-button" @click="toggleSearchMenu">
+                      <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </button>
+                  </UTooltip>
       
                   <!-- Search Menu Dropdown -->
                   <SearchDropdown
@@ -96,11 +98,12 @@
                   />
                 </div>
                 <div class="currency-dropdown-container">
-                  <button
-                    :key="currency"
-                    class="action-button-flex"
-                    @click="toggleCurrencyDropdown"
-                  >
+                  <UTooltip text="Currency" :ui="{ content: '!px-4' }">
+                    <button
+                      :key="currency"
+                      class="action-button-flex"
+                      @click="toggleCurrencyDropdown"
+                    >
                     <!-- BDT (Taka) Icon -->
                     <svg v-if="currency === 'BDT'" class="action-icon color-inherit" width="24" height="24"
                       viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,6 +125,7 @@
                         clip-rule="evenodd" />
                     </svg>
                   </button>
+                  </UTooltip>
                   <!-- Currency Dropdown Menu -->
                   <div v-if="showCurrencyDropdown" class="currency-dropdown">
                     <button class="currency-option" :class="{ 'currency-option-active': currency === 'BDT' }"
@@ -136,12 +140,14 @@
                     </button>
                   </div>
                 </div>
-                <NuxtLink :to="wishlistLink" class="action-button color-inherit">
-                  <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </NuxtLink>
+                <UTooltip text="Wishlist" :ui="{ content: '!px-4' }">
+                  <NuxtLink :to="wishlistLink" class="action-button color-inherit">
+                    <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </NuxtLink>
+                </UTooltip>
                 <!-- <NuxtLink to="/store" class="action-button color-inherit">
                   <button class="action-button color-inherit">
                     <svg class="action-icon color-inherit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,8 +156,9 @@
                     </svg>
                   </button>
                 </NuxtLink> -->
-                <NuxtLink to="/store-location-rang" class="action-button p-0 color-inherit store-locator-link">
-                  <button class="action-button py-0 color-inherit pt-2!">
+                <UTooltip text="Store Location" :ui="{ content: '!px-4' }">
+                  <NuxtLink to="/store-location-rang" class="action-button p-0 color-inherit store-locator-link">
+                    <button class="action-button py-0 color-inherit pt-2!">
                     <!-- <NuxtImg src="/store-locator-2.png" alt="Store Locator" class="action-icon store-locator-icon"
                       style="filter: brightness(1) invert(0); width: 24px; height: 34px;" format="webp" quality="85"
                       loading="lazy" /> -->
@@ -162,30 +169,37 @@
                         fill="currentColor" />
                     </svg>
       
-                  </button>
-                </NuxtLink>
-                <NuxtLink to="/cart" class="action-button color-inherit cart-button">
+                    </button>
+                  </NuxtLink>
+                </UTooltip>
+                <UTooltip text="Cart" :content="{ sideOffset: 20 }" :ui="{ content: '!px-4' }">
+                  <NuxtLink to="/cart" class="action-button color-inherit cart-button">
                   <svg class="action-icon color-inherit" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M17 18C17.5304 18 18.0391 18.2107 18.4142 18.5858C18.7893 18.9609 19 19.4696 19 20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22C16.4696 22 15.9609 21.7893 15.5858 21.4142C15.2107 21.0391 15 20.5304 15 20C15 18.89 15.89 18 17 18ZM1 2H4.27L5.21 4H20C20.2652 4 20.5196 4.10536 20.7071 4.29289C20.8946 4.48043 21 4.73478 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63L7.17 14.75C7.17 14.8163 7.19634 14.8799 7.24322 14.9268C7.29011 14.9737 7.3537 15 7.42 15H19V17H7C6.46957 17 5.96086 16.7893 5.58579 16.4142C5.21071 16.0391 5 15.5304 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2ZM7 18C7.53043 18 8.03914 18.2107 8.41421 18.5858C8.78929 18.9609 9 19.4696 9 20C9 20.5304 8.78929 21.0391 8.41421 21.4142C8.03914 21.7893 7.53043 22 7 22C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20C5 18.89 5.89 18 7 18ZM16 11L18.78 6H12.46H6.14L8.5 11H16Z"
                       fill="currentColor" />
                   </svg>
-                  <span v-if="cartTotalItems > 0" class="cart-badge">{{ cartTotalItems }}</span>
-                </NuxtLink>
-                <NuxtLink :to="accountLink" class="action-button color-inherit">
-                  <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </NuxtLink>
+                    <span v-if="cartTotalItems > 0" class="cart-badge">{{ cartTotalItems }}</span>
+                  </NuxtLink>
+                </UTooltip>
+                <UTooltip text="My Account" :ui="{ content: '!px-4' }">
+                  <NuxtLink :to="accountLink" class="action-button color-inherit">
+                    <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </NuxtLink>
+                </UTooltip>
                 <!-- Logout Button (Desktop) -->
-                <button v-if="hasToken" @click="handleLogout" class="action-button color-inherit" title="Logout">
-                  <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                </button>
+                <UTooltip v-if="hasToken" text="Logout" :ui="{ content: '!px-4' }">
+                  <button @click="handleLogout" class="action-button color-inherit">
+                    <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                  </button>
+                </UTooltip>
               </div>
           </div>
           <nav class="nav flex items-end! ml-3!">
