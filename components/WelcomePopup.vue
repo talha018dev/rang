@@ -159,7 +159,7 @@ defineExpose({
   border-radius: 12px;
   max-width: 60%;
   width: 100%;
-  padding: 1.5rem;
+  padding: 0rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -187,7 +187,7 @@ defineExpose({
 .welcome-popup-image-wrap {
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
   aspect-ratio: 3 / 2;
 }
 
@@ -225,6 +225,11 @@ defineExpose({
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .welcome-popup-cta:hover {
