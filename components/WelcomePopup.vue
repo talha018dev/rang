@@ -167,7 +167,7 @@ defineExpose({
 @media (max-width: 600px) {
   .welcome-popup-content {
     width: 80vw;
-    height: 80vh;
+    height: 70vh;
   }
 }
 
