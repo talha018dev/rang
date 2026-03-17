@@ -30,7 +30,7 @@ export interface ActiveCampaign {
 }
 
 export interface Product {
-  active_campaign: ActiveCampaign
+  active_campaign?: ActiveCampaign
   id: number
   name: string
   slug: string
@@ -47,6 +47,8 @@ export interface Product {
   variants: ProductVariant[]
   tags?: string[] | Record<string, string>
   campaigns?: string[] | Record<string, string>
+  /** Map of color name -> hex (e.g. { "Parrot Green": "#14eb36" }). When present, used for color swatches. */
+  color_map?: Record<string, string> | unknown[]
 }
 
 export interface HomepageSection {

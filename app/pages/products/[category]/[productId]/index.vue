@@ -1582,24 +1582,28 @@ const availableSizes = computed(() => {
   return Array.from(sizes).sort(compareSizes)
 })
 
-// Available colors from variants
+// Available colors from variants; use product.color_map when available for swatch hex values
 const availableColors = computed(() => {
   if (!product.value?.variants) return []
-  
+  const apiColorMap = product.value.color_map
+  const isObjectMap = apiColorMap && typeof apiColorMap === 'object' && !Array.isArray(apiColorMap)
+  const nameToHex = isObjectMap ? (apiColorMap as Record<string, string>) : null
+
   const colorMap = new Map<string, { name: string; value: string }>()
   product.value.variants.forEach(variant => {
     if (variant.attributes?.color) {
       const colorName = variant.attributes.color
       if (!colorMap.has(colorName)) {
-        // Try to get color value from variant or use a default
+        const hex = nameToHex?.[colorName] ?? nameToHex?.[colorName.trim()]
+        const value = (hex && /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) ? hex : '#ccc'
         colorMap.set(colorName, {
           name: colorName,
-          value: colorName // Default color, you might want to map color names to hex values
+          value
         })
       }
     }
   })
-  
+
   return Array.from(colorMap.values())
 })
 
