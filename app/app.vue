@@ -16,6 +16,8 @@
       />
     </noscript>
   </UApp>
+  <!-- Outside UApp so fixed position is relative to viewport on every page -->
+  <MessengerFloatingButton />
 </template>
 
 <script setup lang="ts">
@@ -23,6 +25,7 @@ import { useRoute } from 'nuxt/app'
 import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import AppHeader from '../components/AppHeader.vue'
+import MessengerFloatingButton from '../components/MessengerFloatingButton.vue'
 
 const route = useRoute()
 const config = useRuntimeConfig()
