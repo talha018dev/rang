@@ -24,8 +24,6 @@
               :src="displayImage"
               :alt="imageAlt"
               class="welcome-popup-image"
-              width="600"
-              height="400"
               format="webp"
               quality="85"
             />
@@ -108,6 +106,19 @@ function updateViewport() {
     isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
   }
 }
+
+// // const TEST_MOBILE_IMAGE = '/test-popup.jpg'
+// const TEST_MOBILE_IMAGE = '/test-2.png'
+
+// const displayImage = computed(() => {
+//   if (isMobile.value) {
+//     // For quick testing: use a fixed image under 600px.
+//     // If `mobileImage` is explicitly provided, prefer it.
+//     return TEST_MOBILE_IMAGE
+//   }
+
+//   return props.image
+// })
 
 const displayImage = computed(() => {
   if (isMobile.value && props.mobileImage) {
@@ -234,6 +245,12 @@ defineExpose({
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+@media (max-width: 600px) {
+  .welcome-popup-image {
+    object-fit: contain;
+  }
 }
 
 .welcome-popup-title {
