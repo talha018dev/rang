@@ -188,6 +188,7 @@ export interface MenuItem {
 export interface HomepagePopupSettings {
   enabled?: boolean
   image?: string | null
+  mobile_image?: string | null
   description?: string | null
   cta_text?: string | null
   cta_url?: string | null

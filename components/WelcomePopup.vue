@@ -20,8 +20,8 @@
 
           <div class="welcome-popup-image-wrap">
             <NuxtImg
-              v-if="image"
-              :src="image"
+              v-if="displayImage"
+              :src="displayImage"
               :alt="imageAlt"
               class="welcome-popup-image"
               width="600"
@@ -75,11 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+
+const MOBILE_BREAKPOINT = 600
 
 interface Props {
   modelValue?: boolean
   image?: string
+  mobileImage?: string | null
   imageAlt?: string
   title?: string
   ctaText?: string
@@ -90,11 +93,36 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
   image: '/rang-logo-2026-v2.png',
+  mobileImage: null,
   imageAlt: 'Welcome',
   title: '',
   ctaText: 'Explore Now',
   ctaUrl: '/products',
   showDontShowAgain: true
+})
+
+const isMobile = ref(false)
+
+function updateViewport() {
+  if (import.meta.client) {
+    isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
+  }
+}
+
+const displayImage = computed(() => {
+  if (isMobile.value && props.mobileImage) {
+    return props.mobileImage
+  }
+  return props.image
+})
+
+onMounted(() => {
+  updateViewport()
+  window.addEventListener('resize', updateViewport)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateViewport)
 })
 
 function isExternalUrl(url: string): boolean {

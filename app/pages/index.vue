@@ -129,6 +129,7 @@
       v-if="shouldShowWelcomePopup"
       ref="welcomePopupRef"
       :image="welcomePopupImage"
+      :mobile-image="welcomePopupMobileImage"
       :title="welcomePopupTitle"
       :cta-text="welcomePopupCtaText"
       :cta-url="welcomePopupCtaUrl"
@@ -156,7 +157,7 @@ import HeroBanner2 from '../../components/HeroBanner2.vue'
 import WelcomePopup from '../../components/WelcomePopup.vue'
 
 const welcomePopupRef = ref<InstanceType<typeof WelcomePopup> | null>(null)
-const homepagePopupSettings = ref<{ enabled?: boolean; image?: string | null; description?: string | null; cta_text?: string | null; cta_url?: string | null } | null>(null)
+const homepagePopupSettings = ref<{ enabled?: boolean; image?: string | null; mobile_image?: string | null; description?: string | null; cta_text?: string | null; cta_url?: string | null } | null>(null)
 
 // Welcome popup: prefer settings homepage_popup when available, else homepageData?.cta, else defaults
 function getImageUrl(path: string): string {
@@ -175,6 +176,11 @@ const welcomePopupImage = computed(() => {
   const banner = homepageData.value?.banners?.[0]
   if (banner && typeof banner === 'string') return getImageUrl(banner)
   return '/rang-logo-2026-v2.png'
+})
+const welcomePopupMobileImage = computed(() => {
+  const img = homepagePopupSettings.value?.mobile_image
+  if (img) return getImageUrl(img)
+  return null
 })
 const welcomePopupTitle = computed(() =>
   homepagePopupSettings.value?.description ?? ''
