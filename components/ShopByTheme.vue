@@ -32,48 +32,72 @@
                 </div>
             </div>
 
-            <!-- Mobile Carousel View -->
+            <!-- Mobile Carousel View (matches NewArrival carousel) -->
             <div class="theme-carousel">
-                <div class="carousel-container" @mousedown="handleMouseDown" @mousemove="handleMouseMove"
-                    @mouseup="handleMouseUp" @mouseleave="handleMouseUp" @touchstart="handleTouchStart"
-                    @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-                    <div class="carousel-track" :style="{
-                        transform: `translateX(${-currentSlide * slideWidth + dragOffset}px)`,
-                        transition: isDragging ? 'none' : 'transform 0.3s ease-in-out'
-                    }">
-                        <div v-for="(theme, index) in themeImages" :key="index" class="carousel-slide">
-                            <div class="theme-image-container">
-                                <NuxtLink :to="theme.link">
-                                    <NuxtImg 
-                                        :src="theme.src" 
-                                        :alt="theme.alt" 
-                                        class="theme-image carousel-image" 
-                                        format="webp" 
-                                        quality="80" 
+                <section class="carousel-section">
+                    <button
+                        v-if="themeImages.length > 1"
+                        @click="goToPrevious"
+                        class="carousel-nav-arrow carousel-nav-prev"
+                        aria-label="Previous"
+                    >
+                        <Icon name="heroicons:chevron-left" size="24" />
+                    </button>
+                    <button
+                        v-if="themeImages.length > 1"
+                        @click="goToNext"
+                        class="carousel-nav-arrow carousel-nav-next"
+                        aria-label="Next"
+                    >
+                        <Icon name="heroicons:chevron-right" size="24" />
+                    </button>
+                    <UCarousel
+                        ref="carouselRef"
+                        v-slot="{ item }"
+                        :items="themeImages"
+                        class="carousel-nuxt"
+                        :slides-per-view="2"
+                        :slides-per-group="1"
+                        :space-between="8"
+                        :autoplay="false"
+                        :infinite="false"
+                        :ui="{
+                            item: 'carousel-slide shrink-0 basis-[calc((100%-8px)/2)] min-w-[calc((100%-8px)/2)] max-w-[calc((100%-8px)/2)]',
+                            container: 'carousel-container gap-2 !mt-1 px-0! flex-row'
+                        }"
+                    >
+                        <div class="carousel-item">
+                            <NuxtLink :to="item.link" class="carousel-link">
+                                <div class="carousel-image-container">
+                                    <NuxtImg
+                                        :src="item.src"
+                                        :alt="item.alt"
+                                        class="carousel-image"
+                                        format="webp"
+                                        quality="80"
                                         loading="lazy"
-                                        sizes="100vw"
-                                        width="800"
-                                        height="800"
+                                        sizes="50vw"
+                                        width="400"
+                                        height="488"
                                     />
-                                    <div
-                                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-lg">
-                                        <h3 class="theme-name-light">{{ theme.title }}</h3>
-                                        <p class="shop-now-blue-button-div">
-                                            <ShopNowBlue />
-                                        </p>
-                                    </div>
-                                </NuxtLink>
-                            </div>
+                                </div>
+                                <div class="carousel-content-overlay p-0 md:p-1">
+                                    <h3 class="theme-name-light text-xs! md:text-base! text-center!">{{ item.title }}</h3>
+                                    <p class="mt-2! mb-2! md:mb-6! text-center!">
+                                        <ShopNowBlue />
+                                    </p>
+                                </div>
+                            </NuxtLink>
                         </div>
-                    </div>
-                </div>
+                    </UCarousel>
+                </section>
             </div>
         </section>
     </main>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { HomePageShopByTheme2 } from '../types/homepage';
 import ShopNowBlue from './ShopNowBlue.vue';
 
@@ -106,133 +130,20 @@ const getImageUrl = (imagePath: string): string => {
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
 }
 
-// Carousel state
-const currentSlide = ref(0)
-const slideWidth = ref(0)
-const isMobile = ref(false)
+// Carousel ref and navigation (matches NewArrival)
+const carouselRef = ref()
 
-// Drag and touch state
-const isDragging = ref(false)
-const dragOffset = ref(0)
-const startX = ref(0)
-const startY = ref(0)
-const lastX = ref(0)
-const isTouch = ref(false)
-
-// Calculate max slide based on showing 2.25 images
-const maxSlide = computed(() => {
-    if (!isMobile.value) return 0
-    return Math.max(0, themeImages.value.length - 2.25)
-})
-
-// Carousel methods
-const nextSlide = () => {
-    if (currentSlide.value < maxSlide.value) {
-        currentSlide.value++
-    }
+const goToNext = () => {
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.scrollNext()
+  }
 }
 
-const prevSlide = () => {
-    if (currentSlide.value > 0) {
-        currentSlide.value--
-    }
+const goToPrevious = () => {
+  if (carouselRef.value?.emblaApi) {
+    carouselRef.value.emblaApi.scrollPrev()
+  }
 }
-
-// Mouse event handlers
-const handleMouseDown = (e: MouseEvent) => {
-    if (!isMobile.value) return
-    isDragging.value = true
-    startX.value = e.clientX
-    lastX.value = e.clientX
-    dragOffset.value = 0
-}
-
-const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.value || !isMobile.value) return
-    e.preventDefault()
-
-    const deltaX = e.clientX - startX.value
-    dragOffset.value = deltaX
-}
-
-const handleMouseUp = () => {
-    if (!isDragging.value || !isMobile.value) return
-    isDragging.value = false
-
-    const threshold = slideWidth.value * 0.3
-
-    if (Math.abs(dragOffset.value) > threshold) {
-        if (dragOffset.value > 0) {
-            prevSlide()
-        } else {
-            nextSlide()
-        }
-    }
-
-    dragOffset.value = 0
-}
-
-// Touch event handlers
-const handleTouchStart = (e: TouchEvent) => {
-    if (!isMobile.value) return
-    isTouch.value = true
-    isDragging.value = true
-    startX.value = e.touches[0]?.clientX || 0
-    startY.value = e.touches[0]?.clientY || 0
-    lastX.value = e.touches[0]?.clientX || 0
-    dragOffset.value = 0
-}
-
-const handleTouchMove = (e: TouchEvent) => {
-    if (!isDragging.value || !isMobile.value) return
-
-    const touch = e.touches[0]
-    const deltaX = (touch?.clientX || 0) - startX.value
-    const deltaY = (touch?.clientY || 0) - startY.value
-
-    // Only prevent default if horizontal swipe is more significant than vertical
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        e.preventDefault()
-        dragOffset.value = deltaX
-    }
-}
-
-const handleTouchEnd = () => {
-    if (!isDragging.value || !isMobile.value) return
-    isDragging.value = false
-    isTouch.value = false
-
-    const threshold = slideWidth.value * 0.3
-
-    if (Math.abs(dragOffset.value) > threshold) {
-        if (dragOffset.value > 0) {
-            prevSlide()
-        } else {
-            nextSlide()
-        }
-    }
-
-    dragOffset.value = 0
-}
-
-// Handle responsive behavior
-const handleResize = () => {
-    isMobile.value = window.innerWidth < 600
-    if (isMobile.value) {
-        // Calculate slide width for mobile (2.25 images visible)
-        const containerWidth = window.innerWidth * 0.9 // 90% of screen width
-        slideWidth.value = containerWidth / 2.25
-    }
-}
-
-onMounted(() => {
-    handleResize()
-    window.addEventListener('resize', handleResize)
-})
-
-onUnmounted(() => {
-    window.removeEventListener('resize', handleResize)
-})
 </script>
 
 <style scoped>
