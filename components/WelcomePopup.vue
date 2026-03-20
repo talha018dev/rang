@@ -195,7 +195,7 @@ defineExpose({
 .welcome-popup-content {
   position: relative;
   background: white;
-  border-radius: 12px;
+  border-radius: 0px;
   width: 50vw;
   height: 50vh;
   overflow: visible;
@@ -207,6 +207,8 @@ defineExpose({
   .welcome-popup-content {
     width: 80vw;
     height: 70vh;
+    /* overflow: hidden; */
+     /* ensure image/click targets don't cause overflow on small screens */
   }
 }
 
@@ -249,7 +251,24 @@ defineExpose({
 
 @media (max-width: 600px) {
   .welcome-popup-image {
-    object-fit: contain;
+    object-fit: cover; /* mobile image should still cover the whole popup */
+  }
+
+  .welcome-popup-close {
+    /* top: 12px;
+    right: 12px; */
+    top: -2rem;
+  right: -2rem;
+  }
+
+  .welcome-popup-title {
+    font-size: 1.05rem;
+  }
+
+  .welcome-popup-cta {
+    bottom: 12px;
+    font-size: 0.95rem;
+    padding: 9px 20px;
   }
 }
 
