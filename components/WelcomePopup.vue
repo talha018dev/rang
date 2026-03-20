@@ -249,28 +249,7 @@ defineExpose({
   display: block;
 }
 
-@media (max-width: 600px) {
-  .welcome-popup-image {
-    object-fit: cover; /* mobile image should still cover the whole popup */
-  }
 
-  .welcome-popup-close {
-    /* top: 12px;
-    right: 12px; */
-    top: -2rem;
-  right: -2rem;
-  }
-
-  .welcome-popup-title {
-    font-size: 1.05rem;
-  }
-
-  .welcome-popup-cta {
-    bottom: 12px;
-    font-size: 0.95rem;
-    padding: 9px 20px;
-  }
-}
 
 .welcome-popup-title {
   position: absolute;
@@ -348,5 +327,29 @@ defineExpose({
 .welcome-popup-enter-from .welcome-popup-content,
 .welcome-popup-leave-to .welcome-popup-content {
   transform: scale(0.95);
+}
+
+@media (max-width: 600px) {
+  .welcome-popup-image {
+    object-fit: cover; /* mobile image should still cover the whole popup */
+  }
+
+  .welcome-popup-close {
+    /* top: 12px;
+    right: 12px; */
+    top: -2rem;
+    right: -2rem;
+  }
+
+  .welcome-popup-title {
+    font-size: 1.05rem;
+  }
+
+  .welcome-popup-cta {
+    bottom: 12px;
+    font-size: 0.85rem;
+    padding: 9px 20px;
+    text-wrap: nowrap;
+  }
 }
 </style>
