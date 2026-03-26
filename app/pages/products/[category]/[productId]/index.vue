@@ -270,7 +270,7 @@
                                 <span class="size-radio-label">{{ size }}</span>
                             </label>
                         </div>
-                        <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                        <NuxtLink :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                     </div>
 
                     <!-- Color Selection -->
@@ -438,7 +438,7 @@
                         <span class="size-radio-label">{{ size }}</span>
                     </label>
                 </div>
-                <NuxtLink to="/size-guide" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                <NuxtLink :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
             </div>
 
             <div class="color-selection">
@@ -1096,6 +1096,12 @@ const getImageUrl = (imagePath: string): string => {
   // Otherwise, prepend the API base URL
   return `https://rangbd.thecell.tech${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`
 }
+
+const sizeGuideUrl = computed(() => {
+  const previewUrl = product.value?.size_chart?.preview_url
+  if (previewUrl) return getImageUrl(previewUrl)
+  return '/size-guide'
+})
 
 // Get all product images (main image, images object, variant images)
 const getAllProductImages = (product: Product): string[] => {

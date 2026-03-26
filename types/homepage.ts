@@ -29,6 +29,13 @@ export interface ActiveCampaign {
   discount_value: number
 }
 
+export interface ProductMedia {
+  id: string
+  original_url: string
+  preview_url: string
+  thumbnail_url: string
+}
+
 export interface Product {
   active_campaign?: ActiveCampaign
   id: number
@@ -47,6 +54,7 @@ export interface Product {
   variants: ProductVariant[]
   tags?: string[] | Record<string, string>
   campaigns?: string[] | Record<string, string>
+  size_chart?: ProductMedia | null
   /** Map of color name -> hex (e.g. { "Parrot Green": "#14eb36" }). When present, used for color swatches. */
   color_map?: Record<string, string> | unknown[]
 }
