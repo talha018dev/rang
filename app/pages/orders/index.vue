@@ -5,9 +5,9 @@
         <!-- Navigation Cards -->
         <div class="!flex !flex-wrap !gap-4 !w-full !justify-center !mb-6 !max-w-[600px]">
           <NuxtLink 
-            to="/myprofile"
+            to="/profile"
             class="!flex !flex-col !items-center !justify-center !gap-2 !p-6 !bg-white !rounded-lg !border-2 !transition-all !duration-200 hover:!shadow-md !min-w-[120px] !flex-1 !max-w-[200px] !h-[100px]"
-            :class="$route.path === '/myprofile' ? '!border-orange-600 !bg-orange-50' : '!border-gray-200 hover:!border-orange-300'">
+            :class="$route.path === '/profile' ? '!border-orange-600 !bg-orange-50' : '!border-gray-200 hover:!border-orange-300'">
             <div class="!w-8 !h-8 !text-orange-600">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="!w-full !h-full">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
