@@ -580,7 +580,7 @@ const accountLink = computed(() => {
 
 // Wishlist link based on authentication status
 const wishlistLink = computed(() => {
-  return hasToken.value ? '/wishlist' : '/login'
+  return hasToken.value ? '/profile?tab=wishlist' : '/login'
 })
 
 // Reactive state for drawer

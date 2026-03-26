@@ -246,7 +246,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useHead, useRouter } from 'nuxt/app'
+import { useHead, useRoute, useRouter } from 'nuxt/app'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCurrency } from '~~/composables/useCurrency'
@@ -325,6 +325,7 @@ interface WishlistResponse {
   data?: WishlistItem[]
 }
 
+const route = useRoute()
 const router = useRouter()
 const { backendUrl } = useApi()
 const { formatPrice, exchangeRate } = useCurrency()
@@ -622,6 +623,11 @@ useHead({
   meta: [{ name: 'description', content: 'Account information - Rang Bangladesh' }]
 })
 
-onMounted(fetchProfile)
+onMounted(async () => {
+  await fetchProfile()
+  if (route.query.tab === 'wishlist') {
+    await activateWishlistSection()
+  }
+})
 </script>
 
