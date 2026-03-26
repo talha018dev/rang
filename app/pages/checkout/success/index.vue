@@ -71,7 +71,8 @@ function trackMetaPixelPurchase() {
     // localStorage may be full or disabled; allow one fire
   }
   const payload: Record<string, unknown> = {
-    value: orderTotal,
+    // Always send two decimal places (e.g. "100.00") for Purchase value
+    value: orderTotal.toFixed(2),
     currency,
     order_id: orderNumber
   }
