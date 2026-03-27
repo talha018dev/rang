@@ -164,7 +164,10 @@
 import { ref } from 'vue'
 import { useHead } from 'nuxt/app'
 import AppFooter from '~~/components/AppFooter.vue'
+import { useApi } from '~~/composables/useApi'
 import './contact-us.css'
+
+const { backendUrl } = useApi()
 
 // Meta
 useHead({
@@ -185,29 +188,40 @@ const isSubmitting = ref(false)
 const submitMessage = ref('')
 const submitMessageType = ref<'success' | 'error'>('success')
 
-// Handle form submission
+// Handle form submission — POST /contact as multipart form-data
 const handleSubmit = async () => {
   isSubmitting.value = true
   submitMessage.value = ''
 
+  const body = new FormData()
+  body.append('name', formData.value.name.trim())
+  body.append('email', formData.value.email.trim())
+  body.append('message', formData.value.message.trim())
+
   try {
-    // TODO: Implement API call to submit contact form
-    console.log('Contact form submitted:', formData.value)
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    submitMessage.value = 'Thank you for contacting us! We will get back to you as soon as possible.'
-    submitMessageType.value = 'success'
-    
-    // Reset form
-    formData.value = {
-      name: '',
-      email: '',
-      message: ''
+    const response = await $fetch<{ success?: boolean; message?: string }>(`${backendUrl}/contact`, {
+      method: 'POST',
+      body
+    })
+
+    const ok = response && (response.success !== false)
+    if (ok) {
+      submitMessage.value =
+        response?.message || 'Thank you for contacting us! We will get back to you as soon as possible.'
+      submitMessageType.value = 'success'
+      formData.value = {
+        name: '',
+        email: '',
+        message: ''
+      }
+    } else {
+      submitMessage.value = response?.message || 'Sorry, we could not send your message. Please try again.'
+      submitMessageType.value = 'error'
     }
-  } catch (error) {
-    submitMessage.value = 'Sorry, there was an error sending your message. Please try again later.'
+  } catch (error: unknown) {
+    const err = error as { data?: { message?: string }; message?: string }
+    submitMessage.value =
+      err?.data?.message || err?.message || 'Sorry, there was an error sending your message. Please try again later.'
     submitMessageType.value = 'error'
     console.error('Error submitting contact form:', error)
   } finally {
