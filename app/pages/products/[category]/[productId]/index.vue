@@ -270,7 +270,15 @@
                                 <span class="size-radio-label">{{ size }}</span>
                             </label>
                         </div>
-                        <NuxtLink :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                        <button
+                            v-if="hasSizeChartPreview"
+                            type="button"
+                            class="size-guide-link size-guide-button"
+                            @click="openSizeChartModal"
+                        >
+                            See Sizes & Fit Details
+                        </button>
+                        <NuxtLink v-else :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
                     </div>
 
                     <!-- Color Selection -->
@@ -438,7 +446,15 @@
                         <span class="size-radio-label">{{ size }}</span>
                     </label>
                 </div>
-                <NuxtLink :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
+                <button
+                    v-if="hasSizeChartPreview"
+                    type="button"
+                    class="size-guide-link size-guide-button"
+                    @click="openSizeChartModal"
+                >
+                    See Sizes & Fit Details
+                </button>
+                <NuxtLink v-else :to="sizeGuideUrl" target="_blank" class="size-guide-link">See Sizes & Fit Details</NuxtLink>
             </div>
 
             <div class="color-selection">
@@ -1019,6 +1035,31 @@
             </UCarousel>
         </section>
     </div>
+    <div
+        v-if="showSizeChartModal && sizeChartPreviewUrl"
+        class="size-chart-modal-overlay"
+        @click.self="closeSizeChartModal"
+    >
+        <div class="size-chart-modal">
+            <button
+                type="button"
+                class="size-chart-modal-close"
+                aria-label="Close size chart"
+                @click="closeSizeChartModal"
+            >
+                <Icon name="heroicons:x-mark" />
+            </button>
+            <NuxtImg
+                :src="sizeChartPreviewUrl"
+                alt="Size chart"
+                class="size-chart-modal-image"
+                loading="lazy"
+                format="webp"
+                quality="90"
+            />
+        </div>
+    </div>
+
     <AppFooter />
 </template>
 
@@ -1102,6 +1143,20 @@ const sizeGuideUrl = computed(() => {
   if (previewUrl) return getImageUrl(previewUrl)
   return '/size-guide'
 })
+
+const showSizeChartModal = ref(false)
+const sizeChartPreviewUrl = computed(() => {
+  const previewUrl = product.value?.size_chart?.preview_url
+  return previewUrl ? getImageUrl(previewUrl) : ''
+})
+const hasSizeChartPreview = computed(() => !!sizeChartPreviewUrl.value)
+const openSizeChartModal = () => {
+  if (!hasSizeChartPreview.value) return
+  showSizeChartModal.value = true
+}
+const closeSizeChartModal = () => {
+  showSizeChartModal.value = false
+}
 
 // Get all product images (main image, images object, variant images)
 const getAllProductImages = (product: Product): string[] => {
