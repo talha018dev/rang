@@ -1059,7 +1059,7 @@ const fetchShippingMethods = async (addressData?: any) => {
       headers: getAuthHeaders(),
       body: {
         address: addressData,
-        currency: checkoutApiCurrency.value
+        currency: currency.value
       }
     })
     console.log('Shipping Methods API Response:', response)
@@ -1512,7 +1512,8 @@ const isBangladesh = computed(() => {
   return shippingInfo.value.country === 'Bangladesh'
 })
 
-// Currency to send in checkout APIs: BDT for Bangladesh, USD for any other country
+// Shipping region: used to refetch preview when switching Bangladesh ↔ international (rates/context change).
+// Order preview / place order / shipping-methods `currency` field uses the header `currency` (user choice).
 const checkoutApiCurrency = computed(() => {
   return isBangladesh.value ? 'BDT' : 'USD'
 })
@@ -1524,10 +1525,10 @@ const normalizeCurrencyCode = (value: unknown): 'BDT' | 'USD' | null => {
 }
 
 // Checkout should always display the currency returned by order preview.
-// Before preview is loaded, fallback to checkoutApiCurrency.
+// Before preview is loaded, fallback to the header currency (user selection).
 const checkoutDisplayCurrency = computed<'BDT' | 'USD'>(() => {
   const previewCurrency = normalizeCurrencyCode(orderPreviewData.value?.totals?.currency)
-  return previewCurrency ?? checkoutApiCurrency.value
+  return previewCurrency ?? (currency.value as 'BDT' | 'USD')
 })
 
 const syncCheckoutCurrency = () => {
@@ -1542,10 +1543,26 @@ watch(checkoutDisplayCurrency, () => {
   syncCheckoutCurrency()
 }, { immediate: true })
 
-watch(currency, (newCurrency) => {
-  if (newCurrency !== checkoutDisplayCurrency.value) {
-    syncCheckoutCurrency()
+// Do not call syncCheckoutCurrency here: while old preview still has the previous totals.currency,
+// sync would revert the user's new selection (e.g. USD→BDT snapped back to USD). Clear preview first;
+// checkoutDisplayCurrency then follows currency.value until the new preview loads.
+watch(currency, () => {
+  if (cartItems.value.length === 0) {
+    orderPreviewData.value = null
+    return
   }
+  orderPreviewData.value = null
+  void fetchOrderPreview()
+})
+
+// Refetch when Bangladesh vs international changes (shipping); preview payload currency follows header.
+watch(checkoutApiCurrency, () => {
+  if (cartItems.value.length === 0) {
+    orderPreviewData.value = null
+    return
+  }
+  orderPreviewData.value = null
+  void fetchOrderPreview()
 })
 
 // Computed property for filtered countries based on search term
@@ -2315,7 +2332,7 @@ async function fetchOrderPreview () {
       coupon_code: couponValidated.value && couponCode.value ? couponCode.value.trim() : null,
       customer_notes: orderNotes.value?.trim() || null,
       shipping_method: shippingMethodValue || null,
-      currency: checkoutApiCurrency.value,
+      currency: currency.value,
       address: {
         name: shippingInfo.value.fullName || '',
         phone: shippingInfo.value.phone || '',
@@ -2686,7 +2703,7 @@ const handlePlaceOrder = async () => {
       payment_method: paymentMethod.value,
       is_gift: isGiftPackage.value,
       gift_package_charge: isGiftPackage.value ? giftPackageChargeBDT.value : 0,
-      currency: checkoutApiCurrency.value,
+      currency: currency.value,
       address: {
         name: shippingInfo.value.fullName,
         phone: shippingInfo.value.phone || '',
