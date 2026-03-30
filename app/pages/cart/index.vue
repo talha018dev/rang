@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { navigateTo, useHead } from 'nuxt/app'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AppFooter from '../../../components/AppFooter.vue'
 import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
@@ -463,6 +463,16 @@ onMounted(async () => {
   }, remainingTime)
 })
 
+// Preview totals are returned in the requested currency; refetch when currency changes
+// so we never show BDT numbers formatted as USD (or vice versa).
+watch(currency, () => {
+  if (cartItems.value.length === 0) {
+    orderPreviewData.value = null
+    return
+  }
+  orderPreviewData.value = null
+  void fetchOrderPreview()
+})
 
 const handleCheckout = () => {
   navigateTo('/checkout')
