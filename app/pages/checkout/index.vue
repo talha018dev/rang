@@ -676,7 +676,7 @@
                       <template v-if="item.compare_price != null && item.compare_price > item.price">
                         <span class="order-item-compare-price">{{ formatCheckoutPrice(currency === 'USD' ? (item.compare_price_usd ?? item.compare_price / exchangeRate) * item.quantity : item.compare_price * item.quantity) }}</span>
                         <span class="order-item-final-price">{{ formatItemTotal(item) }}</span>
-                        <span v-if="item.campaign_name" class="order-item-discount-label">{{ item.campaign_name }} -{{ formatCheckoutPrice(getItemCampaignDiscountAmount(item)) }}</span>
+                        <span v-if="item.campaign_name" class="order-item-discount-label">{{ item.campaign_name }} - {{ formatItemCampaignDiscountDisplay(item) }}</span>
                       </template>
                       <template v-else>{{ formatItemTotal(item) }}</template>
                     </p>
@@ -782,6 +782,7 @@ const {
 } = useCart()
 
 const { formatPrice, currency, currencyCode, exchangeRate, setCurrency } = useCurrency()
+const runtimeConfig = useRuntimeConfig()
 
 // Format price same as invoice: BDT = Tk + toLocaleString(2 decimals), USD = $ + toFixed(2)
 const formatCheckoutPrice = (price: number | null | undefined): string => {
@@ -847,6 +848,25 @@ const getItemCampaignDiscountAmount = (item: any): number => {
 
   // Unknown campaign discount type: fallback to derived difference.
   return safeDiff
+}
+
+/** Percent: show only e.g. "16%". Fixed: show line discount total in checkout currency. */
+const formatItemCampaignDiscountDisplay = (item: any): string => {
+  const discountType = String(item?.campaign_discount_type ?? '').toLowerCase()
+  const discountValue = Number(item?.campaign_discount_value ?? 0)
+
+  if (discountType === 'percentage' && Number.isFinite(discountValue) && discountValue > 0) {
+    const pct = Number.isInteger(discountValue)
+      ? String(discountValue)
+      : String(parseFloat(discountValue.toFixed(2)))
+    return `${pct}%`
+  }
+
+  if (discountType === 'fixed') {
+    return formatCheckoutPrice(getItemCampaignDiscountAmount(item))
+  }
+
+  return formatCheckoutPrice(getItemCampaignDiscountAmount(item))
 }
 
 // Discount in current currency (API returns BDT)
@@ -2707,15 +2727,48 @@ const handlePlaceOrder = async () => {
 
     // Check if order was successful
     if (response && (response.success !== false)) {
-      // Capture order total and currency before clearCart() (clearing cart zeros out grandTotal)
+      // Get order number from response (for testing use 202511JJC)
+      const orderNumber = (response as any)?.data?.number
+
+      // Capture order total and Meta Purchase line items before clearCart() (clearing cart empties cartItems)
       const orderTotalForPixel = grandTotal.value
       const currencyForPixel = currencyCode.value
+      const metaPixelId = String(runtimeConfig.public.metaPixelId || '')
+      const metaContents: { id: string; quantity: number }[] = []
+      for (const item of cartItems.value) {
+        const hasProductsArray =
+          (item as any).products &&
+          Array.isArray((item as any).products) &&
+          (item as any).products.length > 0
+        const lineId = hasProductsArray
+          ? ((item as any).product_id ?? item.product_id ?? item.id)
+          : (item.variant_id ?? item.product_id ?? item.id)
+        const contentId = metaPixelId ? `${metaPixelId}_${lineId}` : String(lineId)
+        metaContents.push({
+          id: String(contentId),
+          quantity: Number(item.quantity) || 1
+        })
+      }
+      const metaNumItems = cartItems.value.reduce(
+        (sum, item) => sum + (Number(item.quantity) || 1),
+        0
+      )
+      if (orderNumber) {
+        try {
+          sessionStorage.setItem(
+            `meta_pixel_purchase_extra_${orderNumber}`,
+            JSON.stringify({
+              eventID: String(orderNumber),
+              content_type: 'product_group',
+              contents: metaContents,
+              num_items: metaNumItems
+            })
+          )
+        } catch (_) {}
+      }
 
       // Clear cart after successful order
       clearCart()
-
-      // Get order number from response (for testing use 202511JJC)
-      const orderNumber = (response as any)?.data?.number
       
       // Determine gateway based on payment method
       let gateway = 'ssl' // Default to SSL for online payments

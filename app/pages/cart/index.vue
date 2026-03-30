@@ -67,7 +67,7 @@
                     <span v-else class="item-price">{{ formatPrice(item.price, item.price_usd) }}</span>
                   </div>
                   <div v-if="item.compare_price != null && item.compare_price > item.price && item.campaign_name" class="item-discount-label">
-                    {{ item.campaign_name }} -{{ formatSummaryPrice(getItemCampaignDiscountAmount(item)) }}
+                    {{ item.campaign_name }} - {{ formatItemCampaignDiscountDisplay(item) }}
                   </div>
                 </div>
                 
@@ -314,6 +314,26 @@ const getItemCampaignDiscountAmount = (item: any): number => {
   }
 
   return safeDiff
+}
+
+/** Percent: show only e.g. "16%". Fixed: show line discount total in current currency. */
+const formatItemCampaignDiscountDisplay = (item: any): string => {
+  const discountType = String(item?.campaign_discount_type ?? '').toLowerCase()
+  const discountValue = Number(item?.campaign_discount_value ?? 0)
+
+  if (discountType === 'percentage' && Number.isFinite(discountValue) && discountValue > 0) {
+    const pct = Number.isInteger(discountValue)
+      ? String(discountValue)
+      : String(parseFloat(discountValue.toFixed(2)))
+    return `${pct}%`
+  }
+
+  if (discountType === 'fixed') {
+    const amount = getItemCampaignDiscountAmount(item)
+    return formatSummaryPrice(amount)
+  }
+
+  return formatSummaryPrice(getItemCampaignDiscountAmount(item))
 }
 
 // VAT: fixed 10% on subtotal (amount after campaign discount; no coupon on cart)

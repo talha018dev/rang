@@ -71,11 +71,29 @@ function trackMetaPixelPurchase() {
     // localStorage may be full or disabled; allow one fire
   }
   const payload: Record<string, unknown> = {
-    // Always send two decimal places (e.g. "100.00") for Purchase value
-    value: orderTotal.toFixed(2),
+    // Numeric value matches Meta Events Manager display (e.g. 1890)
+    value: Number(orderTotal.toFixed(2)),
     currency,
+    content_type: 'product_group',
+    eventID: orderNumber,
     order_id: orderNumber
   }
+  try {
+    const extraRaw = sessionStorage.getItem(`meta_pixel_purchase_extra_${orderNumber}`)
+    if (extraRaw) {
+      const extra = JSON.parse(extraRaw) as {
+        eventID?: string
+        content_type?: string
+        contents?: { id: string; quantity: number }[]
+        num_items?: number
+      }
+      if (extra.eventID) payload.eventID = extra.eventID
+      if (extra.content_type) payload.content_type = extra.content_type
+      if (Array.isArray(extra.contents)) payload.contents = extra.contents
+      if (typeof extra.num_items === 'number') payload.num_items = extra.num_items
+      sessionStorage.removeItem(`meta_pixel_purchase_extra_${orderNumber}`)
+    }
+  } catch (_) {}
   // Include advanced matching fields when available (Meta hashes these for matching)
   try {
     const contactRaw = sessionStorage.getItem(`meta_pixel_purchase_contact_${orderNumber}`)
