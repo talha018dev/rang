@@ -223,6 +223,7 @@ import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
+import { useCampaignBadge } from '~~/composables/useCampaignBadge'
 import { useWishlist } from '~~/composables/useWishlist'
 import type { Brand, BrandResponse, Category, CategoryResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import '../../products/[category]/products.css'
@@ -667,29 +668,7 @@ const getCurrentPriceDisplay = (product: Product): string => {
   return `${minText}-${maxText}`
 }
 
-const getCampaignBadgeText = (product: Product): string => {
-  const campaign = product.active_campaign
-  if (!campaign) return ''
-
-  const discountValue = Number(campaign.discount_value || 0)
-  const discountType = String(campaign.discount_type || '').toLowerCase()
-
-  if (discountType === 'percentage') {
-    return `${discountValue}% OFF`
-  }
-
-  if (discountType === 'fixed') {
-    const fixedAmount = currency.value === 'USD' && exchangeRate.value > 0
-      ? discountValue / exchangeRate.value
-      : discountValue
-    return `${formatPrice(
-      currency.value === 'USD' ? 0 : fixedAmount,
-      currency.value === 'USD' ? fixedAmount : undefined
-    )} OFF`
-  }
-
-  return `${discountType} ${discountValue}`.trim()
-}
+const { getCampaignBadgeText } = useCampaignBadge()
 
 // Wishlist functionality
 const { isLoggedIn, isInWishlist, toggleWishlist, initializeWishlist } = useWishlist()
@@ -783,22 +762,6 @@ const handleQuickAddToCart = (product: Product) => {
 
 :global(.mobile-menu-button:hover) {
   color: #ea580c !important;
-}
-
-.campaign-badge {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 11;
-  padding: 0.3rem 0.55rem;
-  border-radius: 9999px;
-  background: #ea580c;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 </style>
 

@@ -134,6 +134,9 @@
                       height="488"
                     />
                   </div>
+                  <div v-if="product.active_campaign" class="campaign-badge">
+                    {{ getCampaignBadgeText(product) }}
+                  </div>
                   <button
                     v-if="isLoggedIn"
                     class="wishlist-icon-btn"
@@ -229,6 +232,7 @@ import AppFooter from '../../../../../components/AppFooter.vue'
 import AppHeader from '../../../../../components/AppHeader.vue'
 import { useCart } from '../../../../../composables/useCart'
 import { useCurrency } from '../../../../../composables/useCurrency'
+import { useCampaignBadge } from '../../../../../composables/useCampaignBadge'
 import { useWishlist } from '../../../../../composables/useWishlist'
 import { useApi } from '../../../../../composables/useApi'
 import type { Brand, PaginationData, Product, ProductResponse } from '../../../../../types/homepage'
@@ -449,6 +453,7 @@ async function fetchProducts() {
 
 // Currency & price display (same as [category] page)
 const { formatPrice, currency, exchangeRate } = useCurrency()
+const { getCampaignBadgeText } = useCampaignBadge()
 
 const shouldShowComparePrice = (product: Product): boolean => {
   const comparePrice = product.compare_price || 0

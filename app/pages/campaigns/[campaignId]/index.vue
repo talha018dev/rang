@@ -135,6 +135,9 @@
                       quality="85" 
                     />
                   </div>
+                  <div v-if="product.active_campaign" class="campaign-badge">
+                    {{ getCampaignBadgeText(product) }}
+                  </div>
                   <!-- Wishlist Icon (only for logged-in users) -->
                   <button 
                     v-if="isLoggedIn" 
@@ -220,6 +223,7 @@ import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import { useCart } from '~~/composables/useCart'
 import { useCurrency } from '~~/composables/useCurrency'
+import { useCampaignBadge } from '~~/composables/useCampaignBadge'
 import { useWishlist } from '~~/composables/useWishlist'
 import type { Brand, BrandResponse, PaginationData, Product, ProductResponse } from '~~/types/homepage'
 import '../../products/[category]/products.css'
@@ -526,6 +530,7 @@ watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
 // Cart functionality
 const { addToCart } = useCart()
 const { formatPrice, currency, exchangeRate } = useCurrency()
+const { getCampaignBadgeText } = useCampaignBadge()
 
 // Check if prices differ and should show compare price
 const shouldShowComparePrice = (product: Product): boolean => {
