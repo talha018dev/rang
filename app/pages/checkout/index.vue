@@ -1497,6 +1497,37 @@ const checkoutApiCurrency = computed(() => {
   return isBangladesh.value ? 'BDT' : 'USD'
 })
 
+const normalizeCurrencyCode = (value: unknown): 'BDT' | 'USD' | null => {
+  const code = String(value ?? '').toUpperCase()
+  if (code === 'BDT' || code === 'USD') return code
+  return null
+}
+
+// Checkout should always display the currency returned by order preview.
+// Before preview is loaded, fallback to checkoutApiCurrency.
+const checkoutDisplayCurrency = computed<'BDT' | 'USD'>(() => {
+  const previewCurrency = normalizeCurrencyCode(orderPreviewData.value?.totals?.currency)
+  return previewCurrency ?? checkoutApiCurrency.value
+})
+
+const syncCheckoutCurrency = () => {
+  const target = checkoutDisplayCurrency.value
+  if (currency.value !== target) {
+    setCurrency(target, false)
+  }
+}
+
+// Lock checkout currency to preview/API currency even if header selector changes.
+watch(checkoutDisplayCurrency, () => {
+  syncCheckoutCurrency()
+}, { immediate: true })
+
+watch(currency, (newCurrency) => {
+  if (newCurrency !== checkoutDisplayCurrency.value) {
+    syncCheckoutCurrency()
+  }
+})
+
 // Computed property for filtered countries based on search term
 const filteredCountries = computed(() => {
   if (!countrySearchTerm.value) {
@@ -2296,9 +2327,11 @@ async function fetchOrderPreview () {
     } else {
       orderPreviewData.value = null
     }
+    syncCheckoutCurrency()
   } catch (e) {
     console.error('Order preview error:', e)
     orderPreviewData.value = null
+    syncCheckoutCurrency()
   }
 }
 
