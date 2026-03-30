@@ -67,7 +67,7 @@
                     <span v-else class="item-price">{{ formatPrice(item.price, item.price_usd) }}</span>
                   </div>
                   <div v-if="item.compare_price != null && item.compare_price > item.price && item.campaign_name" class="item-discount-label">
-                    {{ item.campaign_name }} -{{ formatSummaryPrice(currency === 'USD' ? (item.campaign_discount_value != null ? (item.campaign_discount_value / exchangeRate) * item.quantity : ((item.compare_price - item.price) / exchangeRate) * item.quantity) : (item.campaign_discount_value != null ? item.campaign_discount_value * item.quantity : (item.compare_price - item.price) * item.quantity)) }}
+                    {{ item.campaign_name }} -{{ formatSummaryPrice(getItemCampaignDiscountAmount(item)) }}
                   </div>
                 </div>
                 
@@ -264,6 +264,56 @@ const formatSummaryPrice = (price: number): string => {
     return `$${Number(price).toFixed(2)}`
   }
   return `Tk ${Number(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+// Campaign discount displayed per cart item in current currency.
+// - percentage: campaign_discount_value is percentage (e.g. 16 => 16%)
+// - fixed: campaign_discount_value is fixed amount in BDT (convert for USD)
+const getItemCampaignDiscountAmount = (item: any): number => {
+  const qty = Number(item?.quantity ?? 0)
+  if (!Number.isFinite(qty) || qty <= 0) return 0
+
+  const discountType = String(item?.campaign_discount_type ?? '').toLowerCase()
+  const discountValue = Number(item?.campaign_discount_value ?? 0)
+
+  const comparePriceBdt = Number(item?.compare_price ?? 0)
+  const priceBdt = Number(item?.price ?? 0)
+
+  const comparePriceUsd = item?.compare_price_usd != null && isFinite(Number(item.compare_price_usd))
+    ? Number(item.compare_price_usd)
+    : (exchangeRate.value > 0 ? comparePriceBdt / exchangeRate.value : 0)
+
+  const priceUsd = item?.price_usd != null && isFinite(Number(item.price_usd))
+    ? Number(item.price_usd)
+    : (exchangeRate.value > 0 ? priceBdt / exchangeRate.value : 0)
+
+  const perUnitDiscountDiff = currency.value === 'USD'
+    ? (comparePriceUsd - priceUsd)
+    : (comparePriceBdt - priceBdt)
+
+  const safeDiff = Number.isFinite(perUnitDiscountDiff) && perUnitDiscountDiff > 0 ? perUnitDiscountDiff * qty : 0
+
+  if (discountType === 'percentage') {
+    if (Number.isFinite(discountValue) && discountValue > 0) {
+      const base = currency.value === 'USD' ? comparePriceUsd : comparePriceBdt
+      const amount = base * (discountValue / 100) * qty
+      if (Number.isFinite(amount) && amount > 0) return amount
+    }
+    return safeDiff
+  }
+
+  if (discountType === 'fixed') {
+    if (Number.isFinite(discountValue) && discountValue > 0) {
+      if (currency.value === 'USD') {
+        if (!exchangeRate.value || exchangeRate.value <= 0) return 0
+        return (discountValue / exchangeRate.value) * qty
+      }
+      return discountValue * qty
+    }
+    return safeDiff
+  }
+
+  return safeDiff
 }
 
 // VAT: fixed 10% on subtotal (amount after campaign discount; no coupon on cart)
