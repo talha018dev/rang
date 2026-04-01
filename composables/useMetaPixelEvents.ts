@@ -1,3 +1,6 @@
+import { useRuntimeConfig } from 'nuxt/app'
+import { useCurrency } from './useCurrency'
+
 type MetaPixelTrackAction = 'track' | 'trackCustom'
 
 type MetaPixelCategory = {
