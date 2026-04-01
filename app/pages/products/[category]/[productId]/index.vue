@@ -1073,6 +1073,7 @@ import AppFooter from '../../../../../components/AppFooter.vue'
 import { useApi } from '../../../../../composables/useApi'
 import { useCart } from '../../../../../composables/useCart'
 import { useCurrency } from '../../../../../composables/useCurrency'
+import { useMetaPixelEvents } from '../../../../../composables/useMetaPixelEvents'
 import { useWishlist } from '../../../../../composables/useWishlist'
 import type { Product } from '../../../../../types/homepage'
 // Get route parameters

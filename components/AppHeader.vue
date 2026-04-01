@@ -556,6 +556,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useApi } from '../composables/useApi';
 import { useCart } from '../composables/useCart';
 import { useCurrency } from '../composables/useCurrency';
+import { useMetaPixelEvents } from '../composables/useMetaPixelEvents';
 import type { Brand, BrandResponse, Category, CategoryResponse, MenuItem, Product, ProductResponse, SettingsResponse } from '../types/homepage';
 import SearchDropdown from './SearchDropdown.vue';
 
