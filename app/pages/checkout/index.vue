@@ -971,8 +971,12 @@ const getAuthToken = (): string | null => {
 
 // Helper function to get headers with auth token if available
 const getAuthHeaders = () => {
+  const fbp = useCookie('_fbp')
+  const fbc = useCookie('_fbc')
   const headers: Record<string, string> = {
-    'X-Requested-With': 'XMLHttpRequest'
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-META-FBP': fbp.value || '',
+    'X-META-FBC': fbc.value || ''
   }
   const token = getAuthToken()
   if (token) {
@@ -2841,5 +2845,4 @@ const handlePlaceOrder = async () => {
   }
 }
 </script>
-
 
