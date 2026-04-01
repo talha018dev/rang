@@ -16,6 +16,12 @@ type MetaPixelProductLike = {
   category?: MetaPixelCategory | null
 }
 
+type MetaPixelCheckoutItemLike = MetaPixelProductLike & {
+  quantity?: number | null
+  product_id?: number | string | null
+  variant_id?: number | string | null
+}
+
 declare global {
   interface Window {
     fbq?: (
@@ -102,6 +108,20 @@ export const useMetaPixelEvents = () => {
       .filter((item): item is { id: string; quantity: number } => item !== null)
   }
 
+  const buildCheckoutContents = (items: MetaPixelCheckoutItemLike[], limit = 20) => {
+    return items
+      .slice(0, limit)
+      .map((item) => {
+        const id = getContentId(item.variant_id ?? item.product_id ?? item.id)
+        if (!id) return null
+        return {
+          id,
+          quantity: Math.max(1, Number(item.quantity) || 1)
+        }
+      })
+      .filter((item): item is { id: string; quantity: number } => item !== null)
+  }
+
   const trackViewContent = (
     product: MetaPixelProductLike,
     options?: { variantId?: unknown; dedupeKey?: string }
@@ -170,8 +190,43 @@ export const useMetaPixelEvents = () => {
     trackEvent('track', 'Search', payload, dedupeKey)
   }
 
+  const trackInitiateCheckout = (
+    items: MetaPixelCheckoutItemLike[],
+    options?: {
+      value?: number | null
+      currency?: unknown
+      dedupeKey?: string
+    }
+  ) => {
+    if (items.length === 0) return
+
+    const contents = buildCheckoutContents(items)
+    const numItems = contents.reduce((sum, item) => sum + item.quantity, 0)
+    const fallbackValue = roundPrice(items.reduce((sum, item) => {
+      const quantity = Math.max(1, Number(item.quantity) || 1)
+      return sum + (getDisplayValue(item.price, item.price_usd) * quantity)
+    }, 0))
+
+    const rawValue = Number(options?.value)
+    const value = Number.isFinite(rawValue) && rawValue > 0 ? roundPrice(rawValue) : fallbackValue
+    const payload: Record<string, unknown> = {
+      content_type: 'product_group',
+      value,
+      currency: normalizeCurrencyCode(options?.currency ?? currency.value) ?? 'BDT',
+      num_items: numItems
+    }
+
+    if (contents.length > 0) {
+      payload.content_ids = contents.map((item) => item.id)
+      payload.contents = contents
+    }
+
+    trackEvent('track', 'InitiateCheckout', payload, options?.dedupeKey)
+  }
+
   return {
     getContentId,
+    trackInitiateCheckout,
     trackSearch,
     trackViewCategory,
     trackViewContent

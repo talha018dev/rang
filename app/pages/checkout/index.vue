@@ -753,6 +753,7 @@ import AppFooter from '../../../components/AppFooter.vue'
 import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
 import { useCurrency } from '../../../composables/useCurrency'
+import { useMetaPixelEvents } from '../../../composables/useMetaPixelEvents'
 import './checkout.css'
 
 // Define page meta to ensure route is recognized
@@ -782,7 +783,9 @@ const {
 } = useCart()
 
 const { formatPrice, currency, currencyCode, exchangeRate, setCurrency } = useCurrency()
+const { trackInitiateCheckout } = useMetaPixelEvents()
 const runtimeConfig = useRuntimeConfig()
+let lastTrackedInitiateCheckoutKey = ''
 
 // Format price same as invoice: BDT = Tk + toLocaleString(2 decimals), USD = $ + toFixed(2)
 const formatCheckoutPrice = (price: number | null | undefined): string => {
@@ -1000,6 +1003,30 @@ interface PreviewTotals {
   currency: string
 }
 const orderPreviewData = ref<{ totals: PreviewTotals } | null>(null)
+
+const trackCheckoutStart = () => {
+  if (cartItems.value.length === 0) return
+
+  const totals = orderPreviewData.value?.totals
+  const previewValue = totals?.grand_total_excluding_shipping ?? (
+    totals ? totals.item_total - (totals.coupon_discount ?? 0) + (totals.vat ?? 0) : null
+  )
+  const previewCurrency = totals?.currency || currencyCode.value
+  const trackingKey = [
+    cartItems.value.map(item => `${item.variant_id ?? item.product_id ?? item.id}:${item.quantity}`).join(','),
+    Number(previewValue ?? totalPrice.value).toFixed(2),
+    previewCurrency
+  ].join('|')
+
+  if (trackingKey === lastTrackedInitiateCheckoutKey) return
+
+  trackInitiateCheckout(cartItems.value as any[], {
+    value: previewValue ?? totalPrice.value,
+    currency: previewCurrency,
+    dedupeKey: `InitiateCheckout:${trackingKey}`
+  })
+  lastTrackedInitiateCheckoutKey = trackingKey
+}
 
 // Format item total price (same format as invoice)
 const formatItemTotal = (item: any) => {
@@ -2363,15 +2390,18 @@ async function fetchOrderPreview () {
       headers: getAuthHeaders(),
       body
     })
-    if (response?.success && response?.data?.totals) {
+  if (response?.success && response?.data?.totals) {
       orderPreviewData.value = { totals: response.data.totals }
+      trackCheckoutStart()
     } else {
       orderPreviewData.value = null
+      trackCheckoutStart()
     }
     syncCheckoutCurrency()
   } catch (e) {
     console.error('Order preview error:', e)
     orderPreviewData.value = null
+    trackCheckoutStart()
     syncCheckoutCurrency()
   }
 }
@@ -2845,4 +2875,3 @@ const handlePlaceOrder = async () => {
   }
 }
 </script>
-
