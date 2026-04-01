@@ -563,6 +563,7 @@ const route = useRoute()
 const router = useRouter()
 const { totalItems: cartTotalItems } = useCart()
 const { currency, setCurrency, formatPrice } = useCurrency()
+const { trackSearch } = useMetaPixelEvents()
 
 const brands = ref<Brand[]>([])
 
@@ -598,6 +599,7 @@ const showSearchResults = ref(false)
 const showSearchMenu = ref(false)
 const showMobileSearch = ref(false)
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
+let lastTrackedSearchKey = ''
 
 // Toggle search menu
 const toggleSearchMenu = () => {
@@ -628,11 +630,18 @@ const performSearch = async (query: string) => {
   isSearching.value = true
   try {
     const { backendUrl } = useApi()
-    const apiUrl = `${backendUrl}/product?q=${encodeURIComponent(query.trim())}`
+    const normalizedQuery = query.trim()
+    const apiUrl = `${backendUrl}/product?q=${encodeURIComponent(normalizedQuery)}`
     const response = await $fetch<ProductResponse>(apiUrl)
 
     if (response.success && response.data) {
-      searchOptions.value = response.data.slice(0, 10) // Limit to 10 results
+      const results = response.data.slice(0, 10)
+      searchOptions.value = results
+      const searchKey = `${normalizedQuery.toLowerCase()}:${results.map(product => product.id).join(',')}`
+      if (searchKey !== lastTrackedSearchKey) {
+        trackSearch(normalizedQuery, results)
+        lastTrackedSearchKey = searchKey
+      }
     } else {
       searchOptions.value = []
     }

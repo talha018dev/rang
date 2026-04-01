@@ -356,6 +356,8 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
 const categories = ref<Category[]>([])
+const { trackViewCategory } = useMetaPixelEvents()
+let lastTrackedViewCategoryKey = ''
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -505,6 +507,7 @@ const fetchProducts = async () => {
       }
       console.log('Products loaded:', products.value.length)
       console.log('Pagination:', pagination.value)
+      trackCategoryListingView()
     }
   } catch (err: any) {
     // Check if it's a 404 error
@@ -671,6 +674,25 @@ const filteredProducts = computed(() => {
     return sizeMatch && priceMatch
   })
 })
+
+const trackCategoryListingView = () => {
+  const visibleProducts = filteredProducts.value
+  const trackingKey = [
+    route.path,
+    currentPage.value,
+    selectedBrand.value,
+    selectedSize.value,
+    selectedPrice.value,
+    selectedCombo.value,
+    selectedSort.value,
+    visibleProducts.map(product => product.id).join(',')
+  ].join('|')
+
+  if (trackingKey === lastTrackedViewCategoryKey) return
+
+  trackViewCategory(categoryTitle.value, visibleProducts)
+  lastTrackedViewCategoryKey = trackingKey
+}
 
 // Function to update URL query parameters
 const updateUrlQuery = () => {

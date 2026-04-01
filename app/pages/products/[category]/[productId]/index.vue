@@ -1348,6 +1348,12 @@ watch(product, (newProduct) => {
       selectedSize.value = availableSizes.value[0] || ''
     }
   }
+
+  if (newProduct?.id) {
+    trackViewContent(newProduct, {
+      dedupeKey: `ViewContent:${productIdSlug.value}:${newProduct.id}`
+    })
+  }
 })
 
 // Fetch on mount
@@ -1939,6 +1945,7 @@ const decreaseQuantity = () => {
 
 const { addToCart } = useCart()
 const { formatPrice, currency, exchangeRate } = useCurrency()
+const { trackViewContent } = useMetaPixelEvents()
 
 // Helper functions for related products price comparison
 const shouldShowComparePriceForRelated = (product: Product): boolean => {

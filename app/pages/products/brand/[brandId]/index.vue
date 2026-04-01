@@ -254,6 +254,8 @@ const pagination = ref<PaginationData | null>(null)
 const currentPage = ref(1)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
+const { trackViewCategory } = useMetaPixelEvents()
+let lastTrackedViewCategoryKey = ''
 
 // Filter state (init from URL)
 const selectedSize = ref(sizeFromUrl.value)
@@ -349,6 +351,24 @@ const filteredProducts = computed(() => {
   })
 })
 
+const trackBrandListingView = () => {
+  const visibleProducts = filteredProducts.value
+  const trackingKey = [
+    route.path,
+    currentPage.value,
+    selectedSize.value,
+    selectedPrice.value,
+    selectedCombo.value,
+    selectedSort.value,
+    visibleProducts.map(product => product.id).join(',')
+  ].join('|')
+
+  if (trackingKey === lastTrackedViewCategoryKey) return
+
+  trackViewCategory(brand.value?.name || brandId.value, visibleProducts)
+  lastTrackedViewCategoryKey = trackingKey
+}
+
 const hasActiveFilters = computed(
   () =>
     !!selectedSize.value ||
@@ -442,6 +462,7 @@ async function fetchProducts() {
       if (pagination.value && pagination.value.current_page !== currentPage.value) {
         currentPage.value = pagination.value.current_page
       }
+      trackBrandListingView()
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load products'

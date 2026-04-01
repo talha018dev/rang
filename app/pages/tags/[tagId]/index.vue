@@ -302,6 +302,8 @@ const error = ref<string | null>(null)
 const brands = ref<Brand[]>([])
 const categories = ref<Category[]>([])
 const tagCoverImage = ref()
+const { trackViewCategory } = useMetaPixelEvents()
+let lastTrackedViewCategoryKey = ''
 
 // Helper function to get full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -447,6 +449,7 @@ const fetchProducts = async () => {
       }
       console.log('Products loaded:', products.value.length)
       console.log('Pagination:', pagination.value)
+      trackTagListingView()
     }
   } catch (err: any) {
     // Check if it's a 404 error
@@ -581,6 +584,25 @@ const filteredProducts = computed(() => {
     return sizeMatch && priceMatch
   })
 })
+
+const trackTagListingView = () => {
+  const visibleProducts = filteredProducts.value
+  const trackingKey = [
+    route.path,
+    currentPage.value,
+    selectedBrand.value,
+    selectedSize.value,
+    selectedPrice.value,
+    selectedCombo.value,
+    selectedSort.value,
+    visibleProducts.map(product => product.id).join(',')
+  ].join('|')
+
+  if (trackingKey === lastTrackedViewCategoryKey) return
+
+  trackViewCategory(tagTitle.value, visibleProducts)
+  lastTrackedViewCategoryKey = trackingKey
+}
 
 // Watch for filter changes to reset to page 1
 watch([selectedSize, selectedPrice, selectedBrand, selectedCombo], () => {
@@ -764,4 +786,3 @@ const handleQuickAddToCart = (product: Product) => {
   color: #ea580c !important;
 }
 </style>
-
