@@ -988,6 +988,34 @@ const getAuthHeaders = () => {
   return headers
 }
 
+interface CheckoutProfileAddress {
+  line_1?: string | null
+  line_2?: string | null
+  city?: string | null
+  zone?: string | null
+  state?: string | null
+  country?: string | null
+  postal_code?: string | null
+}
+
+interface CheckoutProfileMeResponse {
+  success: boolean
+  data?: {
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    mobile?: string | null
+    address?: CheckoutProfileAddress | string | null
+    line_1?: string | null
+    line_2?: string | null
+    city?: string | null
+    zone?: string | null
+    state?: string | null
+    country?: string | null
+    postal_code?: string | null
+  } | null
+}
+
 // Order preview API response (same structure as cart)
 interface PreviewTotals {
   item_total: number
@@ -1296,12 +1324,12 @@ onMounted(async () => {
   if (shippingInfo.value.country) {
     countrySearchTerm.value = shippingInfo.value.country
   }
+
+  // Prefill shipping fields from profile when the user is logged in.
+  await prefillCheckoutFromProfile()
   
   // Force checkbox styles to be applied after navigation
   await nextTick()
-  
-  // Ensure city is set to empty string to show default option after DOM is ready
-  shippingInfo.value.city = ''
   
   if (typeof window !== 'undefined') {
     // Force reflow to ensure CSS is applied
@@ -1316,8 +1344,13 @@ onMounted(async () => {
     await nextTick()
     const citySelect = document.getElementById('city') as HTMLSelectElement
     if (citySelect) {
-      citySelect.value = ''
-      citySelect.selectedIndex = 0
+      const selectedCity = String(shippingInfo.value.city || '')
+      if (selectedCity) {
+        citySelect.value = selectedCity
+      } else {
+        citySelect.value = ''
+        citySelect.selectedIndex = 0
+      }
     }
   }
   
@@ -1460,6 +1493,54 @@ const shippingInfo = ref({
   city_id: null as number | null,
   zone_id: null as number | null
 })
+
+const fillIfEmpty = (currentValue: unknown, nextValue: unknown): string => {
+  const current = String(currentValue ?? '').trim()
+  if (current) return String(currentValue ?? '')
+  return String(nextValue ?? '').trim()
+}
+
+const prefillCheckoutFromProfile = async () => {
+  const token = getAuthToken()
+  if (!token) return
+
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<CheckoutProfileMeResponse>(`${backendUrl}/profile/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!response?.success || !response?.data) return
+
+    const profile = response.data
+    const addressObj = profile.address && typeof profile.address === 'object' ? profile.address : null
+
+    const name = profile.name
+    const email = profile.email
+    const phone = profile.phone ?? profile.mobile
+    const line1 = addressObj?.line_1 ?? profile.line_1
+    const line2 = addressObj?.line_2 ?? profile.line_2
+    const city = addressObj?.city ?? profile.city
+    const zone = addressObj?.zone ?? addressObj?.state ?? profile.zone ?? profile.state
+    const country = addressObj?.country ?? profile.country
+    const postalCode = addressObj?.postal_code ?? profile.postal_code
+
+    shippingInfo.value.fullName = fillIfEmpty(shippingInfo.value.fullName, name)
+    shippingInfo.value.email = fillIfEmpty(shippingInfo.value.email, email)
+    shippingInfo.value.phone = fillIfEmpty(shippingInfo.value.phone, phone)
+    shippingInfo.value.addressLine1 = fillIfEmpty(shippingInfo.value.addressLine1, line1)
+    shippingInfo.value.addressLine2 = fillIfEmpty(shippingInfo.value.addressLine2, line2)
+    shippingInfo.value.city = fillIfEmpty(shippingInfo.value.city, city)
+    shippingInfo.value.zone = fillIfEmpty(shippingInfo.value.zone, zone)
+    shippingInfo.value.country = fillIfEmpty(shippingInfo.value.country, country || 'Bangladesh')
+    shippingInfo.value.postalCode = fillIfEmpty(shippingInfo.value.postalCode, postalCode)
+  } catch (error) {
+    console.warn('Could not prefill checkout from profile/me:', error)
+  }
+}
 
 
 // Store all cities from API (cached)
