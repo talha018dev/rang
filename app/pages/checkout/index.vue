@@ -643,7 +643,7 @@
                     {{ couponError }}
                   </div>
                   <div v-if="couponValidated && couponData" class="coupon-success">
-                    Coupon applied! Discount: {{ formatPrice(effectiveCouponDiscount) }}
+                    Coupon applied! Discount: {{ formatCheckoutPrice(summaryCouponDiscount) }}
                   </div>
                   <button
                     v-if="couponValidated"
