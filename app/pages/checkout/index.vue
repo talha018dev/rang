@@ -121,6 +121,36 @@
             <section class="checkout-section">
               <h2 class="section-title">Shipping Information</h2>
               <form class="checkout-form" @submit.prevent="handleSubmit" novalidate>
+                <div v-if="checkoutSavedAddresses.length > 0" class="form-group">
+                  <label for="checkoutSavedAddress" class="form-label">Saved address</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="checkoutSavedAddress"
+                      v-model="selectedCheckoutSavedAddressIdx"
+                      class="form-input"
+                      :disabled="isLoadingCheckoutSavedAddresses || isPlacingOrder"
+                      @change="onCheckoutSavedAddressSelect"
+                    >
+                      <option value="">Enter address manually</option>
+                      <option
+                        v-for="(item, idx) in checkoutSavedAddresses"
+                        :key="item.id ?? `saved-${idx}`"
+                        :value="String(idx)"
+                      >
+                        {{ formatCheckoutSavedAddressLabel(item) }}
+                      </option>
+                    </select>
+                    <svg class="select-caret" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <p class="field-hint">Select a profile address to fill the form below.</p>
+                </div>
+
                 <div class="form-group">
                   <label for="fullName" class="form-label">Full Name *</label>
                   <input
@@ -1327,6 +1357,8 @@ onMounted(async () => {
 
   // Prefill shipping fields from profile when the user is logged in.
   await prefillCheckoutFromProfile()
+
+  await loadCheckoutSavedAddresses()
   
   // Force checkbox styles to be applied after navigation
   await nextTick()
@@ -1938,6 +1970,125 @@ const fetchZones = async (cityId: number | null) => {
   } finally {
     isLoadingZones.value = false
   }
+}
+
+interface CheckoutSavedAddressItem {
+  id?: number
+  title?: string
+  address?: {
+    name?: string
+    email?: string
+    phone?: string
+    line_1?: string
+    line_2?: string
+    city?: string
+    state?: string
+    country?: string
+    postal_code?: string
+    city_id?: number
+    zone_id?: number
+  }
+}
+
+const checkoutSavedAddresses = ref<CheckoutSavedAddressItem[]>([])
+const selectedCheckoutSavedAddressIdx = ref<string>('')
+const isLoadingCheckoutSavedAddresses = ref(false)
+
+const formatCheckoutSavedAddressLabel = (item: CheckoutSavedAddressItem): string => {
+  const title = item.title || 'Saved address'
+  const hint = item.address?.line_1 || item.address?.city || item.address?.country || ''
+  return hint ? `${title} — ${hint}` : title
+}
+
+const loadCheckoutSavedAddresses = async () => {
+  if (!getAuthToken()) {
+    checkoutSavedAddresses.value = []
+    return
+  }
+  isLoadingCheckoutSavedAddresses.value = true
+  try {
+    const { backendUrl } = useApi()
+    const response = await $fetch<{ success?: boolean; data?: CheckoutSavedAddressItem[] }>(
+      `${backendUrl}/profile/address`,
+      {
+        method: 'GET',
+        headers: getAuthHeaders()
+      }
+    )
+    checkoutSavedAddresses.value =
+      response && response.success && Array.isArray(response.data) ? response.data : []
+  } catch {
+    checkoutSavedAddresses.value = []
+  } finally {
+    isLoadingCheckoutSavedAddresses.value = false
+  }
+}
+
+const applySavedAddressToShippingForm = async (item: CheckoutSavedAddressItem) => {
+  const a = item.address
+  if (!a) return
+
+  shippingInfo.value.fullName = String(a.name || '').trim()
+  shippingInfo.value.email = String(a.email || '').trim()
+  shippingInfo.value.phone = String(a.phone || '').trim()
+  shippingInfo.value.addressLine1 = String(a.line_1 || '').trim()
+  shippingInfo.value.addressLine2 = String(a.line_2 || '').trim()
+  shippingInfo.value.postalCode = String(a.postal_code || '').trim()
+
+  const countryStr = String(a.country || 'Bangladesh').trim() || 'Bangladesh'
+  shippingInfo.value.country = countryStr
+  countrySearchTerm.value = countryStr
+  showCountryDropdown.value = false
+  await handleCountryChange()
+
+  const cityNm = String(a.city || '').trim()
+  const stateNm = String(a.state || '').trim()
+
+  if (shippingInfo.value.country === 'Bangladesh' && cityNm) {
+    selectCity(cityNm)
+    await nextTick()
+    const cid = shippingInfo.value.city_id
+    if (cid) {
+      await fetchZones(cid)
+    }
+    await nextTick()
+
+    const zRaw = a.zone_id
+    if (zRaw != null && zones.value.length) {
+      const target = Number(zRaw)
+      const zo = zones.value.find((z: any) => {
+        const id = typeof z === 'string' ? z : (z.zone_id ?? z.id ?? z.zoneId ?? z.ID)
+        return Number(id) === target
+      })
+      if (zo) selectZone(zo)
+    } else if (stateNm && zones.value.length) {
+      const want = stateNm.trim().toLowerCase()
+      const zo = zones.value.find((z: any) => {
+        const zn =
+          typeof z === 'string'
+            ? z
+            : String(z.zone_name || z.name || z.zone || z.title || '')
+        return zn.trim().toLowerCase() === want
+      })
+      if (zo) selectZone(zo)
+    }
+  } else if (cityNm) {
+    shippingInfo.value.city = cityNm
+    citySearchTerm.value = cityNm
+  }
+
+  await fetchShippingMethodsWithAddress(true)
+  await fetchOrderPreview()
+}
+
+const onCheckoutSavedAddressSelect = async () => {
+  const v = selectedCheckoutSavedAddressIdx.value
+  if (v === '' || v === null) return
+  const idx = Number(v)
+  if (Number.isNaN(idx) || idx < 0 || idx >= checkoutSavedAddresses.value.length) return
+  const item = checkoutSavedAddresses.value[idx]
+  if (!item?.address) return
+  await applySavedAddressToShippingForm(item)
 }
 
 // Watch for city changes to store city_id and fetch zones (only for Bangladesh)

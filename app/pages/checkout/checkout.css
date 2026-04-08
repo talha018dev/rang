@@ -204,6 +204,12 @@
   font-weight: 500;
 }
 
+.field-hint {
+  margin-top: 0.35rem;
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
 .form-textarea {
   resize: vertical;
   min-height: 100px;
