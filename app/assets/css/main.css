@@ -685,11 +685,17 @@ ol[role="region"][tabindex="-1"] > li > * [class*="progress"] * {
   --success-bg: rgba(225, 135, 25, 0.12) !important;
   --success-border: rgba(225, 135, 25, 0.45) !important;
   --success-text: #c2410c !important;
+  --error-bg: rgba(220, 38, 38, 0.12) !important;
+  --error-border: rgba(220, 38, 38, 0.45) !important;
+  --error-text: #b91c1c !important;
 }
 [data-sonner-toaster][data-theme='dark'] {
   --success-bg: rgba(194, 65, 12, 0.25) !important;
   --success-border: rgba(225, 135, 25, 0.4) !important;
   --success-text: #e18719 !important;
+  --error-bg: rgba(185, 28, 28, 0.3) !important;
+  --error-border: rgba(220, 38, 38, 0.45) !important;
+  --error-text: #fca5a5 !important;
 }
 /* Direct overrides on success toast (vue-sonner injects styles late, so we override) */
 [data-sonner-toast][data-type='success'] {
@@ -710,6 +716,21 @@ ol[role="region"][tabindex="-1"] > li > * [class*="progress"] * {
   background: #fbeddd !important;
   border-color: rgba(225, 135, 25, 0.5) !important;
   color: #c2410c !important;
+}
+
+/* Error toast styling to match success custom style */
+[data-sonner-toast][data-type='error'] {
+  background: #fee2e2 !important;
+  border-color: rgba(220, 38, 38, 0.5) !important;
+  color: #b91c1c !important;
+  padding: 12px !important;
+  gap: 12px !important;
+}
+
+[data-sonner-toast][data-type='error'] [data-close-button] {
+  background: #fee2e2 !important;
+  border-color: rgba(220, 38, 38, 0.5) !important;
+  color: #b91c1c !important;
 }
 
 /* Global scale to simulate 75% zoom without changing browser zoom */

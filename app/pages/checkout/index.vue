@@ -779,6 +779,7 @@
 <script setup lang="ts">
 import { navigateTo, useHead } from 'nuxt/app'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { toast } from 'vue-sonner'
 import AppFooter from '../../../components/AppFooter.vue'
 import { useApi } from '../../../composables/useApi'
 import { useCart } from '../../../composables/useCart'
@@ -3100,8 +3101,15 @@ const handlePlaceOrder = async () => {
     }
   } catch (error: any) {
     console.error('Error placing order:', error)
-    const errorMessage = error?.data?.message || error?.message || 'There was an error placing your order. Please try again.'
-    alert(errorMessage)
+    const rawErrors = error?.data?.errors
+    const firstFieldError = rawErrors && typeof rawErrors === 'object'
+      ? Object.values(rawErrors).find((messages) => Array.isArray(messages) && messages.length > 0)
+      : null
+    const errorMessage = (Array.isArray(firstFieldError) && firstFieldError[0])
+      || error?.data?.message
+      || error?.message
+      || 'There was an error placing your order. Please try again.'
+    toast.error(String(errorMessage))
   } finally {
     isPlacingOrder.value = false
   }
