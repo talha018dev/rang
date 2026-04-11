@@ -1,105 +1,148 @@
-# Image placement and aspect ratios (by section)
+# API image aspect ratios (by section)
 
-This document describes where images appear in the Rang web app, grouped by section, with aspect ratios enforced by CSS (or explicit dimensions). **Aspect ratio** is **width : height** unless noted. Where the UI uses `object-fit: cover`, cropping follows the container; `contain` shows the full image with possible letterboxing.
+This guide lists **only placements where the image URL comes from the backend** (homepage payload, site settings, product/category/tag/brand APIs, cart, orders, etc.). It does **not** cover static assets bundled in the app (for example default hero fallbacks, marquee-only banners, or fixed marketing art unless that art is also served from an API URL).
 
----
-
-## 1. Product catalog (same asset everywhere)
-
-These are the **main product images** returned by the API (e.g. listing cards, PDP, cart). One upload should be chosen to look good in the **dominant** slot (grid cards); other slots are smaller or crop.
-
-| Where | Ratio / behavior | Source |
-|--------|------------------|--------|
-| **Category / tag / campaign / brand product grids** | Container `aspect-ratio: 0.82` → **41 : 50** (portrait) | [app/assets/css/products.css](app/assets/css/products.css) (`.product-img`), also [app/assets/css/product.css](app/assets/css/product.css), brand/collection pages |
-| **Home “product-style” blocks** (e.g. grids using `0.82`) | **41 : 50** | Same pattern in [components/ExploreRang.vue](components/ExploreRang.vue) + [ExploreRang.css](components/ExploreRang.css) |
-| **PDP main image** | **No fixed ratio** — max height ~677px, full width, `object-fit: contain` | [app/assets/css/product.css](app/assets/css/product.css) (`.product-image-section img`) |
-| **PDP thumbnails** | **1 : 1** | `.thumbnail-item img` in `product.css` |
-| **PDP “Frequently bought together”** | **2 : 3** | `.frequently-bought-image` in `product.css` |
-| **PDP related products** | **41 : 50** (`0.82`) | `.related-products .product-img` in `product.css` |
-| **Cart line items** | **1 : 1** (120×120 box, cover) | [app/pages/cart/index.vue](app/pages/cart/index.vue) + cart CSS |
-| **Checkout line items** | **1 : 1** (80×80 box, cover) | Checkout page styles |
-| **Search dropdown results** | **1 : 1** (50×50) | [components/AppHeader.vue](components/AppHeader.vue) |
-| **Wishlist** | Fixed **height 300px**, full width, `cover` — effective ratio **varies with viewport width** | [app/pages/wishlist/index.vue](app/pages/wishlist/index.vue) |
-| **Profile wishlist** | Fixed **h-48** (12rem height), full width — **ratio varies** | [app/pages/profile/index.vue](app/pages/profile/index.vue) |
-| **Order invoice line items** | **80 : 98** (≈ **40 : 49**, close to 41:50) | [app/pages/orders/[orderId]/index.vue](app/pages/orders/[orderId]/index.vue) (`width="80"` `height="98"`) |
-
-**Practical guidance for product photography:** Optimize for **~41 : 50** portrait for grids; thumbnails and cart need a **square-safe center crop** (or dedicated square asset if the CMS supports multiple images).
+**Aspect ratio** is **width : height**. With `object-fit: cover`, the image is cropped to the frame; with `contain`, the full image may letterbox.
 
 ---
 
-## 2. Home — heroes and large banners
+## Home page
 
-| Section | Ratio | Source |
+### Hero carousel
+
+- **Source:** Homepage API — main banner image URLs.
+- **Ratio:** **12 : 5** (same frame as 1920×800).
+
+### Welcome popup
+
+- **Source:** Settings API — popup desktop and mobile image URLs (when set); may fall back to other homepage data if unset.
+- **Ratio:** No fixed ratio — full-bleed in the modal with **cover** cropping. Match your design mockup size.
+
+### New Arrivals
+
+- **Source:** Homepage API — products in the **New Arrival / New Arrivals** section (product images).
+- **Ratio:** **17 : 25** (portrait tiles in the carousel).
+
+### Explore Rang Bangladesh
+
+- **Source:** Homepage API — **Explore Rang Bangladesh** dynamic section (one image per tile).
+- **Ratio:** Depends on tile position in the grid:
+  - First row, wide tile: **1.73 : 1**
+  - First row, square tile: **1 : 1**
+  - Second row tiles: **41 : 50**
+  - On small screens, some tiles switch to **2.63 : 1** or **22 : 25** — use the desktop ratios if you only upload one asset per slot.
+
+### Shop by Category
+
+- **Source:** Homepage API — **Shop by Category** dynamic section.
+- **Ratio:** Per slot (order matters in the layout):
+  - **1 : 1**, **1.73 : 1**, and **41 : 50** on desktop; on narrow screens the layout uses **22 : 25**, **1.73 : 1**, and **2 : 1** in places — align uploads with the slot order in admin.
+
+### Timeless Six Yards
+
+- **Source:** Homepage API — products in the **Timeless Six Yards** section.
+- **Ratio:** **17 : 25** and **73 : 100** depending on tile (see how the slot appears on the home page).
+
+### Shop by Brand
+
+- **Source:** Brands API — brand logo image per brand; **plus** product images from the API for the featured product grid.
+- **Ratio:** Brand logos **1 : 1**; featured product tiles follow the **Sale Offer** / large-tile patterns (tall portrait blocks, typically **~17 : 25** to **~41 : 50** depending on the cell).
+
+### Shop by Theme
+
+- **Source:** Homepage API — **Shop by Theme** dynamic section (theme tile images).
+- **Ratio:** **17 : 25** and **73 : 100** (carousel / grid styling).
+
+### Sale Offer
+
+- **Source:** Homepage API — products in the **Sale Offer** section.
+- **Ratio:** Large hero-style product tile and smaller tiles — **17 : 25** and **1 : 1** style cells in the block (portrait-heavy).
+
+### Deals of the Month
+
+- **Source:** Homepage API — products in the **Deals of the Month** section (carousel product cards). The countdown card background is a **static** file in the app, not an admin upload.
+- **Ratio:** Carousel product images **17 : 25**.
+
+### Why Rang Bangladesh?
+
+- **Source:** Homepage API — **Why Rang** dynamic section. The UI renders **video** files from the URLs returned by the API (not still photos).
+- **Ratio:** Video frames are shown in **~2.22 : 1** (wide) and **~10 : 13** (tall) slots. Export video to match these frames, or use letterboxing-aware composition.
+
+---
+
+## Products listing pages
+
+Applies to category, tag, and similar product listing screens (filters + product grid). **Product card images** always come from the product API.
+
+### Listing hero (category / tag)
+
+- **Source:** Category or tag **cover** image from the API when configured.
+- **Ratio:** **13 : 4** (`aspect-ratio` wide banner).
+
+### Listing hero (campaign)
+
+- **Source:** Currently the campaign page does not bind a hero image from the API in the client; if your backend adds a campaign cover later, the same **13 : 4** frame is used elsewhere for listing heroes.
+
+### Product grid (all listing types)
+
+- **Source:** Product API — main product image per card.
+- **Ratio:** **41 : 50** (portrait cards).
+
+### Brand listing page
+
+- **Source:** Product API — grid only (no hero image from API in the current layout).
+- **Ratio:** **41 : 50** for product cards.
+
+---
+
+## Product details page
+
+All from **product / variant APIs**.
+
+| Placement | Ratio / behavior |
+|-----------|------------------|
+| Main gallery image | **No fixed ratio** — max-height frame, **contain** (full product visible). |
+| Thumbnail strip | **1 : 1** |
+| Frequently bought together | **2 : 3** |
+| Related products | **41 : 50** |
+
+---
+
+## Cart, checkout, and search
+
+| Section | Source | Ratio |
 |---------|--------|--------|
-| **Main hero (HeroBanner / HeroBanner2)** | **1920 : 800** → **12 : 5** | [components/HeroBanner.css](components/HeroBanner.css), [HeroBanner2.css](components/HeroBanner2.css) (`aspect-ratio: 1920/800`) |
+| **Cart** — line items | Product image URL | **1 : 1** (square thumb, cover) |
+| **Checkout** — line items | Product image URL | **1 : 1** (square thumb, cover) |
+| **Search** — dropdown results | Product image URL | **1 : 1** (small square) |
 
 ---
 
-## 3. Listing / campaign heroes (not PDP)
+## Wishlist
 
-| Section | Ratio | Source |
+| Section | Source | Ratio |
 |---------|--------|--------|
-| **Category / tag / campaign page top hero** (`.hero-content img`) | **13 : 4** (`aspect-ratio: 3.25`) | [app/assets/css/products.css](app/assets/css/products.css) |
+| **Wishlist** page | Product image URL | Fixed height, full width; **cover** — effective ratio depends on screen width (not a single fixed ratio). |
+| **Profile — wishlist** | Product image URL | Fixed height, full width; **cover** — same idea as the wishlist page. |
 
 ---
 
-## 4. Home — modular sections (marketing tiles)
+## Orders
 
-Ratios differ by block; many use Tailwind `aspect-[…]` in the Vue file plus overrides in CSS.
-
-| Section | Ratio(s) | Source |
-|---------|-----------|--------|
-| **New Arrival** | **17 : 25** (`0.68`) | [components/NewArrival.css](components/NewArrival.css) |
-| **Explore Rang** | Desktop: **1.73 : 1**, **1 : 1**, **41 : 50**; mobile: **2.63 : 1**, **22 : 25** (`0.88`) | [components/ExploreRang.vue](components/ExploreRang.vue), [ExploreRang.css](components/ExploreRang.css) |
-| **Shop by Category** | Men main: **1 : 1**; Women main: **1.7 : 1**; secondary tiles **2 : 1** (desktop); mobile men **22 : 25**, women **1.73 : 1**, secondary **22 : 25** | [components/ShopByCategory.vue](components/ShopByCategory.vue), [ShopByCategory.css](components/ShopByCategory.css) |
-| **Timeless Six Yards / Shop by Theme** | **17 : 25** and **73 : 100** (`0.73`) | [TimelessSixYards.css](components/TimelessSixYards.css), [ShopByTheme.css](components/ShopByTheme.css) |
-| **Shop by Brand** | **1 : 1** for brand tiles | [ShopByBrand.vue](components/ShopByBrand.vue) |
-| **Sale / Sale countdown blocks** | Mix **17 : 25** and **1 : 1** | [SaleOffer.vue](components/SaleOffer.vue), [SaleOfferCountdown.vue](components/SaleOfferCountdown.vue) |
-| **Why Rang** | Wide strip **~2.22 : 1** / **2.08 : 1**; secondary **~10 : 13** (`0.77`) | [WhyRang.vue](components/WhyRang.vue), [WhyRang.css](components/WhyRang.css) |
-| **Complex Grid (homepage)** | **3 : 4** (`600×800` in markup) | [components/ComplexGrid.vue](components/ComplexGrid.vue) |
-| **Welcome popup** | Full-bleed `object-fit: cover` in modal — **no fixed ratio** (follow design artboard) | [components/WelcomePopup.vue](components/WelcomePopup.vue) |
-
-**Customer Diaries** and similar may use **static** assets under `/public` — not necessarily CMS uploads; confirm in admin which fields map to which component.
+| Section | Source | Ratio |
+|---------|--------|--------|
+| **Order invoice** — line items | Product image URL | **80 : 98** (≈ **40 : 49**, close to **41 : 50**) |
 
 ---
 
-## 5. Header / branding
+## One upload for product photos
 
-| Asset | Notes |
-|-------|--------|
-| **Logo** | Fixed width (~100px class); height follows intrinsic image — use a **horizontal logo** with transparent PNG/SVG as designed |
+The **same** product image URL is reused across grids, PDP, cart, search, wishlist, and invoices. **Prioritize** looking good at **~41 : 50** for listing cards; **1 : 1** thumbs and small squares will crop—keep important detail in the center.
 
 ---
 
-## 6. Diagram — product image reuse
+## Caveats
 
-```mermaid
-flowchart LR
-  subgraph api [API product image]
-    P[Primary product image URL]
-  end
-  subgraph grid [Grids 41:50]
-    PLP[PLP / brand / home cards]
-  end
-  subgraph square [1:1]
-    Cart[Cart / checkout / search]
-    PDPthumb[PDP thumbnails]
-  end
-  subgraph other [Other]
-    PDPmain[PDP main contain]
-    FB[PDP frequent 2:3]
-  end
-  P --> PLP
-  P --> Cart
-  P --> PDPthumb
-  P --> PDPmain
-  P --> FB
-```
-
----
-
-## 7. Caveats
-
-- **CMS vs code:** Homepage section images are often **per-slot** in the admin API; match each slot to the ratio in the table for that component.
-- **Responsive:** Some sections change ratio at breakpoints (e.g. Explore Rang, Shop by Category); provide assets per breakpoint or favor the **largest / default** desktop ratio.
-- **Not exhaustive:** Any new page added after this audit should be checked for `aspect-ratio`, `NuxtImg` width/height, and fixed `width`/`height` in CSS.
+- **Homepage dynamic sections** are ordered in the API; **slot index** (first tile vs second row) determines which aspect ratio applies—match each admin field to the correct tile in the layout.
+- **Responsive layouts** swap some ratios on mobile; when in doubt, prefer the **desktop** ratios above or upload separate mobile assets if your admin supports them.
+- **Why Rang** uses **video** URLs, not static hero images.
