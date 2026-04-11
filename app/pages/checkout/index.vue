@@ -3101,15 +3101,31 @@ const handlePlaceOrder = async () => {
     }
   } catch (error: any) {
     console.error('Error placing order:', error)
-    const rawErrors = error?.data?.errors
-    const firstFieldError = rawErrors && typeof rawErrors === 'object'
-      ? Object.values(rawErrors).find((messages) => Array.isArray(messages) && messages.length > 0)
-      : null
-    const errorMessage = (Array.isArray(firstFieldError) && firstFieldError[0])
-      || error?.data?.message
-      || error?.message
-      || 'There was an error placing your order. Please try again.'
-    toast.error(String(errorMessage))
+    const rawErrors = error?.data?.errors as Record<string, string[] | undefined> | undefined
+    const phoneMessages = rawErrors?.['address.phone']
+    const phoneMsg =
+      Array.isArray(phoneMessages) && phoneMessages.length > 0
+        ? String(phoneMessages[0])
+        : ''
+
+    if (phoneMsg) {
+      errors.value = { ...errors.value, phone: phoneMsg }
+      await nextTick()
+      document.getElementById('phone')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else {
+      const firstFieldError =
+        rawErrors && typeof rawErrors === 'object'
+          ? Object.values(rawErrors).find(
+              (messages) => Array.isArray(messages) && messages.length > 0
+            )
+          : null
+      const errorMessage =
+        (Array.isArray(firstFieldError) && firstFieldError[0])
+        || error?.data?.message
+        || error?.message
+        || 'There was an error placing your order. Please try again.'
+      toast.error(String(errorMessage))
+    }
   } finally {
     isPlacingOrder.value = false
   }
