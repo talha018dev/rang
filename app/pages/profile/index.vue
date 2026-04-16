@@ -108,8 +108,10 @@
 
         <div v-else-if="activeSection === 'address'" class="account-card address-book-card">
           <div class="address-book-header">
-            <h1 class="address-book-title">ADD NEW ADDRESS</h1>
-            <p class="address-book-subtitle">Fill up your contact &amp; address details</p>
+            <h1 class="address-book-title">{{ isEditingAddress ? 'EDIT ADDRESS' : 'ADD NEW ADDRESS' }}</h1>
+            <p class="address-book-subtitle">
+              {{ isEditingAddress ? 'Update your contact & address details' : 'Fill up your contact &amp; address details' }}
+            </p>
           </div>
 
           <form class="address-book-form" @submit.prevent="handleAddressSubmit">
@@ -344,10 +346,10 @@
 
             <div class="address-book-actions">
               <button type="submit" class="address-book-btn address-book-btn-primary" :disabled="isLoadingAddress">
-                {{ isLoadingAddress ? 'SAVING...' : 'SAVE ADDRESS' }}
+                {{ isLoadingAddress ? 'SAVING...' : (isEditingAddress ? 'UPDATE ADDRESS' : 'SAVE ADDRESS') }}
               </button>
               <button type="button" class="address-book-btn address-book-btn-secondary" :disabled="isLoadingAddress" @click="resetAddressForm">
-                CANCEL
+                {{ isEditingAddress ? 'CANCEL EDIT' : 'CANCEL' }}
               </button>
             </div>
 
@@ -367,6 +369,7 @@
                     <th class="!px-3 !py-2 !text-left">Name</th>
                     <th class="!px-3 !py-2 !text-left">Phone</th>
                     <th class="!px-3 !py-2 !text-left">Address</th>
+                    <th class="!px-3 !py-2 !text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -376,6 +379,16 @@
                     <td class="!px-3 !py-2 align-middle!">{{ address.address?.phone || '' }}</td>
                     <td class="!px-3 !py-2 align-middle! saved-address-detail-cell">
                       {{ formatSavedAddressDetail(address.address) }}
+                    </td>
+                    <td class="!px-3 !py-2 align-middle!">
+                      <button
+                        type="button"
+                        class="!text-orange-700 hover:!underline"
+                        :disabled="isLoadingAddress"
+                        @click="startEditAddress(address)"
+                      >
+                        Edit
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -611,12 +624,47 @@ const profileShowZoneDropdown = ref(false)
 const profileCityId = ref<number | null>(null)
 const profileZoneId = ref<number | null>(null)
 const profileZoneSelect = ref<string | number | ''>('')
+const pendingProfileZoneName = ref('')
 
 const getProfileAreaHeaders = (): Record<string, string> => {
   const headers: Record<string, string> = { 'X-Requested-With': 'XMLHttpRequest' }
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}`
   return headers
+}
+
+const resolveProfileCitySelection = () => {
+  const selectedCity = String(addressFormData.value.address.city || '').trim()
+  if (!selectedCity) {
+    profileCityId.value = null
+    return
+  }
+
+  let cityObj = profileAreaCities.value.find((city: any) => {
+    if (typeof city === 'string') {
+      return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
+    }
+    const cityName = city.city_name || city.name || city.city || city.title || ''
+    return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
+  })
+
+  if (!cityObj && profileAreaAllCities.value.length > 0) {
+    cityObj = profileAreaAllCities.value.find((city: any) => {
+      if (typeof city === 'string') {
+        return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
+      }
+      const cityName = city.city_name || city.name || city.city || city.title || ''
+      return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
+    })
+  }
+
+  if (cityObj && typeof cityObj === 'object') {
+    const cityId = cityObj.city_id || cityObj.id || cityObj.cityId || cityObj.ID || null
+    profileCityId.value = cityId
+    if (cityId) void fetchProfileAreaZones(cityId)
+  } else {
+    profileCityId.value = null
+  }
 }
 
 const initializeProfileAreaCities = () => {
@@ -637,6 +685,10 @@ const fetchProfileAreaCities = async () => {
     if (response.success && response.data && Array.isArray(response.data)) {
       profileAreaAllCities.value = response.data
       initializeProfileAreaCities()
+      // First edit click can set city before cities load; resolve again now.
+      if (addressFormData.value.address.country === 'Bangladesh') {
+        resolveProfileCitySelection()
+      }
     } else {
       profileAreaAllCities.value = []
     }
@@ -668,6 +720,38 @@ const fetchProfileAreaZones = async (cityId: number | null) => {
   } catch {
     profileAreaZones.value = []
   } finally {
+    if (pendingProfileZoneName.value && profileAreaZones.value.length > 0) {
+      const wanted = pendingProfileZoneName.value.trim().toLowerCase()
+      const matchedZone = profileAreaZones.value.find((zone: any) => {
+        const zoneName = typeof zone === 'string'
+          ? zone
+          : (zone.zone_name || zone.name || zone.zone || zone.title || '')
+        return String(zoneName).trim().toLowerCase() === wanted
+      })
+
+      if (matchedZone) {
+        const zoneId = typeof matchedZone === 'string'
+          ? matchedZone
+          : (matchedZone.zone_id || matchedZone.id || matchedZone.zoneId || matchedZone.ID)
+        const zoneName = typeof matchedZone === 'string'
+          ? matchedZone
+          : (matchedZone.zone_name || matchedZone.name || matchedZone.zone || matchedZone.title || '')
+
+        profileZoneSelect.value = zoneId
+        profileZoneSearchTerm.value = String(zoneName || '')
+        addressFormData.value.address.state = String(zoneName || '')
+
+        if (matchedZone && typeof matchedZone === 'object') {
+          const id = matchedZone.zone_id || matchedZone.id || matchedZone.zoneId || matchedZone.ID
+          profileZoneId.value = typeof id === 'number' ? id : (Number(id) || null)
+        } else if (typeof zoneId === 'number' || !Number.isNaN(Number(zoneId))) {
+          profileZoneId.value = typeof zoneId === 'number' ? zoneId : Number(zoneId)
+        }
+      }
+
+      pendingProfileZoneName.value = ''
+    }
+
     isLoadingProfileZones.value = false
   }
 }
@@ -773,6 +857,7 @@ const resetProfileAreaUi = () => {
   profileAreaZones.value = []
   profileCitySearchTerm.value = ''
   profileZoneSearchTerm.value = ''
+  pendingProfileZoneName.value = ''
 }
 
 watch(
@@ -810,34 +895,8 @@ watch(
     }
     profileCitySearchTerm.value = selectedCity
 
-    let cityObj = profileAreaCities.value.find((city: any) => {
-      if (typeof city === 'string') {
-        return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
-      }
-      const cityName = city.city_name || city.name || city.city || city.title || ''
-      return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
-    })
-
-    if (!cityObj && profileAreaAllCities.value.length > 0) {
-      cityObj = profileAreaAllCities.value.find((city: any) => {
-        if (typeof city === 'string') {
-          return city === selectedCity || city.toLowerCase() === selectedCity.toLowerCase()
-        }
-        const cityName = city.city_name || city.name || city.city || city.title || ''
-        return cityName === selectedCity || cityName.trim().toLowerCase() === selectedCity.trim().toLowerCase()
-      })
-    }
-
-    if (cityObj && typeof cityObj === 'object') {
-      const cityId = cityObj.city_id || cityObj.id || cityObj.cityId || cityObj.ID || null
-      profileCityId.value = cityId
-      if (cityId) void fetchProfileAreaZones(cityId)
-      else {
-        profileZoneSelect.value = ''
-        profileZoneId.value = null
-        profileAreaZones.value = []
-      }
-    } else {
+    resolveProfileCitySelection()
+    if (!profileCityId.value) {
       profileCityId.value = null
       profileZoneSelect.value = ''
       profileZoneId.value = null
@@ -870,6 +929,8 @@ const isLoadingAddress = ref(false)
 const isLoadingAddresses = ref(false)
 const addressErrorMessage = ref('')
 const addressSuccessMessage = ref('')
+const editingAddressId = ref<number | null>(null)
+const isEditingAddress = computed(() => editingAddressId.value !== null)
 
 const orders = ref<Order[]>([])
 const ordersPagination = ref<OrdersPagination | null>(null)
@@ -934,29 +995,10 @@ const fetchAddresses = async () => {
 
 const resetAddressForm = () => {
   addressFormData.value = createEmptyAddressForm()
+  editingAddressId.value = null
   resetProfileAreaUi()
   addressErrorMessage.value = ''
   addressSuccessMessage.value = ''
-}
-
-const prefillAddressContactFromProfile = () => {
-  const p = profile.value
-  if (!p || typeof p !== 'object') return
-  if (!addressFormData.value.firstName.trim() && !addressFormData.value.lastName.trim()) {
-    const fn = p.first_name ?? p.firstName
-    const ln = p.last_name ?? p.lastName
-    if (fn || ln) {
-      addressFormData.value.firstName = String(fn || '')
-      addressFormData.value.lastName = String(ln || '')
-    } else if (p.name) {
-      const parts = String(p.name).trim().split(/\s+/).filter(Boolean)
-      addressFormData.value.firstName = parts[0] || ''
-      addressFormData.value.lastName = parts.slice(1).join(' ') || ''
-    }
-  }
-  if (!addressFormData.value.address.phone.trim() && (p.phone || p.mobile)) {
-    addressFormData.value.address.phone = String(p.phone ?? p.mobile ?? '')
-  }
 }
 
 const handleAddressSubmit = async () => {
@@ -1020,6 +1062,54 @@ const handleAddressSubmit = async () => {
   await handleUpdateAddress()
 }
 
+const startEditAddress = (savedAddress: SavedAddress) => {
+  const rawId = savedAddress?.id
+  const normalizedId = typeof rawId === 'number' ? rawId : Number(rawId)
+  if (!rawId || Number.isNaN(normalizedId)) {
+    addressErrorMessage.value = 'Unable to edit this address right now.'
+    addressSuccessMessage.value = ''
+    return
+  }
+
+  const addr = savedAddress.address || ({} as AddressData)
+  const fullName = String(addr.name || '').trim()
+  const parts = fullName.split(/\s+/).filter(Boolean)
+  const first = parts[0] || ''
+  const last = parts.slice(1).join(' ')
+
+  editingAddressId.value = normalizedId
+  addressFormData.value = {
+    title: String(savedAddress.title || ''),
+    firstName: first,
+    lastName: last,
+    defaultBilling: false,
+    defaultShipping: false,
+    address: {
+      name: fullName,
+      phone: String(addr.phone || ''),
+      email: String(addr.email || ''),
+      line_1: String(addr.line_1 || ''),
+      line_2: String(addr.line_2 || ''),
+      city: String(addr.city || ''),
+      state: String(addr.state || ''),
+      country: String(addr.country || ''),
+      postal_code: String(addr.postal_code || '')
+    }
+  }
+
+  addressErrorMessage.value = ''
+  addressSuccessMessage.value = ''
+
+  if (addressFormData.value.address.country === 'Bangladesh') {
+    profileCitySearchTerm.value = addressFormData.value.address.city || ''
+    profileZoneSearchTerm.value = addressFormData.value.address.state || ''
+    pendingProfileZoneName.value = String(addressFormData.value.address.state || '')
+    void fetchProfileAreaCities()
+  } else {
+    resetProfileAreaUi()
+  }
+}
+
 const handleUpdateAddress = async () => {
   const token = getToken()
   if (!token) return
@@ -1029,37 +1119,62 @@ const handleUpdateAddress = async () => {
   addressSuccessMessage.value = ''
 
   try {
-    const response = await $fetch<AddressResponse>(`${backendUrl}/profile/address`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: {
-        title: addressFormData.value.title.trim(),
-        is_default_billing: addressFormData.value.defaultBilling,
-        is_default_shipping: addressFormData.value.defaultShipping,
-        address: {
-          name: addressFormData.value.address.name.trim(),
-          phone: addressFormData.value.address.phone.trim(),
-          email: addressFormData.value.address.email.trim(),
-          line_1: addressFormData.value.address.line_1.trim(),
-          line_2: addressFormData.value.address.line_2.trim(),
-          city: addressFormData.value.address.city.trim(),
-          state: addressFormData.value.address.state.trim(),
-          country: addressFormData.value.address.country.trim(),
-          postal_code: addressFormData.value.address.postal_code.trim()
+    const endpoint = isEditingAddress.value
+      ? `${backendUrl}/profile/address/${encodeURIComponent(String(editingAddressId.value))}`
+      : `${backendUrl}/profile/address`
+    const body = isEditingAddress.value
+      ? {
+          title: addressFormData.value.title.trim(),
+          address: {
+            name: addressFormData.value.address.name.trim(),
+            phone: addressFormData.value.address.phone.trim(),
+            email: addressFormData.value.address.email.trim(),
+            line_1: addressFormData.value.address.line_1.trim(),
+            line_2: addressFormData.value.address.line_2.trim(),
+            city: addressFormData.value.address.city.trim(),
+            state: addressFormData.value.address.state.trim(),
+            country: addressFormData.value.address.country.trim(),
+            postal_code: addressFormData.value.address.postal_code.trim()
+          }
         }
-      }
+      : {
+          title: addressFormData.value.title.trim(),
+          is_default_billing: addressFormData.value.defaultBilling,
+          is_default_shipping: addressFormData.value.defaultShipping,
+          address: {
+            name: addressFormData.value.address.name.trim(),
+            phone: addressFormData.value.address.phone.trim(),
+            email: addressFormData.value.address.email.trim(),
+            line_1: addressFormData.value.address.line_1.trim(),
+            line_2: addressFormData.value.address.line_2.trim(),
+            city: addressFormData.value.address.city.trim(),
+            state: addressFormData.value.address.state.trim(),
+            country: addressFormData.value.address.country.trim(),
+            postal_code: addressFormData.value.address.postal_code.trim()
+          }
+        }
+
+    const response = await $fetch<AddressResponse>(endpoint, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body
     })
     if (response.success) {
-      addressSuccessMessage.value = 'Address saved successfully!'
+      addressSuccessMessage.value = isEditingAddress.value
+        ? 'Address updated successfully!'
+        : 'Address saved successfully!'
       await fetchAddresses()
       addressFormData.value = createEmptyAddressForm()
+      editingAddressId.value = null
       resetProfileAreaUi()
-      prefillAddressContactFromProfile()
     } else {
-      addressErrorMessage.value = response.message || 'Failed to save address.'
+      addressErrorMessage.value = response.message || (isEditingAddress.value ? 'Failed to update address.' : 'Failed to save address.')
     }
   } catch (error: any) {
-    addressErrorMessage.value = error?.data?.message || error?.message || 'Failed to save address.'
+    addressErrorMessage.value =
+      error?.data?.message ||
+      error?.message ||
+      (isEditingAddress.value ? 'Failed to update address.' : 'Failed to save address.')
   } finally {
     isLoadingAddress.value = false
   }
@@ -1221,7 +1336,6 @@ const activateAddressSection = async () => {
   if (addressesList.value.length === 0 && !isLoadingAddresses.value) {
     await fetchAddresses()
   }
-  prefillAddressContactFromProfile()
   if (addressFormData.value.address.country === 'Bangladesh') {
     void fetchProfileAreaCities()
   }

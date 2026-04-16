@@ -25,40 +25,52 @@
         </NuxtLink>
       </section>
 
-      <!-- Feature Cards (similar to GP: Flagship Programs, Why Join Us, Career Advice) -->
-      <section class="career-cards">
-        <div class="career-card">
-          <div class="career-card-header">
-            <span class="career-card-badge">FLAGSHIP PROGRAMS</span>
-            <h2 class="career-card-title">Graduate & Campus</h2>
-          </div>
-          <p class="career-card-desc">Kick-start your career with structured programs designed for fresh talent.</p>
-          <NuxtLink to="/contact-us" class="career-card-link">
-            Learn More
-            <Icon name="heroicons:arrow-right" class="career-card-link-icon" />
-          </NuxtLink>
+      <!-- Open Positions -->
+      <section class="career-openings">
+        <div class="career-openings-header">
+          <h2 class="career-openings-title">Open Positions</h2>
+          <p class="career-openings-subtitle">Explore available opportunities and apply to the role that matches your profile.</p>
         </div>
-        <div class="career-card">
-          <div class="career-card-header">
-            <span class="career-card-badge">WHY JOIN US</span>
-            <h2 class="career-card-title">How We Define & Help the Future</h2>
-          </div>
-          <p class="career-card-desc">Culture, growth, and impact—see how we invest in our people.</p>
-          <NuxtLink to="/about-us" class="career-card-link">
-            Learn More
-            <Icon name="heroicons:arrow-right" class="career-card-link-icon" />
-          </NuxtLink>
-        </div>
-        <div class="career-card">
-          <div class="career-card-header">
-            <span class="career-card-badge">CAREER ADVICE</span>
-            <h2 class="career-card-title">Hear From Our People</h2>
-          </div>
-          <p class="career-card-desc">Stories and tips from the team behind Rang Bangladesh.</p>
-          <NuxtLink to="/blognews" class="career-card-link">
-            Learn More
-            <Icon name="heroicons:arrow-right" class="career-card-link-icon" />
-          </NuxtLink>
+
+        <div v-if="isLoadingCareers" class="career-loading">Loading career options...</div>
+        <div v-else-if="careerError" class="career-error">{{ careerError }}</div>
+        <div v-else-if="careerOptions.length === 0" class="career-empty">No open positions are available right now.</div>
+
+        <div v-else class="career-cards">
+          <article
+            v-for="career in careerOptions"
+            :key="career.id"
+            class="career-card"
+          >
+            <div class="career-card-header">
+              <span v-if="career.department" class="career-card-badge">{{ career.department }}</span>
+              <h3 class="career-card-title">{{ career.title }}</h3>
+            </div>
+
+            <p v-if="career.description" class="career-card-desc">{{ career.description }}</p>
+            <p v-else class="career-card-desc">Join our team and help shape the future of fashion at Rang Bangladesh.</p>
+
+            <div class="career-card-meta">
+              <span v-if="career.location" class="career-card-meta-item">Location: {{ career.location }}</span>
+              <span v-if="career.type" class="career-card-meta-item">Type: {{ career.type }}</span>
+              <span v-if="career.deadline" class="career-card-meta-item">Deadline: {{ career.deadline }}</span>
+            </div>
+
+            <a
+              v-if="career.applyUrl"
+              :href="career.applyUrl"
+              class="career-card-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Apply Now
+              <Icon name="heroicons:arrow-top-right-on-square" class="career-card-link-icon" />
+            </a>
+            <NuxtLink v-else to="/contact-us" class="career-card-link">
+              Contact HR
+              <Icon name="heroicons:arrow-right" class="career-card-link-icon" />
+            </NuxtLink>
+          </article>
         </div>
       </section>
 
@@ -113,14 +125,109 @@
 
 <script setup lang="ts">
 import { useHead } from 'nuxt/app'
+import { onMounted, ref } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
+import { useApi } from '~~/composables/useApi'
 import './career.css'
+
+interface CareerApiItem {
+  id?: string | number
+  title?: string
+  name?: string
+  position?: string
+  job_title?: string
+  department?: string
+  team?: string
+  location?: string
+  city?: string
+  workplace?: string
+  employment_type?: string
+  type?: string
+  job_type?: string
+  deadline?: string
+  closing_date?: string
+  expires_at?: string
+  description?: string
+  short_description?: string
+  summary?: string
+  apply_url?: string
+  apply_link?: string
+  application_url?: string
+  [key: string]: unknown
+}
+
+interface CareerOption {
+  id: string | number
+  title: string
+  department: string
+  location: string
+  type: string
+  deadline: string
+  description: string
+  applyUrl: string
+}
+
+const careerOptions = ref<CareerOption[]>([])
+const isLoadingCareers = ref(false)
+const careerError = ref('')
+
+const readFirstString = (value: unknown): string => {
+  if (typeof value === 'string') return value.trim()
+  if (Array.isArray(value)) {
+    const firstString = value.find((item) => typeof item === 'string')
+    return typeof firstString === 'string' ? firstString.trim() : ''
+  }
+  return ''
+}
+
+const toCareerOption = (item: CareerApiItem, index: number): CareerOption => ({
+  id: item.id ?? `career-${index}`,
+  title: readFirstString(item.title) || readFirstString(item.position) || readFirstString(item.job_title) || readFirstString(item.name) || 'Untitled position',
+  department: readFirstString(item.department) || readFirstString(item.team),
+  location: readFirstString(item.location) || readFirstString(item.city) || readFirstString(item.workplace),
+  type: readFirstString(item.type) || readFirstString(item.job_type) || readFirstString(item.employment_type),
+  deadline: readFirstString(item.deadline) || readFirstString(item.closing_date) || readFirstString(item.expires_at),
+  description: readFirstString(item.description) || readFirstString(item.short_description) || readFirstString(item.summary),
+  applyUrl: readFirstString(item.apply_url) || readFirstString(item.apply_link) || readFirstString(item.application_url)
+})
+
+const fetchCareerOptions = async () => {
+  isLoadingCareers.value = true
+  careerError.value = ''
+  const { backendUrl } = useApi()
+
+  try {
+    const response = await $fetch<any>(`${backendUrl}/careers`)
+    const responseData = response?.data
+    const list = Array.isArray(responseData)
+      ? responseData
+      : Array.isArray(responseData?.careers)
+        ? responseData.careers
+        : Array.isArray(responseData?.items)
+          ? responseData.items
+          : Array.isArray(response)
+            ? response
+            : []
+
+    careerOptions.value = list.map((item: CareerApiItem, index: number) => toCareerOption(item, index))
+  } catch (error) {
+    console.error('Failed to load career options:', error)
+    careerError.value = 'Unable to load career options right now. Please try again later.'
+    careerOptions.value = []
+  } finally {
+    isLoadingCareers.value = false
+  }
+}
 
 useHead({
   title: 'Career - Rang Bangladesh',
   meta: [
     { name: 'description', content: 'Go beyond traditional careers and build your dreams with Rang Bangladesh. Explore jobs, flagship programs, and hear from our people.' }
   ]
+})
+
+onMounted(() => {
+  fetchCareerOptions()
 })
 </script>
 

@@ -97,6 +97,49 @@
   margin-bottom: 3rem;
 }
 
+.career-openings {
+  margin-bottom: 3rem;
+}
+
+.career-openings-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.career-openings-title {
+  font-family: Poppins, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem;
+}
+
+.career-openings-subtitle {
+  font-family: Poppins, sans-serif;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.career-loading,
+.career-error,
+.career-empty {
+  font-family: Poppins, sans-serif;
+  text-align: center;
+  padding: 1rem 1.25rem;
+  border-radius: 0.6rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  margin-bottom: 1.5rem;
+}
+
+.career-error {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
 .career-card {
   background: white;
   padding: 1.75rem;
@@ -143,6 +186,22 @@
   line-height: 1.55;
   margin: 0 0 1rem 0;
   flex: 1;
+}
+
+.career-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.career-card-meta-item {
+  font-family: Poppins, sans-serif;
+  font-size: 0.8125rem;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
 }
 
 .career-card-link {
@@ -294,6 +353,18 @@
   .career-cards {
     gap: 1.25rem;
     margin-bottom: 2.5rem;
+  }
+
+  .career-openings {
+    margin-bottom: 2.5rem;
+  }
+
+  .career-openings-title {
+    font-size: 1.4rem;
+  }
+
+  .career-openings-subtitle {
+    font-size: 0.9rem;
   }
 
   .career-card {
