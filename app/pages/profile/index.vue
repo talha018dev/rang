@@ -381,14 +381,24 @@
                       {{ formatSavedAddressDetail(address.address) }}
                     </td>
                     <td class="!px-3 !py-2 align-middle!">
-                      <button
-                        type="button"
-                        class="!text-orange-700 hover:!underline"
-                        :disabled="isLoadingAddress"
-                        @click="startEditAddress(address)"
-                      >
-                        Edit
-                      </button>
+                      <div class="!flex !items-center !gap-3">
+                        <button
+                          type="button"
+                          class="!text-orange-700 hover:!underline"
+                          :disabled="isLoadingAddress"
+                          @click="startEditAddress(address)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          class="!text-red-700 hover:!underline"
+                          :disabled="isLoadingAddress"
+                          @click="handleDeleteAddress(address)"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -1155,7 +1165,7 @@ const handleUpdateAddress = async () => {
         }
 
     const response = await $fetch<AddressResponse>(endpoint, {
-      method: 'PUT',
+      method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body
     })
@@ -1175,6 +1185,52 @@ const handleUpdateAddress = async () => {
       error?.data?.message ||
       error?.message ||
       (isEditingAddress.value ? 'Failed to update address.' : 'Failed to save address.')
+  } finally {
+    isLoadingAddress.value = false
+  }
+}
+
+const handleDeleteAddress = async (savedAddress: SavedAddress) => {
+  const token = getToken()
+  if (!token) return
+
+  const rawId = savedAddress?.id
+  const addressId = typeof rawId === 'number' ? rawId : Number(rawId)
+  if (!rawId || Number.isNaN(addressId)) {
+    addressErrorMessage.value = 'Unable to delete this address right now.'
+    addressSuccessMessage.value = ''
+    return
+  }
+
+  const confirmed = typeof window === 'undefined'
+    ? true
+    : window.confirm('Are you sure you want to delete this address?')
+  if (!confirmed) return
+
+  isLoadingAddress.value = true
+  addressErrorMessage.value = ''
+  addressSuccessMessage.value = ''
+
+  try {
+    const response = await $fetch<AddressResponse>(`${backendUrl}/profile/address/${encodeURIComponent(String(addressId))}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    if (response.success) {
+      addressSuccessMessage.value = 'Address deleted successfully!'
+      await fetchAddresses()
+      if (editingAddressId.value === addressId) {
+        resetAddressForm()
+      }
+    } else {
+      addressErrorMessage.value = response.message || 'Failed to delete address.'
+    }
+  } catch (error: any) {
+    addressErrorMessage.value =
+      error?.data?.message ||
+      error?.message ||
+      'Failed to delete address.'
   } finally {
     isLoadingAddress.value = false
   }
