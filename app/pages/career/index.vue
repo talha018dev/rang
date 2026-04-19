@@ -18,12 +18,12 @@
       </section>
 
       <!-- CTA -->
-      <section class="career-cta">
+      <!-- <section class="career-cta">
         <NuxtLink to="/contact-us" class="career-cta-button" aria-label="Explore job opportunities">
           Explore Jobs
           <Icon name="heroicons:arrow-right" class="career-cta-icon" />
         </NuxtLink>
-      </section>
+      </section> -->
 
       <!-- Open Positions -->
       <section class="career-openings">
@@ -167,6 +167,21 @@ interface CareerOption {
   applyUrl: string
 }
 
+/** Laravel-style list response for `GET /careers` */
+interface CareersListResponse {
+  success?: boolean
+  message?: string
+  data?: CareerApiItem[] | null
+  pagination?: {
+    current_page?: number
+    last_page?: number
+    per_page?: number
+    total?: number
+    from?: number | null
+    to?: number | null
+  }
+}
+
 const careerOptions = ref<CareerOption[]>([])
 const isLoadingCareers = ref(false)
 const careerError = ref('')
@@ -197,17 +212,28 @@ const fetchCareerOptions = async () => {
   const { backendUrl } = useApi()
 
   try {
-    const response = await $fetch<any>(`${backendUrl}/careers`)
-    const responseData = response?.data
-    const list = Array.isArray(responseData)
-      ? responseData
-      : Array.isArray(responseData?.careers)
-        ? responseData.careers
-        : Array.isArray(responseData?.items)
-          ? responseData.items
-          : Array.isArray(response)
-            ? response
-            : []
+    const first = await $fetch<CareersListResponse>(`${backendUrl}/careers`, {
+      query: { page: 1 }
+    })
+
+    if (first?.success === false) {
+      careerError.value = first.message || 'Failed to load career options.'
+      careerOptions.value = []
+      return
+    }
+
+    let list: CareerApiItem[] = Array.isArray(first?.data) ? first.data : []
+
+    const lastPage = first?.pagination?.last_page ?? 1
+    if (lastPage > 1) {
+      for (let page = 2; page <= lastPage; page++) {
+        const next = await $fetch<CareersListResponse>(`${backendUrl}/careers`, {
+          query: { page }
+        })
+        if (next?.success === false) break
+        if (Array.isArray(next?.data)) list = list.concat(next.data)
+      }
+    }
 
     careerOptions.value = list.map((item: CareerApiItem, index: number) => toCareerOption(item, index))
   } catch (error) {

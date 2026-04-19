@@ -1165,7 +1165,7 @@ const handleUpdateAddress = async () => {
         }
 
     const response = await $fetch<AddressResponse>(endpoint, {
-      method: 'POST',
+      method: isEditingAddress.value ? 'PUT' : 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body
     })
