@@ -40,7 +40,12 @@
           <article
             v-for="career in careerOptions"
             :key="career.id"
-            class="career-card"
+            class="career-card career-card--clickable"
+            role="button"
+            tabindex="0"
+            :aria-label="`View details for ${career.title}`"
+            @click="openCareerDetail(career)"
+            @keydown.enter.prevent="openCareerDetail(career)"
           >
             <div class="career-card-header">
               <span v-if="career.department" class="career-card-badge">{{ career.department }}</span>
@@ -55,38 +60,22 @@
               <span v-if="career.deadlineDisplay" class="career-card-meta-item">Apply by: {{ career.deadlineDisplay }}</span>
             </div>
 
-            <!-- API returns trusted HTML from your CMS -->
-            <div
-              v-if="career.descriptionHtml"
-              class="career-card-html career-card-html-desc"
-              v-html="career.descriptionHtml"
-            />
+            <p v-if="htmlToPlainSnippet(career.descriptionHtml)" class="career-card-teaser">{{ htmlToPlainSnippet(career.descriptionHtml) }}</p>
             <p v-else class="career-card-desc career-card-desc-fallback">Join our team and help shape the future of fashion at Rang Bangladesh.</p>
+            <p class="career-card-hint">Click the card for full details</p>
 
-            <div v-if="career.requirementsHtml" class="career-card-section">
-              <h4 class="career-card-section-title">Requirements</h4>
-              <div class="career-card-html" v-html="career.requirementsHtml" />
+            <div class="career-card-footer" @click.stop>
+              <a
+                v-if="career.applyUrl"
+                :href="career.applyUrl"
+                class="career-card-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Apply Now
+                <Icon name="heroicons:arrow-top-right-on-square" class="career-card-link-icon" />
+              </a>
             </div>
-
-            <div v-if="career.benefitsHtml" class="career-card-section">
-              <h4 class="career-card-section-title">Benefits</h4>
-              <div class="career-card-html" v-html="career.benefitsHtml" />
-            </div>
-
-            <a
-              v-if="career.applyUrl"
-              :href="career.applyUrl"
-              class="career-card-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Apply Now
-              <Icon name="heroicons:arrow-top-right-on-square" class="career-card-link-icon" />
-            </a>
-            <NuxtLink v-else to="/contact-us" class="career-card-link">
-              Contact HR
-              <Icon name="heroicons:arrow-right" class="career-card-link-icon" />
-            </NuxtLink>
           </article>
         </div>
       </section>
@@ -137,12 +126,79 @@
       </section>
     </div>
     <AppFooter />
+
+    <Teleport to="body">
+      <div
+        v-if="showCareerDetailModal"
+        class="career-detail-overlay"
+        role="presentation"
+        @click.self="closeCareerDetailModal"
+      >
+        <div
+          class="career-detail-dialog"
+          role="dialog"
+          aria-modal="true"
+          :aria-labelledby="careerDetailTitleId"
+        >
+          <button type="button" class="career-detail-close" aria-label="Close" @click="closeCareerDetailModal">
+            ×
+          </button>
+
+          <div v-if="isLoadingCareerDetail" class="career-detail-loading">Loading job details…</div>
+          <div v-else-if="careerDetailError" class="career-detail-error">{{ careerDetailError }}</div>
+
+          <template v-else-if="careerDetail">
+            <div class="career-detail-header">
+              <span v-if="careerDetail.department" class="career-card-badge">{{ careerDetail.department }}</span>
+              <h2 :id="careerDetailTitleId" class="career-detail-title">{{ careerDetail.title }}</h2>
+            </div>
+
+            <div class="career-card-meta">
+              <span v-if="careerDetail.location" class="career-card-meta-item">Location: {{ careerDetail.location }}</span>
+              <span v-if="careerDetail.employmentTypeLabel" class="career-card-meta-item">Employment: {{ careerDetail.employmentTypeLabel }}</span>
+              <span v-if="careerDetail.experienceLevel" class="career-card-meta-item">Experience: {{ careerDetail.experienceLevel }}</span>
+              <span v-if="careerDetail.salaryRange" class="career-card-meta-item">Salary: {{ careerDetail.salaryRange }}</span>
+              <span v-if="careerDetail.deadlineDisplay" class="career-card-meta-item">Apply by: {{ careerDetail.deadlineDisplay }}</span>
+            </div>
+
+            <div
+              v-if="careerDetail.descriptionHtml"
+              class="career-card-html career-detail-body"
+              v-html="careerDetail.descriptionHtml"
+            />
+
+            <div v-if="careerDetail.requirementsHtml" class="career-card-section">
+              <h4 class="career-card-section-title">Requirements</h4>
+              <div class="career-card-html" v-html="careerDetail.requirementsHtml" />
+            </div>
+
+            <div v-if="careerDetail.benefitsHtml" class="career-card-section">
+              <h4 class="career-card-section-title">Benefits</h4>
+              <div class="career-card-html" v-html="careerDetail.benefitsHtml" />
+            </div>
+
+            <div class="career-detail-actions">
+              <a
+                v-if="careerDetail.applyUrl"
+                :href="careerDetail.applyUrl"
+                class="career-card-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Apply Now
+                <Icon name="heroicons:arrow-top-right-on-square" class="career-card-link-icon" />
+              </a>
+            </div>
+          </template>
+        </div>
+      </div>
+    </Teleport>
   </main>
 </template>
 
 <script setup lang="ts">
 import { useHead } from 'nuxt/app'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, useId } from 'vue'
 import AppFooter from '~~/components/AppFooter.vue'
 import { useApi } from '~~/composables/useApi'
 import './career.css'
@@ -211,9 +267,24 @@ interface CareersListResponse {
   }
 }
 
+/** Single career `GET /careers/{id}` */
+interface CareerDetailResponse {
+  success?: boolean
+  message?: string
+  data?: CareerApiItem | null
+}
+
+const { backendUrl } = useApi()
+
 const careerOptions = ref<CareerOption[]>([])
 const isLoadingCareers = ref(false)
 const careerError = ref('')
+
+const showCareerDetailModal = ref(false)
+const careerDetail = ref<CareerOption | null>(null)
+const careerDetailError = ref('')
+const isLoadingCareerDetail = ref(false)
+const careerDetailTitleId = useId()
 
 const readFirstString = (value: unknown): string => {
   if (typeof value === 'string') return value.trim()
@@ -250,6 +321,55 @@ const formatApplicationDeadline = (raw: string): string => {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
+const isNumericCareerId = (id: string | number): boolean => {
+  if (typeof id === 'number' && Number.isFinite(id)) return true
+  return typeof id === 'string' && /^\d+$/.test(id)
+}
+
+const htmlToPlainSnippet = (html: string, maxLen = 200): string => {
+  if (!html) return ''
+  const plain = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (!plain) return ''
+  return plain.length > maxLen ? `${plain.slice(0, maxLen)}…` : plain
+}
+
+const openCareerDetail = async (career: CareerOption) => {
+  if (!isNumericCareerId(career.id)) return
+
+  showCareerDetailModal.value = true
+  careerDetail.value = null
+  careerDetailError.value = ''
+  isLoadingCareerDetail.value = true
+
+  try {
+    const res = await $fetch<CareerDetailResponse>(`${backendUrl}/careers/${encodeURIComponent(String(career.id))}`)
+
+    if (res?.success === false) {
+      careerDetailError.value = res.message || 'Could not load this job.'
+      return
+    }
+
+    const payload = res?.data
+    const raw = Array.isArray(payload) ? payload[0] : payload
+    if (!raw || typeof raw !== 'object') {
+      careerDetailError.value = 'No details found for this position.'
+      return
+    }
+
+    careerDetail.value = toCareerOption(raw as CareerApiItem, 0)
+  } catch (e: any) {
+    careerDetailError.value = e?.data?.message || e?.message || 'Could not load job details.'
+  } finally {
+    isLoadingCareerDetail.value = false
+  }
+}
+
+const closeCareerDetailModal = () => {
+  showCareerDetailModal.value = false
+  careerDetail.value = null
+  careerDetailError.value = ''
+}
+
 const toCareerOption = (item: CareerApiItem, index: number): CareerOption => {
   const employmentRaw =
     readFirstString(item.employment_type) || readFirstString(item.type) || readFirstString(item.job_type)
@@ -282,7 +402,6 @@ const toCareerOption = (item: CareerApiItem, index: number): CareerOption => {
 const fetchCareerOptions = async () => {
   isLoadingCareers.value = true
   careerError.value = ''
-  const { backendUrl } = useApi()
 
   try {
     const first = await $fetch<CareersListResponse>(`${backendUrl}/careers`, {
