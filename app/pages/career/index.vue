@@ -47,13 +47,30 @@
               <h3 class="career-card-title">{{ career.title }}</h3>
             </div>
 
-            <p v-if="career.description" class="career-card-desc">{{ career.description }}</p>
-            <p v-else class="career-card-desc">Join our team and help shape the future of fashion at Rang Bangladesh.</p>
-
             <div class="career-card-meta">
               <span v-if="career.location" class="career-card-meta-item">Location: {{ career.location }}</span>
-              <span v-if="career.type" class="career-card-meta-item">Type: {{ career.type }}</span>
-              <span v-if="career.deadline" class="career-card-meta-item">Deadline: {{ career.deadline }}</span>
+              <span v-if="career.employmentTypeLabel" class="career-card-meta-item">Employment: {{ career.employmentTypeLabel }}</span>
+              <span v-if="career.experienceLevel" class="career-card-meta-item">Experience: {{ career.experienceLevel }}</span>
+              <span v-if="career.salaryRange" class="career-card-meta-item">Salary: {{ career.salaryRange }}</span>
+              <span v-if="career.deadlineDisplay" class="career-card-meta-item">Apply by: {{ career.deadlineDisplay }}</span>
+            </div>
+
+            <!-- API returns trusted HTML from your CMS -->
+            <div
+              v-if="career.descriptionHtml"
+              class="career-card-html career-card-html-desc"
+              v-html="career.descriptionHtml"
+            />
+            <p v-else class="career-card-desc career-card-desc-fallback">Join our team and help shape the future of fashion at Rang Bangladesh.</p>
+
+            <div v-if="career.requirementsHtml" class="career-card-section">
+              <h4 class="career-card-section-title">Requirements</h4>
+              <div class="career-card-html" v-html="career.requirementsHtml" />
+            </div>
+
+            <div v-if="career.benefitsHtml" class="career-card-section">
+              <h4 class="career-card-section-title">Benefits</h4>
+              <div class="career-card-html" v-html="career.benefitsHtml" />
             </div>
 
             <a
@@ -147,9 +164,17 @@ interface CareerApiItem {
   deadline?: string
   closing_date?: string
   expires_at?: string
+  application_deadline?: string
   description?: string
+  requirements?: string
+  benefits?: string
   short_description?: string
   summary?: string
+  salary_min?: string | number
+  salary_max?: string | number
+  formatted_salary_range?: string
+  experience_level?: string
+  is_active?: boolean
   apply_url?: string
   apply_link?: string
   application_url?: string
@@ -161,9 +186,13 @@ interface CareerOption {
   title: string
   department: string
   location: string
-  type: string
-  deadline: string
-  description: string
+  employmentTypeLabel: string
+  deadlineDisplay: string
+  experienceLevel: string
+  salaryRange: string
+  descriptionHtml: string
+  requirementsHtml: string
+  benefitsHtml: string
   applyUrl: string
 }
 
@@ -195,16 +224,60 @@ const readFirstString = (value: unknown): string => {
   return ''
 }
 
-const toCareerOption = (item: CareerApiItem, index: number): CareerOption => ({
-  id: item.id ?? `career-${index}`,
-  title: readFirstString(item.title) || readFirstString(item.position) || readFirstString(item.job_title) || readFirstString(item.name) || 'Untitled position',
-  department: readFirstString(item.department) || readFirstString(item.team),
-  location: readFirstString(item.location) || readFirstString(item.city) || readFirstString(item.workplace),
-  type: readFirstString(item.type) || readFirstString(item.job_type) || readFirstString(item.employment_type),
-  deadline: readFirstString(item.deadline) || readFirstString(item.closing_date) || readFirstString(item.expires_at),
-  description: readFirstString(item.description) || readFirstString(item.short_description) || readFirstString(item.summary),
-  applyUrl: readFirstString(item.apply_url) || readFirstString(item.apply_link) || readFirstString(item.application_url)
-})
+const readHtml = (value: unknown): string => {
+  if (typeof value !== 'string') return ''
+  return value.trim()
+}
+
+const formatEmploymentType = (raw: string): string => {
+  if (!raw) return ''
+  const key = raw.toLowerCase().replace(/\s+/g, '_')
+  const map: Record<string, string> = {
+    full_time: 'Full time',
+    part_time: 'Part time',
+    contract: 'Contract',
+    internship: 'Internship',
+    freelance: 'Freelance'
+  }
+  if (map[key]) return map[key]
+  return raw.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+const formatApplicationDeadline = (raw: string): string => {
+  if (!raw) return ''
+  const d = new Date(raw)
+  if (Number.isNaN(d.getTime())) return raw
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+const toCareerOption = (item: CareerApiItem, index: number): CareerOption => {
+  const employmentRaw =
+    readFirstString(item.employment_type) || readFirstString(item.type) || readFirstString(item.job_type)
+  const deadlineRaw =
+    readFirstString(item.application_deadline) ||
+    readFirstString(item.deadline) ||
+    readFirstString(item.closing_date) ||
+    readFirstString(item.expires_at)
+  const salaryRange = readFirstString(item.formatted_salary_range).trim()
+    || (item.salary_min != null && item.salary_max != null
+      ? `${String(item.salary_min).trim()} – ${String(item.salary_max).trim()}`
+      : '')
+
+  return {
+    id: item.id ?? `career-${index}`,
+    title: readFirstString(item.title) || readFirstString(item.position) || readFirstString(item.job_title) || readFirstString(item.name) || 'Untitled position',
+    department: readFirstString(item.department) || readFirstString(item.team),
+    location: readFirstString(item.location) || readFirstString(item.city) || readFirstString(item.workplace),
+    employmentTypeLabel: formatEmploymentType(employmentRaw),
+    deadlineDisplay: formatApplicationDeadline(deadlineRaw),
+    experienceLevel: readFirstString(item.experience_level),
+    salaryRange,
+    descriptionHtml: readHtml(item.description) || readHtml(item.short_description) || readHtml(item.summary),
+    requirementsHtml: readHtml(item.requirements),
+    benefitsHtml: readHtml(item.benefits),
+    applyUrl: readFirstString(item.apply_url) || readFirstString(item.apply_link) || readFirstString(item.application_url)
+  }
+}
 
 const fetchCareerOptions = async () => {
   isLoadingCareers.value = true
@@ -235,7 +308,8 @@ const fetchCareerOptions = async () => {
       }
     }
 
-    careerOptions.value = list.map((item: CareerApiItem, index: number) => toCareerOption(item, index))
+    const activeOnly = list.filter((item) => item.is_active !== false)
+    careerOptions.value = activeOnly.map((item: CareerApiItem, index: number) => toCareerOption(item, index))
   } catch (error) {
     console.error('Failed to load career options:', error)
     careerError.value = 'Unable to load career options right now. Please try again later.'
