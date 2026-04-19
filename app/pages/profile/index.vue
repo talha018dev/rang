@@ -394,7 +394,7 @@
                           type="button"
                           class="!text-red-700 hover:!underline"
                           :disabled="isLoadingAddress"
-                          @click="handleDeleteAddress(address)"
+                          @click="openDeleteAddressModal(address)"
                         >
                           Delete
                         </button>
@@ -485,6 +485,53 @@
     </div>
 
     <AppFooter />
+
+    <Teleport to="body">
+      <div
+        v-if="showDeleteAddressModal"
+        class="profile-delete-modal-overlay"
+        role="presentation"
+        @click.self="closeDeleteAddressModal"
+      >
+        <div
+          class="profile-delete-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="profile-delete-address-title"
+        >
+          <h3 id="profile-delete-address-title" class="profile-delete-modal-title">Delete this address?</h3>
+          <p class="profile-delete-modal-text">
+            This will remove the saved address from your address book. You can add it again later if needed.
+          </p>
+          <div v-if="addressPendingDelete" class="profile-delete-modal-preview">
+            <p v-if="addressPendingDelete.title" class="profile-delete-modal-preview-line">
+              <span class="profile-delete-modal-label">Type</span> {{ addressPendingDelete.title }}
+            </p>
+            <p v-if="addressPendingDelete.address?.name" class="profile-delete-modal-preview-line">
+              <span class="profile-delete-modal-label">Name</span> {{ addressPendingDelete.address.name }}
+            </p>
+          </div>
+          <div class="profile-delete-modal-actions">
+            <button
+              type="button"
+              class="profile-delete-modal-btn profile-delete-modal-btn-secondary"
+              :disabled="isLoadingAddress"
+              @click="closeDeleteAddressModal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="profile-delete-modal-btn profile-delete-modal-btn-danger"
+              :disabled="isLoadingAddress"
+              @click="confirmDeleteAddress"
+            >
+              {{ isLoadingAddress ? 'Deleting…' : 'Delete' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </main>
 </template>
 
@@ -942,6 +989,9 @@ const addressSuccessMessage = ref('')
 const editingAddressId = ref<number | null>(null)
 const isEditingAddress = computed(() => editingAddressId.value !== null)
 
+const showDeleteAddressModal = ref(false)
+const addressPendingDelete = ref<SavedAddress | null>(null)
+
 const orders = ref<Order[]>([])
 const ordersPagination = ref<OrdersPagination | null>(null)
 const ordersPage = ref(1)
@@ -1190,10 +1240,7 @@ const handleUpdateAddress = async () => {
   }
 }
 
-const handleDeleteAddress = async (savedAddress: SavedAddress) => {
-  const token = getToken()
-  if (!token) return
-
+const openDeleteAddressModal = (savedAddress: SavedAddress) => {
   const rawId = savedAddress?.id
   const addressId = typeof rawId === 'number' ? rawId : Number(rawId)
   if (!rawId || Number.isNaN(addressId)) {
@@ -1201,11 +1248,31 @@ const handleDeleteAddress = async (savedAddress: SavedAddress) => {
     addressSuccessMessage.value = ''
     return
   }
+  addressErrorMessage.value = ''
+  addressSuccessMessage.value = ''
+  addressPendingDelete.value = savedAddress
+  showDeleteAddressModal.value = true
+}
 
-  const confirmed = typeof window === 'undefined'
-    ? true
-    : window.confirm('Are you sure you want to delete this address?')
-  if (!confirmed) return
+const closeDeleteAddressModal = () => {
+  showDeleteAddressModal.value = false
+  addressPendingDelete.value = null
+}
+
+const confirmDeleteAddress = async () => {
+  const token = getToken()
+  if (!token) return
+
+  const savedAddress = addressPendingDelete.value
+  if (!savedAddress) return
+
+  const rawId = savedAddress?.id
+  const addressId = typeof rawId === 'number' ? rawId : Number(rawId)
+  if (!rawId || Number.isNaN(addressId)) {
+    addressErrorMessage.value = 'Unable to delete this address right now.'
+    closeDeleteAddressModal()
+    return
+  }
 
   isLoadingAddress.value = true
   addressErrorMessage.value = ''
@@ -1219,6 +1286,7 @@ const handleDeleteAddress = async (savedAddress: SavedAddress) => {
 
     if (response.success) {
       addressSuccessMessage.value = 'Address deleted successfully!'
+      closeDeleteAddressModal()
       await fetchAddresses()
       if (editingAddressId.value === addressId) {
         resetAddressForm()
