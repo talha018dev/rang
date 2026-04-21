@@ -145,6 +145,7 @@ import './index.css'
 
 import CustomerDiaries from '../../components/CustomerDiaries.vue'
 import ExploreRang from '../../components/ExploreRang.vue'
+import HeroBanner2 from '../../components/HeroBanner2.vue'
 import NewArrival from '../../components/NewArrival.vue'
 import OfferBanner from '../../components/OfferBanner.vue'
 import SaleOffer from '../../components/SaleOffer.vue'
@@ -152,9 +153,8 @@ import ShopByBrand from '../../components/ShopByBrand.vue'
 import ShopByCategory from '../../components/ShopByCategory.vue'
 import ShopByTheme from '../../components/ShopByTheme.vue'
 import TimelessSixYards from '../../components/TimelessSixYards.vue'
-import WhyRang from '../../components/WhyRang.vue'
-import HeroBanner2 from '../../components/HeroBanner2.vue'
 import WelcomePopup from '../../components/WelcomePopup.vue'
+import WhyRang from '../../components/WhyRang.vue'
 
 const welcomePopupRef = ref<InstanceType<typeof WelcomePopup> | null>(null)
 const homepagePopupSettings = ref<{ enabled?: boolean; image?: string | null; mobile_image?: string | null; description?: string | null; cta_text?: string | null; cta_url?: string | null } | null>(null)
@@ -175,7 +175,7 @@ const welcomePopupImage = computed(() => {
   if (img) return getImageUrl(img)
   const banner = homepageData.value?.banners?.[0]
   if (banner && typeof banner === 'string') return getImageUrl(banner)
-  return '/rang-logo-2026-v2.png'
+  return '/rang-logo-2026-v3.png'
 })
 const welcomePopupMobileImage = computed(() => {
   const img = homepagePopupSettings.value?.mobile_image

@@ -5,7 +5,7 @@
       <!-- <div class="mobile-logo-container">
         <NuxtLink to="/">
           <NuxtImg 
-            src="/rang-logo-2026-v2.png" 
+            src="/rang-logo-2026-v3.png" 
             alt="logo" 
             class='mobile-logo-image' 
             loading="eager"
@@ -45,7 +45,7 @@
         <div class="w-[100px]!">
           <NuxtLink to="/">
             <NuxtImg 
-              src="/rang-logo-2026-v2.png" 
+              src="/rang-logo-2026-v3.png" 
               alt="logo" 
               class='logo-image' 
               loading="eager"
@@ -303,7 +303,7 @@
           <div class="flex items-center justify-between mb-6">
             <NuxtLink to="/" @click="closeDrawer">
               <NuxtImg 
-                src="/rang-logo-2026-v2.png" 
+                src="/rang-logo-2026-v3.png" 
                 alt="Rang Bangladesh Logo" 
                 class="mobile-nav-logo h-[90px]!" 
                 loading="eager"

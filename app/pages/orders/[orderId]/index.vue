@@ -74,7 +74,7 @@
             <div class="invoice-header-top">
               <div class="invoice-logo">
                 <NuxtImg 
-                  src="/rang-logo-2026-v2.png" 
+                  src="/rang-logo-2026-v3.png" 
                   alt="Rang Bangladesh Logo" 
                   class="invoice-logo-image"
                   loading="eager"

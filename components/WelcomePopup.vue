@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const MOBILE_BREAKPOINT = 600
 
@@ -90,7 +90,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
-  image: '/rang-logo-2026-v2.png',
+  image: '/rang-logo-2026-v3.png',
   mobileImage: null,
   imageAlt: 'Welcome',
   title: '',
